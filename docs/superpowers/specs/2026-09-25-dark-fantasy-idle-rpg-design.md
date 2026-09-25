@@ -1,7 +1,7 @@
 # Spesifikasi desain: Ashen Covenant
 
 Tanggal: 25 September 2026.
-Status: rancangan untuk ditinjau pengguna; belum merupakan game yang sudah dibuat.
+Status: disetujui pengguna pada 25 September 2026 untuk dilanjutkan ke rencana implementasi; belum merupakan game yang sudah dibuat.
 Ashen Covenant adalah nama kerja internal, bukan nama publik yang sudah diperiksa ketersediaannya.
 
 ## 1. Brief yang disepakati
@@ -12,7 +12,7 @@ Ashen Covenant adalah nama kerja internal, bukan nama publik yang sudah diperiks
 - Gratis dimainkan, tanpa iklan, pembelian kosmetik dan ekspansi konten.
 - Implementasi bertahap mempertahankan ambisi game lengkap. Prototipe kecil merupakan tahap validasi, bukan pengganti lingkup akhir.
 
-Detail mekanik, jumlah konten, nama kerja, teknologi, dan batas offline di bawah adalah keputusan desain yang diusulkan. Pengguna belum meninjau dokumen ini.
+Detail mekanik, jumlah konten, nama kerja, teknologi, dan batas offline di bawah menjadi baseline desain setelah pengguna menyetujui kelanjutan dari dokumen ini. Nilai keseimbangan tetap dievaluasi melalui playtest; perubahan lingkup material harus dijelaskan.
 
 ## 2. Identitas dan pengalaman inti
 
