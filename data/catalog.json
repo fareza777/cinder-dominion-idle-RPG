@@ -1,0 +1,1007 @@
+{
+  "items": {
+    "ash_log": {
+      "id": "ash_log",
+      "name": "Kayu Abu",
+      "en": "Ash log",
+      "category": "material",
+      "sell": 1,
+      "icon": "wood"
+    },
+    "oak_log": {
+      "id": "oak_log",
+      "name": "Kayu Ek",
+      "en": "Oak log",
+      "category": "material",
+      "sell": 1,
+      "icon": "wood"
+    },
+    "copper_ore": {
+      "id": "copper_ore",
+      "name": "Bijih Tembaga",
+      "en": "Copper ore",
+      "category": "material",
+      "sell": 1,
+      "icon": "ore"
+    },
+    "iron_ore": {
+      "id": "iron_ore",
+      "name": "Bijih Besi",
+      "en": "Iron ore",
+      "category": "material",
+      "sell": 1,
+      "icon": "ore"
+    },
+    "coal": {
+      "id": "coal",
+      "name": "Batu Bara",
+      "en": "Coal",
+      "category": "material",
+      "sell": 1,
+      "icon": "ore"
+    },
+    "copper_ingot": {
+      "id": "copper_ingot",
+      "name": "Ingot Tembaga",
+      "en": "Copper ingot",
+      "category": "material",
+      "sell": 1,
+      "icon": "ingot"
+    },
+    "iron_ingot": {
+      "id": "iron_ingot",
+      "name": "Ingot Besi",
+      "en": "Iron ingot",
+      "category": "material",
+      "sell": 1,
+      "icon": "ingot"
+    },
+    "raw_minnow": {
+      "id": "raw_minnow",
+      "name": "Ikan Kecil",
+      "en": "Raw minnow",
+      "category": "material",
+      "sell": 1,
+      "icon": "fish"
+    },
+    "raw_perch": {
+      "id": "raw_perch",
+      "name": "Ikan Perch",
+      "en": "Raw perch",
+      "category": "material",
+      "sell": 1,
+      "icon": "fish"
+    },
+    "raw_meat": {
+      "id": "raw_meat",
+      "name": "Daging Mentah",
+      "en": "Raw meat",
+      "category": "material",
+      "sell": 1,
+      "icon": "meat"
+    },
+    "emberleaf": {
+      "id": "emberleaf",
+      "name": "Daun Bara",
+      "en": "Emberleaf",
+      "category": "material",
+      "sell": 1,
+      "icon": "herb"
+    },
+    "grave_moss": {
+      "id": "grave_moss",
+      "name": "Lumut Makam",
+      "en": "Grave moss",
+      "category": "material",
+      "sell": 1,
+      "icon": "herb"
+    },
+    "empty_vial": {
+      "id": "empty_vial",
+      "name": "Botol Kaca",
+      "en": "Empty vial",
+      "category": "material",
+      "sell": 1,
+      "icon": "potion"
+    },
+    "scrap": {
+      "id": "scrap",
+      "name": "Serpihan Logam",
+      "en": "Metal scrap",
+      "category": "material",
+      "sell": 1,
+      "icon": "ore"
+    },
+    "cooked_minnow": {
+      "id": "cooked_minnow",
+      "name": "Ikan Panggang",
+      "en": "Grilled minnow",
+      "category": "food",
+      "sell": 1,
+      "heal": 20,
+      "icon": "food"
+    },
+    "cooked_perch": {
+      "id": "cooked_perch",
+      "name": "Perch Panggang",
+      "en": "Grilled perch",
+      "category": "food",
+      "sell": 1,
+      "heal": 35,
+      "icon": "food"
+    },
+    "cooked_meat": {
+      "id": "cooked_meat",
+      "name": "Daging Panggang",
+      "en": "Roasted meat",
+      "category": "food",
+      "sell": 1,
+      "heal": 30,
+      "icon": "food"
+    },
+    "healing_draught": {
+      "id": "healing_draught",
+      "name": "Ramuan Pemulihan",
+      "en": "Healing draught",
+      "category": "potion",
+      "sell": 1,
+      "effect": "heal",
+      "icon": "potion"
+    },
+    "guard_draught": {
+      "id": "guard_draught",
+      "name": "Ramuan Penjaga",
+      "en": "Guard draught",
+      "category": "potion",
+      "sell": 1,
+      "effect": "armor",
+      "icon": "potion"
+    },
+    "fury_draught": {
+      "id": "fury_draught",
+      "name": "Ramuan Amarah",
+      "en": "Fury draught",
+      "category": "potion",
+      "sell": 1,
+      "effect": "attack",
+      "icon": "potion"
+    },
+    "copper_sword": {
+      "id": "copper_sword",
+      "name": "Pedang Tembaga",
+      "en": "Copper Sword",
+      "category": "equipment",
+      "sell": 1,
+      "slot": "weapon",
+      "attack": 4,
+      "armor": 0,
+      "icon": "sword"
+    },
+    "copper_shield": {
+      "id": "copper_shield",
+      "name": "Perisai Tembaga",
+      "en": "Copper Shield",
+      "category": "equipment",
+      "sell": 1,
+      "slot": "shield",
+      "attack": 0,
+      "armor": 2,
+      "icon": "shield"
+    },
+    "copper_helm": {
+      "id": "copper_helm",
+      "name": "Helm Tembaga",
+      "en": "Copper Helm",
+      "category": "equipment",
+      "sell": 1,
+      "slot": "head",
+      "attack": 0,
+      "armor": 1,
+      "icon": "helm"
+    },
+    "copper_chest": {
+      "id": "copper_chest",
+      "name": "Zirah Tembaga",
+      "en": "Copper Cuirass",
+      "category": "equipment",
+      "sell": 1,
+      "slot": "body",
+      "attack": 0,
+      "armor": 3,
+      "icon": "chest"
+    },
+    "copper_gloves": {
+      "id": "copper_gloves",
+      "name": "Sarung Tangan Tembaga",
+      "en": "Copper Gauntlets",
+      "category": "equipment",
+      "sell": 1,
+      "slot": "hands",
+      "attack": 0,
+      "armor": 1,
+      "icon": "gloves"
+    },
+    "copper_boots": {
+      "id": "copper_boots",
+      "name": "Sepatu Tembaga",
+      "en": "Copper Boots",
+      "category": "equipment",
+      "sell": 1,
+      "slot": "feet",
+      "attack": 0,
+      "armor": 1,
+      "icon": "boots"
+    },
+    "iron_sword": {
+      "id": "iron_sword",
+      "name": "Pedang Besi",
+      "en": "Iron Sword",
+      "category": "equipment",
+      "sell": 1,
+      "slot": "weapon",
+      "attack": 8,
+      "armor": 0,
+      "icon": "sword"
+    },
+    "iron_shield": {
+      "id": "iron_shield",
+      "name": "Perisai Besi",
+      "en": "Iron Shield",
+      "category": "equipment",
+      "sell": 1,
+      "slot": "shield",
+      "attack": 0,
+      "armor": 4,
+      "icon": "shield"
+    },
+    "iron_helm": {
+      "id": "iron_helm",
+      "name": "Helm Besi",
+      "en": "Iron Helm",
+      "category": "equipment",
+      "sell": 1,
+      "slot": "head",
+      "attack": 0,
+      "armor": 2,
+      "icon": "helm"
+    },
+    "iron_chest": {
+      "id": "iron_chest",
+      "name": "Zirah Besi",
+      "en": "Iron Cuirass",
+      "category": "equipment",
+      "sell": 1,
+      "slot": "body",
+      "attack": 0,
+      "armor": 6,
+      "icon": "chest"
+    },
+    "iron_gloves": {
+      "id": "iron_gloves",
+      "name": "Sarung Tangan Besi",
+      "en": "Iron Gauntlets",
+      "category": "equipment",
+      "sell": 1,
+      "slot": "hands",
+      "attack": 0,
+      "armor": 2,
+      "icon": "gloves"
+    },
+    "iron_boots": {
+      "id": "iron_boots",
+      "name": "Sepatu Besi",
+      "en": "Iron Boots",
+      "category": "equipment",
+      "sell": 1,
+      "slot": "feet",
+      "attack": 0,
+      "armor": 2,
+      "icon": "boots"
+    },
+    "worn_sword": {
+      "id": "worn_sword",
+      "name": "Pedang Usang",
+      "en": "Worn sword",
+      "category": "equipment",
+      "sell": 1,
+      "slot": "weapon",
+      "attack": 0,
+      "armor": 0,
+      "speed": 0,
+      "icon": "sword"
+    },
+    "worn_shield": {
+      "id": "worn_shield",
+      "name": "Perisai Usang",
+      "en": "Worn shield",
+      "category": "equipment",
+      "sell": 1,
+      "slot": "shield",
+      "attack": 0,
+      "armor": 1,
+      "speed": 0,
+      "icon": "shield"
+    },
+    "wood_axe": {
+      "id": "wood_axe",
+      "name": "Kapak Kayu",
+      "en": "Wood axe",
+      "category": "equipment",
+      "sell": 1,
+      "slot": "axe",
+      "attack": 0,
+      "armor": 0,
+      "speed": 0,
+      "icon": "axe"
+    },
+    "stone_pick": {
+      "id": "stone_pick",
+      "name": "Beliung Batu",
+      "en": "Stone pick",
+      "category": "equipment",
+      "sell": 1,
+      "slot": "pick",
+      "attack": 0,
+      "armor": 0,
+      "speed": 0,
+      "icon": "pick"
+    },
+    "reed_rod": {
+      "id": "reed_rod",
+      "name": "Pancing Buluh",
+      "en": "Reed rod",
+      "category": "equipment",
+      "sell": 1,
+      "slot": "rod",
+      "attack": 0,
+      "armor": 0,
+      "speed": 0,
+      "icon": "fish"
+    },
+    "ash_axe": {
+      "id": "ash_axe",
+      "name": "Kapak Bara",
+      "en": "Ash axe",
+      "category": "equipment",
+      "sell": 1,
+      "slot": "axe",
+      "attack": 0,
+      "armor": 0,
+      "speed": 0.1,
+      "icon": "axe"
+    },
+    "copper_pick": {
+      "id": "copper_pick",
+      "name": "Beliung Tembaga",
+      "en": "Copper pick",
+      "category": "equipment",
+      "sell": 1,
+      "slot": "pick",
+      "attack": 0,
+      "armor": 0,
+      "speed": 0.1,
+      "icon": "pick"
+    },
+    "iron_rod": {
+      "id": "iron_rod",
+      "name": "Pancing Besi",
+      "en": "Iron rod",
+      "category": "equipment",
+      "sell": 1,
+      "slot": "rod",
+      "attack": 0,
+      "armor": 0,
+      "speed": 0.1,
+      "icon": "fish"
+    }
+  },
+  "skills": {
+    "woodcutting": {
+      "name": "Penebangan",
+      "en": "Woodcutting",
+      "tag": "axe"
+    },
+    "mining": {
+      "name": "Pertambangan",
+      "en": "Mining",
+      "tag": "pick"
+    },
+    "fishing": {
+      "name": "Memancing",
+      "en": "Fishing",
+      "tag": "fish"
+    },
+    "cooking": {
+      "name": "Memasak",
+      "en": "Cooking",
+      "tag": "food"
+    },
+    "smithing": {
+      "name": "Penempaan",
+      "en": "Smithing",
+      "tag": "anvil"
+    },
+    "alchemy": {
+      "name": "Alkimia",
+      "en": "Alchemy",
+      "tag": "potion"
+    },
+    "bladecraft": {
+      "name": "Keahlian Pedang",
+      "en": "Bladecraft",
+      "tag": "sword"
+    },
+    "might": {
+      "name": "Kekuatan",
+      "en": "Might",
+      "tag": "shield"
+    },
+    "warding": {
+      "name": "Pertahanan",
+      "en": "Warding",
+      "tag": "shield"
+    }
+  },
+  "activities": {
+    "cut_ash": {
+      "id": "cut_ash",
+      "kind": "gather",
+      "skill": "woodcutting",
+      "output": "ash_log",
+      "level": 1,
+      "duration": 3,
+      "xp": 5,
+      "inputs": {},
+      "side": "emberleaf"
+    },
+    "cut_oak": {
+      "id": "cut_oak",
+      "kind": "gather",
+      "skill": "woodcutting",
+      "output": "oak_log",
+      "level": 5,
+      "duration": 4,
+      "xp": 10,
+      "inputs": {},
+      "side": "grave_moss"
+    },
+    "mine_copper": {
+      "id": "mine_copper",
+      "kind": "gather",
+      "skill": "mining",
+      "output": "copper_ore",
+      "level": 1,
+      "duration": 3,
+      "xp": 5,
+      "inputs": {},
+      "side": ""
+    },
+    "mine_coal": {
+      "id": "mine_coal",
+      "kind": "gather",
+      "skill": "mining",
+      "output": "coal",
+      "level": 5,
+      "duration": 4,
+      "xp": 10,
+      "inputs": {},
+      "side": ""
+    },
+    "mine_iron": {
+      "id": "mine_iron",
+      "kind": "gather",
+      "skill": "mining",
+      "output": "iron_ore",
+      "level": 10,
+      "duration": 5,
+      "xp": 15,
+      "inputs": {},
+      "side": ""
+    },
+    "fish_minnow": {
+      "id": "fish_minnow",
+      "kind": "gather",
+      "skill": "fishing",
+      "output": "raw_minnow",
+      "level": 1,
+      "duration": 3,
+      "xp": 5,
+      "inputs": {},
+      "side": ""
+    },
+    "fish_perch": {
+      "id": "fish_perch",
+      "kind": "gather",
+      "skill": "fishing",
+      "output": "raw_perch",
+      "level": 5,
+      "duration": 4,
+      "xp": 10,
+      "inputs": {},
+      "side": ""
+    },
+    "craft_copper_ingot": {
+      "id": "craft_copper_ingot",
+      "kind": "craft",
+      "skill": "smithing",
+      "output": "copper_ingot",
+      "level": 1,
+      "inputs": {
+        "copper_ore": 2
+      },
+      "duration": 3,
+      "xp": 8,
+      "side": ""
+    },
+    "craft_iron_ingot": {
+      "id": "craft_iron_ingot",
+      "kind": "craft",
+      "skill": "smithing",
+      "output": "iron_ingot",
+      "level": 10,
+      "inputs": {
+        "iron_ore": 2,
+        "coal": 1
+      },
+      "duration": 5,
+      "xp": 18,
+      "side": ""
+    },
+    "craft_cooked_minnow": {
+      "id": "craft_cooked_minnow",
+      "kind": "craft",
+      "skill": "cooking",
+      "output": "cooked_minnow",
+      "level": 1,
+      "inputs": {
+        "raw_minnow": 1
+      },
+      "duration": 2,
+      "xp": 5,
+      "side": ""
+    },
+    "craft_cooked_perch": {
+      "id": "craft_cooked_perch",
+      "kind": "craft",
+      "skill": "cooking",
+      "output": "cooked_perch",
+      "level": 5,
+      "inputs": {
+        "raw_perch": 1
+      },
+      "duration": 3,
+      "xp": 10,
+      "side": ""
+    },
+    "craft_cooked_meat": {
+      "id": "craft_cooked_meat",
+      "kind": "craft",
+      "skill": "cooking",
+      "output": "cooked_meat",
+      "level": 1,
+      "inputs": {
+        "raw_meat": 1
+      },
+      "duration": 3,
+      "xp": 8,
+      "side": ""
+    },
+    "craft_healing_draught": {
+      "id": "craft_healing_draught",
+      "kind": "craft",
+      "skill": "alchemy",
+      "output": "healing_draught",
+      "level": 1,
+      "inputs": {
+        "emberleaf": 2,
+        "empty_vial": 1
+      },
+      "duration": 4,
+      "xp": 10,
+      "side": ""
+    },
+    "craft_guard_draught": {
+      "id": "craft_guard_draught",
+      "kind": "craft",
+      "skill": "alchemy",
+      "output": "guard_draught",
+      "level": 5,
+      "inputs": {
+        "grave_moss": 2,
+        "empty_vial": 1
+      },
+      "duration": 5,
+      "xp": 15,
+      "side": ""
+    },
+    "craft_fury_draught": {
+      "id": "craft_fury_draught",
+      "kind": "craft",
+      "skill": "alchemy",
+      "output": "fury_draught",
+      "level": 8,
+      "inputs": {
+        "emberleaf": 2,
+        "grave_moss": 1,
+        "empty_vial": 1
+      },
+      "duration": 6,
+      "xp": 20,
+      "side": ""
+    },
+    "craft_copper_sword": {
+      "id": "craft_copper_sword",
+      "kind": "craft",
+      "skill": "smithing",
+      "output": "copper_sword",
+      "level": 1,
+      "inputs": {
+        "copper_ingot": 2,
+        "ash_log": 1
+      },
+      "duration": 5,
+      "xp": 15,
+      "side": ""
+    },
+    "craft_copper_shield": {
+      "id": "craft_copper_shield",
+      "kind": "craft",
+      "skill": "smithing",
+      "output": "copper_shield",
+      "level": 2,
+      "inputs": {
+        "copper_ingot": 2,
+        "ash_log": 2
+      },
+      "duration": 5,
+      "xp": 15,
+      "side": ""
+    },
+    "craft_copper_helm": {
+      "id": "craft_copper_helm",
+      "kind": "craft",
+      "skill": "smithing",
+      "output": "copper_helm",
+      "level": 3,
+      "inputs": {
+        "copper_ingot": 2
+      },
+      "duration": 5,
+      "xp": 15,
+      "side": ""
+    },
+    "craft_copper_chest": {
+      "id": "craft_copper_chest",
+      "kind": "craft",
+      "skill": "smithing",
+      "output": "copper_chest",
+      "level": 5,
+      "inputs": {
+        "copper_ingot": 4
+      },
+      "duration": 8,
+      "xp": 25,
+      "side": ""
+    },
+    "craft_copper_gloves": {
+      "id": "craft_copper_gloves",
+      "kind": "craft",
+      "skill": "smithing",
+      "output": "copper_gloves",
+      "level": 2,
+      "inputs": {
+        "copper_ingot": 1
+      },
+      "duration": 4,
+      "xp": 10,
+      "side": ""
+    },
+    "craft_copper_boots": {
+      "id": "craft_copper_boots",
+      "kind": "craft",
+      "skill": "smithing",
+      "output": "copper_boots",
+      "level": 2,
+      "inputs": {
+        "copper_ingot": 1
+      },
+      "duration": 4,
+      "xp": 10,
+      "side": ""
+    },
+    "craft_iron_sword": {
+      "id": "craft_iron_sword",
+      "kind": "craft",
+      "skill": "smithing",
+      "output": "iron_sword",
+      "level": 10,
+      "inputs": {
+        "iron_ingot": 2,
+        "oak_log": 1
+      },
+      "duration": 7,
+      "xp": 30,
+      "side": ""
+    },
+    "craft_iron_shield": {
+      "id": "craft_iron_shield",
+      "kind": "craft",
+      "skill": "smithing",
+      "output": "iron_shield",
+      "level": 11,
+      "inputs": {
+        "iron_ingot": 2,
+        "oak_log": 2
+      },
+      "duration": 7,
+      "xp": 30,
+      "side": ""
+    },
+    "craft_iron_helm": {
+      "id": "craft_iron_helm",
+      "kind": "craft",
+      "skill": "smithing",
+      "output": "iron_helm",
+      "level": 12,
+      "inputs": {
+        "iron_ingot": 2
+      },
+      "duration": 7,
+      "xp": 30,
+      "side": ""
+    },
+    "craft_iron_chest": {
+      "id": "craft_iron_chest",
+      "kind": "craft",
+      "skill": "smithing",
+      "output": "iron_chest",
+      "level": 14,
+      "inputs": {
+        "iron_ingot": 4
+      },
+      "duration": 10,
+      "xp": 40,
+      "side": ""
+    },
+    "craft_iron_gloves": {
+      "id": "craft_iron_gloves",
+      "kind": "craft",
+      "skill": "smithing",
+      "output": "iron_gloves",
+      "level": 11,
+      "inputs": {
+        "iron_ingot": 1
+      },
+      "duration": 6,
+      "xp": 25,
+      "side": ""
+    },
+    "craft_iron_boots": {
+      "id": "craft_iron_boots",
+      "kind": "craft",
+      "skill": "smithing",
+      "output": "iron_boots",
+      "level": 11,
+      "inputs": {
+        "iron_ingot": 1
+      },
+      "duration": 6,
+      "xp": 25,
+      "side": ""
+    },
+    "hunt_ash_rat": {
+      "id": "hunt_ash_rat",
+      "kind": "combat",
+      "enemy": "ash_rat",
+      "skill": "bladecraft",
+      "level": 1,
+      "output": "raw_meat",
+      "inputs": {},
+      "duration": 2,
+      "xp": 6
+    },
+    "hunt_hollow_hound": {
+      "id": "hunt_hollow_hound",
+      "kind": "combat",
+      "enemy": "hollow_hound",
+      "skill": "bladecraft",
+      "level": 1,
+      "output": "raw_meat",
+      "inputs": {},
+      "duration": 2,
+      "xp": 10
+    },
+    "hunt_grave_thrall": {
+      "id": "hunt_grave_thrall",
+      "kind": "combat",
+      "enemy": "grave_thrall",
+      "skill": "bladecraft",
+      "level": 1,
+      "output": "grave_moss",
+      "inputs": {},
+      "duration": 2,
+      "xp": 14
+    },
+    "hunt_cinder_bandit": {
+      "id": "hunt_cinder_bandit",
+      "kind": "combat",
+      "enemy": "cinder_bandit",
+      "skill": "bladecraft",
+      "level": 1,
+      "output": "copper_ore",
+      "inputs": {},
+      "duration": 2,
+      "xp": 18
+    },
+    "hunt_chapel_guard": {
+      "id": "hunt_chapel_guard",
+      "kind": "combat",
+      "enemy": "chapel_guard",
+      "skill": "bladecraft",
+      "level": 1,
+      "output": "scrap",
+      "inputs": {},
+      "duration": 2,
+      "xp": 24
+    },
+    "hunt_ember_wraith": {
+      "id": "hunt_ember_wraith",
+      "kind": "combat",
+      "enemy": "ember_wraith",
+      "skill": "bladecraft",
+      "level": 1,
+      "output": "emberleaf",
+      "inputs": {},
+      "duration": 2,
+      "xp": 26
+    },
+    "hunt_bellkeeper": {
+      "id": "hunt_bellkeeper",
+      "kind": "combat",
+      "enemy": "bellkeeper",
+      "skill": "bladecraft",
+      "level": 1,
+      "output": "iron_ingot",
+      "inputs": {},
+      "duration": 2,
+      "xp": 100
+    }
+  },
+  "enemies": {
+    "ash_rat": {
+      "id": "ash_rat",
+      "name": "Tikus Abu",
+      "en": "Ash Rat",
+      "hp": 18,
+      "attack": 2,
+      "armor": 0,
+      "interval": 2500,
+      "gold": 3,
+      "xp": 6,
+      "drop": "raw_meat",
+      "qty": 1,
+      "unlock": "",
+      "portrait": 1,
+      "lore": "Hewan liar yang memakan sisa-sisa Cinderwatch.",
+      "boss": false
+    },
+    "hollow_hound": {
+      "id": "hollow_hound",
+      "name": "Anjing Hampa",
+      "en": "Hollow Hound",
+      "hp": 35,
+      "attack": 4,
+      "armor": 0,
+      "interval": 2200,
+      "gold": 5,
+      "xp": 10,
+      "drop": "raw_meat",
+      "qty": 1,
+      "unlock": "tutorial",
+      "portrait": 2,
+      "lore": "Giginya masih tajam. Yang tersisa hanya rasa lapar.",
+      "boss": false
+    },
+    "grave_thrall": {
+      "id": "grave_thrall",
+      "name": "Budak Makam",
+      "en": "Grave Thrall",
+      "hp": 50,
+      "attack": 5,
+      "armor": 1,
+      "interval": 2800,
+      "gold": 7,
+      "xp": 14,
+      "drop": "grave_moss",
+      "qty": 1,
+      "unlock": "tutorial",
+      "portrait": 3,
+      "lore": "Bangkit bersama bunyi lonceng dari kapel tua.",
+      "boss": false
+    },
+    "cinder_bandit": {
+      "id": "cinder_bandit",
+      "name": "Bandit Bara",
+      "en": "Cinder Bandit",
+      "hp": 65,
+      "attack": 6,
+      "armor": 2,
+      "interval": 2400,
+      "gold": 9,
+      "xp": 18,
+      "drop": "copper_ore",
+      "qty": 2,
+      "unlock": "grave_thrall",
+      "portrait": 4,
+      "lore": "Mereka merampas apa pun yang masih berharga.",
+      "boss": false
+    },
+    "chapel_guard": {
+      "id": "chapel_guard",
+      "name": "Penjaga Kapel",
+      "en": "Chapel Guard",
+      "hp": 85,
+      "attack": 7,
+      "armor": 4,
+      "interval": 3000,
+      "gold": 12,
+      "xp": 24,
+      "drop": "scrap",
+      "qty": 2,
+      "unlock": "cinder_bandit",
+      "portrait": 5,
+      "lore": "Zirah kosong yang tak pernah melupakan tugasnya.",
+      "boss": false
+    },
+    "ember_wraith": {
+      "id": "ember_wraith",
+      "name": "Arwah Bara",
+      "en": "Ember Wraith",
+      "hp": 70,
+      "attack": 8,
+      "armor": 1,
+      "interval": 2000,
+      "gold": 14,
+      "xp": 26,
+      "drop": "emberleaf",
+      "qty": 2,
+      "unlock": "chapel_guard",
+      "portrait": 6,
+      "lore": "Sesuatu bergerak di antara abu dan cahaya api.",
+      "boss": false
+    },
+    "bellkeeper": {
+      "id": "bellkeeper",
+      "name": "Sang Penjaga Lonceng",
+      "en": "The Bellkeeper",
+      "hp": 240,
+      "attack": 12,
+      "armor": 5,
+      "interval": 3000,
+      "gold": 80,
+      "xp": 100,
+      "drop": "iron_ingot",
+      "qty": 3,
+      "unlock": "ember_wraith",
+      "portrait": 7,
+      "lore": "Setiap dentang ketiga membawa pukulan yang mengerikan.",
+      "boss": true
+    }
+  },
+  "merchant": {
+    "empty_vial": 2,
+    "ash_axe": 30,
+    "copper_pick": 40,
+    "iron_rod": 60
+  },
+  "rarities": [
+    "Worn",
+    "Common",
+    "Fine",
+    "Rare",
+    "Epic",
+    "Legendary",
+    "Mythic",
+    "Relic"
+  ]
+}

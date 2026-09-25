@@ -1,0 +1,564 @@
+extends Control
+
+const U = preload("res://ui/style.gd")
+const Pages = preload("res://ui/pages.gd")
+var model = RealmModel.new()
+var saves = RealmSave.new()
+var page = "village"
+var skill = ""
+var filter = "all"
+var search_text = ""
+var body: VBoxContainer
+var scroller: ScrollContainer
+var hp_label: Label
+var gold_label: Label
+var activity_label: Label
+var activity_sub: Label
+var activity_progress: ProgressBar
+var toast_label: Label
+var dialog: Control
+var hud: VBoxContainer
+var pulse = 0.0
+var save_timer = 0.0
+var ui_timer = 0.0
+var fraction_ms = 0.0
+var paused = false
+var save_blocked = false
+var update_callbacks: Array[Callable] = []
+var pages
+var music: AudioStreamPlayer
+var effect: AudioStreamPlayer
+
+func _ready():
+	get_tree().auto_accept_quit = false
+	var loaded = saves.read_state(model.data)
+	if not loaded.is_empty(): model.s = loaded
+	elif saves.message!="": save_blocked = true
+	U.setup(model.data)
+	U.scale = float(model.s.settings.font)
+	pages = Pages.new(self)
+	var report = saves.resume(model,now_ms())
+	if not save_blocked: persist()
+	build_shell()
+	set_page("village")
+	if report.elapsed>30000: call_deferred("offline_dialog",report)
+	if save_blocked: call_deferred("toast",saves.message)
+	Engine.max_fps = 30 if model.s.settings.battery else 60
+	if ResourceLoader.exists("res://assets/audio/refuge.wav"):
+		music = AudioStreamPlayer.new()
+		music.stream = load("res://assets/audio/refuge.wav")
+		music.volume_db = linear_to_db(float(model.s.settings.music))
+		add_child(music)
+		music.play()
+		music.finished.connect(func(): music.play())
+	effect = AudioStreamPlayer.new()
+	effect.stream = load("res://assets/audio/action.wav")
+	add_child(effect)
+
+func tr2(id_text: String, en_text: String) -> String:
+	return en_text if model.s.settings.locale=="en" else id_text
+
+func now_ms() -> int:
+	return int(Time.get_unix_time_from_system()*1000)
+
+func persist():
+	if save_blocked: return
+	var old_wall = model.s.wall
+	model.s.wall = now_ms()
+	if not saves.write_state(model.s,model.data):
+		model.s.wall = old_wall
+		if is_instance_valid(toast_label): toast(saves.message)
+
+func _notification(what):
+	if not is_node_ready(): return
+	if what==NOTIFICATION_APPLICATION_PAUSED:
+		persist()
+		paused = true
+	elif what==NOTIFICATION_APPLICATION_RESUMED and paused:
+		paused = false
+		fraction_ms = 0
+		var report = saves.resume(model,now_ms())
+		persist()
+		if report.elapsed>30000: offline_dialog(report)
+	elif what==NOTIFICATION_WM_CLOSE_REQUEST:
+		persist()
+		get_tree().quit()
+	elif what==NOTIFICATION_WM_GO_BACK_REQUEST:
+		if is_instance_valid(dialog): dismiss()
+		elif page!="village": set_page("village")
+		else:
+			persist()
+			get_tree().quit()
+
+func _process(delta):
+	if paused: return
+	fraction_ms += delta*1000
+	var ms = int(fraction_ms)
+	fraction_ms -= ms
+	model.advance(ms)
+	save_timer += delta
+	ui_timer += delta
+	if save_timer>=15:
+		save_timer = 0
+		persist()
+	if ui_timer>=.15:
+		ui_timer = 0
+		refresh()
+
+func build_shell():
+	for child in get_children():
+		if child!=music:
+			remove_child(child)
+			child.queue_free()
+	dialog = null
+	var bg = ColorRect.new()
+	bg.color = U.INK
+	bg.set_anchors_and_offsets_preset(Control.PRESET_FULL_RECT)
+	add_child(bg)
+	var margin = MarginContainer.new()
+	margin.set_anchors_and_offsets_preset(Control.PRESET_FULL_RECT)
+	if OS.get_name()=="Android":
+		var safe = DisplayServer.get_display_safe_area()
+		var screen = DisplayServer.screen_get_size()
+		var ratio = 480.0/maxf(1,screen.x)
+		margin.add_theme_constant_override("margin_top",int(safe.position.y*ratio))
+		margin.add_theme_constant_override("margin_bottom",maxi(0,int((screen.y-safe.end.y)*ratio)))
+	add_child(margin)
+	var layout = U.column(0)
+	margin.add_child(layout)
+	var header = PanelContainer.new()
+	header.add_theme_stylebox_override("panel",U.box(Color("10181e"),U.LINE,0,16))
+	layout.add_child(header)
+	var hr = U.row(12)
+	header.add_child(hr)
+	hr.add_child(U.portrait(0,Vector2(44,54)))
+	var title = U.column(0)
+	hr.add_child(title)
+	title.add_child(U.label("ASHEN COVENANT",20,U.TEXT,true))
+	title.add_child(U.label(tr2("PENJAGA BARA TERAKHIR","KEEPER OF THE LAST EMBER"),9,U.GOLD))
+	hr.add_child(U.spacer())
+	var counters = U.column(2)
+	hr.add_child(counters)
+	gold_label = U.label("",16,U.GOLD)
+	hp_label = U.label("",12,U.MUTED)
+	counters.add_child(gold_label)
+	counters.add_child(hp_label)
+	scroller = ScrollContainer.new()
+	scroller.size_flags_vertical = Control.SIZE_EXPAND_FILL
+	scroller.horizontal_scroll_mode = ScrollContainer.SCROLL_MODE_DISABLED
+	layout.add_child(scroller)
+	var inset = MarginContainer.new()
+	inset.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+	inset.add_theme_constant_override("margin_left",18)
+	inset.add_theme_constant_override("margin_right",18)
+	inset.add_theme_constant_override("margin_top",18)
+	inset.add_theme_constant_override("margin_bottom",24)
+	scroller.add_child(inset)
+	body = U.column(16)
+	body.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+	inset.add_child(body)
+	var footer = PanelContainer.new()
+	footer.add_theme_stylebox_override("panel",U.box(Color("182128"),U.LINE,0,12))
+	layout.add_child(footer)
+	var footer_col = U.column(5)
+	footer.add_child(footer_col)
+	var fr = U.row(8)
+	footer_col.add_child(fr)
+	var ft = U.column(3)
+	ft.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+	fr.add_child(ft)
+	activity_label = U.label("",14,U.TEXT)
+	activity_label.text_overrun_behavior = TextServer.OVERRUN_TRIM_ELLIPSIS
+	ft.add_child(activity_label)
+	activity_sub = U.label("",11,U.MUTED)
+	activity_sub.text_overrun_behavior = TextServer.OVERRUN_TRIM_ELLIPSIS
+	ft.add_child(activity_sub)
+	fr.add_child(U.button(tr2("Antrean","Queue"),queue_dialog))
+	activity_progress = U.progress(0,1,U.GOLD,3)
+	footer_col.add_child(activity_progress)
+	var nav = U.row(2)
+	var nav_panel = PanelContainer.new()
+	nav_panel.add_theme_stylebox_override("panel",U.box(Color("0e151a"),U.LINE,0,6))
+	nav_panel.add_child(nav)
+	layout.add_child(nav_panel)
+	for entry in [["village","Desa","Refuge"],["explore","Jelajah","Explore"],["skills","Keahlian","Skills"],["inventory","Tas","Bag"],["character","Karakter","Hero"]]:
+		var key = entry[0]
+		var b = U.button(tr2(entry[1],entry[2]),func(): set_page(key))
+		b.name = key
+		b.custom_minimum_size.y = 55
+		b.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+		b.add_theme_font_size_override("font_size",int(12*U.scale))
+		b.add_theme_stylebox_override("normal",U.box(Color("101a21") if key==page else Color("0e151a"),U.GOLD if key==page else Color("0e151a"),4,6))
+		nav.add_child(b)
+	hud = layout
+	toast_label = U.label("",14,U.TEXT)
+	toast_label.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
+	toast_label.add_theme_stylebox_override("normal",U.box(Color("38423b"),U.GOLD,8,14))
+	toast_label.set_anchors_and_offsets_preset(Control.PRESET_CENTER_BOTTOM)
+	toast_label.offset_left = -215
+	toast_label.offset_right = 215
+	toast_label.offset_top = -215
+	toast_label.offset_bottom = -145
+	toast_label.visible = false
+	toast_label.z_index = 20
+	add_child(toast_label)
+
+func set_page(next: String, retain_scroll: bool = false):
+	var old_scroll = scroller.scroll_vertical if is_instance_valid(scroller) else 0
+	page = next
+	update_callbacks.clear()
+	for child in body.get_children():
+		body.remove_child(child)
+		child.queue_free()
+	match page:
+		"village": pages.village(body)
+		"explore": pages.explore(body)
+		"skills": pages.skills(body)
+		"inventory": pages.inventory(body)
+		"character": pages.character(body)
+	var nav = hud.get_child(hud.get_child_count()-1).get_child(0)
+	for b in nav.get_children():
+		b.add_theme_stylebox_override("normal",U.box(Color("1c282f") if b.name==page else Color("0e151a"),U.GOLD if b.name==page else Color("0e151a"),4,6))
+		b.add_theme_color_override("font_color",U.GOLD if b.name==page else U.MUTED)
+	scroller.set_deferred("scroll_vertical",old_scroll if retain_scroll else 0)
+	refresh()
+
+func dynamic(parent: Node, fn: Callable, size: int = 15, color: Color = U.TEXT) -> Label:
+	var l = U.para(str(fn.call()),size,color)
+	parent.add_child(l)
+	update_callbacks.append(func():
+		if is_instance_valid(l): l.text = str(fn.call()))
+	return l
+
+func refresh():
+	if not is_instance_valid(gold_label): return
+	gold_label.text = "◈ %s" % int(model.s.gold)
+	hp_label.text = "%d / 100 HP" % int(model.s.hp)
+	if model.s.queue.is_empty():
+		activity_label.text = tr2("Api menantikan langkahmu","The fire awaits your next step")
+		activity_sub.text = tr2("Pilih aktivitas · progres offline hingga 24 jam","Choose an activity · up to 24h offline progress")
+		activity_progress.value = 0
+	else:
+		var step = model.s.queue[0]
+		activity_label.text = model.activity_name(step.id)
+		activity_sub.text = "%d / %d  ·  %d %s" % [int(step.done),int(step.target),model.s.queue.size(),tr2("aktivitas","activities")]
+		var fraction = 0.0
+		if not model.s.active.is_empty():
+			var act = model.s.active
+			fraction = float(model.s.time-act.started)/maxf(1,act.due-act.started)
+		elif not model.s.fight.is_empty(): fraction = 1-float(model.s.fight.hp)/float(model.data.enemies[model.s.fight.enemy].hp)
+		else: activity_sub.text = model.requirement(step.id)
+		activity_progress.max_value = 1
+		activity_progress.value = fraction
+	for callback in update_callbacks: callback.call()
+
+func send(cmd: Dictionary, rebuild: bool = true):
+	cmd.cid = "%d-%d" % [Time.get_ticks_usec(),model.s.processed.size()]
+	if model.command(cmd):
+		if is_instance_valid(effect):
+			effect.volume_db = linear_to_db(float(model.s.settings.sfx))
+			effect.play()
+		persist()
+		if rebuild: set_page(page,true)
+	else: toast(model.error)
+	refresh()
+
+func toast(text: String):
+	if not is_instance_valid(toast_label): return
+	toast_label.text = text
+	toast_label.show()
+	var expected = text
+	get_tree().create_timer(4).timeout.connect(func():
+		if is_instance_valid(toast_label) and toast_label.text==expected: toast_label.hide())
+
+func dismiss():
+	if is_instance_valid(dialog):
+		remove_child(dialog)
+		dialog.queue_free()
+	dialog = null
+
+func modal(title: String) -> VBoxContainer:
+	dismiss()
+	dialog = Control.new()
+	dialog.set_anchors_and_offsets_preset(Control.PRESET_FULL_RECT)
+	dialog.z_index = 10
+	add_child(dialog)
+	var shade = ColorRect.new()
+	shade.color = Color(0,0,0,.78)
+	shade.set_anchors_and_offsets_preset(Control.PRESET_FULL_RECT)
+	dialog.add_child(shade)
+	var p = PanelContainer.new()
+	p.set_anchors_and_offsets_preset(Control.PRESET_FULL_RECT)
+	p.offset_left = 20
+	p.offset_right = -20
+	p.offset_top = 100
+	p.offset_bottom = -80
+	p.add_theme_stylebox_override("panel",U.box(U.INK,U.LINE,12,18))
+	dialog.add_child(p)
+	var root = U.column(14)
+	p.add_child(root)
+	var header = U.row()
+	root.add_child(header)
+	var name_label = U.para(title,22,U.GOLD)
+	header.add_child(name_label)
+	header.add_child(U.button("×",dismiss))
+	var scroll = ScrollContainer.new()
+	scroll.size_flags_vertical = Control.SIZE_EXPAND_FILL
+	scroll.horizontal_scroll_mode = ScrollContainer.SCROLL_MODE_DISABLED
+	root.add_child(scroll)
+	var content = U.column(14)
+	content.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+	scroll.add_child(content)
+	return content
+
+func activity_dialog(id: String):
+	var a = model.data.activities[id]
+	var v = modal(model.activity_name(id))
+	if a.kind!="combat":
+		v.add_child(U.icon(a.output,92))
+		v.add_child(U.para("%s · Lv.%d · %.1fs · +%d XP" % [model.local_name(model.data.skills[a.skill]),int(a.level),model.duration(a)/1000.0,int(a.xp)]))
+		for key in a.inputs:
+			var r = U.row()
+			v.add_child(r)
+			r.add_child(U.icon(key,34))
+			r.add_child(U.para("%s   %d / %d" % [model.name_of(key),model.count(key),int(a.inputs[key])]))
+			r.add_child(U.button(tr2("Cari","Find"),func(): sources_dialog(key)))
+	else:
+		var e = model.data.enemies[a.enemy]
+		v.add_child(U.portrait(int(e.portrait),Vector2(100,160)))
+		v.add_child(U.para(e.lore))
+		v.add_child(U.para("%d HP · %d ATK · %d DEF" % [int(e.hp),int(e.attack),int(e.armor)]))
+	var reason = model.requirement(id)
+	if reason!="": v.add_child(U.para(reason+tr2(". Antrean akan menunggu sampai persyaratan terpenuhi.",". The queue will wait for requirements."),14,U.RED))
+	v.add_child(U.label(tr2("TARGET AKTIVITAS","ACTIVITY TARGET"),11,U.GOLD))
+	var targets = U.row(6)
+	v.add_child(targets)
+	for number in [1,10,50,100]:
+		var b = U.button("%d×" % number,func():
+			send({"type":"queue","id":id,"target":number})
+			dismiss()
+			toast(tr2("Aktivitas masuk antrean","Activity added to queue")))
+		b.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+		targets.add_child(b)
+	var amount = SpinBox.new()
+	amount.min_value = 1
+	amount.max_value = 1000000
+	amount.value = 250
+	amount.custom_minimum_size.y = 48
+	amount.add_theme_font_size_override("font_size",18)
+	v.add_child(amount)
+	var kind = OptionButton.new()
+	for text in [tr2("Jumlah siklus","Cycle count"),tr2("Jumlah hasil baru","New output count"),tr2("Level skill tujuan","Target skill level")]: kind.add_item(text)
+	kind.custom_minimum_size.y = 48
+	v.add_child(kind)
+	var skip = CheckButton.new()
+	skip.text = tr2("Lewati jika bahan tidak tersedia","Skip when requirements are missing")
+	skip.add_theme_font_size_override("font_size",13)
+	v.add_child(skip)
+	v.add_child(U.button(tr2("Tambahkan ke antrean","Add to queue"),func():
+		send({"type":"queue","id":id,"target":int(amount.value),"kind":["cycles","output","level"][kind.selected],"skip":skip.button_pressed})
+		dismiss(),true))
+	v.add_child(U.para(tr2("Satu aktivitas berjalan. Tutup game dan progres tetap berlanjut hingga 24 jam.","One activity at a time. Close the game and progress continues for up to 24 hours."),13))
+
+func sources_dialog(id: String):
+	var v = modal(tr2("Sumber: ","Sources: ")+model.name_of(id))
+	for aid in model.sources(id):
+		var a = model.data.activities[aid]
+		v.add_child(U.button(model.activity_name(aid)+" · "+model.local_name(model.data.skills[a.skill]),func(): activity_dialog(aid)))
+	if model.data.merchant.has(id): v.add_child(U.button(tr2("Beli di pedagang desa","Buy from the village merchant"),merchant_dialog))
+
+func queue_dialog():
+	var v = modal(tr2("Antrean perjalanan","Journey queue"))
+	v.add_child(U.para(tr2("20 slot gratis. Aktivitas pertama berjalan; sisanya menunggu.","20 free slots. The first activity runs; the rest wait.")))
+	if model.s.queue.is_empty(): v.add_child(U.para(tr2("Belum ada aktivitas. Pilih dari Keahlian atau Jelajah.","No activities yet. Choose from Skills or Explore.")))
+	for i in range(model.s.queue.size()):
+		var st = model.s.queue[i]
+		var card = U.card(v)
+		card.add_child(U.para("%02d  %s" % [i+1,model.activity_name(st.id)],16,U.TEXT))
+		card.add_child(U.para("%d / %d · %s" % [int(st.done),int(st.target),st.kind],12))
+		var r = U.row()
+		card.add_child(r)
+		if i>1: r.add_child(U.button("↑",func():
+			send({"type":"up","index":i})
+			queue_dialog()))
+		r.add_child(U.button(tr2("Batalkan","Cancel"),func():
+			send({"type":"cancel","index":i})
+			queue_dialog()))
+	if not model.s.queue.is_empty(): v.add_child(U.button(tr2("Hentikan semua aktivitas","Stop all activities"),func():
+		send({"type":"clear"})
+		queue_dialog()))
+	v.add_child(U.para(tr2("Bahan siklus yang belum selesai dikembalikan saat dibatalkan.","Ingredients reserved for an unfinished cycle are returned on cancellation."),12))
+
+func merchant_dialog():
+	var v = modal(tr2("Pedagang Cinderwatch","Cinderwatch merchant"))
+	v.add_child(U.para(tr2("Perbekalan dibeli dengan gold hasil petualangan.","Supplies are bought with gold earned on your journey.")))
+	for id in model.data.merchant:
+		var c = U.card(v)
+		var r = U.row()
+		c.add_child(r)
+		r.add_child(U.icon(id,56))
+		r.add_child(U.para(model.name_of(id),17,U.TEXT))
+		var qty = 10 if id=="empty_vial" else 1
+		c.add_child(U.button(tr2("Beli","Buy")+" %d · %d gold" % [qty,int(model.data.merchant[id])*qty],func():
+			send({"type":"buy","id":id,"amount":qty})
+			merchant_dialog(),true))
+
+func item_dialog(uid: String):
+	var g = model.gear(uid)
+	if g.is_empty(): return
+	var d = model.data.items[g.id]
+	var v = modal(model.name_of(g.id))
+	v.add_child(U.icon(g.id,100))
+	v.add_child(U.label(model.data.rarities[int(g.q)].to_upper()+" · "+str(d.slot).to_upper(),12,U.QUALITY[int(g.q)]))
+	var equipped = model.gear(str(model.s.equipped.get(d.slot,"")))
+	for stat in ["attack","armor","speed"]:
+		if d.get(stat,0)==0: continue
+		var value = float(d[stat])*RealmModel.QUALITY[int(g.q)]
+		var old = float(model.data.items[equipped.id].get(stat,0))*RealmModel.QUALITY[int(equipped.q)] if not equipped.is_empty() else 0.0
+		v.add_child(U.para("%s  %.1f  (%+.1f)" % [stat.to_upper(),value,value-old],19,U.GREEN if value>=old else U.RED))
+	v.add_child(U.button(tr2("Pasang perlengkapan","Equip item"),func():
+		send({"type":"equip","id":uid})
+		dismiss(),true))
+	v.add_child(U.button(tr2("Buka kunci" if g.locked else "Kunci item","Unlock" if g.locked else "Lock item"),func():
+		send({"type":"lock","id":uid})
+		item_dialog(uid)))
+	v.add_child(U.button(tr2("Hapus favorit" if g.favorite else "Jadikan favorit","Unfavorite" if g.favorite else "Favorite"),func():
+		send({"type":"favorite","id":uid})
+		item_dialog(uid)))
+	if not model.protected(uid): v.add_child(U.button(tr2("Lebur perlengkapan…","Salvage item…"),func(): salvage_dialog([uid])))
+
+func salvage_dialog(ids: Array):
+	var v = modal(tr2("Konfirmasi peleburan","Confirm salvage"))
+	var total = 0
+	for uid in ids:
+		var g = model.gear(uid)
+		if g.is_empty(): continue
+		total += int(g.count)*[1,1,2,4,6,8,12,16][int(g.q)]
+		v.add_child(U.para("%s ×%d" % [model.name_of(g.id),int(g.count)]))
+	v.add_child(U.label("→ %d %s" % [total,tr2("serpihan logam","metal scraps")],19,U.GOLD))
+	v.add_child(U.para(tr2("Perlengkapan dalam daftar akan dilebur permanen.","The listed equipment will be permanently salvaged.")))
+	v.add_child(U.button(tr2("Lebur item di atas","Salvage listed items"),func():
+		send({"type":"salvage","ids":ids})
+		dismiss(),true))
+
+func offline_dialog(report: Dictionary):
+	var v = modal(tr2("Selamat datang kembali","Welcome back"))
+	v.add_child(U.label(tr2("BARA TETAP MENYALA","THE EMBER ENDURES"),11,U.GOLD))
+	v.add_child(U.para(tr2("Petualanganmu berlanjut selama","Your journey continued for"),16))
+	var seconds = int(report.elapsed/1000)
+	v.add_child(U.label("%dj %02dm" % [int(seconds/3600),int(seconds/60)%60],42,U.TEXT,true))
+	var r = U.row()
+	v.add_child(r)
+	U.stat(r,"%+d" % int(report.gold),"GOLD",U.GOLD)
+	U.stat(r,"+%d" % int(report.xp),"XP",U.GREEN)
+	U.stat(r,str(report.kills),tr2("DIKALAHKAN","DEFEATED"))
+	for id in report.gains: v.add_child(U.para("+%d  %s" % [int(report.gains[id]),model.name_of(id)],15,U.GREEN))
+	for id in report.spent: v.add_child(U.para("−%d  %s" % [int(report.spent[id]),model.name_of(id)],13,U.MUTED))
+	if not model.s.queue.is_empty() and model.s.active.is_empty() and model.s.fight.is_empty(): v.add_child(U.para(model.requirement(model.s.queue[0].id),15,U.RED))
+	v.add_child(U.para(tr2("Hasil sudah tersimpan. Batas progres offline: 24 jam.","Results are already saved. Offline progress cap: 24 hours."),12))
+	v.add_child(U.button(tr2("Lanjutkan perjalanan","Continue the journey"),func():
+		model.s.report = {}
+		persist()
+		dismiss()
+		set_page(page,true),true))
+
+func settings_dialog():
+	var v = modal(tr2("Pengaturan","Settings"))
+	for cfg in [["motion","Animasi lingkungan","Ambient animation"],["battery","Hemat baterai · 30 FPS","Battery saver · 30 FPS"]]:
+		var b = CheckButton.new()
+		b.text = tr2(cfg[1],cfg[2])
+		b.button_pressed = bool(model.s.settings[cfg[0]])
+		b.custom_minimum_size.y = 48
+		v.add_child(b)
+		b.toggled.connect(func(value):
+			send({"type":"setting","id":cfg[0],"value":value},false)
+			Engine.max_fps = 30 if model.s.settings.battery else 60
+			set_page(page,true))
+	v.add_child(U.label(tr2("Ukuran teks","Text size"),16))
+	var fonts = U.row()
+	v.add_child(fonts)
+	for size_value in [1.0,1.15,1.3]:
+		fonts.add_child(U.button("%d%%" % int(size_value*100),func():
+			send({"type":"setting","id":"font","value":size_value},false)
+			U.scale = size_value
+			build_shell()
+			set_page(page)))
+	v.add_child(U.button("Bahasa Indonesia / English",func():
+		send({"type":"setting","id":"locale","value":"en" if model.s.settings.locale=="id" else "id"},false)
+		build_shell()
+		set_page(page)))
+	for key in ["music","sfx"]:
+		v.add_child(U.label(tr2("Musik" if key=="music" else "Efek suara","Music" if key=="music" else "Sound effects"),15))
+		var slider = HSlider.new()
+		slider.min_value = 0
+		slider.max_value = 1
+		slider.step = .05
+		slider.value = float(model.s.settings[key])
+		slider.custom_minimum_size.y = 40
+		v.add_child(slider)
+		slider.value_changed.connect(func(value):
+			model.s.settings[key] = value
+			if key=="music" and is_instance_valid(music): music.volume_db = linear_to_db(value)
+			persist())
+	v.add_child(U.button(tr2("Ekspor cadangan save","Export save backup"),export_save))
+	v.add_child(U.button(tr2("Impor cadangan save","Import save backup"),import_save))
+	v.add_child(U.button(tr2("Kredit & lisensi","Credits & licenses"),func():
+		var credits = modal(tr2("Kredit & lisensi","Credits & licenses"))
+		credits.add_child(U.para("Ilustrasi: dibuat untuk Ashen Covenant dengan OpenAI image generation.\nAudio: sintesis orisinal.\nFont: Manrope dan Cormorant Garamond (SIL OFL 1.1).\nEngine: Godot (MIT)."))
+		for path in ["res://assets/GODOT-LICENSE.txt","res://assets/fonts/manrope-OFL.txt","res://assets/fonts/cormorantgaramond-OFL.txt","res://assets/GODOT-COPYRIGHT.txt"]:
+			credits.add_child(U.para(FileAccess.get_file_as_string(path),12))))
+	v.add_child(U.para(tr2("Ashen Covenant · Fondasi 0.1\nTanpa iklan. Semua sistem saat ini gratis.\nNama game masih nama kerja.","Ashen Covenant · Foundation 0.1\nNo ads. All current systems are free.\nThe game title is a working name."),12))
+
+func export_save():
+	var fd = FileDialog.new()
+	fd.access = FileDialog.ACCESS_FILESYSTEM
+	fd.file_mode = FileDialog.FILE_MODE_SAVE_FILE
+	fd.use_native_dialog = true
+	fd.current_file = "ashen-covenant-backup.json"
+	fd.add_filter("*.json","Save backup")
+	add_child(fd)
+	fd.file_selected.connect(func(path):
+		var f = FileAccess.open(path,FileAccess.WRITE)
+		if f!=null:
+			f.store_string(saves.encode(model.s))
+			f.close()
+			toast(tr2("Cadangan berhasil diekspor","Backup exported"))
+		else: toast(tr2("Tidak dapat menulis cadangan","Cannot write backup"))
+		fd.queue_free())
+	fd.canceled.connect(fd.queue_free)
+	fd.popup_centered_ratio(.85)
+
+func import_save():
+	var fd = FileDialog.new()
+	fd.access = FileDialog.ACCESS_FILESYSTEM
+	fd.file_mode = FileDialog.FILE_MODE_OPEN_FILE
+	fd.use_native_dialog = true
+	fd.add_filter("*.json","Save backup")
+	add_child(fd)
+	fd.file_selected.connect(func(path):
+		var f = FileAccess.open(path,FileAccess.READ)
+		if f==null or f.get_length()>RealmSave.LIMIT:
+			toast(tr2("Cadangan terlalu besar atau tidak terbaca","Backup is too large or unreadable"))
+			fd.queue_free()
+			return
+		var incoming = saves.decode(f.get_as_text(),model.data)
+		fd.queue_free()
+		if incoming.is_empty():
+			toast(tr2("Save tidak valid; progresmu tetap aman","Invalid save; your progress is unchanged"))
+			return
+		var v = modal(tr2("Ganti progres dengan cadangan?","Replace progress with backup?"))
+		v.add_child(U.para(tr2("Progres saat ini dicadangkan sebelum diganti.","Your current progress is backed up before replacement.")))
+		v.add_child(U.button(tr2("Gunakan cadangan ini","Use this backup"),func():
+			persist()
+			incoming.wall = now_ms()
+			if saves.write_state(incoming,model.data):
+				model.s = incoming
+				save_blocked = false
+				Engine.max_fps = 30 if model.s.settings.battery else 60
+				if is_instance_valid(music): music.volume_db = linear_to_db(float(model.s.settings.music))
+				U.scale = float(model.s.settings.font)
+				build_shell()
+				set_page("village")
+			else: toast(tr2("Impor gagal","Import failed")),true)))
+	fd.canceled.connect(fd.queue_free)
+	fd.popup_centered_ratio(.85)

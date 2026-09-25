@@ -1,0 +1,7 @@
+.godot/
+build/
+.superpowers/
+*.keystore
+*.jks
+.env
+tools/local-paths.json
