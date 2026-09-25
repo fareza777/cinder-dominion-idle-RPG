@@ -127,7 +127,37 @@ func relics():
 				if is_instance_valid(b): b.disabled = state.fragments[id]<cost or not m.s.fight.is_empty())
 		if rank>0 and state.relic!=id: card.add_child(U.button("Equip "+d.name,func():
 			if app.send({"type":"relic_equip","id":id}): relics()))
-		card.add_child(U.button("Farm fragments · preview hunt",func(): app.activity_dialog("hunt_"+d.enemy,10)))
+		card.add_child(U.button("Find a hunting ground",func(): farms(id)))
+
+func farms(relic: String):
+	var d = C.RELICS[relic]
+	var v = app.modal(d.name+" · hunting grounds")
+	var state = C.state(m)
+	var rank = int(state.relics[relic])
+	var missing = maxi(0,C.relic_cost(rank)-int(state.fragments[relic])) if rank<10 else 0
+	v.add_child(U.para("%d fragments to the next rank" % missing if rank<10 else "This relic is fully awakened.",22,U.TEXT))
+	v.add_child(U.para("Choose a route for your current build. Safer hunts appear first, then the estimated fragment yield. Estimates vary with misses, healing and your remaining supplies.",14))
+	var choices = RealmCombat.farms(m,relic)
+	if choices.is_empty(): v.add_child(U.para("No hunting grounds are open yet. Follow the main journey to reach "+d.source+".",15,U.GOLD))
+	for i in range(choices.size()):
+		var choice = choices[i]
+		var enemy = m.data.enemies[choice.id]
+		var forecast = choice.forecast
+		var card = U.card(v,14,U.GOLD.darkened(.4) if i==0 else U.LINE)
+		var row = U.row(10)
+		card.add_child(row)
+		row.add_child(U.enemy_portrait(enemy,Vector2(64,82)))
+		var description = U.column(4)
+		description.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+		row.add_child(description)
+		description.add_child(U.para(m.local_name(enemy),19,U.TEXT))
+		description.add_child(U.para("%d fragments per victory" % int(choice.fragments),12,U.GOLD))
+		card.add_child(U.para(m.encounter_advice(choice.id),13,U.RED if forecast.risk else U.GREEN))
+		card.add_child(U.para("Estimated %.1f fragments / minute" % float(forecast.fragments_per_minute),13,U.GOLD))
+		if enemy.has("region"): card.add_child(U.para(RealmCombat.mechanic(enemy),12))
+		var wins = clampi(ceili(float(missing)/int(choice.fragments)),1,100) if missing>0 else 10
+		card.add_child(U.button("Plan %d %s" % [wins,"victory" if wins==1 else "victories"],func(): app.activity_dialog("hunt_"+choice.id,wins),i==0 and not forecast.risk))
+	app.modal_action("Return to relics",relics)
 
 func bounties():
 	C.sync_day(m,app.now_ms())
@@ -193,7 +223,7 @@ func world(selected: String = "wilds"):
 	if not m.s.beacon:
 		v.add_child(U.para("Restore Cinderwatch's beacon by defeating the Bellkeeper to begin expeditions. Your next story objective is: "+m.objective().title,15,U.GOLD))
 		v.add_child(U.button("Continue Chapter I",app.guide_dialog,true))
-	v.add_child(U.para("Clear a tier once to open the next. Repeat cleared tiers for guaranteed fragments and a 5% chance of iron equipment. Every third enemy strike is empowered.",14))
+	v.add_child(U.para("Clear a tier once to open the next. Repeat cleared tiers for guaranteed fragments and a 5% chance of iron equipment. Each guardian has a different third-strike ability.",14))
 	for region in C.REGIONS:
 		if region!=selected: continue
 		var d = C.REGIONS[region]

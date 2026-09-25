@@ -2,7 +2,7 @@ extends RefCounted
 
 const U = preload("res://ui/style.gd")
 const STORE_URL = "" # Set only after a real public listing exists.
-const VERSION = "0.4.0"
+const VERSION = "0.5.0"
 var app
 var front: Control
 var cinematic_page = 0
@@ -287,7 +287,7 @@ func act_on_goal():
 func survival():
 	var v = app.modal("Food & survival")
 	v.add_child(U.para("1. Catch raw minnows in Skills → Fishing.\n\n2. Cook them in Skills → Cooking. Raw food cannot heal you.\n\n3. In Bag, choose Auto-heal on the cooked food you want to use.\n\n4. In Hero, check the selected food and healing threshold.\n\n5. Equip armor before tougher fights. Retreat stops the entire queue. HP recovers outside combat.",17,U.TEXT))
-	app.dynamic(v,func(): return "Selected: %s ×%d · heals %d HP · used at %d%% HP" % [app.model.name_of(app.model.s.settings.food),app.model.count(app.model.s.settings.food),int(app.model.data.items[app.model.s.settings.food].heal),int(app.model.s.settings.threshold*100)],15,U.GOLD)
+	app.dynamic(v,func(): return "Selected: %s ×%d · heals %d HP · used at %d%% HP" % [app.model.name_of(app.model.s.settings.food),app.model.count(app.model.s.settings.food),RealmCombat.food_heal(app.model,app.model.s.settings.food),int(app.model.s.settings.threshold*100)],15,U.GOLD)
 	v.add_child(U.button("Go fishing",func():
 		app.dismiss()
 		app.skill = "fishing"

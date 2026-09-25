@@ -31,6 +31,12 @@
       "source": "OpenAI image generation in this task, 2026-09-25",
       "kind": "original generated art",
       "prompt_summary": "Original high-oblique world map: warm walled refuge southwest, burned forest northwest, sunken teal marsh ruins east, obsidian volcanic cathedral northeast; charcoal and amber painterly architecture, no text or UI."
+    },
+    {
+      "file": "art/expedition-guardians.png",
+      "source": "OpenAI image generation in this task, 2026-09-25",
+      "kind": "original generated art",
+      "prompt_summary": "Three equal vertical boss portraits: deadwood Thornbound Sentinel, veiled Drowned Oracle, obsidian Crowned Bellkeeper. Original painterly dark fantasy, no lettering or UI."
     }
   ],
   "fonts": [

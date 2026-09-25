@@ -9,19 +9,23 @@ var rng = RandomNumberGenerator.new()
 var error = ""
 var last_hit = ""
 var battle_event = {"serial":0,"text":"","side":"enemy"}
+var combat_events: Array = []
 var last_reward = ""
 
 func progression() -> Dictionary:
 	return RealmProgression.state(self)
 
 func combat_event(message: String, side: String):
-	battle_event = {"serial":int(battle_event.serial)+1,"text":message,"side":side}
+	battle_event = {"serial":int(battle_event.serial)+1,"text":message,"side":side,"time":int(s.time)}
+	combat_events.append(battle_event)
+	if combat_events.size()>8: combat_events.pop_front()
 
 func _init():
 	data = JSON.parse_string(FileAccess.get_file_as_string("res://data/catalog.json"))
 	fresh()
 
 func fresh(seed_value: int = 12345):
+	combat_events.clear()
 	last_reward = ""
 	last_hit = ""
 	rng.seed = seed_value
@@ -311,14 +315,9 @@ func gear_score(g: Dictionary) -> float:
 	return (float(d.get("attack",0))+float(d.get("armor",0)))*QUALITY[int(g.q)]+float(d.get("speed",0))*100
 
 func encounter_advice(id: String) -> String:
-	var d = data.enemies[id]
-	var st = stats()
-	var strikes = ceili(float(d.hp)/hit_damage(int(st.attack),int(d.armor)))
-	var incoming = ceili(strikes*2000.0/int(d.interval))*hit_damage(int(d.attack),int(st.armor))
-	if d.boss: incoming = ceili(incoming*1.3)
-	var reserve = int(s.hp)+count(s.settings.food)*int(data.items[s.settings.food].heal)
-	var rating = "Favorable" if incoming<int(s.hp)*.65 else ("Bring food" if incoming<reserve*.75 else "High risk — upgrade gear")
-	return "%s · about %ds per fight. Estimate excludes critical hits and special skills; repeated hunts consume supplies." % [rating,strikes*2]
+	var f = RealmCombat.forecast(self,id)
+	if f.stalled: return "Outmatched · the enemy can recover faster than your current damage. Improve your weapon, talents or relic."
+	return "%s · about %ds · roughly %d %s per fight" % [f.rating,int(f.seconds),int(f.meals),"meal" if int(f.meals)==1 else "meals"]
 
 func step_complete(step: Dictionary) -> bool:
 	if step.kind=="level": return level(data.activities[step.id].skill)>=int(step.target)
@@ -434,11 +433,14 @@ func resolve_combat():
 	if f.enemy_at<=s.time:
 		f.enemy_at = int(s.time)+int(d.interval)
 		f.hits += 1
+		var move = RealmCombat.move(self,d,int(f.hits),int(st.armor))
+		if move.heal>0:
+			var restored = mini(int(move.heal),int(d.hp)-int(f.hp))
+			f.hp = mini(int(d.hp),int(f.hp)+int(move.heal))
+			if restored>0: combat_event("+%d HP" % restored,"enemy")
 		if rng.randf()<.95:
-			var attack = int(d.attack*1.8) if d.boss and int(f.hits)%3==0 else int(d.attack)
-			var received = hit_damage(attack,int(st.armor))
-			s.hp -= received
-			combat_event("−%d HP" % received,"hero")
+			s.hp -= int(move.damage)
+			combat_event("−%d HP" % int(move.damage),"hero")
 		if s.hp<=0:
 			s.hp = 0
 			last_reward = "DEFEAT · No items lost. Rest, cook food, or upgrade equipment before returning."
@@ -450,9 +452,7 @@ func resolve_combat():
 		var food = str(s.settings.food)
 		if s.hp<=100*float(s.settings.threshold) and count(food)>0:
 			spend(food,1)
-			var legacy = RealmChronicle.state(self)
-			var bonus = int(legacy.relics.heart)*3 if legacy.relic=="heart" else 0
-			s.hp = mini(100,int(s.hp)+int(data.items[food].heal)+bonus)
+			s.hp = mini(100,int(s.hp)+RealmCombat.food_heal(self,food))
 
 func win(enemy: Dictionary):
 	var id = enemy.id

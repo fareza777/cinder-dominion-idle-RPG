@@ -37,7 +37,7 @@ for region_index,(region,region_name,title,portrait,hp,attack,armor,drop,relic) 
         key=f'{region}_{tier}'
         gate='beacon' if region_index==0 and tier==1 else (f'{expeditions[region_index-1][0]}_5' if tier==1 else f'{region}_{tier-1}')
         name=f'{title} · Tier {tier}'
-        enemy=dict(id=key,name=name,en=name,hp=int(hp*(1+.4*(tier-1))),attack=int(attack*(1+.22*(tier-1))),armor=armor+tier-1,interval=2800,gold=25+region_index*20+tier*8,xp=40+region_index*25+tier*15,drop=drop,qty=2+tier,unlock=gate,portrait=portrait,lore=f'{region_name}: a stronger echo of the fallen.',lore_en=f'{region_name}: a stronger echo of the fallen. Every third strike is empowered. First victory opens the next tier.',boss=True,region=region,tier=tier,relic=relic,fragments=tier+1)
+        enemy=dict(id=key,name=name,en=name,hp=int(hp*(1+.4*(tier-1))),attack=int(attack*(1+.22*(tier-1))),armor=armor+tier-1,interval=2800,gold=25+region_index*20+tier*8,xp=40+region_index*25+tier*15,drop=drop,qty=2+tier,unlock=gate,portrait=portrait,lore=f'{region_name}: a stronger echo of the fallen.',lore_en=f'{region_name}: a stronger echo of the fallen. Every third strike is empowered. First victory opens the next tier.',boss=True,region=region,tier=tier,relic=relic,fragments=(8+region_index*4)*tier)
         enemies[key]=enemy
         activities['hunt_'+key]=dict(id='hunt_'+key,kind='combat',enemy=key,skill='bladecraft',level=1,output=drop,inputs={},duration=2,xp=enemy['xp'])
 

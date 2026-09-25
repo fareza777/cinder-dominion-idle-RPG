@@ -96,7 +96,8 @@ func explore(parent: Node):
 		if m.s.fight.is_empty(): return "Ready when you are. Choose a target below."
 		var f = m.s.fight
 		if m.data.enemies[f.enemy].boss:
-			return "THIRD TOLL IN %.1fs · 1.8× damage" % [maxf(0,(int(f.enemy_at)-int(m.s.time))/1000.0)] if int(f.hits)%3==2 else "Heavy strike: every third attack deals 1.8× damage."
+			var special = RealmCombat.move(m,m.data.enemies[f.enemy],3,int(m.stats().armor))
+			return "%s in %.1fs" % [special.label,maxf(0,(int(f.enemy_at)-int(m.s.time))/1000.0)] if int(f.hits)%3==2 else "%s · in %d enemy attacks" % [special.label,3-int(f.hits)%3]
 		return "Automatic combat · skills trigger every fourth attack.",13,U.GOLD)
 	var retreat = U.button("Retreat & stop queue",func(): app.send({"type":"clear"}))
 	battle.add_child(retreat)
@@ -104,7 +105,7 @@ func explore(parent: Node):
 		if is_instance_valid(retreat): retreat.visible = not m.s.fight.is_empty())
 	var prep = U.card(parent)
 	app.dynamic(prep,func(): return "%s · %d ATK · %d DEF" % [RealmProgression.STANCES[m.progression().stance].name,int(m.stats().attack),int(m.stats().armor)],16,U.GOLD)
-	app.dynamic(prep,func(): return "Auto-heal: %s ×%d · triggers at %d%% HP" % [m.name_of(m.s.settings.food),m.count(m.s.settings.food),int(m.s.settings.threshold*100)],13,U.GREEN)
+	app.dynamic(prep,func(): return "%s ×%d · heals %d HP at %d%% health" % [m.name_of(m.s.settings.food),m.count(m.s.settings.food),RealmCombat.food_heal(m,m.s.settings.food),int(m.s.settings.threshold*100)],13,U.GREEN)
 	var actions = U.row(6)
 	prep.add_child(actions)
 	actions.add_child(U.button("Fighting style",app.tactics_dialog))
@@ -136,7 +137,7 @@ func explore(parent: Node):
 		elif id=="hollow_hound": card.add_child(U.para("OPTIONAL HUNT · Gather meat and melee XP.",12,U.GOLD))
 		if why!="": card.add_child(U.para(why,12,U.MUTED))
 		else:
-			app.dynamic(card,func(): return m.encounter_advice(id),12,U.GREEN)
+			app.dynamic(card,func(): return m.encounter_advice(id),12,U.MUTED)
 			card.add_child(U.button(text("Tantang boss" if d.boss else "Buru & kumpulkan loot","Challenge boss" if d.boss else "Hunt & gather loot"),func(): app.activity_dialog("hunt_"+id),d.boss))
 
 func skills(parent: Node):

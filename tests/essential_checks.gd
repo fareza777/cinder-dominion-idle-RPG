@@ -112,5 +112,32 @@ func _init():
 	order.command({"type":"work_order","id":"forge","batches":1})
 	order.advance(5000000)
 	check(preview.steps.size()==2 and order.count("copper_ingot")==500 and order.count("copper_ore")==0 and order.s.xp.smithing==4000 and order.s.queue.is_empty(),"long work order gathers inputs, earns XP and finishes while offline")
+	var wild = RealmCombat.move(expedition,expedition.data.enemies.wilds_1,3,20)
+	var plain = RealmCombat.move(expedition,expedition.data.enemies.wilds_1,1,20)
+	var oracle = RealmCombat.move(expedition,expedition.data.enemies.marsh_1,3,20)
+	var crown = RealmCombat.move(expedition,expedition.data.enemies.crown_1,3,20)
+	check(wild.damage>plain.damage and oracle.heal==8 and crown.damage>RealmCombat.move(expedition,expedition.data.enemies.crown_1,1,20).damage,"guardians have distinct armor-piercing, recovery and burst attacks")
+	check(RealmCombat.forecast(expedition,"wilds_1").fragments_per_minute>RealmCombat.forecast(expedition,"ash_rat").fragments_per_minute,"unlocked expedition improves predicted relic yield over starter rats")
+	var healer = RealmModel.new()
+	healer.s.tutorial = true
+	RealmChronicle.state(healer).relics.heart = 2
+	healer.s.chronicle.relic = "heart"
+	healer.s.hp = 30
+	healer.command({"type":"queue","id":"hunt_ash_rat","target":1})
+	healer.s.fight.enemy_at = 1
+	healer.advance(1)
+	check(RealmCombat.food_heal(healer,"cooked_minnow")==26 and healer.s.hp>=55 and healer.count("cooked_minnow")==4,"displayed relic healing matches food consumed in combat")
+	var marsh = RealmModel.new()
+	marsh.s = expedition.s.duplicate(true)
+	marsh.command({"type":"clear"})
+	marsh.s.kills.wilds_5 = 1
+	marsh.s.hp = 100
+	marsh.s.bag.cooked_minnow = 100
+	marsh.command({"type":"queue","id":"hunt_marsh_1","target":3})
+	var marsh_chunks = RealmModel.new()
+	marsh_chunks.s = marsh.s.duplicate(true)
+	marsh.advance(180000)
+	for i in range(180): marsh_chunks.advance(1000)
+	check(marsh.s==marsh_chunks.s,"Oracle healing stays deterministic during offline combat")
 	print("ESSENTIAL CHECKS: ","PASS" if failed==0 else "FAIL")
 	quit(1 if failed else 0)

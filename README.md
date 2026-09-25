@@ -1,17 +1,26 @@
-# Ashen Covenant — Adventure preview 0.4
+# Ashen Covenant — Adventure preview 0.5
 
 Idle RPG dark fantasy untuk Android. Gratis, tanpa iklan. Build ini untuk dimainkan dan dievaluasi, belum versi rilis publik.
 
 ## Mulai bermain
 
-1. Pasang `build/android/ashen-covenant-0.4.apk` di Android 64-bit. APK memakai identitas aplikasi yang sama dengan 0.1–0.3 sehingga bisa dipasang sebagai pembaruan.
+1. Pasang `build/android/ashen-covenant-0.5.apk` di Android 64-bit. APK memakai identitas aplikasi yang sama dengan 0.1–0.4 sehingga bisa dipasang sebagai pembaruan.
 2. Seluruh antarmuka dan narasi game memakai **English**. Splash mengantar ke menu utama. Pilih **New game**, ikuti atau lewati intro, lalu baca empat tahap onboarding. **Continue journey** melanjutkan progres yang sudah ada.
-3. Tekan **Guide →** di bagian atas layar. Panduan menunjukkan tujuan, alasan, lokasi aktivitas dan jumlah yang dibutuhkan. Tekan tindakannya, lalu **Start this objective** untuk memulai jumlah siklus yang tepat.
+3. Tekan **Guide →** di bagian atas layar. Panduan menunjukkan tujuan, alasan, lokasi aktivitas dan jumlah yang dibutuhkan. Tekan tindakannya, lalu **Begin · 4 cycles** (jumlahnya mengikuti tujuan) untuk memulai jumlah siklus yang tepat.
 4. Tugas awal: 4 copper ore → 2 copper ingots → 1 ash log → Copper Sword → Equip item → 3 Ash Rats. Panduan lalu mengantar lewat musuh berikutnya hingga Bellkeeper, tanpa melompat langsung ke boss.
 5. Pantau activity bar. **Queue** menampilkan tugas berjalan/menunggu, progres target, dan alasan terhambat. **Sources/Find** membantu mencari bahan yang kurang. Satu aktivitas berjalan pada satu waktu.
 6. Buka **Food & survival guide** untuk belajar memancing, memasak, memilih makanan dan menyiapkan auto-heal. Perlengkapan hasil crafting harus dipasang dari **Bag**.
 7. Progres tersimpan otomatis dan berlanjut maksimal 24 jam saat kembali. Menu **☰** tersedia dari dalam permainan. New Game meminta konfirmasi dan menyimpan cadangan terpisah; **Settings → Restore a previous journey** memulihkannya.
 
+## Baru di 0.5
+
+**Farming sesuai build.** Relic → Find a hunting ground membandingkan wilayah yang sudah terbuka: fragment per kemenangan, estimasi waktu, kebutuhan makanan dan hasil per menit. Pilihan yang lebih aman didahulukan. Tombolnya menyiapkan jumlah kemenangan menuju rank berikutnya. Hadiah ekspedisi meningkat menurut wilayah dan tier, sehingga melawan guardian memberi alasan yang lebih kuat daripada terus berburu musuh awal.
+
+**Tiga guardian, tiga ancaman.** Thornbound Sentinel menembus separuh armor setiap serangan ketiga. Drowned Oracle memulihkan HP. Crowned Bellkeeper menghasilkan ledakan damage lebih besar. Ketiganya memakai portrait baru; persiapan menjelaskan kemampuan dan arena menampilkan hitung mundurnya. Angka healing dan damage bersamaan tetap terbaca.
+
+**Tindakan selalu terjangkau.** Tombol Begin, Gather & craft dan Begin this order tetap di bawah dialog ketika detail digulir. Work orders menampilkan proyeksi kenaikan level dan waktu dalam jam/menit. Angka pemulihan makanan sudah memasukkan bonus Emberheart. Semua teks baru memakai English.
+
+Review mendalam, temuan yang dibenahi, dan pekerjaan menuju kualitas produksi ada di `docs/review-0.5.md`. Ini peningkatan preview yang dapat dimainkan, belum klaim game AAA selesai.
 ## Baru di 0.4
 
 **Mulai dengan satu tujuan.** Refuge menampilkan **YOUR NEXT MOVE** di atas ilustrasi: apa yang perlu dikerjakan, alasannya, dan tombol tindakannya. Mulai dari 4 copper ore. Roadmap menjelaskan jalur senjata pertama → perlengkapan dan makanan → Bellkeeper → ekspedisi. Rekomendasi kemudian mengikuti kondisi antrean, talent, relic, gear, makanan dan Smithing.
@@ -20,7 +29,7 @@ Idle RPG dark fantasy untuk Android. Gratis, tanpa iklan. Build ini untuk dimain
 
 **Grind dengan tujuan.** Setiap musuh memberikan fragment relic tertentu secara pasti. Tiga relic memiliki masing-masing 10 rank; pilih satu untuk bonus attack, armor atau pemulihan makanan. Biaya upgrade meningkat, sementara tier ekspedisi lebih tinggi menghasilkan lebih banyak fragment. Tiga jalur talent menyediakan 15 rank dengan batas alokasi 10 poin, satu poin per 250 melee XP, dan reset gratis di luar combat. Tier baru memberi tujuan, build alternatif memberi alasan untuk mencoba lagi.
 
-**Dunia setelah boss.** Peta dunia bergambar orisinal membuka Ashen Wilds, Drowned Sanctum dan Obsidian Crown setelah Bellkeeper. Setiap wilayah punya lima tier. Kalahkan tier sebelumnya sekali untuk lanjut; ulangi tier yang sudah terbuka untuk farming. Ada hadiah first-clear, fragment pasti, peluang 5% loot iron, dan Rare Iron Sword saat pertama menyelesaikan tier 5. Musuh ekspedisi adalah varian yang memakai portrait cast awal.
+**Dunia setelah boss.** Peta dunia bergambar orisinal membuka Ashen Wilds, Drowned Sanctum dan Obsidian Crown setelah Bellkeeper. Setiap wilayah punya lima tier. Kalahkan tier sebelumnya sekali untuk lanjut; ulangi tier yang sudah terbuka untuk farming. Ada hadiah first-clear, fragment pasti, peluang 5% loot iron, dan Rare Iron Sword saat pertama menyelesaikan tier 5. Versi 0.5 memberi setiap wilayah portrait guardian orisinal dan mekanik serangan berbeda.
 
 **Kembali dengan rencana.** Bounty board terbuka setelah First Supplies, berisi gathering, crafting dan hunting. Hadiah: gold, makanan, fragment bertema harian. Board yang belum selesai tetap tersimpan; board yang seluruh hadiahnya sudah diklaim berganti pada hari UTC berikutnya. Tidak ada streak yang hilang. Laporan offline kini mencakup fragment, talent points baru, dan tujuan berikutnya.
 
@@ -28,7 +37,7 @@ Idle RPG dark fantasy untuk Android. Gratis, tanpa iklan. Build ini untuk dimain
 
 ## Fondasi gameplay (0.3)
 
-- **Supply planner:** dari preview resep, pilih **Plan materials & craft automatically**. Tinjau seluruh bahan, urutan kerja, dan estimasi waktu sebelum **Start complete plan**. Mendukung 1–100 hasil; antrean harus kosong. Drop acak dan pembelian tetap manual, dengan petunjuk jelas jika dibutuhkan.
+- **Supply planner:** dari preview resep, pilih **Plan materials & craft automatically**. Tinjau seluruh bahan, urutan kerja, dan estimasi waktu sebelum **Gather & craft**. Mendukung 1–100 hasil; antrean harus kosong. Drop acak dan pembelian tetap manual, dengan petunjuk jelas jika dibutuhkan.
 - **Fighting style:** Vanguard (seimbang, pukulan keempat 2×), Warden (+4 armor, −15% attack, skill pulih 8 HP), Reaver (+25% attack, −3 armor, skill 2.5×). Pilih di Hero/Explore sebelum bertarung. Skill dicoba setiap serangan keempat dan bisa meleset.
 - **Refuge contracts:** delapan milestone opsional berhadiah gold, makanan, dan scraps. Klaim satu kali per campaign.
 - **Rebuild Cinderwatch:** Ember Forge mempercepat produksi, Gateward menambah armor, Resting Hearth mempercepat pemulihan. Masing-masing tiga rank, dibeli dengan hasil bermain.
@@ -64,4 +73,4 @@ Buka `project.godot` dengan Godot **4.7.1** dan export template yang sama. Andro
 
 Pemeriksaan ringan: `godot --headless --path . --script tests/essential_checks.gd`. Regenerasi katalog melalui `python tools/build_content.py`. Sumber audio ada di `tools/make_audio.py`; font statis disiapkan dengan `tools/prepare_fonts.py` (fontTools).
 
-Lihat `docs/qa/gameplay-0.4-report.md` dan `docs/qa/foundation-report.md` untuk bukti dan keterbatasan pemeriksaan, serta `assets/manifest.json` untuk asal aset.
+Lihat `docs/review-0.5.md`, `docs/qa/polish-0.5-report.md` dan `docs/qa/foundation-report.md` untuk bukti dan keterbatasan pemeriksaan, serta `assets/manifest.json` untuk asal aset.

@@ -13,8 +13,12 @@ func work_orders(selected: String = "watch", batches: int = 1):
 	var v = app.modal("Work for the refuge")
 	v.add_child(U.para("Leave the hearth well supplied.",26,U.TEXT))
 	v.add_child(U.para("Set a longer gathering and crafting order before you leave. Materials already in your pack are used first. These orders do not start combat.",14))
-	for id in P.ORDERS:
-		v.add_child(U.button(P.ORDERS[id].name,func(): work_orders(id,batches),id==selected))
+	var selector = OptionButton.new()
+	selector.custom_minimum_size.y = 48
+	for id in P.ORDERS: selector.add_item(P.ORDERS[id].name)
+	selector.selected = P.ORDERS.keys().find(selected)
+	selector.item_selected.connect(func(index): work_orders(P.ORDERS.keys()[index],batches))
+	v.add_child(selector)
 	var d = P.ORDERS[selected]
 	v.add_child(U.para(d.detail,15,U.TEXT))
 	var sizes = U.row(6)
@@ -35,14 +39,16 @@ func work_orders(selected: String = "watch", batches: int = 1):
 	for step in plan.steps:
 		var a = m.data.activities[step.id]
 		experience[a.skill] = int(experience.get(a.skill,0))+int(a.xp)*int(step.target)
-	for skill in experience: v.add_child(U.para("+%d %s XP" % [int(experience[skill]),m.local_name(m.data.skills[skill])],13,U.GREEN))
+	for skill in experience:
+		var projected = mini(100,1+int(sqrt(float(m.s.xp[skill]+experience[skill])/25.0)))
+		v.add_child(U.para("%s · +%d XP · Lv.%d → %d" % [m.local_name(m.data.skills[skill]),int(experience[skill]),m.level(skill),projected],13,U.GREEN))
 	v.add_child(U.para("About %s · %d queue steps" % [time_label(plan.seconds),plan.steps.size()],14,U.GOLD))
 	v.add_child(U.para("Mastery may shorten this estimate as you work. Orders progress for up to 24 hours while away; finished food must be selected for auto-heal if it is not already your active food.",12))
 	for step in plan.steps: v.add_child(U.para("%s ×%d" % [m.activity_name(step.id),int(step.target)],13))
-	v.add_child(U.button("Begin this order",func():
+	app.modal_action("Begin this order",func():
 		if app.send({"type":"work_order","id":selected,"batches":batches}):
 			app.dismiss()
-			app.toast("Your order is underway. Cinderwatch will keep working while you are away."),true))
+			app.toast("Your order is underway. Cinderwatch will keep working while you are away."))
 
 func planner(id: String, amount: int = 1):
 	var v = app.modal("Crafting plan")
@@ -71,13 +77,14 @@ func planner(id: String, amount: int = 1):
 		var ingredients = []
 		for key in a.inputs: ingredients.append("%d %s" % [int(a.inputs[key])*int(step.target),m.name_of(key)])
 		c.add_child(U.para("Gather from the world" if ingredients.is_empty() else "Consumes: "+", ".join(ingredients),12))
-	v.add_child(U.button("Start complete plan",func():
+	app.modal_action("Gather & craft",func():
 		if app.send({"type":"plan","id":id,"amount":amount}):
 			app.dismiss()
-			app.toast("Supply chain started. Open Queue to follow each step."),true))
+			app.toast("Your crafting order is underway. Follow its progress in Queue."))
 	v.add_child(U.para("You can cancel at any time. Only the active cycle reserves ingredients; its unused ingredients are refunded on cancellation.",12))
 
 func time_label(seconds: float) -> String:
+	if seconds>=3600: return "%dh %02dm" % [int(seconds)/3600,int(seconds/60)%60]
 	return "%dm %ds" % [int(seconds)/60,int(seconds)%60] if seconds>=60 else "%ds" % int(seconds)
 
 func training(skill: String, target: int):

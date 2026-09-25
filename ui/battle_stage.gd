@@ -10,6 +10,9 @@ var event_side = "enemy"
 var background: Texture2D
 var faces: Array[Texture2D] = []
 var region_art: Dictionary = {}
+var current_enemy = ""
+var enemy_face: Texture2D
+var floating: Array = []
 
 func _ready():
 	custom_minimum_size.y = 280
@@ -40,7 +43,17 @@ func _process(delta: float):
 	if model==null: return
 	elapsed += delta
 	flash = maxf(0,flash-delta)
+	for item in floating: item.life -= delta
+	floating = floating.filter(func(item): return item.life>0)
+	var id = str(model.s.fight.get("enemy",""))
+	if id!="" and id!=current_enemy:
+		current_enemy = id
+		enemy_face = U.enemy_texture(model.data.enemies[id])
 	if serial!=int(model.battle_event.serial):
+		for event in model.combat_events:
+			if int(event.serial)>serial and int(model.s.time)-int(event.get("time",0))<1000:
+				floating.append({"text":event.text,"side":event.side,"life":1.0})
+				if floating.size()>4: floating.pop_front()
 		serial = int(model.battle_event.serial)
 		flash = .85
 		event_text = model.battle_event.text
@@ -52,7 +65,19 @@ func bar(rect: Rect2, fraction: float, color: Color):
 	draw_rect(Rect2(rect.position,Vector2(rect.size.x*clampf(fraction,0,1),rect.size.y)),color)
 
 func caption(at: Vector2, value: String, color: Color, font_size: int = 13, width: float = -1):
-	draw_string(U.body_font,at,value,HORIZONTAL_ALIGNMENT_CENTER,width,font_size,color)
+	var points = mini(20,roundi(font_size*U.scale))
+	if width>0:
+		var short = value
+		while short.length()>1 and U.body_font.get_string_size(short,HORIZONTAL_ALIGNMENT_LEFT,-1,points).x>width: short = short.left(short.length()-1)
+		if short!=value: value = short.left(maxi(1,short.length()-1))+"…"
+	draw_string(U.body_font,at,value,HORIZONTAL_ALIGNMENT_CENTER,width,points,color)
+
+func draw_face(texture: Texture2D, rect: Rect2, tint: Color):
+	var source = texture.get_size()
+	var factor = maxf(rect.size.x/source.x,rect.size.y/source.y)
+	var visible_size = rect.size/factor
+	var offset = Vector2((source.x-visible_size.x)/2,(source.y-visible_size.y)*.2)
+	draw_texture_rect_region(texture,rect,Rect2(offset,visible_size),tint)
 
 func _draw():
 	if model==null or faces.is_empty(): return
@@ -73,7 +98,8 @@ func _draw():
 		if hit and model.s.settings.motion: r.position.x += sin(elapsed*75)*3
 		draw_rect(r.grow(2),U.RED if hit else U.GOLD.darkened(.55))
 		if side==0 or fighting:
-			draw_texture_rect(faces[0 if side==0 else int(enemy.portrait)],r,false,Color(1,.72,.68) if hit else Color.WHITE)
+			var face = faces[0] if side==0 else (enemy_face if enemy_face!=null else faces[int(enemy.portrait)])
+			draw_face(face,r,Color(1,.72,.68) if hit else Color.WHITE)
 		else:
 			draw_rect(r,U.INK)
 			caption(r.position+Vector2(0,80),"Awaiting hunt",U.MUTED,12,w)
@@ -86,14 +112,19 @@ func _draw():
 			var interval = 2000 if side==0 else int(enemy.interval)
 			bar(Rect2(r.position.x,241,w,3),1.0-float(remaining)/interval,U.GOLD)
 	caption(Vector2(16,29),"EMBERKEEPER",U.GOLD,11,w)
-	caption(Vector2(right.position.x,29),model.local_name(enemy).to_upper() if fighting else "THE OUTSKIRTS",U.GOLD,10,w)
+	caption(Vector2(right.position.x,29),model.local_name(enemy).split(" · ")[0].to_upper() if fighting else "THE OUTSKIRTS",U.GOLD,10,w)
 	caption(Vector2(size.x/2-20,127),"VS",U.GOLD,22,40)
 	if fighting:
 		var charges = int(f.get("swings",0))%4
 		caption(Vector2(0,268),"STYLE SKILL  %d / 4    ·    NEXT ATTACK %.1fs" % [charges,maxf(0,(int(f.player_at)-int(model.s.time))/1000.0)],U.GOLD,10,size.x)
 	else: caption(Vector2(0,268),"PREPARE  ·  HUNT  ·  BRING HOPE HOME",U.GOLD,10,size.x)
-	if flash>0 and event_text!="":
-		var x = left.position.x if event_side=="hero" else right.position.x
-		var y = 100-(.85-flash)*24 if model.s.settings.motion else 92.0
+	var lanes = {"hero":0,"enemy":0}
+	for i in range(floating.size()):
+		var item = floating[i]
+		var x = left.position.x if item.side=="hero" else right.position.x
+		var lane = int(lanes[item.side])
+		lanes[item.side] += 1
+		var y = 140-(1.0-float(item.life))*24-lane*30 if model.s.settings.motion else 125.0-lane*30
 		draw_rect(Rect2(x,y-20,w,27),Color(0,0,0,.8))
-		caption(Vector2(x,y),event_text,U.RED if event_side=="hero" else U.GOLD,16,w)
+		var color = U.GREEN if str(item.text).begins_with("+") else (U.RED if item.side=="hero" else U.GOLD)
+		caption(Vector2(x,y),item.text,color,14,w)

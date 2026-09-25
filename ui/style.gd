@@ -123,6 +123,31 @@ static func portrait(index: int, dimensions: Vector2) -> TextureRect:
 		t.texture = a
 	return t
 
+static func enemy_texture(enemy: Dictionary) -> Texture2D:
+	if enemy.has("region") and ResourceLoader.exists("res://assets/art/expedition-guardians.png"):
+		var texture = load("res://assets/art/expedition-guardians.png")
+		var atlas = AtlasTexture.new()
+		atlas.atlas = texture
+		atlas.filter_clip = true
+		var index = ["wilds","marsh","crown"].find(enemy.region)
+		atlas.region = Rect2(index*texture.get_width()/3.0,0,texture.get_width()/3.0,texture.get_height())
+		return atlas
+	var atlas = AtlasTexture.new()
+	atlas.atlas = portraits
+	atlas.filter_clip = true
+	var index = int(enemy.get("portrait",0))
+	atlas.region = Rect2((index%4)*portraits.get_width()/4.0,int(index/4)*portraits.get_height()/2.0,portraits.get_width()/4.0,portraits.get_height()/2.0)
+	return atlas
+
+static func enemy_portrait(enemy: Dictionary, dimensions: Vector2) -> TextureRect:
+	var t = TextureRect.new()
+	t.custom_minimum_size = dimensions
+	t.expand_mode = TextureRect.EXPAND_IGNORE_SIZE
+	t.stretch_mode = TextureRect.STRETCH_KEEP_ASPECT_COVERED
+	t.mouse_filter = Control.MOUSE_FILTER_IGNORE
+	t.texture = enemy_texture(enemy)
+	return t
+
 static func icon(id: String, dimension: int = 52) -> TextureRect:
 	var t = TextureRect.new()
 	t.custom_minimum_size = Vector2(dimension,dimension)

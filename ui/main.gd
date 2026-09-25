@@ -17,6 +17,7 @@ var activity_sub: Label
 var activity_progress: ProgressBar
 var toast_label: Label
 var dialog: Control
+var dialog_footer: VBoxContainer
 var hud: VBoxContainer
 var pulse = 0.0
 var save_timer = 0.0
@@ -176,6 +177,7 @@ func build_shell():
 			remove_child(child)
 			child.queue_free()
 	dialog = null
+	dialog_footer = null
 	var bg = ColorRect.new()
 	bg.color = U.INK
 	bg.set_anchors_and_offsets_preset(Control.PRESET_FULL_RECT)
@@ -411,7 +413,16 @@ func modal(title: String) -> VBoxContainer:
 	var content = U.column(14)
 	content.size_flags_horizontal = Control.SIZE_EXPAND_FILL
 	scroll.add_child(content)
+	dialog_footer = U.column(8)
+	root.add_child(dialog_footer)
+	dialog_footer.hide()
 	return content
+
+func modal_action(label: String, callback: Callable) -> Button:
+	dialog_footer.show()
+	var button = U.button(label,callback,true)
+	dialog_footer.add_child(button)
+	return button
 
 func work_orders_dialog():
 	preload("res://ui/gameplay.gd").new(self).work_orders()
@@ -454,29 +465,42 @@ func activity_dialog(id: String, recommended: int = 0):
 			r.add_child(U.button(tr2("Cari","Find"),func(): sources_dialog(key)))
 	else:
 		var e = model.data.enemies[a.enemy]
-		v.add_child(U.portrait(int(e.portrait),Vector2(100,160)))
-		v.add_child(U.para(e.get("lore_en",e.lore)))
+		var encounter = U.row(16)
+		v.add_child(encounter)
+		encounter.add_child(U.enemy_portrait(e,Vector2(112,172)))
+		var introduction = U.column(10)
+		introduction.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+		encounter.add_child(introduction)
+		introduction.add_child(U.para(e.get("lore_en",e.lore),14))
+		introduction.add_child(U.para("%d HP · %d ATK · %d DEF" % [int(e.hp),int(e.attack),int(e.armor)],13,U.GOLD))
+		v.add_child(U.para(model.encounter_advice(a.enemy),14,U.GOLD))
+		v.add_child(U.para(RealmCombat.mechanic(e),14,U.TEXT))
 		var fragment_id = RealmChronicle.fragments_for(e)
 		v.add_child(U.para("GUARANTEED RELIC DROP\n%d × %s fragments" % [int(e.get("fragments",1)),RealmChronicle.RELICS[fragment_id].name],14,U.GREEN))
 		if e.has("region"): v.add_child(U.para("First clear: +10 meals and %d scraps.%s" % [5+int(e.tier)," Tier 5 also grants a Rare Iron Sword." if int(e.tier)==5 else ""],13,U.GOLD))
 		v.add_child(U.para("VICTORY REWARDS\n+%d gold · +%d melee XP · %s ×%d" % [int(e.gold),int(e.xp),model.name_of(e.drop),int(e.qty)],14,U.GOLD))
 		v.add_child(U.para("Auto-heal: %s ×%d · at %d%% HP. Defeat stops the queue; your equipment stays safe." % [model.name_of(model.s.settings.food),model.count(model.s.settings.food),int(model.s.settings.threshold*100)],14,U.GREEN if model.count(model.s.settings.food)>0 else U.RED))
-		v.add_child(U.para("%d HP · %d ATK · %d DEF" % [int(e.hp),int(e.attack),int(e.armor)]))
+		v.add_child(U.para("Your selected food restores %d HP per meal, including relic bonuses." % RealmCombat.food_heal(model,model.s.settings.food),13,U.GREEN))
 	if a.kind!="combat":
 		var cost_tip = "No materials are consumed. Your equipped tool is used automatically." if a.inputs.is_empty() else "Ingredients are consumed when a cycle starts."
 		v.add_child(U.para("EACH CYCLE PRODUCES\n1 × "+model.name_of(a.output)+". "+cost_tip,14,U.GREEN))
 	if a.kind!="combat" and not a.inputs.is_empty():
 		v.add_child(U.button("Plan materials & craft automatically",func(): planner_dialog(id,maxi(1,mini(100,recommended))),true))
-	if a.kind=="combat": v.add_child(U.para(model.encounter_advice(a.enemy),14,U.GOLD))
 	var reason = model.requirement(id)
 	if reason!="": v.add_child(U.para(reason+tr2(". Antrean akan menunggu sampai persyaratan terpenuhi.",". The queue will wait for requirements."),14,U.RED))
 	if recommended>0:
-		var suggested = U.button("Start this objective · %d %s" % [recommended,"fights" if a.kind=="combat" else "cycles"],func(): enqueue_activity(id,recommended),true)
+		var unit = ("fight" if recommended==1 else "fights") if a.kind=="combat" else ("cycle" if recommended==1 else "cycles")
+		var suggested = modal_action("Begin · %d %s" % [recommended,unit],func(): enqueue_activity(id,recommended))
 		suggested.disabled = reason!="" or not model.s.queue.is_empty()
-		v.add_child(suggested)
 		if not model.s.queue.is_empty(): v.add_child(U.button("Manage existing queue first",queue_dialog))
-	v.add_child(U.para("Choose how many times to repeat this activity. It starts now if the queue is empty; otherwise it waits its turn.",14))
-	v.add_child(U.label(tr2("TARGET AKTIVITAS","ACTIVITY TARGET"),11,U.GOLD))
+	else:
+		var begin = modal_action("Begin one fight" if a.kind=="combat" else "Begin one cycle",func(): enqueue_activity(id,1))
+		begin.disabled = reason!=""
+	if reason!="" and a.kind!="combat":
+		for button in dialog_footer.get_children(): button.hide()
+		modal_action("Plan missing materials",func(): planner_dialog(id,maxi(1,mini(100,recommended))))
+	v.add_child(U.para("Use the button below to begin. For a different count, choose a quick start. Tasks begin now if the queue is empty; otherwise they wait their turn.",14))
+	v.add_child(U.label("QUICK START",11,U.GOLD))
 	var targets = U.row(6)
 	v.add_child(targets)
 	for number in [1,10,50,100]:
@@ -669,7 +693,7 @@ func settings_dialog():
 	v.add_child(U.button("Share",experience.share))
 	v.add_child(U.button("Rate",experience.rate))
 	v.add_child(U.button("Return to main menu",experience.menu))
-	v.add_child(U.para("Version 0.4.0 · Adventure preview\nFree to play. No ads. No purchases in this build.",12))
+	v.add_child(U.para("Version 0.5.0 · Adventure preview\nFree to play. No ads. No purchases in this build.",12))
 
 func export_save():
 	var fd = FileDialog.new()

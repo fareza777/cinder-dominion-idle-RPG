@@ -1179,7 +1179,7 @@
       "region": "wilds",
       "tier": 1,
       "relic": "fang",
-      "fragments": 2
+      "fragments": 8
     },
     "wilds_2": {
       "id": "wilds_2",
@@ -1201,7 +1201,7 @@
       "region": "wilds",
       "tier": 2,
       "relic": "fang",
-      "fragments": 3
+      "fragments": 16
     },
     "wilds_3": {
       "id": "wilds_3",
@@ -1223,7 +1223,7 @@
       "region": "wilds",
       "tier": 3,
       "relic": "fang",
-      "fragments": 4
+      "fragments": 24
     },
     "wilds_4": {
       "id": "wilds_4",
@@ -1245,7 +1245,7 @@
       "region": "wilds",
       "tier": 4,
       "relic": "fang",
-      "fragments": 5
+      "fragments": 32
     },
     "wilds_5": {
       "id": "wilds_5",
@@ -1267,7 +1267,7 @@
       "region": "wilds",
       "tier": 5,
       "relic": "fang",
-      "fragments": 6
+      "fragments": 40
     },
     "marsh_1": {
       "id": "marsh_1",
@@ -1289,7 +1289,7 @@
       "region": "marsh",
       "tier": 1,
       "relic": "heart",
-      "fragments": 2
+      "fragments": 12
     },
     "marsh_2": {
       "id": "marsh_2",
@@ -1311,7 +1311,7 @@
       "region": "marsh",
       "tier": 2,
       "relic": "heart",
-      "fragments": 3
+      "fragments": 24
     },
     "marsh_3": {
       "id": "marsh_3",
@@ -1333,7 +1333,7 @@
       "region": "marsh",
       "tier": 3,
       "relic": "heart",
-      "fragments": 4
+      "fragments": 36
     },
     "marsh_4": {
       "id": "marsh_4",
@@ -1355,7 +1355,7 @@
       "region": "marsh",
       "tier": 4,
       "relic": "heart",
-      "fragments": 5
+      "fragments": 48
     },
     "marsh_5": {
       "id": "marsh_5",
@@ -1377,7 +1377,7 @@
       "region": "marsh",
       "tier": 5,
       "relic": "heart",
-      "fragments": 6
+      "fragments": 60
     },
     "crown_1": {
       "id": "crown_1",
@@ -1399,7 +1399,7 @@
       "region": "crown",
       "tier": 1,
       "relic": "ward",
-      "fragments": 2
+      "fragments": 16
     },
     "crown_2": {
       "id": "crown_2",
@@ -1421,7 +1421,7 @@
       "region": "crown",
       "tier": 2,
       "relic": "ward",
-      "fragments": 3
+      "fragments": 32
     },
     "crown_3": {
       "id": "crown_3",
@@ -1443,7 +1443,7 @@
       "region": "crown",
       "tier": 3,
       "relic": "ward",
-      "fragments": 4
+      "fragments": 48
     },
     "crown_4": {
       "id": "crown_4",
@@ -1465,7 +1465,7 @@
       "region": "crown",
       "tier": 4,
       "relic": "ward",
-      "fragments": 5
+      "fragments": 64
     },
     "crown_5": {
       "id": "crown_5",
@@ -1487,7 +1487,7 @@
       "region": "crown",
       "tier": 5,
       "relic": "ward",
-      "fragments": 6
+      "fragments": 80
     }
   },
   "merchant": {
