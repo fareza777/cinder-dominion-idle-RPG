@@ -1,0 +1,33 @@
+class_name RealmJourney
+extends RefCounted
+
+static func steps(m) -> Array:
+	var weapon = m.gear(str(m.s.equipped.get("weapon","")))
+	var equipped = not weapon.is_empty() and weapon.id in ["copper_sword","iron_sword"]
+	return [
+		entry("ore","Gather 4 copper ore","Ore is the raw material for your first real weapon. Your stone pick is already equipped.","mine_copper",int(m.s.gains.get("copper_ore",0)),4,"Mine copper ore","Mining → Copper ore"),
+		entry("ingots","Smelt 2 copper ingots","Each ingot uses 2 copper ore. Smelting turns the 4 ore you gathered into 2 ingots.","craft_copper_ingot",int(m.s.gains.get("copper_ingot",0)),2,"Smelt copper ingots","Smithing → Copper ingot"),
+		entry("wood","Gather 1 ash log","A sword needs a wooden grip. Your wood axe is already equipped.","cut_ash",int(m.s.gains.get("ash_log",0)),1,"Cut an ash log","Woodcutting → Ash log"),
+		entry("sword","Forge your copper sword","Use 2 copper ingots and 1 ash log. Crafting puts the weapon in your Bag; it does not equip it.","craft_copper_sword",int(m.s.gains.get("copper_sword",0)),1,"Forge a copper sword","Smithing → Copper Sword"),
+		entry("equip","Equip your new sword","Open the sword in your Bag and choose Equip item. Green numbers show an improvement over your current gear.","",1 if equipped or m.s.tutorial else 0,1,"Open your copper sword","Bag → Copper Sword → Equip item","equip"),
+		entry("rats","Defeat 3 Ash Rats","Attacks happen automatically. Your 5 starting grilled minnows restore 20 HP each when health falls to 50%. Each victory gives gold, XP and loot.","hunt_ash_rat",int(m.s.kills.get("ash_rat",0)),3,"Hunt 3 Ash Rats","Explore → Ash Rat"),
+		entry("thralls","Defeat 5 Grave Thralls","First Supplies unlocks the graveyard and grants 30 gold plus 10 grilled minnows. Craft copper armor and cook meat from rats if you need more protection or food.","hunt_grave_thrall",int(m.s.kills.get("grave_thrall",0)),5,"Hunt Grave Thralls","Explore → Grave Thrall"),
+		entry("bandits","Defeat 5 Cinder Bandits","The path opens when 5 Grave Thralls fall. Bandits drop copper ore for more equipment. Keep your auto-heal food stocked.","hunt_cinder_bandit",int(m.s.kills.get("cinder_bandit",0)),5,"Hunt Cinder Bandits","Explore → Cinder Bandit"),
+		entry("guards","Defeat 5 Chapel Guards","Guards have more armor. Improve your sword and fill empty armor slots in the Bag before a long hunt.","hunt_chapel_guard",int(m.s.kills.get("chapel_guard",0)),5,"Hunt Chapel Guards","Explore → Chapel Guard"),
+		entry("wraiths","Defeat 5 Ember Wraiths","Wraiths strike quickly. Bring cooked food and consider a healing draught. You can Retreat at any time to stop combat.","hunt_ember_wraith",int(m.s.kills.get("ember_wraith",0)),5,"Hunt Ember Wraiths","Explore → Ember Wraith"),
+		entry("smith","Reach Smithing level 10","Smelting and forging both give Smithing XP. Gather copper ore, smelt ingots and craft armor. Level 10 unlocks iron recipes and the final approach.","craft_copper_ingot",m.level("smithing"),10,"Train Smithing","Skills → Smithing","level"),
+		entry("boss","Silence the Bellkeeper","The third strike deals 1.8× damage. Equip your strongest armor and weapon, select food and stock healing draughts. Victory rekindles Cinderwatch's beacon.","hunt_bellkeeper",1 if m.s.beacon else 0,1,"Prepare for the Bellkeeper","Explore → The Bellkeeper","boss")
+	]
+
+static func entry(key, title, detail, activity, current, goal, action, route, kind="activity") -> Dictionary:
+	return {"key":key,"title":title,"detail":detail,"activity":activity,"current":current,"goal":goal,"action":action,"route":route,"kind":kind}
+
+static func current(m) -> Dictionary:
+	var all = steps(m)
+	for i in range(all.size()):
+		var step = all[i]
+		if step.current<step.goal:
+			step.index = i+1
+			step.total = all.size()
+			return step
+	return {"key":"complete","title":"Cinderwatch lives again","detail":"The beacon burns. Your first chapter is complete. Keep refining your equipment and skills, or begin a new journey from the main menu.","activity":"","current":1,"goal":1,"action":"Explore the outskirts","route":"Chapter I complete","kind":"complete","index":12,"total":12}

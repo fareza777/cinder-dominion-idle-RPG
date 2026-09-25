@@ -1,14 +1,22 @@
-# Ashen Covenant — playable foundation 0.1
+# Ashen Covenant — Chapter I preview 0.2
 
 Idle RPG dark fantasy untuk Android. Gratis, tanpa iklan. Build ini untuk dimainkan dan dievaluasi, belum versi rilis publik.
 
 ## Mulai bermain
 
-1. Pasang `build/android/ashen-covenant-0.1.apk` di Android 64-bit. Izinkan instalasi dari aplikasi pengirim berkas bila Android memintanya.
-2. Di Desa, tekan **Lanjutkan perjalanan** untuk mengikuti jurnal: tambang tembaga, lebur ingot, kumpulkan kayu, buat dan kenakan pedang tembaga, lalu berburu tikus abu.
-3. Masukkan aktivitas ke antrean. Satu aktivitas berjalan pada satu waktu; bahan crafting dipakai saat siklus dimulai.
-4. Siapkan makanan sebelum berburu. Musuh berikutnya terbuka lewat progres; Bellkeeper menjadi tujuan wilayah pertama.
-5. Progres tersimpan otomatis. Saat kembali, simulasi melanjutkan aktivitas maksimal 24 jam. Pengaturan menyediakan ekspor/impor cadangan.
+1. Pasang `build/android/ashen-covenant-0.2.apk` di Android 64-bit. APK memakai identitas aplikasi yang sama dengan 0.1 sehingga bisa dipasang sebagai pembaruan.
+2. Bahasa default adalah **English**. Splash mengantar ke menu utama. Pilih **New game**, ikuti atau lewati intro, lalu baca empat tahap onboarding. **Continue journey** melanjutkan progres yang sudah ada.
+3. Tekan **Guide →** di bagian atas layar. Panduan menunjukkan tujuan, alasan, lokasi aktivitas dan jumlah yang dibutuhkan. Tekan tindakannya, lalu **Start this objective** untuk memulai jumlah siklus yang tepat.
+4. Tugas awal: 4 copper ore → 2 copper ingots → 1 ash log → Copper Sword → Equip item → 3 Ash Rats. Panduan lalu mengantar lewat musuh berikutnya hingga Bellkeeper, tanpa melompat langsung ke boss.
+5. Pantau activity bar. **Queue** menampilkan tugas berjalan/menunggu, progres target, dan alasan terhambat. **Sources/Find** membantu mencari bahan yang kurang. Satu aktivitas berjalan pada satu waktu.
+6. Buka **Food & survival guide** untuk belajar memancing, memasak, memilih makanan dan menyiapkan auto-heal. Perlengkapan hasil crafting harus dipasang dari **Bag**.
+7. Progres tersimpan otomatis dan berlanjut maksimal 24 jam saat kembali. Menu **☰** tersedia dari dalam permainan. New Game meminta konfirmasi dan menyimpan cadangan terpisah; **Settings → Restore a previous journey** memulihkannya.
+
+## Baru di 0.2
+
+Splash bermerek, intro ilustrasi tiga adegan dengan fade dan gerakan kamera, menu utama, onboarding, panduan perjalanan 12 langkah, petunjuk permanen lintas layar, penjelasan recipe/loot/food, serta opsi antrean lanjutan yang bisa dibuka sesuai kebutuhan.
+
+Settings mencakup About, Share, Rate, panduan bermain, replay intro/tips, ukuran teks, animasi, audio dan cadangan. Share membuka pemilih aplikasi Android; di komputer tersedia Copy message. Pesan dibagikan hanya setelah pemain memilih sendiri. Rate menjelaskan bahwa listing publik belum tersedia. Tidak ada tautan toko palsu. Koneksi rating bisa diaktifkan setelah URL toko resmi tersedia.
 
 ## Isi build
 
@@ -23,7 +31,7 @@ Pembelian kosmetik dan ekspansi adalah model bisnis yang direncanakan, belum dia
 
 ## Batas versi
 
-Ini fondasi satu wilayah. Kampanye lengkap, ranged/magic, pet, bangunan lengkap, affix/rune, cloud save dan Google Play Billing belum tersedia. Bahasa Indonesia diutamakan; pilihan Inggris belum menerjemahkan seluruh pesan sistem. Animasi berupa atmosfer dan portrait, belum animasi karakter penuh. Balance, variasi perangkat fisik, safe area dan font terbesar masih memerlukan playtest.
+Ini preview satu wilayah. Kampanye lengkap, ranged/magic, pet, bangunan lengkap, affix/rune, cloud save dan Google Play Billing belum tersedia. Inggris menjadi bahasa utama termasuk pesan sistem dan lore; pilihan Indonesia masih ada, tetapi alur baru belum seluruhnya dilokalkan. Catatan historis dari save 0.1 dapat tetap memakai bahasa lamanya. Intro berupa ilustrasi bergerak dan teks, tanpa video 3D atau voice-over. Balance dan variasi perangkat fisik masih memerlukan playtest.
 
 ## Pengembangan
 

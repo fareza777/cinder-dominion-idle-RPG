@@ -25,23 +25,41 @@ var fraction_ms = 0.0
 var paused = false
 var save_blocked = false
 var update_callbacks: Array[Callable] = []
+var dialog_callbacks: Array[Callable] = []
 var pages
 var music: AudioStreamPlayer
 var effect: AudioStreamPlayer
+var experience
+var mode = "play"
+var has_campaign = false
+var last_objective = ""
+var objective_label: Label
+var rebuild_pending = false
+var last_back_ms = -1000
 
 func _ready():
 	get_tree().auto_accept_quit = false
+	get_tree().quit_on_go_back = false
 	var loaded = saves.read_state(model.data)
-	if not loaded.is_empty(): model.s = loaded
+	if not loaded.is_empty():
+		model.s = loaded
+		has_campaign = true
+		if not model.s.has("experience"):
+			model.s.experience = {"version":2,"welcome_done":false}
+			model.s.settings.locale = "en"
 	elif saves.message!="": save_blocked = true
+	if not has_campaign:
+		var prefs = ConfigFile.new()
+		if prefs.load("user://preferences.cfg")==OK:
+			for key in ["locale","font","motion","battery","music","sfx"]:
+				model.s.settings[key] = prefs.get_value("preferences",key,model.s.settings[key])
 	U.setup(model.data)
 	U.scale = float(model.s.settings.font)
 	pages = Pages.new(self)
-	var report = saves.resume(model,now_ms())
-	if not save_blocked: persist()
+	experience = preload("res://ui/experience.gd").new(self)
+	mode = "boot"
 	build_shell()
 	set_page("village")
-	if report.elapsed>30000: call_deferred("offline_dialog",report)
 	if save_blocked: call_deferred("toast",saves.message)
 	Engine.max_fps = 30 if model.s.settings.battery else 60
 	if ResourceLoader.exists("res://assets/audio/refuge.wav"):
@@ -54,6 +72,7 @@ func _ready():
 	effect = AudioStreamPlayer.new()
 	effect.stream = load("res://assets/audio/action.wav")
 	add_child(effect)
+	experience.splash()
 
 func tr2(id_text: String, en_text: String) -> String:
 	return en_text if model.s.settings.locale=="en" else id_text
@@ -62,9 +81,12 @@ func now_ms() -> int:
 	return int(Time.get_unix_time_from_system()*1000)
 
 func persist():
-	if save_blocked: return
+	var prefs = ConfigFile.new()
+	for key in ["locale","font","motion","battery","music","sfx"]: prefs.set_value("preferences",key,model.s.settings[key])
+	prefs.save("user://preferences.cfg")
+	if save_blocked or not has_campaign: return
 	var old_wall = model.s.wall
-	model.s.wall = now_ms()
+	if mode=="play": model.s.wall = now_ms()
 	if not saves.write_state(model.s,model.data):
 		model.s.wall = old_wall
 		if is_instance_valid(toast_label): toast(saves.message)
@@ -77,21 +99,58 @@ func _notification(what):
 	elif what==NOTIFICATION_APPLICATION_RESUMED and paused:
 		paused = false
 		fraction_ms = 0
-		var report = saves.resume(model,now_ms())
-		persist()
-		if report.elapsed>30000: offline_dialog(report)
+		if mode=="play":
+			var report = saves.resume(model,now_ms())
+			persist()
+			if report.elapsed>30000: offline_dialog(report)
 	elif what==NOTIFICATION_WM_CLOSE_REQUEST:
 		persist()
 		get_tree().quit()
 	elif what==NOTIFICATION_WM_GO_BACK_REQUEST:
-		if is_instance_valid(dialog): dismiss()
-		elif page!="village": set_page("village")
-		else:
+		get_tree().quit_on_go_back = false
+		call_deferred("navigate_back")
+
+func navigate_back():
+	var ticks = Time.get_ticks_msec()
+	if ticks-last_back_ms<300: return
+	last_back_ms = ticks
+	if is_instance_valid(dialog): dismiss()
+	elif mode=="intro": experience.finish_intro()
+	elif mode=="play": experience.menu()
+	else:
+		var v = modal("Leave Cinderwatch?")
+		v.add_child(U.para("Your journey is saved on this device. Queued activities continue for up to 24 hours while you are away.",16,U.TEXT))
+		v.add_child(U.button("Keep playing",dismiss,true))
+		v.add_child(U.button("Save & exit",func():
 			persist()
-			get_tree().quit()
+			get_tree().quit()))
+
+func enter_world():
+	if not has_campaign: return
+	experience.clear()
+	dismiss()
+	var report = saves.resume(model,now_ms())
+	mode = "play"
+	paused = false
+	fraction_ms = 0
+	build_shell()
+	set_page("village")
+	last_objective = model.objective().key
+	persist()
+	if report.elapsed>30000 and (model.s.experience.welcome_done or report.xp>0 or report.gold>0): offline_dialog(report)
+	elif not model.s.experience.welcome_done: experience.welcome()
+
+func refresh_shell():
+	var previous_mode = mode
+	build_shell()
+	set_page(page)
+	if previous_mode!="play": experience.menu()
+
+func guide_dialog():
+	experience.guide()
 
 func _process(delta):
-	if paused: return
+	if paused or mode!="play": return
 	fraction_ms += delta*1000
 	var ms = int(fraction_ms)
 	fraction_ms -= ms
@@ -106,8 +165,11 @@ func _process(delta):
 		refresh()
 
 func build_shell():
+	theme = Theme.new()
+	theme.default_font = U.body_font
+	theme.default_font_size = int(15*U.scale)
 	for child in get_children():
-		if child!=music:
+		if child!=music and child!=effect:
 			remove_child(child)
 			child.queue_free()
 	dialog = null
@@ -134,15 +196,28 @@ func build_shell():
 	hr.add_child(U.portrait(0,Vector2(44,54)))
 	var title = U.column(0)
 	hr.add_child(title)
-	title.add_child(U.label("ASHEN COVENANT",20,U.TEXT,true))
+	title.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+	title.add_child(U.para("ASHEN COVENANT",16,U.TEXT))
 	title.add_child(U.label(tr2("PENJAGA BARA TERAKHIR","KEEPER OF THE LAST EMBER"),9,U.GOLD))
-	hr.add_child(U.spacer())
+	hr.add_child(U.button("☰",func(): experience.menu()))
 	var counters = U.column(2)
 	hr.add_child(counters)
 	gold_label = U.label("",16,U.GOLD)
 	hp_label = U.label("",12,U.MUTED)
 	counters.add_child(gold_label)
 	counters.add_child(hp_label)
+	var journey_bar = PanelContainer.new()
+	journey_bar.add_theme_stylebox_override("panel",U.box(Color("202a2c"),U.LINE,0,12))
+	layout.add_child(journey_bar)
+	var journey_row = U.row(10)
+	journey_bar.add_child(journey_row)
+	var journey_words = U.column(3)
+	journey_words.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+	journey_row.add_child(journey_words)
+	journey_words.add_child(U.label("YOUR NEXT STEP",9,U.GOLD))
+	objective_label = U.para("",14,U.TEXT)
+	journey_words.add_child(objective_label)
+	journey_row.add_child(U.button("Guide →",guide_dialog))
 	scroller = ScrollContainer.new()
 	scroller.size_flags_vertical = Control.SIZE_EXPAND_FILL
 	scroller.horizontal_scroll_mode = ScrollContainer.SCROLL_MODE_DISABLED
@@ -226,14 +301,28 @@ func set_page(next: String, retain_scroll: bool = false):
 func dynamic(parent: Node, fn: Callable, size: int = 15, color: Color = U.TEXT) -> Label:
 	var l = U.para(str(fn.call()),size,color)
 	parent.add_child(l)
-	update_callbacks.append(func():
-		if is_instance_valid(l): l.text = str(fn.call()))
+	var target = weakref(l)
+	var callback = func():
+		var live = target.get_ref()
+		if is_instance_valid(live): live.text = str(fn.call())
+	if is_instance_valid(dialog) and dialog.is_ancestor_of(parent): dialog_callbacks.append(callback)
+	else: update_callbacks.append(callback)
 	return l
 
 func refresh():
 	if not is_instance_valid(gold_label): return
 	gold_label.text = "◈ %s" % int(model.s.gold)
 	hp_label.text = "%d / 100 HP" % int(model.s.hp)
+	var objective = model.objective()
+	if is_instance_valid(objective_label): objective_label.text = "%s · %d/%d" % [objective.title,mini(int(objective.current),int(objective.goal)),int(objective.goal)]
+	if last_objective!="" and last_objective!=objective.key:
+		last_objective = objective.key
+		toast("Objective complete! Next: "+objective.title)
+		if is_instance_valid(dialog) and dialog.get_meta("journey_guide",false): experience.call_deferred("guide")
+		if not is_instance_valid(dialog) and not rebuild_pending and mode=="play":
+			rebuild_pending = true
+			call_deferred("refresh_objective_page")
+	else: last_objective = objective.key
 	if model.s.queue.is_empty():
 		activity_label.text = tr2("Api menantikan langkahmu","The fire awaits your next step")
 		activity_sub.text = tr2("Pilih aktivitas · progres offline hingga 24 jam","Choose an activity · up to 24h offline progress")
@@ -241,7 +330,9 @@ func refresh():
 	else:
 		var step = model.s.queue[0]
 		activity_label.text = model.activity_name(step.id)
-		activity_sub.text = "%d / %d  ·  %d %s" % [int(step.done),int(step.target),model.s.queue.size(),tr2("aktivitas","activities")]
+		var progress_value = model.level(model.data.activities[step.id].skill) if step.kind=="level" else int(step.output if step.kind=="output" else step.done)
+		var unit = "level" if step.kind=="level" else ("items" if step.kind=="output" else "cycles")
+		activity_sub.text = "%d / %d %s · %d queued" % [progress_value,int(step.target),unit,model.s.queue.size()]
 		var fraction = 0.0
 		if not model.s.active.is_empty():
 			var act = model.s.active
@@ -250,9 +341,13 @@ func refresh():
 		else: activity_sub.text = model.requirement(step.id)
 		activity_progress.max_value = 1
 		activity_progress.value = fraction
-	for callback in update_callbacks: callback.call()
+	for callback in update_callbacks+dialog_callbacks: callback.call()
 
-func send(cmd: Dictionary, rebuild: bool = true):
+func refresh_objective_page():
+	rebuild_pending = false
+	if mode=="play": set_page(page,true)
+
+func send(cmd: Dictionary, rebuild: bool = true) -> bool:
 	cmd.cid = "%d-%d" % [Time.get_ticks_usec(),model.s.processed.size()]
 	if model.command(cmd):
 		if is_instance_valid(effect):
@@ -262,6 +357,7 @@ func send(cmd: Dictionary, rebuild: bool = true):
 		if rebuild: set_page(page,true)
 	else: toast(model.error)
 	refresh()
+	return model.error==""
 
 func toast(text: String):
 	if not is_instance_valid(toast_label): return
@@ -272,6 +368,7 @@ func toast(text: String):
 		if is_instance_valid(toast_label) and toast_label.text==expected: toast_label.hide())
 
 func dismiss():
+	dialog_callbacks.clear()
 	if is_instance_valid(dialog):
 		remove_child(dialog)
 		dialog.queue_free()
@@ -311,7 +408,7 @@ func modal(title: String) -> VBoxContainer:
 	scroll.add_child(content)
 	return content
 
-func activity_dialog(id: String):
+func activity_dialog(id: String, recommended: int = 0):
 	var a = model.data.activities[id]
 	var v = modal(model.activity_name(id))
 	if a.kind!="combat":
@@ -326,39 +423,56 @@ func activity_dialog(id: String):
 	else:
 		var e = model.data.enemies[a.enemy]
 		v.add_child(U.portrait(int(e.portrait),Vector2(100,160)))
-		v.add_child(U.para(e.lore))
+		v.add_child(U.para(e.get("lore_en",e.lore) if model.s.settings.locale=="en" else e.lore))
+		v.add_child(U.para("VICTORY REWARDS\n+%d gold · +%d melee XP · %s ×%d" % [int(e.gold),int(e.xp),model.name_of(e.drop),int(e.qty)],14,U.GOLD))
+		v.add_child(U.para("Auto-heal: %s ×%d · at %d%% HP. Defeat stops the queue; your equipment stays safe." % [model.name_of(model.s.settings.food),model.count(model.s.settings.food),int(model.s.settings.threshold*100)],14,U.GREEN if model.count(model.s.settings.food)>0 else U.RED))
 		v.add_child(U.para("%d HP · %d ATK · %d DEF" % [int(e.hp),int(e.attack),int(e.armor)]))
+	if a.kind!="combat":
+		var cost_tip = "No materials are consumed. Your equipped tool is used automatically." if a.inputs.is_empty() else "Ingredients are consumed when a cycle starts."
+		v.add_child(U.para("EACH CYCLE PRODUCES\n1 × "+model.name_of(a.output)+". "+cost_tip,14,U.GREEN))
 	var reason = model.requirement(id)
 	if reason!="": v.add_child(U.para(reason+tr2(". Antrean akan menunggu sampai persyaratan terpenuhi.",". The queue will wait for requirements."),14,U.RED))
+	if recommended>0:
+		var suggested = U.button("Start this objective · %d %s" % [recommended,"fights" if a.kind=="combat" else "cycles"],func(): enqueue_activity(id,recommended),true)
+		suggested.disabled = reason!="" or not model.s.queue.is_empty()
+		v.add_child(suggested)
+		if not model.s.queue.is_empty(): v.add_child(U.button("Manage existing queue first",queue_dialog))
+	v.add_child(U.para("Choose how many times to repeat this activity. It starts now if the queue is empty; otherwise it waits its turn.",14))
 	v.add_child(U.label(tr2("TARGET AKTIVITAS","ACTIVITY TARGET"),11,U.GOLD))
 	var targets = U.row(6)
 	v.add_child(targets)
 	for number in [1,10,50,100]:
-		var b = U.button("%d×" % number,func():
-			send({"type":"queue","id":id,"target":number})
-			dismiss()
-			toast(tr2("Aktivitas masuk antrean","Activity added to queue")))
+		var b = U.button("%d×" % number,func(): enqueue_activity(id,number))
 		b.size_flags_horizontal = Control.SIZE_EXPAND_FILL
 		targets.add_child(b)
+	var advanced = U.column(12)
+	v.add_child(U.button("Advanced target options ▾",func(): advanced.visible = not advanced.visible))
+	v.add_child(advanced)
+	advanced.hide()
+	advanced.add_child(U.para("Choose an exact count, a number of new items, or a skill level. A level target trains until that level is reached.",13))
 	var amount = SpinBox.new()
 	amount.min_value = 1
 	amount.max_value = 1000000
-	amount.value = 250
+	amount.value = recommended if recommended>0 else 10
 	amount.custom_minimum_size.y = 48
 	amount.add_theme_font_size_override("font_size",18)
-	v.add_child(amount)
+	advanced.add_child(amount)
 	var kind = OptionButton.new()
 	for text in [tr2("Jumlah siklus","Cycle count"),tr2("Jumlah hasil baru","New output count"),tr2("Level skill tujuan","Target skill level")]: kind.add_item(text)
 	kind.custom_minimum_size.y = 48
-	v.add_child(kind)
+	advanced.add_child(kind)
 	var skip = CheckButton.new()
 	skip.text = tr2("Lewati jika bahan tidak tersedia","Skip when requirements are missing")
 	skip.add_theme_font_size_override("font_size",13)
-	v.add_child(skip)
-	v.add_child(U.button(tr2("Tambahkan ke antrean","Add to queue"),func():
-		send({"type":"queue","id":id,"target":int(amount.value),"kind":["cycles","output","level"][kind.selected],"skip":skip.button_pressed})
-		dismiss(),true))
+	advanced.add_child(skip)
+	advanced.add_child(U.button(tr2("Tambahkan ke antrean","Add to queue"),func():
+		enqueue_activity(id,int(amount.value),["cycles","output","level"][kind.selected],skip.button_pressed),true))
 	v.add_child(U.para(tr2("Satu aktivitas berjalan. Tutup game dan progres tetap berlanjut hingga 24 jam.","One activity at a time. Close the game and progress continues for up to 24 hours."),13))
+
+func enqueue_activity(id: String, target: int, kind: String = "cycles", skip: bool = false):
+	if send({"type":"queue","id":id,"target":target,"kind":kind,"skip":skip}):
+		dismiss()
+		toast("Task added. Follow its progress in the activity bar below.")
 
 func sources_dialog(id: String):
 	var v = modal(tr2("Sumber: ","Sources: ")+model.name_of(id))
@@ -375,7 +489,11 @@ func queue_dialog():
 		var st = model.s.queue[i]
 		var card = U.card(v)
 		card.add_child(U.para("%02d  %s" % [i+1,model.activity_name(st.id)],16,U.TEXT))
-		card.add_child(U.para("%d / %d · %s" % [int(st.done),int(st.target),st.kind],12))
+		var value = model.level(model.data.activities[st.id].skill) if st.kind=="level" else int(st.output if st.kind=="output" else st.done)
+		card.add_child(U.para("%d / %d · %s" % [value,int(st.target),{"cycles":"cycles completed","output":"new items produced","level":"skill level"}[st.kind]],12))
+		if i==0:
+			var blocked = model.requirement(st.id) if model.s.active.is_empty() and model.s.fight.is_empty() else ""
+			card.add_child(U.para("RUNNING" if blocked=="" else "WAITING · "+blocked,12,U.GREEN if blocked=="" else U.RED))
 		var r = U.row()
 		card.add_child(r)
 		if i>1: r.add_child(U.button("↑",func():
@@ -446,7 +564,7 @@ func offline_dialog(report: Dictionary):
 	v.add_child(U.label(tr2("BARA TETAP MENYALA","THE EMBER ENDURES"),11,U.GOLD))
 	v.add_child(U.para(tr2("Petualanganmu berlanjut selama","Your journey continued for"),16))
 	var seconds = int(report.elapsed/1000)
-	v.add_child(U.label("%dj %02dm" % [int(seconds/3600),int(seconds/60)%60],42,U.TEXT,true))
+	v.add_child(U.label("%ds" % seconds if seconds<60 else "%dh %02dm" % [int(seconds/3600),int(seconds/60)%60],42,U.TEXT,true))
 	var r = U.row()
 	v.add_child(r)
 	U.stat(r,"%+d" % int(report.gold),"GOLD",U.GOLD)
@@ -460,7 +578,8 @@ func offline_dialog(report: Dictionary):
 		model.s.report = {}
 		persist()
 		dismiss()
-		set_page(page,true),true))
+		set_page(page,true)
+		if not model.s.experience.welcome_done: experience.welcome(),true))
 
 func settings_dialog():
 	var v = modal(tr2("Pengaturan","Settings"))
@@ -473,20 +592,21 @@ func settings_dialog():
 		b.toggled.connect(func(value):
 			send({"type":"setting","id":cfg[0],"value":value},false)
 			Engine.max_fps = 30 if model.s.settings.battery else 60
-			set_page(page,true))
+			refresh_shell()
+			settings_dialog())
 	v.add_child(U.label(tr2("Ukuran teks","Text size"),16))
 	var fonts = U.row()
 	v.add_child(fonts)
 	for size_value in [1.0,1.15,1.3]:
-		fonts.add_child(U.button("%d%%" % int(size_value*100),func():
+		fonts.add_child(U.button("%d%%" % roundi(size_value*100),func():
 			send({"type":"setting","id":"font","value":size_value},false)
 			U.scale = size_value
-			build_shell()
-			set_page(page)))
+			refresh_shell()
+			settings_dialog()))
 	v.add_child(U.button("Bahasa Indonesia / English",func():
 		send({"type":"setting","id":"locale","value":"en" if model.s.settings.locale=="id" else "id"},false)
-		build_shell()
-		set_page(page)))
+		refresh_shell()
+		settings_dialog()))
 	for key in ["music","sfx"]:
 		v.add_child(U.label(tr2("Musik" if key=="music" else "Efek suara","Music" if key=="music" else "Sound effects"),15))
 		var slider = HSlider.new()
@@ -500,14 +620,18 @@ func settings_dialog():
 			model.s.settings[key] = value
 			if key=="music" and is_instance_valid(music): music.volume_db = linear_to_db(value)
 			persist())
-	v.add_child(U.button(tr2("Ekspor cadangan save","Export save backup"),export_save))
+	v.add_child(U.label("PROGRESS & BACKUPS",11,U.GOLD))
+	if has_campaign: v.add_child(U.button(tr2("Ekspor cadangan save","Export save backup"),export_save))
 	v.add_child(U.button(tr2("Impor cadangan save","Import save backup"),import_save))
-	v.add_child(U.button(tr2("Kredit & lisensi","Credits & licenses"),func():
-		var credits = modal(tr2("Kredit & lisensi","Credits & licenses"))
-		credits.add_child(U.para("Ilustrasi: dibuat untuk Ashen Covenant dengan OpenAI image generation.\nAudio: sintesis orisinal.\nFont: Manrope dan Cormorant Garamond (SIL OFL 1.1).\nEngine: Godot (MIT)."))
-		for path in ["res://assets/GODOT-LICENSE.txt","res://assets/fonts/manrope-OFL.txt","res://assets/fonts/cormorantgaramond-OFL.txt","res://assets/GODOT-COPYRIGHT.txt"]:
-			credits.add_child(U.para(FileAccess.get_file_as_string(path),12))))
-	v.add_child(U.para(tr2("Ashen Covenant · Fondasi 0.1\nTanpa iklan. Semua sistem saat ini gratis.\nNama game masih nama kerja.","Ashen Covenant · Foundation 0.1\nNo ads. All current systems are free.\nThe game title is a working name."),12))
+	v.add_child(U.button("Restore a previous journey",experience.archives))
+	v.add_child(U.label("HELP & COMMUNITY",11,U.GOLD))
+	v.add_child(U.button("How to play",experience.handbook))
+	if mode=="play": v.add_child(U.button("Replay beginner tips",experience.welcome))
+	v.add_child(U.button("About Ashen Covenant",experience.about))
+	v.add_child(U.button("Share",experience.share))
+	v.add_child(U.button("Rate",experience.rate))
+	v.add_child(U.button("Return to main menu",experience.menu))
+	v.add_child(U.para("Version 0.2.0 · Chapter I preview\nFree to play. No ads. No purchases in this build.",12))
 
 func export_save():
 	var fd = FileDialog.new()
@@ -546,19 +670,27 @@ func import_save():
 		if incoming.is_empty():
 			toast(tr2("Save tidak valid; progresmu tetap aman","Invalid save; your progress is unchanged"))
 			return
-		var v = modal(tr2("Ganti progres dengan cadangan?","Replace progress with backup?"))
-		v.add_child(U.para(tr2("Progres saat ini dicadangkan sebelum diganti.","Your current progress is backed up before replacement.")))
-		v.add_child(U.button(tr2("Gunakan cadangan ini","Use this backup"),func():
-			persist()
-			incoming.wall = now_ms()
-			if saves.write_state(incoming,model.data):
-				model.s = incoming
-				save_blocked = false
-				Engine.max_fps = 30 if model.s.settings.battery else 60
-				if is_instance_valid(music): music.volume_db = linear_to_db(float(model.s.settings.music))
-				U.scale = float(model.s.settings.font)
-				build_shell()
-				set_page("village")
-			else: toast(tr2("Impor gagal","Import failed")),true)))
+		confirm_restore(incoming))
 	fd.canceled.connect(fd.queue_free)
 	fd.popup_centered_ratio(.85)
+
+func confirm_restore(incoming: Dictionary):
+	var v = modal("Restore this journey?")
+	v.add_child(U.para("This will replace current progress with the selected backup. Your current save is written first and retained in the rotating save backups.",16,U.TEXT))
+	v.add_child(U.para("Backup: %d gold · Smithing level %d" % [int(incoming.gold),1+int(sqrt(float(incoming.xp.smithing)/25.0))],15,U.GOLD))
+	v.add_child(U.button("Cancel",dismiss))
+	v.add_child(U.button("Restore selected journey",func():
+		persist()
+		incoming.wall = now_ms()
+		if not incoming.has("experience"):
+			incoming.experience = {"version":2,"welcome_done":false}
+			incoming.settings.locale = "en"
+		if saves.write_state(incoming,model.data):
+			model.s = incoming
+			has_campaign = true
+			save_blocked = false
+			Engine.max_fps = 30 if model.s.settings.battery else 60
+			if is_instance_valid(music): music.volume_db = linear_to_db(float(model.s.settings.music))
+			U.scale = float(model.s.settings.font)
+			enter_world()
+		else: toast("Import failed. Current progress is unchanged."),true))

@@ -53,11 +53,13 @@ static func para(text: String, size: int = 15, color: Color = MUTED) -> Label:
 
 static func row(separation: int = 10) -> HBoxContainer:
 	var h = HBoxContainer.new()
+	h.mouse_filter = Control.MOUSE_FILTER_PASS
 	h.add_theme_constant_override("separation",separation)
 	return h
 
 static func column(separation: int = 10) -> VBoxContainer:
 	var v = VBoxContainer.new()
+	v.mouse_filter = Control.MOUSE_FILTER_PASS
 	v.add_theme_constant_override("separation",separation)
 	return v
 
@@ -68,6 +70,7 @@ static func spacer() -> Control:
 
 static func card(parent: Node, padding: int = 16, border: Color = LINE) -> VBoxContainer:
 	var p = PanelContainer.new()
+	p.mouse_filter = Control.MOUSE_FILTER_PASS
 	p.add_theme_stylebox_override("panel",box(PANEL,border,10,padding))
 	parent.add_child(p)
 	var v = column(10)
@@ -76,6 +79,7 @@ static func card(parent: Node, padding: int = 16, border: Color = LINE) -> VBoxC
 
 static func button(text: String, callback: Callable, primary: bool = false) -> Button:
 	var b = Button.new()
+	b.mouse_filter = Control.MOUSE_FILTER_PASS
 	b.text = text
 	b.custom_minimum_size.y = 48
 	b.add_theme_font_override("font",body_font)

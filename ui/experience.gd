@@ -1,0 +1,381 @@
+extends RefCounted
+
+const U = preload("res://ui/style.gd")
+const STORE_URL = "" # Set only after a real public listing exists.
+const VERSION = "0.2.0"
+var app
+var front: Control
+var cinematic_page = 0
+var cinematic_replay = false
+
+func _init(owner):
+	app = owner
+
+func clear():
+	if is_instance_valid(front):
+		if front.get_parent()==app: app.remove_child(front)
+		front.queue_free()
+	front = null
+
+func screen() -> VBoxContainer:
+	app.dismiss()
+	clear()
+	front = Control.new()
+	front.set_anchors_and_offsets_preset(Control.PRESET_FULL_RECT)
+	front.z_index = 5
+	app.add_child(front)
+	var art = TextureRect.new()
+	art.texture = load("res://assets/art/cinderwatch.png")
+	art.expand_mode = TextureRect.EXPAND_IGNORE_SIZE
+	art.stretch_mode = TextureRect.STRETCH_KEEP_ASPECT_COVERED
+	art.set_anchors_and_offsets_preset(Control.PRESET_FULL_RECT)
+	front.add_child(art)
+	if app.model.s.settings.motion:
+		art.pivot_offset = app.size*.5
+		art.create_tween().tween_property(art,"scale",Vector2(1.1,1.1),14.0).set_trans(Tween.TRANS_SINE)
+	var shade = ColorRect.new()
+	shade.color = Color(.025,.04,.055,.78)
+	shade.set_anchors_and_offsets_preset(Control.PRESET_FULL_RECT)
+	front.add_child(shade)
+	var sparks = Control.new()
+	sparks.set_script(load("res://ui/atmosphere.gd"))
+	sparks.set_anchors_and_offsets_preset(Control.PRESET_FULL_RECT)
+	sparks.motion = app.model.s.settings.motion
+	sparks.mouse_filter = Control.MOUSE_FILTER_IGNORE
+	front.add_child(sparks)
+	var margin = MarginContainer.new()
+	margin.set_anchors_and_offsets_preset(Control.PRESET_FULL_RECT)
+	for side in ["left","right"]: margin.add_theme_constant_override("margin_"+side,28)
+	for side in ["top","bottom"]: margin.add_theme_constant_override("margin_"+side,48)
+	front.add_child(margin)
+	var scroll = ScrollContainer.new()
+	scroll.horizontal_scroll_mode = ScrollContainer.SCROLL_MODE_DISABLED
+	margin.add_child(scroll)
+	var v = U.column(16)
+	v.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+	v.size_flags_vertical = Control.SIZE_EXPAND_FILL
+	scroll.add_child(v)
+	if app.model.s.settings.motion:
+		v.modulate.a = 0
+		v.create_tween().tween_property(v,"modulate:a",1.0,.6)
+	return v
+
+func gap(parent, height):
+	var empty = Control.new()
+	empty.custom_minimum_size.y = height
+	parent.add_child(empty)
+
+func title(parent, value, size=42):
+	var label = U.para(value,size,U.TEXT)
+	label.add_theme_font_override("font",U.title_font)
+	parent.add_child(label)
+
+func splash():
+	app.mode = "boot"
+	var v = screen()
+	gap(v,160)
+	var icon = TextureRect.new()
+	icon.texture = load("res://assets/icon.svg")
+	icon.custom_minimum_size = Vector2(90,90)
+	icon.expand_mode = TextureRect.EXPAND_IGNORE_SIZE
+	icon.stretch_mode = TextureRect.STRETCH_KEEP_ASPECT_CENTERED
+	v.add_child(icon)
+	title(v,"ASHEN COVENANT",34)
+	v.add_child(U.para("Every ember begins a journey.",16,U.GOLD))
+	v.add_child(U.progress(1,1,U.GOLD,2))
+	app.get_tree().create_timer(1.6).timeout.connect(func():
+		if app.mode=="boot": menu())
+
+func menu():
+	if app.mode=="play": app.persist()
+	app.mode = "menu"
+	var v = screen()
+	v.add_child(U.label("A DARK FANTASY IDLE RPG",10,U.GOLD))
+	gap(v,42)
+	title(v,"ASHEN\nCOVENANT",58)
+	v.add_child(U.para("Beyond the walls, the dead still stir.\nOne refuge still burns.",17,U.MUTED))
+	gap(v,24)
+	if app.has_campaign:
+		var card = U.card(v,14,U.GOLD.darkened(.6))
+		card.add_child(U.label("YOUR JOURNEY",10,U.GOLD))
+		card.add_child(U.para(app.model.objective().title,19,U.TEXT))
+		card.add_child(U.para("Cinderwatch  ·  %d gold  ·  %d queued activities" % [int(app.model.s.gold),app.model.s.queue.size()],12))
+		v.add_child(U.button("Continue journey  →",app.enter_world,true))
+	v.add_child(U.button("New game",new_game,not app.has_campaign))
+	v.add_child(U.button("How to play",handbook))
+	v.add_child(U.button("Settings",app.settings_dialog))
+	if app.save_blocked:
+		v.add_child(U.para("Your saved progress could not be loaded. Import a backup from Settings. Existing files have been preserved.",13,U.RED))
+	gap(v,12)
+	v.add_child(U.para("FREE TO PLAY · NO ADS\nBuild "+VERSION+" · Chapter I preview",11,U.MUTED))
+	v.add_child(U.button("Exit game",func():
+		app.persist()
+		app.get_tree().quit()))
+
+func new_game():
+	if not app.has_campaign and not app.save_blocked:
+		begin_new_game()
+		return
+	var v = app.modal("Begin a new journey?")
+	v.add_child(U.para("This replaces your current journey. A separate backup of the current progress will be saved on this device before starting.",17,U.TEXT))
+	v.add_child(U.para("Equipment, skill levels, gold and quest progress start over. Display and audio preferences are kept.",14))
+	v.add_child(U.button("Keep my current journey",app.dismiss,true))
+	v.add_child(U.button("Back up progress & start new",begin_new_game))
+
+func begin_new_game():
+	if app.has_campaign:
+		app.persist()
+		DirAccess.make_dir_recursive_absolute("user://archives")
+		var path = "user://archives/before-new-game-%d-%d.json" % [app.now_ms(),Time.get_ticks_usec()]
+		var backup = FileAccess.open(path,FileAccess.WRITE)
+		if backup==null:
+			app.toast("Could not create a backup. Your current journey has not been replaced.")
+			return
+		backup.store_string(app.saves.encode(app.model.s))
+		backup.flush()
+		backup.close()
+		if app.saves.decode(FileAccess.get_file_as_string(path),app.model.data).is_empty():
+			app.toast("Backup verification failed. Your current journey is unchanged.")
+			return
+	var previous = app.model.s.duplicate(true)
+	var settings = app.model.s.settings.duplicate(true)
+	app.model.fresh(int(Time.get_unix_time_from_system()))
+	for key in ["locale","font","motion","battery","music","sfx"]: app.model.s.settings[key] = settings[key]
+	app.model.s.wall = app.now_ms()
+	if not app.saves.write_state(app.model.s,app.model.data):
+		app.model.s = previous
+		app.toast("Could not save the new journey. Check device storage and try again.")
+		return
+	app.has_campaign = true
+	app.save_blocked = false
+	app.skill = ""
+	app.filter = "all"
+	app.search_text = ""
+	app.last_objective = ""
+	intro(false)
+
+func intro(replay=false):
+	if app.mode=="play": app.persist()
+	app.mode = "intro"
+	cinematic_replay = replay
+	cinematic_page = 0
+	intro_scene()
+
+func intro_scene():
+	var scenes = [
+		["I · THE LONG NIGHT","When the bells rang,\nthe fires went out.","Across the valley, towns became ash. Those who remained followed a single light through the dark.",7],
+		["II · THE LAST REFUGE","Cinderwatch\nstill stands.","Behind broken walls, a forge waits cold and a handful of survivors keep the last ember alive.",0],
+		["III · YOUR COVENANT","Take up the ember.","Gather what the ruins have spared. Forge your own strength. Silence the Bellkeeper and rekindle the beacon.",0]
+	]
+	var scene = scenes[cinematic_page]
+	var v = screen()
+	var top = U.row()
+	v.add_child(top)
+	top.add_child(U.label(scene[0],10,U.GOLD))
+	top.add_child(U.spacer())
+	top.add_child(U.button("Skip intro",finish_intro))
+	gap(v,38)
+	var portrait = TextureRect.new()
+	var atlas = AtlasTexture.new()
+	atlas.atlas = load("res://assets/art/cinematic.png")
+	var panel_height = atlas.atlas.get_height()/3.0
+	atlas.region = Rect2(0,cinematic_page*panel_height,atlas.atlas.get_width(),panel_height)
+	atlas.filter_clip = true
+	portrait.texture = atlas
+	portrait.expand_mode = TextureRect.EXPAND_IGNORE_SIZE
+	portrait.stretch_mode = TextureRect.STRETCH_KEEP_ASPECT_COVERED
+	portrait.custom_minimum_size = Vector2(200,260)
+	v.add_child(portrait)
+	if app.model.s.settings.motion:
+		portrait.modulate.a = .1
+		portrait.create_tween().tween_property(portrait,"modulate:a",1.0,1.8)
+	title(v,scene[1],38)
+	v.add_child(U.para(scene[2],17,U.TEXT))
+	gap(v,18)
+	v.add_child(U.label("%02d / 03   —   THE LAST EMBER" % (cinematic_page+1),10,U.GOLD))
+	v.add_child(U.button("Enter Cinderwatch  →" if cinematic_page==2 else "Continue  →",func():
+		if cinematic_page==2: finish_intro()
+		else:
+			cinematic_page += 1
+			intro_scene(),true))
+	if cinematic_page>0: v.add_child(U.button("Previous scene",func():
+		cinematic_page -= 1
+		intro_scene()))
+
+func finish_intro():
+	if cinematic_replay: menu()
+	else:
+		# A new journey has no active tasks; reading the intro is not offline play.
+		app.model.s.wall = app.now_ms()
+		app.enter_world()
+
+func welcome(index=0):
+	var cards = [
+		["Welcome, Emberkeeper","YOUR GOAL","Defeat the Bellkeeper and restore Cinderwatch's beacon. You begin with basic tools, a worn sword and five cooked fish.","Follow the Journey guide at the top of every screen. It tells you exactly what to do next."],
+		["Choose a task. Let it work.","GATHER → CRAFT → EQUIP → FIGHT","One activity runs at a time. Mining, chopping, fishing and crafting repeat automatically for the count you choose.","The activity bar at the bottom shows your progress. Queue opens your task list; you can cancel or reorder waiting tasks."],
+		["Materials become strength.","BUILD YOUR OWN EQUIPMENT","Crafting consumes the ingredients shown before you start. Finished equipment appears in Bag. Open an item and press Equip item to use it.","Green comparison numbers mean an improvement. Use Sources beside a missing ingredient to find where it comes from."],
+		["Prepare before you fight.","FOOD KEEPS YOU ALIVE","Combat is automatic. Your selected cooked food heals you at 50% HP. Open Hero to change food settings. Raw fish and raw meat must be cooked first.","Defeat stops your queue but keeps your gear safe. Outside combat, HP recovers. Queued tasks also progress while away, up to 24 hours."]
+	]
+	var card = cards[index]
+	var v = app.modal("Getting started · %d / 4" % (index+1))
+	v.add_child(U.label(card[1],10,U.GOLD))
+	title(v,card[0],32)
+	v.add_child(U.para(card[2],18,U.TEXT))
+	v.add_child(U.para(card[3],16))
+	v.add_child(U.progress(index+1,4,U.GOLD,5))
+	v.add_child(U.button("Show my first task  →" if index==3 else "Next  →",func():
+		if index<3: welcome(index+1)
+		else:
+			app.model.s.experience.welcome_done = true
+			app.persist()
+			guide(),true))
+	if index>0: v.add_child(U.button("Back",func(): welcome(index-1)))
+	v.add_child(U.button("I know the basics · skip tips",func():
+		app.model.s.experience.welcome_done = true
+		app.persist()
+		guide()))
+
+func guide():
+	var o = app.model.objective()
+	var v = app.modal("Your journey · %d / %d" % [o.index,o.total])
+	app.dialog.set_meta("journey_guide",true)
+	v.add_child(U.label("NEXT OBJECTIVE",10,U.GOLD))
+	title(v,o.title,30)
+	v.add_child(U.para(o.detail,16,U.TEXT))
+	app.dynamic(v,func(): return "%d / %d complete" % [mini(int(app.model.objective().current),int(o.goal)),int(o.goal)],15,U.GOLD)
+	v.add_child(U.para("WHERE TO GO\n"+o.route,14))
+	if o.activity!="":
+		var a = app.model.data.activities[o.activity]
+		for id in a.inputs:
+			var r = U.row()
+			v.add_child(r)
+			r.add_child(U.para("%s: %d owned / %d per craft" % [app.model.name_of(id),app.model.count(id),int(a.inputs[id])],14))
+			r.add_child(U.button("Find",func(): app.sources_dialog(id)))
+	if not app.model.s.queue.is_empty():
+		v.add_child(U.para("A task is already queued. Finish it or use Queue to cancel it before starting this objective.",14,U.GOLD))
+		v.add_child(U.button("View my queue",app.queue_dialog))
+	v.add_child(U.button(o.action,act_on_goal,true))
+	v.add_child(U.button("Food & survival guide",survival))
+	v.add_child(U.label("CHAPTER I CHECKLIST",11,U.GOLD))
+	for step in RealmJourney.steps(app.model):
+		var done = step.current>=step.goal
+		v.add_child(U.para(("✓  " if done else "○  ")+step.title,14,U.GREEN if done else U.MUTED))
+
+func act_on_goal():
+	var o = app.model.objective()
+	app.dismiss()
+	if o.kind=="equip":
+		app.set_page("inventory")
+		for g in app.model.s.gear:
+			if g.id=="copper_sword":
+				app.item_dialog(g.uid)
+				return
+		app.sources_dialog("copper_sword")
+	elif o.kind=="complete": app.set_page("explore")
+	elif o.kind=="level":
+		app.skill = "smithing"
+		app.set_page("skills")
+		app.toast("Smelt ingots or forge equipment to earn Smithing XP.")
+	else:
+		var a = app.model.data.activities[o.activity]
+		if a.kind=="combat": app.set_page("explore")
+		else:
+			app.skill = a.skill
+			app.set_page("skills")
+		app.activity_dialog(o.activity,maxi(1,int(o.goal)-int(o.current)))
+
+func survival():
+	var v = app.modal("Food & survival")
+	v.add_child(U.para("1. Catch raw minnows in Skills → Fishing.\n\n2. Cook them in Skills → Cooking. Raw food cannot heal you.\n\n3. In Bag, choose Auto-heal on the cooked food you want to use.\n\n4. In Hero, check the selected food and healing threshold.\n\n5. Equip armor before tougher fights. Retreat stops the entire queue. HP recovers outside combat.",17,U.TEXT))
+	app.dynamic(v,func(): return "Selected: %s ×%d · heals %d HP · used at %d%% HP" % [app.model.name_of(app.model.s.settings.food),app.model.count(app.model.s.settings.food),int(app.model.data.items[app.model.s.settings.food].heal),int(app.model.s.settings.threshold*100)],15,U.GOLD)
+	v.add_child(U.button("Go fishing",func():
+		app.dismiss()
+		app.skill = "fishing"
+		app.set_page("skills")))
+	v.add_child(U.button("Open cooking",func():
+		app.dismiss()
+		app.skill = "cooking"
+		app.set_page("skills")))
+
+func handbook():
+	var v = app.modal("How to play")
+	for section in [
+		["01 · Follow the Journey","Your goal is to restore the beacon by defeating the Bellkeeper. The Journey guide breaks this into 12 objectives and remains available at the top of every game screen."],
+		["02 · Gather and craft","Open Skills. Gather ore, wood and fish; smelt ore, forge equipment and cook food. Activity previews show the ingredients consumed, result and time per cycle."],
+		["03 · Equip your upgrades","Crafted gear goes to Bag. Open an item and choose Equip item. Crafting alone does not improve your stats. Lock or favorite items you want to keep."],
+		["04 · Fight automatically","Open Explore, choose an unlocked enemy and a number of fights. Each victory gives gold, loot and melee XP. Your selected cooked food heals you automatically while available."],
+		["05 · Plan your time","Queue holds up to 20 tasks. Only the first runs. Tasks wait when ingredients or levels are missing. Sources shows how to get materials; Queue lets you cancel blocked tasks."],
+		["06 · Return to your rewards","Your saved queue continues for up to 24 hours while away. You receive a report when you return. No queue means no gathering or combat rewards."],
+		["07 · Find your way around","Refuge: current objective and merchant. Explore: enemies and combat. Skills: gathering and crafting. Bag: equipment and supplies. Hero: stats, food, presets and Settings."]
+	]:
+		v.add_child(U.para(section[0],20,U.GOLD))
+		v.add_child(U.para(section[1],16,U.TEXT))
+	if app.mode=="play": v.add_child(U.button("Show my next objective",guide,true))
+
+func archives():
+	var v = app.modal("Previous journeys")
+	v.add_child(U.para("Starting a New Game creates a separate backup here. Choose a journey to review before replacing current progress.",15))
+	if not DirAccess.dir_exists_absolute("user://archives"):
+		v.add_child(U.para("No previous journeys yet. Export a backup from Settings whenever you want to keep a separate copy.",15))
+		return
+	var files = DirAccess.get_files_at("user://archives")
+	files.sort()
+	files.reverse()
+	for file in files:
+		if not file.ends_with(".json"): continue
+		var path = "user://archives/"+file
+		var when = Time.get_datetime_string_from_unix_time(FileAccess.get_modified_time(path)).replace("T"," ")
+		v.add_child(U.button("Journey saved "+when,func():
+			var state = app.saves.decode(FileAccess.get_file_as_string(path),app.model.data)
+			if state.is_empty(): app.toast("This backup could not be read. Current progress is unchanged.")
+			else: app.confirm_restore(state)))
+
+func about():
+	var v = app.modal("About Ashen Covenant")
+	title(v,"Keep the last fire burning.",30)
+	v.add_child(U.para("Ashen Covenant is an independent dark fantasy idle RPG about gathering, crafting and preparing for the battles ahead.\n\nVersion "+VERSION+" · Chapter I preview\nOne region · 7 enemies · 40 items · 20 recipes\n\nFree to play. No ads. No purchases are active in this preview. Cosmetics and content expansions are planned for future releases.",16,U.TEXT))
+	v.add_child(U.para("Art generated for this project with OpenAI image generation. Original synthesized audio. Fonts: Manrope and Cormorant Garamond. Built with Godot.",14))
+	v.add_child(U.button("Credits & open-source licenses",licenses))
+	v.add_child(U.button("Replay cinematic intro",func(): intro(true)))
+
+func licenses():
+	var v = app.modal("Credits & licenses")
+	for path in ["res://assets/GODOT-LICENSE.txt","res://assets/fonts/manrope-OFL.txt","res://assets/fonts/cormorantgaramond-OFL.txt","res://assets/GODOT-COPYRIGHT.txt"]:
+		v.add_child(U.para(FileAccess.get_file_as_string(path),12))
+
+func share():
+	var v = app.modal("Share Ashen Covenant")
+	var message = "I'm playing Ashen Covenant — a dark fantasy idle RPG. Gather, forge and fight to rekindle the last beacon. Free to play, with no ads."
+	if STORE_URL!="": message += "\n"+STORE_URL
+	else: message += "\nCurrently in private preview; a public download link is not available yet."
+	v.add_child(U.para(message,17,U.TEXT))
+	v.add_child(U.para("Review the message, then choose how to share it. Nothing is sent automatically.",13))
+	if OS.get_name()=="Android": v.add_child(U.button("Choose an app to share…",func(): share_native(message),true))
+	v.add_child(U.button("Copy message",func():
+		DisplayServer.clipboard_set(message)
+		app.toast("Share message copied.")))
+
+func share_native(message: String):
+	if not Engine.has_singleton("AndroidRuntime") or not Engine.has_singleton("JavaClassWrapper"):
+		DisplayServer.clipboard_set(message)
+		app.toast("Share message copied. Paste it into your preferred app.")
+		return
+	var wrapper = Engine.get_singleton("JavaClassWrapper")
+	var intent_class = wrapper.wrap("android.content.Intent")
+	var intent = intent_class.Intent()
+	intent.setAction("android.intent.action.SEND")
+	intent.setType("text/plain")
+	intent.putExtra("android.intent.extra.TEXT",message)
+	var chooser = intent_class.createChooser(intent,"Share Ashen Covenant")
+	Engine.get_singleton("AndroidRuntime").getActivity().startActivity(chooser)
+	if wrapper.get_exception()!=null:
+		DisplayServer.clipboard_set(message)
+		app.toast("Sharing is unavailable here. The message was copied instead.")
+
+func rate():
+	var v = app.modal("Rate Ashen Covenant")
+	if STORE_URL=="":
+		v.add_child(U.para("Thank you for playing.",26,U.GOLD))
+		v.add_child(U.para("This preview is not published on Google Play yet, so store ratings are not available. Once the public listing is live, this button will open the official page.",17,U.TEXT))
+		v.add_child(U.para("For this build, share your playtest feedback with the person who gave you the APK. Useful feedback includes what you expected, what happened, and a screenshot.",15))
+	else: v.add_child(U.button("Open Google Play",func(): OS.shell_open(STORE_URL),true))

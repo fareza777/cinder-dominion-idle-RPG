@@ -19,7 +19,7 @@ func fresh(seed_value: int = 12345):
 		"bag":{"cooked_minnow":5},"gear":[],"overflow":[],"equipped":{},"next_uid":1,
 		"xp":{},"mastery":{},"queue":[],"active":{},"fight":{},"hp":100,
 		"regen_at":1000,"kills":{},"gains":{},"spent":{},"tutorial":false,"beacon":false,
-		"presets":{},"log":[],"processed":[],"settings":{"locale":"id","font":1.0,
+		"presets":{},"log":[],"processed":[],"experience":{"version":2,"welcome_done":false},"settings":{"locale":"en","font":1.0,
 		"motion":true,"battery":true,"music":0.35,"sfx":0.5,"food":"cooked_minnow",
 		"threshold":0.5,"potion":"","potion_policy":"off"},"report":{}}
 	for key in data.skills: s.xp[key] = 0
@@ -96,22 +96,22 @@ func available(enemy_id: String) -> String:
 	var d = data.enemies[enemy_id]
 	if d.unlock == "": return ""
 	if d.unlock == "tutorial":
-		return "Selesaikan Bekal Pertama" if not s.tutorial else ""
-	if int(s.kills.get(d.unlock,0))<5: return "Kalahkan %s 5×" % local_name(data.enemies[d.unlock])
-	if d.boss and level("smithing")<10: return "Penempaan level 10"
+		return "Complete First Supplies (Journey steps 1–6)" if not s.tutorial else ""
+	if int(s.kills.get(d.unlock,0))<5: return "Defeat %s 5 times" % local_name(data.enemies[d.unlock])
+	if d.boss and level("smithing")<10: return "Reach Smithing level 10"
 	return ""
 
 func requirement(aid: String) -> String:
-	if not data.activities.has(aid): return "Aktivitas tidak ditemukan"
+	if not data.activities.has(aid): return "Activity not found"
 	var a = data.activities[aid]
 	if a.kind=="combat":
 		var locked = available(a.enemy)
 		if locked!="": return locked
-		if s.hp<=0: return "Pulihkan HP di desa"
+		if s.hp<=0: return "Recover HP outside combat before hunting"
 	else:
 		if level(a.skill)<int(a.level): return "%s Lv.%d" % [local_name(data.skills[a.skill]),int(a.level)]
 		for id in a.inputs:
-			if count(id)<int(a.inputs[id]): return "Kurang %s (%d/%d)" % [name_of(id),count(id),int(a.inputs[id])]
+			if count(id)<int(a.inputs[id]): return "Need %s (owned %d / required %d)" % [name_of(id),count(id),int(a.inputs[id])]
 	return ""
 
 func command(cmd: Dictionary) -> bool:
@@ -122,22 +122,22 @@ func command(cmd: Dictionary) -> bool:
 	var id = str(cmd.get("id",""))
 	match action:
 		"queue":
-			if not data.activities.has(id): return fail("Aktivitas tidak dikenal")
-			if s.queue.size()>=20: return fail("Antrean penuh (20)")
+			if not data.activities.has(id): return fail("Unknown activity")
+			if s.queue.size()>=20: return fail("Queue is full (20 steps). Cancel a step to make room.")
 			var target = clampi(int(cmd.get("target",50)),1,1000000)
 			var kind = str(cmd.get("kind","cycles"))
-			if kind not in ["cycles","output","level"]: return fail("Target tidak valid")
+			if kind not in ["cycles","output","level"]: return fail("Invalid activity target")
 			s.queue.append({"id":id,"target":mini(target,100) if kind=="level" else target,"kind":kind,"done":0,"output":0,"skip":bool(cmd.get("skip",false))})
 			if s.active.is_empty() and s.fight.is_empty(): start_next()
 		"cancel":
 			var index = int(cmd.get("index",0))
-			if index<0 or index>=s.queue.size(): return fail("Antrean berubah")
+			if index<0 or index>=s.queue.size(): return fail("The queue has changed. Open it again.")
 			if index==0: refund_active()
 			s.queue.remove_at(index)
 			start_next()
 		"up":
 			var index = int(cmd.get("index",0))
-			if index<2 or index>=s.queue.size(): return fail("Aktivitas berjalan tetap di urutan pertama")
+			if index<2 or index>=s.queue.size(): return fail("The active task stays first. Reorder waiting tasks only.")
 			var step = s.queue[index]
 			s.queue.remove_at(index)
 			s.queue.insert(index-1,step)
@@ -145,21 +145,21 @@ func command(cmd: Dictionary) -> bool:
 			refund_active()
 			s.queue.clear()
 		"equip":
-			if not s.fight.is_empty(): return fail("Hentikan pertarungan untuk mengganti build")
+			if not s.fight.is_empty(): return fail("Retreat from combat before changing equipment.")
 			var g = gear(id)
-			if g.is_empty(): return fail("Item tidak ditemukan")
+			if g.is_empty(): return fail("Item not found")
 			s.equipped[data.items[g.id].slot] = id
 		"lock","favorite":
 			var g = gear(id)
-			if g.is_empty(): return fail("Item tidak ditemukan")
+			if g.is_empty(): return fail("Item not found")
 			var field = "locked" if action=="lock" else "favorite"
 			g[field] = not g[field]
 		"salvage":
 			var ids = cmd.get("ids",[])
-			if ids.is_empty(): return fail("Tidak ada item yang bisa dilebur")
+			if ids.is_empty(): return fail("No equipment selected for salvage")
 			var seen = {}
 			for uid in ids:
-				if seen.has(uid) or protected(uid): return fail("Item terpasang, terkunci, atau tersimpan dalam preset")
+				if seen.has(uid) or protected(uid): return fail("This item is equipped, locked, a favorite, or used in a preset.")
 				seen[uid] = true
 			var amount = 0
 			for uid in ids:
@@ -167,32 +167,32 @@ func command(cmd: Dictionary) -> bool:
 				amount += int(g.count)*([1,1,2,4,6,8,12,16][int(g.q)])
 				s.gear.erase(g)
 			gain("scrap",amount)
-			note("Dilebur menjadi %d serpihan" % amount)
+			note("Salvaged into %d metal scraps" % amount)
 		"buy":
-			if not data.merchant.has(id): return fail("Barang tidak dijual")
+			if not data.merchant.has(id): return fail("This item is not sold here")
 			var qty = clampi(int(cmd.get("amount",1)),1,100)
 			var cost = int(data.merchant[id])*qty
-			if s.gold<cost: return fail("Gold tidak cukup")
+			if s.gold<cost: return fail("Not enough gold. Hunt enemies to earn more.")
 			s.gold -= cost
 			gain(id,qty)
 		"sell":
-			if not data.items.has(id) or data.items[id].category=="equipment": return fail("Gunakan peleburan untuk perlengkapan")
+			if not data.items.has(id) or data.items[id].category=="equipment": return fail("Salvage equipment to recover metal scraps.")
 			var qty = clampi(int(cmd.get("amount",1)),1,1000)
-			if count(id)<qty: return fail("Jumlah item tidak cukup")
+			if count(id)<qty: return fail("Not enough items")
 			spend(id,qty)
 			s.gold += qty
 		"food":
-			if not data.items.has(id) or data.items[id].category!="food": return fail("Bukan makanan")
+			if not data.items.has(id) or data.items[id].category!="food": return fail("Choose a cooked food item")
 			s.settings.food = id
 		"potion":
-			if id!="" and (not data.items.has(id) or data.items[id].category!="potion"): return fail("Ramuan tidak valid")
+			if id!="" and (not data.items.has(id) or data.items[id].category!="potion"): return fail("Invalid potion")
 			s.settings.potion = id
 			s.settings.potion_policy = "auto" if id!="" else "off"
 		"preset_save":
 			s.presets[id.left(24)] = s.equipped.duplicate(true)
 		"preset_load":
-			if not s.fight.is_empty(): return fail("Hentikan pertarungan terlebih dahulu")
-			if not s.presets.has(id): return fail("Preset kosong")
+			if not s.fight.is_empty(): return fail("Retreat from combat first")
+			if not s.presets.has(id): return fail("This preset has not been saved yet")
 			s.equipped = s.presets[id].duplicate(true)
 		"overflow":
 			var moved = []
@@ -202,10 +202,10 @@ func command(cmd: Dictionary) -> bool:
 				moved.append(g)
 			for g in moved: s.overflow.erase(g)
 		"setting":
-			if not s.settings.has(id): return fail("Pengaturan tidak dikenal")
+			if not s.settings.has(id): return fail("Unknown setting")
 			s.settings[id] = cmd.get("value")
 		_:
-			return fail("Perintah tidak dikenal")
+			return fail("Unknown command")
 	check_quest()
 	if cid!="":
 		s.processed.append(cid)
@@ -341,7 +341,7 @@ func resolve_combat():
 			s.hp -= hit_damage(attack,int(st.armor))
 		if s.hp<=0:
 			s.hp = 0
-			note("Kalah melawan %s. Perlengkapan tetap aman." % local_name(d))
+			note("Defeated by %s. Equipment is safe. Recover and prepare food before trying again." % local_name(d))
 			s.fight = {}
 			s.queue.clear()
 			s.regen_at = int(s.time)+1000
@@ -368,7 +368,7 @@ func win(enemy: Dictionary):
 	if enemy.boss and not s.beacon:
 		s.beacon = true
 		gain("copper_sword",1,3)
-		note("Lonceng terdiam. Api Cinderwatch kembali menyala.")
+		note("The bells fall silent. Cinderwatch burns bright again.")
 	s.queue[0].done += 1
 	s.queue[0].output += int(enemy.qty)
 	s.fight = {}
@@ -376,20 +376,7 @@ func win(enemy: Dictionary):
 	check_quest()
 
 func objective() -> Dictionary:
-	var steps = [
-		["Bijih untuk sebuah harapan","Gather copper ore",int(s.gains.get("copper_ore",0)),4,"mine_copper"],
-		["Nyalakan tungku pertama","Smelt copper ingots",int(s.gains.get("copper_ingot",0)),2,"craft_copper_ingot"],
-		["Kayu untuk gagang pedang","Gather an ash log",int(s.gains.get("ash_log",0)),1,"cut_ash"],
-		["Tempa pedang pertamamu","Forge a copper sword",int(s.gains.get("copper_sword",0)),1,"craft_copper_sword"]]
-	for st in steps:
-		if st[2]<st[3]: return {"title":st[1] if s.settings.locale=="en" else st[0],"current":st[2],"goal":st[3],"activity":st[4],"kind":"activity"}
-	var weapon = gear(str(s.equipped.get("weapon","")))
-	if not s.tutorial and (weapon.is_empty() or weapon.id not in ["copper_sword","iron_sword"]):
-		return {"title":"Equip your new sword" if s.settings.locale=="en" else "Pasang pedang barumu","current":0,"goal":1,"activity":"","kind":"equip"}
-	if not s.tutorial:
-		return {"title":"Clear the outskirts" if s.settings.locale=="en" else "Amankan pinggiran desa","current":int(s.kills.get("ash_rat",0)),"goal":3,"activity":"hunt_ash_rat","kind":"activity"}
-	if s.beacon: return {"title":"Cinderwatch lives again" if s.settings.locale=="en" else "Cinderwatch hidup kembali","current":1,"goal":1,"activity":"","kind":"complete"}
-	return {"title":"Silence the Bellkeeper" if s.settings.locale=="en" else "Bungkam Sang Penjaga Lonceng","current":0,"goal":1,"activity":"hunt_bellkeeper","kind":"boss"}
+	return RealmJourney.current(self)
 
 func check_quest():
 	if s.tutorial: return
@@ -398,7 +385,7 @@ func check_quest():
 		s.tutorial = true
 		s.gold += 30
 		gain("cooked_minnow",10)
-		note("Bekal Pertama selesai · +30 gold · +10 ikan panggang")
+		note("First Supplies complete · +30 gold · +10 grilled minnows")
 
 func activity_name(id: String) -> String:
 	var a = data.activities[id]

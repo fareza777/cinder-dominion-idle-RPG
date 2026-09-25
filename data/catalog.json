@@ -883,6 +883,7 @@
       "unlock": "",
       "portrait": 1,
       "lore": "Hewan liar yang memakan sisa-sisa Cinderwatch.",
+      "lore_en": "Wild scavengers feed on what remains of Cinderwatch.",
       "boss": false
     },
     "hollow_hound": {
@@ -900,6 +901,7 @@
       "unlock": "tutorial",
       "portrait": 2,
       "lore": "Giginya masih tajam. Yang tersisa hanya rasa lapar.",
+      "lore_en": "Its teeth are sharp. Hunger is all that remains.",
       "boss": false
     },
     "grave_thrall": {
@@ -917,6 +919,7 @@
       "unlock": "tutorial",
       "portrait": 3,
       "lore": "Bangkit bersama bunyi lonceng dari kapel tua.",
+      "lore_en": "The old chapel bell wakes those buried beneath it.",
       "boss": false
     },
     "cinder_bandit": {
@@ -934,6 +937,7 @@
       "unlock": "grave_thrall",
       "portrait": 4,
       "lore": "Mereka merampas apa pun yang masih berharga.",
+      "lore_en": "They take anything the ash has spared.",
       "boss": false
     },
     "chapel_guard": {
@@ -951,6 +955,7 @@
       "unlock": "cinder_bandit",
       "portrait": 5,
       "lore": "Zirah kosong yang tak pernah melupakan tugasnya.",
+      "lore_en": "Empty armor, still bound to a forgotten duty.",
       "boss": false
     },
     "ember_wraith": {
@@ -968,6 +973,7 @@
       "unlock": "chapel_guard",
       "portrait": 6,
       "lore": "Sesuatu bergerak di antara abu dan cahaya api.",
+      "lore_en": "A restless shape flickers between ash and fire.",
       "boss": false
     },
     "bellkeeper": {
@@ -985,6 +991,7 @@
       "unlock": "ember_wraith",
       "portrait": 7,
       "lore": "Setiap dentang ketiga membawa pukulan yang mengerikan.",
+      "lore_en": "Every third toll brings a devastating strike.",
       "boss": true
     }
   },

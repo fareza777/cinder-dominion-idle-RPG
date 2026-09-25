@@ -66,18 +66,16 @@ func village(parent: Node):
 	app.dynamic(quest,func(): return m.objective().title,22,U.TEXT)
 	app.dynamic(quest,func():
 		var o = m.objective()
-		return "%d / %d  ·  %s" % [mini(int(o.current),int(o.goal)),int(o.goal),text("Langkah kecil mengubah dunia.","Small steps change the world.")],12)
+		return "%d / %d  ·  %s" % [mini(int(o.current),int(o.goal)),int(o.goal),o.route],12)
 	var qp = U.progress(m.objective().current,m.objective().goal,U.GOLD,4)
 	quest.add_child(qp)
 	app.update_callbacks.append(func():
 		if is_instance_valid(qp):
 			qp.max_value = m.objective().goal
 			qp.value = m.objective().current)
-	quest.add_child(U.button(text("Lanjutkan perjalanan  →","Continue the journey  →"),func():
-		var o = m.objective()
-		if o.kind=="equip": app.set_page("inventory")
-		elif o.kind in ["boss","complete"]: app.set_page("explore")
-		else: app.activity_dialog(o.activity),true))
+	app.dynamic(quest,func(): return m.objective().detail,14,U.MUTED)
+	quest.add_child(U.button("Open step-by-step guide  →",app.guide_dialog,true))
+
 	var links = U.row(10)
 	parent.add_child(links)
 	for entry in [["skills",text("KUMPULKAN & TEMPA","GATHER & FORGE"),text("Keahlian","Skills")],["explore",text("DI BALIK GERBANG","BEYOND THE GATE"),text("Jelajah","Explore")]]:
@@ -94,7 +92,7 @@ func village(parent: Node):
 	app.dynamic(parent,func(): return str(m.s.log[0]) if not m.s.log.is_empty() else text("Perjalananmu baru dimulai.","Your journey is just beginning."),14,U.MUTED)
 
 func explore(parent: Node):
-	heading(parent,text("WILAYAH 01","REGION 01"),text("Pinggiran Cinderwatch","Cinderwatch Outskirts"),text("Bekal, perlengkapan, dan keberanian. Siapkan semuanya.","Supplies, steel, and resolve. Prepare them well."))
+	heading(parent,text("WILAYAH 01","REGION 01"),text("Pinggiran Cinderwatch","Cinderwatch Outskirts"),text("Bekal, perlengkapan, dan keberanian. Siapkan semuanya.","Choose an enemy and a number of fights. Combat runs automatically. Stock cooked food and equip upgrades first."))
 	var fighting = not m.s.fight.is_empty()
 	if fighting:
 		var enemy_id = str(m.s.fight.enemy)
@@ -128,7 +126,8 @@ func explore(parent: Node):
 		U.stat(r,str(int(st.attack)),"ATK",U.GOLD)
 		U.stat(r,str(int(st.armor)),"DEF")
 		U.stat(r,"%d" % m.count(m.s.settings.food),text("BEKAL","FOOD"),U.GREEN)
-		prep.add_child(U.para(text("Auto-heal aktif. Kekalahan menghentikan aktivitas; perlengkapanmu tetap aman.","Auto-heal is active. Defeat stops the activity; your equipment remains safe."),12))
+		prep.add_child(U.para(text("Auto-heal aktif. Kekalahan menghentikan aktivitas; perlengkapanmu tetap aman.","Selected food heals you automatically while supplies last. Defeat stops the queue; your gear stays safe."),12))
+	parent.add_child(U.button("How food & survival work",app.experience.survival))
 	for id in m.data.enemies:
 		var d = m.data.enemies[id]
 		var why = m.available(id)
@@ -146,7 +145,7 @@ func explore(parent: Node):
 		else: card.add_child(U.button(text("Tantang boss" if d.boss else "Buru & kumpulkan loot","Challenge boss" if d.boss else "Hunt & gather loot"),func(): app.activity_dialog("hunt_"+id),d.boss))
 
 func skills(parent: Node):
-	heading(parent,text("TUMBUH MELALUI LATIHAN","GROW THROUGH PRACTICE"),text("Keahlian","Skills"),text("Setiap bahan memiliki tujuan. Setiap pekerjaan meninggalkan jejak.","Every material has a purpose. Every craft leaves a mark."))
+	heading(parent,text("TUMBUH MELALUI LATIHAN","GROW THROUGH PRACTICE"),text("Keahlian","Skills"),text("Setiap bahan memiliki tujuan. Setiap pekerjaan meninggalkan jejak.","Gather raw materials, turn them into supplies, then equip your upgrades. Choose a skill below to see its activities."))
 	if app.skill=="":
 		var grid = GridContainer.new()
 		grid.columns = 2
@@ -159,7 +158,7 @@ func skills(parent: Node):
 			c.get_parent().size_flags_horizontal = Control.SIZE_EXPAND_FILL
 			var icon_id = {"woodcutting":"ash_axe","mining":"copper_pick","fishing":"iron_rod","cooking":"cooked_meat","smithing":"copper_sword","alchemy":"healing_draught"}[id]
 			c.add_child(U.icon(icon_id,60))
-			c.add_child(U.label(m.local_name(skill),18,U.TEXT,true))
+			c.add_child(U.para(m.local_name(skill),18,U.TEXT))
 			app.dynamic(c,func(): return "LEVEL %d  /  100" % m.level(id),10,U.GOLD)
 			var bar = U.progress(0,1,U.GOLD)
 			c.add_child(bar)
@@ -198,7 +197,7 @@ func skills(parent: Node):
 			c.add_child(U.button(text("Atur aktivitas","Set activity"),func(): app.activity_dialog(aid),m.level(selected)>=int(a.level)))
 
 func inventory(parent: Node):
-	heading(parent,text("HASIL DARI SETIAP PERJALANAN","SPOILS OF EVERY JOURNEY"),text("Perbekalan","Inventory"))
+	heading(parent,text("HASIL DARI SETIAP PERJALANAN","SPOILS OF EVERY JOURNEY"),text("Perbekalan","Inventory"),"Open equipment to compare stats and equip it. Cooked food can be selected for auto-heal. Sources tells you where to find more.")
 	var filters = U.row(6)
 	parent.add_child(filters)
 	var picker = OptionButton.new()
@@ -307,6 +306,7 @@ func character(parent: Node):
 	threshold.value_changed.connect(func(value): app.send({"type":"setting","id":"threshold","value":value},false))
 	app.dynamic(food,func(): return text("Ramuan: ","Potion: ")+(m.name_of(m.s.settings.potion) if m.s.settings.potion!="" else text("Tidak aktif","Disabled")),14)
 	food.add_child(U.button(text("Nonaktifkan ramuan","Disable potion"),func(): app.send({"type":"potion","id":""})))
+	food.add_child(U.button("Get more food · step-by-step",app.experience.survival))
 	var presets = U.card(parent)
 	presets.add_child(U.label(text("PRESET PERLENGKAPAN","EQUIPMENT PRESETS"),10,U.GOLD))
 	for name in ["Guardian","Reaver"]:

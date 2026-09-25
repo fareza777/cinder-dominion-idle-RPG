@@ -66,6 +66,8 @@ func valid(s, data: Dictionary) -> bool:
 		for key in ["hp","player_at","enemy_at","hits","buff_until","potion_at","spawn_at"]:
 			if not counter(s.fight[key]): return false
 		if s.fight.player_at<s.time or s.fight.enemy_at<s.time or s.fight.buff not in ["attack","armor"]: return false
+	if s.has("experience"):
+		if not s.experience is Dictionary or s.experience.get("version",0)!=2 or not s.experience.get("welcome_done",false) is bool: return false
 	var cfg = s.settings
 	for key in ["locale","font","motion","battery","music","sfx","food","threshold","potion","potion_policy"]:
 		if not cfg.has(key): return false
@@ -108,14 +110,14 @@ func read_state(data: Dictionary, directory: String = DIRECTORY) -> Dictionary:
 		if f==null or f.get_length()>LIMIT: continue
 		var state = decode(f.get_as_text(),data)
 		if not state.is_empty():
-			if i>0: message = "Save dipulihkan dari cadangan."
+			if i>0: message = "Progress recovered from a backup."
 			return state
-	if not files.is_empty(): message = "Save tidak dapat dibaca. File asli tetap disimpan."
+	if not files.is_empty(): message = "Save could not be read. Original files are preserved. Import a backup to recover."
 	return {}
 
 func write_state(s: Dictionary, data: Dictionary, directory: String = DIRECTORY) -> bool:
 	if not valid(s,data):
-		message = "Progres belum tersimpan: state tidak valid."
+		message = "Progress was not saved: invalid state."
 		return false
 	DirAccess.make_dir_recursive_absolute(directory)
 	var copy = s.duplicate(true)
@@ -127,7 +129,7 @@ func write_state(s: Dictionary, data: Dictionary, directory: String = DIRECTORY)
 	var temp = dest+".tmp"
 	var f = FileAccess.open(temp,FileAccess.WRITE)
 	if f==null:
-		message = "Penyimpanan gagal. Periksa ruang kosong perangkat."
+		message = "Save failed. Check the available storage on your device."
 		return false
 	f.store_string(encode(copy))
 	f.flush()

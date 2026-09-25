@@ -2,15 +2,57 @@
   "project": "Ashen Covenant",
   "created": "2026-09-25",
   "art": [
-    {"file": "art/cinderwatch.png", "source": "OpenAI image generation in this task", "kind": "original generated art", "prompt_summary": "Original dark fantasy ruined mountain refuge, cathedral center-right, warm cottage windows, small campfire, charcoal and amber palette, cinematic painterly illustration, no text, no UI."},
-    {"file": "art/portraits.png", "source": "OpenAI image generation in this task", "kind": "original generated art", "prompt_summary": "Original dark fantasy portrait atlas 4 columns by 2 rows: hooded knight, ash rat, hollow hound, grave thrall, bandit, chapel guard, ember wraith, Bellkeeper. Consistent painterly lighting, no labels or UI."},
-    {"file": "art/items.png", "source": "OpenAI image generation in this task", "kind": "original generated art", "prompt_summary": "Original 8 by 5 dark fantasy inventory icon atlas; resources, ingots, fish, meat, herbs, vial, scrap, meals, three potions, copper and iron equipment, worn equipment and six tools. Exact row order matches data/catalog.json items. No labels or UI."}
+    {
+      "file": "art/cinderwatch.png",
+      "source": "OpenAI image generation in this task",
+      "kind": "original generated art",
+      "prompt_summary": "Original dark fantasy ruined mountain refuge, cathedral center-right, warm cottage windows, small campfire, charcoal and amber palette, cinematic painterly illustration, no text, no UI."
+    },
+    {
+      "file": "art/portraits.png",
+      "source": "OpenAI image generation in this task",
+      "kind": "original generated art",
+      "prompt_summary": "Original dark fantasy portrait atlas 4 columns by 2 rows: hooded knight, ash rat, hollow hound, grave thrall, bandit, chapel guard, ember wraith, Bellkeeper. Consistent painterly lighting, no labels or UI."
+    },
+    {
+      "file": "art/items.png",
+      "source": "OpenAI image generation in this task",
+      "kind": "original generated art",
+      "prompt_summary": "Original 8 by 5 dark fantasy inventory icon atlas; resources, ingots, fish, meat, herbs, vial, scrap, meals, three potions, copper and iron equipment, worn equipment and six tools. Exact row order matches data/catalog.json items. No labels or UI."
+    },
+    {
+      "file": "art/cinematic.png",
+      "source": "OpenAI image generation in this task on 2026-09-25",
+      "kind": "original generated art",
+      "prompt_summary": "Cinematic storyboard atlas, three equal horizontal panels: burnt medieval valley and gothic bell tower; last mountain refuge with forge and warm chapel windows; hooded wanderer beside amber ember brazier at dawn. Painterly realistic charcoal and slate with restrained copper firelight. No labels, UI or existing franchise characters."
+    }
   ],
   "fonts": [
-    {"family": "Manrope", "source": "https://github.com/google/fonts/tree/main/ofl/manrope", "license": "SIL Open Font License 1.1", "license_file": "fonts/manrope-OFL.txt", "adaptation": "Readable static instance at weight 450; original variable file retained."},
-    {"family": "Cormorant Garamond", "source": "https://github.com/google/fonts/tree/main/ofl/cormorantgaramond", "license": "SIL Open Font License 1.1", "license_file": "fonts/cormorantgaramond-OFL.txt", "adaptation": "Readable static instance at weight 500; original variable file retained."}
+    {
+      "family": "Manrope",
+      "source": "https://github.com/google/fonts/tree/main/ofl/manrope",
+      "license": "SIL Open Font License 1.1",
+      "license_file": "fonts/manrope-OFL.txt",
+      "adaptation": "Readable static instance at weight 450; original variable file retained."
+    },
+    {
+      "family": "Cormorant Garamond",
+      "source": "https://github.com/google/fonts/tree/main/ofl/cormorantgaramond",
+      "license": "SIL Open Font License 1.1",
+      "license_file": "fonts/cormorantgaramond-OFL.txt",
+      "adaptation": "Readable static instance at weight 500; original variable file retained."
+    }
   ],
-  "audio": {"files": ["audio/refuge.wav", "audio/action.wav"], "source": "Original synthesized sine-wave audio from tools/make_audio.py; no third-party samples"},
-  "icon": {"file": "icon.svg", "source": "Original vector flame and diamond drawn in this project"},
+  "audio": {
+    "files": [
+      "audio/refuge.wav",
+      "audio/action.wav"
+    ],
+    "source": "Original synthesized sine-wave audio from tools/make_audio.py; no third-party samples"
+  },
+  "icon": {
+    "file": "icon.svg",
+    "source": "Original vector flame and diamond drawn in this project"
+  },
   "notes": "No Realm Idle assets, names, or source code are included. Prompt summaries describe generation direction, not exact historical transcripts. Working title has not received a trademark clearance review. Godot engine license notices are available in the engine About/licenses view and upstream: https://godotengine.org/license/ ."
 }
