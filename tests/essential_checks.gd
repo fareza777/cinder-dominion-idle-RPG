@@ -52,6 +52,8 @@ func _init():
 	check(guided.s.tutorial and guided.objective().key=="thralls","tutorial continues toward enemy unlocks, not straight to boss")
 	var old_save = guided.s.duplicate(true)
 	old_save.erase("experience")
+	old_save.erase("chronicle")
+	old_save.erase("progression")
 	check(not store.decode(store.encode(old_save),guided.data).is_empty(),"0.1 saves remain readable")
 	var planned = RealmModel.new()
 	var chain = RealmProgression.plan(planned,"craft_copper_sword",1)
@@ -73,5 +75,42 @@ func _init():
 	guarded.advance(180000)
 	for i in range(180): chunked.advance(1000)
 	check(guarded.s==chunked.s and guarded.stats().armor==5,"Warden skills remain deterministic online and offline")
+	var legacy = RealmModel.new()
+	legacy.s.tutorial = true
+	legacy.s.xp.might = 500
+	legacy.command({"type":"talent","id":"power"})
+	RealmChronicle.state(legacy).fragments.fang = 5
+	legacy.command({"type":"relic_upgrade","id":"fang"})
+	check(legacy.stats().attack==7 and RealmChronicle.state(legacy).fragments.fang==0 and RealmChronicle.points_free(legacy)==1,"talent and equipped relic change combat stats with exact cost")
+	RealmChronicle.sync_day(legacy,20000*86400000)
+	legacy.s.mastery.mine_copper = 30
+	legacy.command({"type":"bounty_claim","id":"gather"})
+	var paid = legacy.s.gold
+	var repeated = legacy.command({"type":"bounty_claim","id":"gather"})
+	RealmChronicle.sync_day(legacy,20001*86400000)
+	check(not repeated and legacy.s.gold==paid and legacy.s.chronicle.daily.day==20000,"bounty cannot double-pay and unfinished board carries over")
+	legacy.s.mastery.craft_copper_ingot = 10
+	legacy.s.kills.ash_rat = 8
+	legacy.command({"type":"bounty_claim","id":"craft"})
+	legacy.command({"type":"bounty_claim","id":"hunt"})
+	RealmChronicle.sync_day(legacy,20001*86400000)
+	check(legacy.s.chronicle.daily.day==20001 and RealmChronicle.bounty_value(legacy,"gather")==0 and not store.decode(store.encode(legacy.s),legacy.data).is_empty(),"completed bounty rotates once with fresh baseline and valid legacy state")
+	var expedition = RealmModel.new()
+	expedition.s.beacon = true
+	expedition.s.tutorial = true
+	for part in ["sword","shield","helm","chest","gloves","boots"]: expedition.gain("iron_"+part,1,3)
+	expedition.command({"type":"equip_best"})
+	expedition.s.bag.cooked_minnow = 100
+	expedition.command({"type":"queue","id":"hunt_wilds_1","target":2})
+	var twin = RealmModel.new()
+	twin.s = expedition.s.duplicate(true)
+	expedition.advance(300000)
+	for i in range(300): twin.advance(1000)
+	check(expedition.s==twin.s and expedition.s.kills.get("wilds_1",0)==2 and expedition.count("scrap")==6 and expedition.available("wilds_2")=="" and expedition.available("marsh_1")!="","expedition rewards first clear once, gates tiers, and matches offline simulation")
+	var order = RealmModel.new()
+	var preview = RealmProgression.order_plan(order,"forge",1)
+	order.command({"type":"work_order","id":"forge","batches":1})
+	order.advance(5000000)
+	check(preview.steps.size()==2 and order.count("copper_ingot")==500 and order.count("copper_ore")==0 and order.s.xp.smithing==4000 and order.s.queue.is_empty(),"long work order gathers inputs, earns XP and finishes while offline")
 	print("ESSENTIAL CHECKS: ","PASS" if failed==0 else "FAIL")
 	quit(1 if failed else 0)

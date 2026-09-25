@@ -30,7 +30,29 @@ english_lore=['Wild scavengers feed on what remains of Cinderwatch.','Its teeth 
 for i,(key,n,en,hp,atk,armor,interval,gold,xp,drop,qty,unlock,lore) in enumerate(rows):
     enemies[key]=dict(id=key,name=n,en=en,hp=hp,attack=atk,armor=armor,interval=interval,gold=gold,xp=xp,drop=drop,qty=qty,unlock=unlock,portrait=i+1,lore=lore,lore_en=english_lore[i],boss=i==6)
     activities['hunt_'+key]=dict(id='hunt_'+key,kind='combat',enemy=key,skill='bladecraft',level=1,output=drop,inputs={},duration=2,xp=xp)
+# Repeatable post-story encounters. Portraits deliberately reuse the original cast.
+expeditions=[('wilds','Ashen Wilds','Thornbound Sentinel',3,100,9,3,'grave_moss','fang'),('marsh','Drowned Sanctum','Drowned Oracle',6,170,13,5,'emberleaf','heart'),('crown','Obsidian Crown','Crowned Bellkeeper',7,280,17,7,'iron_ingot','ward')]
+for region_index,(region,region_name,title,portrait,hp,attack,armor,drop,relic) in enumerate(expeditions):
+    for tier in range(1,6):
+        key=f'{region}_{tier}'
+        gate='beacon' if region_index==0 and tier==1 else (f'{expeditions[region_index-1][0]}_5' if tier==1 else f'{region}_{tier-1}')
+        name=f'{title} · Tier {tier}'
+        enemy=dict(id=key,name=name,en=name,hp=int(hp*(1+.4*(tier-1))),attack=int(attack*(1+.22*(tier-1))),armor=armor+tier-1,interval=2800,gold=25+region_index*20+tier*8,xp=40+region_index*25+tier*15,drop=drop,qty=2+tier,unlock=gate,portrait=portrait,lore=f'{region_name}: a stronger echo of the fallen.',lore_en=f'{region_name}: a stronger echo of the fallen. Every third strike is empowered. First victory opens the next tier.',boss=True,region=region,tier=tier,relic=relic,fragments=tier+1)
+        enemies[key]=enemy
+        activities['hunt_'+key]=dict(id='hunt_'+key,kind='combat',enemy=key,skill='bladecraft',level=1,output=drop,inputs={},duration=2,xp=enemy['xp'])
+
+region_lore={
+    'wilds':'Roots have taken hold inside the armor of a forgotten watchman. Beneath the dead canopy, he still guards a road that leads nowhere.',
+    'marsh':'Pilgrims once crossed these bridges to hear the oracle speak. Now her voice rises from beneath the water, calling the faithful home.',
+    'crown':'The bell in Cinderwatch has fallen silent. Beyond the volcanic ridge, another answers from a throne of black stone.'
+}
+for enemy in enemies.values():
+    if 'region' in enemy: enemy['lore_en']=region_lore[enemy['region']]
+    enemy['name']=enemy['en']
+    enemy['lore']=enemy['lore_en']
+for entry in list(items.values())+list(skills.values()): entry['name']=entry['en']
+
 doc=dict(items=items,skills=skills,activities=activities,enemies=enemies,merchant={'empty_vial':2,'ash_axe':30,'copper_pick':40,'iron_rod':60},rarities=['Worn','Common','Fine','Rare','Epic','Legendary','Mythic','Relic'])
-assert len(items)==40 and len(recipes)==20 and len(enemies)==7
+assert len(items)==40 and len(recipes)==20 and len(enemies)==22
 (data/'catalog.json').write_text(json.dumps(doc,ensure_ascii=False,indent=2),encoding='utf-8')
-print('Content: 40 items, 20 recipes, 9 trained skills, 7 enemies.')
+print('Content: 40 items, 20 recipes, 9 trained skills, 7 story enemies + 15 expedition tiers.')

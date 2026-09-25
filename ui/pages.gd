@@ -22,8 +22,9 @@ func heading(parent: Node, overline: String, title: String, subtitle: String = "
 
 func village(parent: Node):
 	heading(parent,text("BAB I  /  SUAKA TERAKHIR","CHAPTER I  /  THE LAST REFUGE"),"Cinderwatch")
+	preload("res://ui/chronicle.gd").new(app).home(parent)
 	var scene = Control.new()
-	scene.custom_minimum_size.y = 238
+	scene.custom_minimum_size.y = 150
 	scene.clip_contents = true
 	parent.add_child(scene)
 	var art = TextureRect.new()
@@ -57,25 +58,6 @@ func village(parent: Node):
 	scene.add_child(scene_text)
 	scene_text.add_child(U.label(text("DI ANTARA ABU, MASIH ADA HARAPAN","AMONG THE ASHES, HOPE REMAINS"),10,U.GOLD))
 	scene_text.add_child(U.label(text("Jaga agar api tetap menyala.","Keep the last fire burning."),27,U.TEXT,true))
-	var quest = U.card(parent,18,U.GOLD.darkened(.5))
-	var qr = U.row()
-	quest.add_child(qr)
-	qr.add_child(U.label(text("JURNAL PERJALANAN","JOURNEY JOURNAL"),10,U.GOLD))
-	qr.add_child(U.spacer())
-	qr.add_child(U.label(text("CERITA UTAMA","MAIN QUEST"),9,U.MUTED))
-	app.dynamic(quest,func(): return m.objective().title,22,U.TEXT)
-	app.dynamic(quest,func():
-		var o = m.objective()
-		return "%d / %d  ·  %s" % [mini(int(o.current),int(o.goal)),int(o.goal),o.route],12)
-	var qp = U.progress(m.objective().current,m.objective().goal,U.GOLD,4)
-	quest.add_child(qp)
-	app.update_callbacks.append(func():
-		if is_instance_valid(qp):
-			qp.max_value = m.objective().goal
-			qp.value = m.objective().current)
-	app.dynamic(quest,func(): return m.objective().detail,14,U.MUTED)
-	quest.add_child(U.button("Open step-by-step guide  →",app.guide_dialog,true))
-
 	var links = U.row(10)
 	parent.add_child(links)
 	for entry in [["skills",text("KUMPULKAN & TEMPA","GATHER & FORGE"),text("Keahlian","Skills")],["explore",text("DI BALIK GERBANG","BEYOND THE GATE"),text("Jelajah","Explore")]]:
@@ -98,7 +80,9 @@ func village(parent: Node):
 	app.dynamic(parent,func(): return str(m.s.log[0]) if not m.s.log.is_empty() else text("Perjalananmu baru dimulai.","Your journey is just beginning."),14,U.MUTED)
 
 func explore(parent: Node):
-	heading(parent,text("WILAYAH 01","REGION 01"),text("Pinggiran Cinderwatch","Cinderwatch Outskirts"),text("Bekal, perlengkapan, dan keberanian. Siapkan semuanya.","Choose an enemy and a number of fights. Combat runs automatically. Stock cooked food and equip upgrades first."))
+	var region = m.data.enemies.get(m.s.fight.get("enemy",""),{}).get("region","")
+	if region!="": heading(parent,"EXPEDITION IN PROGRESS",RealmChronicle.REGIONS[region].name,"Repeat cleared tiers for relic fragments and iron loot. Clear the next tier to push deeper into the realm.")
+	else: heading(parent,"CHAPTER I · THE OUTSKIRTS","Cinderwatch Outskirts","Choose an enemy and a number of fights. Combat runs automatically. Stock cooked food and equip upgrades first.")
 	var battle = U.card(parent,12,U.GOLD.darkened(.55))
 	var stage = Control.new()
 	stage.set_script(preload("res://ui/battle_stage.gd"))
@@ -112,7 +96,7 @@ func explore(parent: Node):
 		if m.s.fight.is_empty(): return "Ready when you are. Choose a target below."
 		var f = m.s.fight
 		if m.data.enemies[f.enemy].boss:
-			return "THIRD TOLL IN %.1fs · 1.8× damage" % [maxf(0,(int(f.enemy_at)-int(m.s.time))/1000.0)] if int(f.hits)%3==2 else "Bellkeeper: every third strike deals 1.8× damage."
+			return "THIRD TOLL IN %.1fs · 1.8× damage" % [maxf(0,(int(f.enemy_at)-int(m.s.time))/1000.0)] if int(f.hits)%3==2 else "Heavy strike: every third attack deals 1.8× damage."
 		return "Automatic combat · skills trigger every fourth attack.",13,U.GOLD)
 	var retreat = U.button("Retreat & stop queue",func(): app.send({"type":"clear"}))
 	battle.add_child(retreat)
@@ -127,8 +111,10 @@ func explore(parent: Node):
 	actions.add_child(U.button("Equip best",func():
 		if app.send({"type":"equip_best"}): app.toast("Best owned equipment equipped.")))
 	prep.add_child(U.button("Prepare 10 × "+m.name_of(m.s.settings.food),func(): app.planner_dialog("craft_"+str(m.s.settings.food),10)))
+	parent.add_child(U.button("World map · expedition tiers",app.world_dialog,true))
 	for id in m.data.enemies:
 		var d = m.data.enemies[id]
+		if d.has("region"): continue
 		var why = m.available(id)
 		var card = U.card(parent,12,U.GOLD.darkened(.55) if d.boss else U.LINE)
 		var r = U.row(12)
@@ -202,7 +188,9 @@ func skills(parent: Node):
 					var parts = []
 					for id in a.inputs: parts.append("%s %d/%d" % [m.name_of(id),m.count(id),int(a.inputs[id])])
 					return " · ".join(parts),12)
-			app.dynamic(c,func(): return text("Mastery: ","Mastery: ")+str(int(m.s.mastery.get(aid,0)))+text(" siklus"," cycles"),11,U.MUTED)
+			app.dynamic(c,func():
+				var cycles = int(m.s.mastery.get(aid,0))
+				return "MASTERY %d · %d%% faster%s" % [cycles,mini(10,int(cycles/100))," · next bonus in %d cycles" % (100-cycles%100) if cycles<1000 else " · MAX"],11,U.MUTED)
 			c.add_child(U.button(text("Atur aktivitas","Set activity"),func(): app.activity_dialog(aid),m.level(selected)>=int(a.level)))
 
 func inventory(parent: Node):
@@ -300,6 +288,11 @@ func character(parent: Node):
 	v.add_child(U.para(text("Kekuatan tumbuh dari perjalanan, bukan pembelian.","Strength is earned through your journey."),12))
 	for id in ["bladecraft","might","warding"]:
 		app.dynamic(c,func(): return "%s   Lv.%d   ·   %d XP" % [m.local_name(m.data.skills[id]),m.level(id),int(m.s.xp[id])],15)
+	var legacy = U.card(parent,14,U.GOLD.darkened(.5))
+	legacy.add_child(U.label("OATHS & RELICS",10,U.GOLD))
+	app.dynamic(legacy,func(): return "%d talent points available · %s" % [RealmChronicle.points_free(m),RealmChronicle.RELICS[RealmChronicle.state(m).relic].name if RealmChronicle.state(m).relic!="" else "No relic equipped"],14,U.TEXT)
+	legacy.add_child(U.button("Talents · choose your strengths",app.talents_dialog,true))
+	legacy.add_child(U.button("Relics · targeted progression",app.relics_dialog))
 	var style = U.card(parent)
 	style.add_child(U.label("YOUR FIGHTING STYLE",10,U.GOLD))
 	app.dynamic(style,func(): return RealmProgression.STANCES[m.progression().stance].name,24,U.TEXT)

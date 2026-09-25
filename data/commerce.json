@@ -1,0 +1,16 @@
+{
+  "billing": {
+    "enabled": false,
+    "products": {
+      "cosmetic_ember_cloak": {"kind": "non_consumable", "delivery": "cosmetic", "store_product_id": ""},
+      "expansion_dusk": {"kind": "non_consumable", "delivery": "content_expansion", "store_product_id": ""}
+    }
+  },
+  "ads": {
+    "enabled": false,
+    "provider": "admob",
+    "rewarded_placements": ["optional_refuge_supplies"],
+    "app_id": "",
+    "rewarded_unit_id": ""
+  }
+}

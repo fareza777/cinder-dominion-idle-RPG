@@ -2,7 +2,7 @@ extends RefCounted
 
 const U = preload("res://ui/style.gd")
 const STORE_URL = "" # Set only after a real public listing exists.
-const VERSION = "0.3.0"
+const VERSION = "0.4.0"
 var app
 var front: Control
 var cinematic_page = 0
@@ -107,7 +107,7 @@ func menu():
 	if app.save_blocked:
 		v.add_child(U.para("Your saved progress could not be loaded. Import a backup from Settings. Existing files have been preserved.",13,U.RED))
 	gap(v,12)
-	v.add_child(U.para("FREE TO PLAY · NO ADS\nBuild "+VERSION+" · Chapter I preview",11,U.MUTED))
+	v.add_child(U.para("FREE TO PLAY · NO ADS\nBuild "+VERSION+" · Adventure preview",11,U.MUTED))
 	v.add_child(U.button("Exit game",func():
 		app.persist()
 		app.get_tree().quit()))
@@ -211,9 +211,9 @@ func finish_intro():
 
 func welcome(index=0):
 	var cards = [
-		["Welcome, Emberkeeper","YOUR GOAL","Defeat the Bellkeeper and restore Cinderwatch's beacon. You begin with basic tools, a worn sword and five cooked fish.","Follow the Journey guide at the top of every screen. It tells you exactly what to do next."],
-		["Choose a task. Let it work.","GATHER → CRAFT → EQUIP → FIGHT","One activity runs at a time. Mining, chopping, fishing and crafting repeat automatically for the count you choose.","The activity bar at the bottom shows your progress. Queue opens your task list; you can cancel or reorder waiting tasks."],
-		["Materials become strength.","BUILD YOUR OWN EQUIPMENT","Crafting consumes the ingredients shown before you start. Finished equipment appears in Bag. Open an item and press Equip item to use it.","Green comparison numbers mean an improvement. Use Sources beside a missing ingredient to find where it comes from."],
+		["Welcome, Emberkeeper","YOUR GOAL","Defeat the Bellkeeper and restore Cinderwatch's beacon. You begin with basic tools, a worn sword and five cooked fish.","Begin by mining 4 copper ore. The gold YOUR NEXT MOVE card on Refuge gives one useful action at a time. Follow it to make and equip your first sword."],
+		["Choose a task. Let it work.","GATHER → CRAFT → EQUIP → FIGHT","One activity runs at a time. Mining, chopping, fishing and crafting repeat automatically for the count you choose.","Your first loop is simple: collect materials, make stronger equipment, equip it, then hunt. Later you unlock talents, relic collections and 15 expedition tiers."],
+		["Materials become strength.","BUILD YOUR OWN EQUIPMENT","Crafting consumes the ingredients shown before you start. Finished equipment appears in Bag. Open an item and press Equip item to use it.","Use Plan materials & craft automatically to gather missing ingredients in order. Equip best on Hero or Explore installs your strongest owned gear."],
 		["Prepare before you fight.","FOOD KEEPS YOU ALIVE","Combat is automatic. Your selected cooked food heals you at 50% HP. Open Hero to change food settings. Raw fish and raw meat must be cooked first.","Defeat stops your queue but keeps your gear safe. Outside combat, HP recovers. Queued tasks also progress while away, up to 24 hours."]
 	]
 	var card = cards[index]
@@ -271,11 +271,11 @@ func act_on_goal():
 				app.item_dialog(g.uid)
 				return
 		app.sources_dialog("copper_sword")
-	elif o.kind=="complete": app.set_page("explore")
+	elif o.kind=="complete": app.world_dialog()
 	elif o.kind=="level":
 		app.skill = "smithing"
 		app.set_page("skills")
-		app.toast("Smelt ingots or forge equipment to earn Smithing XP.")
+		app.planner_dialog("craft_copper_ingot",25)
 	else:
 		var a = app.model.data.activities[o.activity]
 		if a.kind=="combat": app.set_page("explore")
@@ -307,7 +307,8 @@ func handbook():
 		["05 · Plan your time","Queue holds up to 20 tasks. Only the first runs. Tasks wait when ingredients or levels are missing. Sources shows how to get materials; Queue lets you cancel blocked tasks."],
 		["06 · Return to your rewards","Your saved queue continues for up to 24 hours while away. You receive a report when you return. No queue means no gathering or combat rewards."],
 		["07 · Build a stronger refuge","Refuge contracts reward milestones with gold, food and scraps. Claim completed contracts, then Rebuild Cinderwatch to improve production speed, armor and recovery. Hero and Explore let you choose Vanguard, Warden or Reaver before a hunt."],
-		["08 · Find your way around","Refuge: current objective and merchant. Explore: enemies and combat. Skills: gathering and crafting. Bag: equipment and supplies. Hero: stats, food, presets and Settings."]
+		["08 · Grow beyond Chapter I","After First Supplies, earn talent points from melee XP and awaken relics with guaranteed fragments. Unfinished bounties carry over without streak loss. After the Bellkeeper, the World map opens 15 expedition tiers with stronger foes, iron loot and targeted relic farms."],
+		["09 · Find your way around","Refuge: current objective and merchant. Explore: enemies and combat. Skills: gathering and crafting. Bag: equipment and supplies. Hero: stats, food, presets and Settings."]
 	]:
 		v.add_child(U.para(section[0],20,U.GOLD))
 		v.add_child(U.para(section[1],16,U.TEXT))
@@ -334,7 +335,7 @@ func archives():
 func about():
 	var v = app.modal("About Ashen Covenant")
 	title(v,"Keep the last fire burning.",30)
-	v.add_child(U.para("Ashen Covenant is an independent dark fantasy idle RPG about gathering, crafting and preparing for the battles ahead.\n\nVersion "+VERSION+" · Chapter I preview\nOne region · 7 enemies · 40 items · 20 recipes\n\nFree to play. No ads. No purchases are active in this preview. Cosmetics and content expansions are planned for future releases.",16,U.TEXT))
+	v.add_child(U.para("Ashen Covenant is an independent dark fantasy idle RPG about gathering, crafting and preparing for the battles ahead.\n\nVersion "+VERSION+" · Adventure preview\nChapter I + 3 expedition regions · 15 expedition tiers\n3 relic collections · 3 talent paths · 40 items · 20 recipes\n\nFree to play. No ads. No purchases are active in this preview. Cosmetics, content expansions and optional rewarded ads are planned for future releases.",16,U.TEXT))
 	v.add_child(U.para("Art generated for this project with OpenAI image generation. Original synthesized audio. Fonts: Manrope and Cormorant Garamond. Built with Godot.",14))
 	v.add_child(U.button("Credits & open-source licenses",licenses))
 	v.add_child(U.button("Replay cinematic intro",func(): intro(true)))

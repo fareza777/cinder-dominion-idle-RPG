@@ -38,7 +38,7 @@ func fresh(seed_value: int = 12345):
 		s.equipped[data.items[id].slot] = uid
 
 func local_name(entry: Dictionary) -> String:
-	return str(entry.get("en",entry.get("name",""))) if s.settings.locale == "en" else str(entry.get("name",""))
+	return str(entry.get("en",entry.get("name","")))
 
 func name_of(id: String) -> String:
 	return local_name(data.items.get(id,{"name":id,"en":id}))
@@ -70,6 +70,11 @@ func stats() -> Dictionary:
 	if not s.fight.is_empty() and s.fight.get("buff_until",0)>s.time:
 		st[s.fight.buff] += 3
 	var style = RealmProgression.STANCES[progression().stance]
+	var legacy = RealmChronicle.state(self)
+	st.attack += int(legacy.talents.power)
+	st.armor += int(legacy.talents.guard)
+	if legacy.relic=="fang": st.attack += int(legacy.relics.fang)*2
+	if legacy.relic=="ward": st.armor += int(legacy.relics.ward)*2
 	st.attack = maxi(1,int(st.attack*float(style.attack)))
 	st.armor = maxi(0,int(st.armor)+int(style.armor)+int(progression().upgrades.ward))
 	return st
@@ -110,6 +115,10 @@ func note(message: String):
 
 func available(enemy_id: String) -> String:
 	var d = data.enemies[enemy_id]
+	if d.has("region"):
+		if not s.beacon: return "Defeat the Bellkeeper in Chapter I first"
+		if d.unlock=="beacon" or int(s.kills.get(d.unlock,0))>=1: return ""
+		return "Clear "+local_name(data.enemies[d.unlock])+" first"
 	if d.unlock == "": return ""
 	if d.unlock == "tutorial":
 		return "Complete First Supplies (Journey steps 1–6)" if not s.tutorial else ""
@@ -137,6 +146,14 @@ func command(cmd: Dictionary) -> bool:
 	var action = str(cmd.get("type",""))
 	var id = str(cmd.get("id",""))
 	match action:
+		"work_order":
+			var plan = RealmProgression.order_plan(self,id,int(cmd.get("batches",1)))
+			if plan.error!="": return fail(plan.error)
+			s.queue.append_array(plan.steps)
+			start_next()
+		"talent","talent_reset","relic_upgrade","relic_equip","bounty_claim":
+			var why = RealmChronicle.command(self,cmd)
+			if why!="": return fail(why)
 		"plan":
 			var plan = RealmProgression.plan(self,id,int(cmd.get("amount",1)))
 			if plan.error!="": return fail(plan.error)
@@ -361,10 +378,12 @@ func quality_roll() -> int:
 
 func finish_production():
 	var a = data.activities[s.active.id]
+	var previous_level = level(a.skill)
 	var q = quality_roll() if data.items[a.output].category=="equipment" else 1
 	gain(a.output,1,q)
 	if a.side!="" and rng.randf()<.2: gain(a.side,1)
 	s.xp[a.skill] = int(s.xp[a.skill])+int(a.xp)
+	if level(a.skill)>previous_level: note("%s reached level %d. Check Skills for new recipes and resources." % [local_name(data.skills[a.skill]),level(a.skill)])
 	s.mastery[a.id] = int(s.mastery.get(a.id,0))+1
 	s.queue[0].done += 1
 	s.queue[0].output += 1
@@ -431,13 +450,27 @@ func resolve_combat():
 		var food = str(s.settings.food)
 		if s.hp<=100*float(s.settings.threshold) and count(food)>0:
 			spend(food,1)
-			s.hp = mini(100,int(s.hp)+int(data.items[food].heal))
+			var legacy = RealmChronicle.state(self)
+			var bonus = int(legacy.relics.heart)*3 if legacy.relic=="heart" else 0
+			s.hp = mini(100,int(s.hp)+int(data.items[food].heal)+bonus)
 
 func win(enemy: Dictionary):
 	var id = enemy.id
-	last_reward = "VICTORY · +%d gold · +%d XP · %s ×%d" % [int(enemy.gold),int(enemy.xp),name_of(enemy.drop),int(enemy.qty)]
+	var legacy = RealmChronicle.state(self)
+	var fragment_id = RealmChronicle.fragments_for(enemy)
+	var fragments = int(enemy.get("fragments",1))
+	legacy.fragments[fragment_id] += fragments
+	var reward_gold = int(enemy.gold)+int(legacy.talents.fortune)*2
+	last_reward = "VICTORY · +%d gold · +%d XP · %s ×%d · +%d %s fragments" % [reward_gold,int(enemy.xp),name_of(enemy.drop),int(enemy.qty),fragments,RealmChronicle.RELICS[fragment_id].name]
+	if enemy.has("region") and int(s.kills.get(id,0))==0:
+		gain("scrap",5+int(enemy.tier))
+		gain("cooked_minnow",10)
+		last_reward += " · FIRST CLEAR: +10 meals & scraps"
+		if int(enemy.tier)==5:
+			gain("iron_sword",1,3)
+			last_reward += " · Rare Iron Sword"
 	s.kills[id] = int(s.kills.get(id,0))+1
-	s.gold += int(enemy.gold)
+	s.gold += reward_gold
 	gain(enemy.drop,int(enemy.qty))
 	var xp = int(enemy.xp)
 	s.xp.bladecraft += xp-int(xp/3)*2
@@ -446,9 +479,10 @@ func win(enemy: Dictionary):
 	if rng.randf()<.05:
 		var part = ["sword","shield","helm","chest","gloves","boots"][rng.randi_range(0,5)]
 		var q = quality_roll()
-		gain("copper_"+part,1,q)
-		note("Loot: %s %s" % [data.rarities[q],name_of("copper_"+part)])
-	if enemy.boss and not s.beacon:
+		var metal = "iron_" if enemy.has("region") else "copper_"
+		gain(metal+part,1,q)
+		note("Loot: %s %s" % [data.rarities[q],name_of(metal+part)])
+	if id=="bellkeeper" and not s.beacon:
 		s.beacon = true
 		gain("copper_sword",1,3)
 		note("The bells fall silent. Cinderwatch burns bright again.")

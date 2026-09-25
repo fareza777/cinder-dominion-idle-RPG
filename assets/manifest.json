@@ -25,6 +25,12 @@
       "source": "OpenAI image generation in this task on 2026-09-25",
       "kind": "original generated art",
       "prompt_summary": "Cinematic storyboard atlas, three equal horizontal panels: burnt medieval valley and gothic bell tower; last mountain refuge with forge and warm chapel windows; hooded wanderer beside amber ember brazier at dawn. Painterly realistic charcoal and slate with restrained copper firelight. No labels, UI or existing franchise characters."
+    },
+    {
+      "file": "art/world-map.png",
+      "source": "OpenAI image generation in this task, 2026-09-25",
+      "kind": "original generated art",
+      "prompt_summary": "Original high-oblique world map: warm walled refuge southwest, burned forest northwest, sunken teal marsh ruins east, obsidian volcanic cathedral northeast; charcoal and amber painterly architecture, no text or UI."
     }
   ],
   "fonts": [

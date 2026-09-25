@@ -9,6 +9,23 @@ const UPGRADES = {
 	"forge":{"name":"Ember Forge","detail":"Production takes 5% less time per rank.","gold":40,"scrap":2},
 	"ward":{"name":"Gateward","detail":"Gain +1 armor per rank in every fighting style.","gold":50,"scrap":3},
 	"hearth":{"name":"Resting Hearth","detail":"Recover +1 HP per second per rank outside combat.","gold":30,"scrap":1}}
+const ORDERS = {
+	"larder":{"name":"Stock the Larder","detail":"Return to a full pack of cooked fish, ready for a longer hunt.","recipes":[["craft_cooked_minnow",150]]},
+	"forge":{"name":"Feed the Forge","detail":"Turn a steady supply of ore into ingots and Smithing experience.","recipes":[["craft_copper_ingot",500]]},
+	"watch":{"name":"Before the Long Watch","detail":"Prepare food and copper ingots together. Spend your next visit improving gear and exploring.","recipes":[["craft_cooked_minnow",100],["craft_copper_ingot",250]]},
+	"iron":{"name":"An Iron Foundation","detail":"Build a stock of iron ingots for stronger equipment. Requires Mining and Smithing level 10.","recipes":[["craft_iron_ingot",100]]}}
+
+static func order_plan(m, id: String, batches: int) -> Dictionary:
+	var result = {"steps":[],"stock":m.s.bag.duplicate(true),"error":"","seconds":0.0}
+	if not ORDERS.has(id) or batches not in [1,2,4]:
+		result.error = "Choose a work order and one, two or four batches."
+		return result
+	if not m.s.queue.is_empty():
+		result.error = "Finish or clear your current queue before starting a work order."
+		return result
+	for recipe in ORDERS[id].recipes: append_recipe(m,recipe[0],int(recipe[1])*batches,result,[])
+	if result.steps.size()>20: result.error = "This order needs more than 20 queue slots. Choose fewer batches."
+	return result
 const CONTRACTS = [
 	{"id":"ore","title":"Fuel the Forge","detail":"Collect 20 copper ore.","source":"gains","key":"copper_ore","target":20,"gold":20,"food":3,"scrap":2,"activity":"mine_copper"},
 	{"id":"ingots","title":"Apprentice Smith","detail":"Smelt 15 copper ingots.","source":"gains","key":"copper_ingot","target":15,"gold":30,"food":0,"scrap":3,"activity":"craft_copper_ingot"},
@@ -52,19 +69,27 @@ static func append_recipe(m, aid: String, amount: int, result: Dictionary, trail
 	var a = m.data.activities[aid]
 	if a.kind=="combat" or m.level(a.skill)<int(a.level):
 		result.error = "Unlock %s Lv.%d first." % [m.local_name(m.data.skills[a.skill]),int(a.level)]
+		result.unlock_skill = a.skill
+		result.unlock_level = int(a.level)
 		return
 	for id in a.inputs:
 		var need = int(a.inputs[id])*amount
 		var missing = maxi(0,need-int(result.stock.get(id,0)))
 		if missing>0:
 			var source = ""
+			var locked_source = {}
 			for candidate in m.sources(id):
 				var recipe = m.data.activities[candidate]
+				if recipe.kind!="combat" and recipe.output==id and m.level(recipe.skill)<int(recipe.level): locked_source = recipe
 				if recipe.kind!="combat" and recipe.output==id and m.level(recipe.skill)>=int(recipe.level):
 					source = candidate
 					break
 			if source=="":
-				result.error = "Collect %d %s first (Sources or Merchant). Random drops and purchases are not automated." % [missing,m.name_of(id)]
+				result.error = "Collect %d %s first (Sources or Merchant). Combat drops and merchant purchases need a separate step." % [missing,m.name_of(id)]
+				if not locked_source.is_empty():
+					result.error = "%s requires %s Lv.%d. Train this skill before planning this recipe." % [m.name_of(id),m.local_name(m.data.skills[locked_source.skill]),int(locked_source.level)]
+					result.unlock_skill = locked_source.skill
+					result.unlock_level = int(locked_source.level)
 				return
 			append_recipe(m,source,missing,result,trail+[aid])
 			if result.error!="": return

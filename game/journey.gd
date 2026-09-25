@@ -30,4 +30,9 @@ static func current(m) -> Dictionary:
 			step.index = i+1
 			step.total = all.size()
 			return step
-	return {"key":"complete","title":"Cinderwatch lives again","detail":"The beacon burns. Your first chapter is complete. Keep refining your equipment and skills, or begin a new journey from the main menu.","activity":"","current":1,"goal":1,"action":"Explore the outskirts","route":"Chapter I complete","kind":"complete","index":12,"total":12}
+	var expedition = RealmChronicle.next_expedition(m)
+	if expedition!="":
+		var enemy = m.data.enemies[expedition]
+		var region_index = RealmChronicle.REGIONS.keys().find(enemy.region)
+		return {"key":expedition,"title":"Clear "+m.local_name(enemy),"detail":"The beacon is restored. Awaken relics, train talents and forge iron equipment for the next challenge. This encounter guarantees %d %s fragments per victory." % [int(enemy.fragments),RealmChronicle.RELICS[enemy.relic].name],"activity":"hunt_"+expedition,"current":0,"goal":1,"action":"Prepare expedition","route":RealmChronicle.REGIONS[enemy.region].name+" → Tier "+str(int(enemy.tier)),"kind":"expedition","index":12+region_index*5+int(enemy.tier),"total":27}
+	return {"key":"complete","title":"Keeper of the three realms","detail":"All 15 expedition tiers are cleared. Complete your relic collection, refine equipment quality and try another build. All expedition tiers remain available for farming.","activity":"","current":1,"goal":1,"action":"Open world map","route":"Expeditions complete","kind":"complete","index":27,"total":27}

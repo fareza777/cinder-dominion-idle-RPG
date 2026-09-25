@@ -53,6 +53,7 @@ func _ready():
 		if prefs.load("user://preferences.cfg")==OK:
 			for key in ["locale","font","motion","battery","music","sfx"]:
 				model.s.settings[key] = prefs.get_value("preferences",key,model.s.settings[key])
+	model.s.settings.locale = "en"
 	U.setup(model.data)
 	U.scale = float(model.s.settings.font)
 	pages = Pages.new(self)
@@ -74,8 +75,8 @@ func _ready():
 	add_child(effect)
 	experience.splash()
 
-func tr2(id_text: String, en_text: String) -> String:
-	return en_text if model.s.settings.locale=="en" else id_text
+func tr2(_id_text: String, en_text: String) -> String:
+	return en_text
 
 func now_ms() -> int:
 	return int(Time.get_unix_time_from_system()*1000)
@@ -130,6 +131,7 @@ func enter_world():
 	experience.clear()
 	dismiss()
 	var report = saves.resume(model,now_ms())
+	RealmChronicle.sync_day(model,now_ms())
 	mode = "play"
 	paused = false
 	fraction_ms = 0
@@ -159,6 +161,7 @@ func _process(delta):
 	ui_timer += delta
 	if save_timer>=15:
 		save_timer = 0
+		RealmChronicle.sync_day(model,now_ms())
 		persist()
 	if ui_timer>=.15:
 		ui_timer = 0
@@ -311,6 +314,7 @@ func dynamic(parent: Node, fn: Callable, size: int = 15, color: Color = U.TEXT) 
 
 func refresh():
 	if not is_instance_valid(gold_label): return
+	if model.s.tutorial and RealmChronicle.state(model).daily.day<0: RealmChronicle.sync_day(model,now_ms())
 	gold_label.text = "◈ %s" % int(model.s.gold)
 	hp_label.text = "%d / 100 HP" % int(model.s.hp)
 	var objective = model.objective()
@@ -324,8 +328,8 @@ func refresh():
 			call_deferred("refresh_objective_page")
 	else: last_objective = objective.key
 	if model.s.queue.is_empty():
-		activity_label.text = tr2("Api menantikan langkahmu","The fire awaits your next step")
-		activity_sub.text = tr2("Pilih aktivitas · progres offline hingga 24 jam","Choose an activity · up to 24h offline progress")
+		activity_label.text = tr2("Api menantikan langkahmu","The hearth is quiet")
+		activity_sub.text = tr2("Pilih aktivitas · progres offline hingga 24 jam","Choose work or a hunt before you leave")
 		activity_progress.value = 0
 	else:
 		var step = model.s.queue[0]
@@ -409,6 +413,21 @@ func modal(title: String) -> VBoxContainer:
 	scroll.add_child(content)
 	return content
 
+func work_orders_dialog():
+	preload("res://ui/gameplay.gd").new(self).work_orders()
+
+func world_dialog():
+	preload("res://ui/chronicle.gd").new(self).world()
+
+func talents_dialog():
+	preload("res://ui/chronicle.gd").new(self).talents()
+
+func relics_dialog():
+	preload("res://ui/chronicle.gd").new(self).relics()
+
+func bounties_dialog():
+	preload("res://ui/chronicle.gd").new(self).bounties()
+
 func planner_dialog(id: String, amount: int = 1):
 	preload("res://ui/gameplay.gd").new(self).planner(id,amount)
 
@@ -436,7 +455,10 @@ func activity_dialog(id: String, recommended: int = 0):
 	else:
 		var e = model.data.enemies[a.enemy]
 		v.add_child(U.portrait(int(e.portrait),Vector2(100,160)))
-		v.add_child(U.para(e.get("lore_en",e.lore) if model.s.settings.locale=="en" else e.lore))
+		v.add_child(U.para(e.get("lore_en",e.lore)))
+		var fragment_id = RealmChronicle.fragments_for(e)
+		v.add_child(U.para("GUARANTEED RELIC DROP\n%d × %s fragments" % [int(e.get("fragments",1)),RealmChronicle.RELICS[fragment_id].name],14,U.GREEN))
+		if e.has("region"): v.add_child(U.para("First clear: +10 meals and %d scraps.%s" % [5+int(e.tier)," Tier 5 also grants a Rare Iron Sword." if int(e.tier)==5 else ""],13,U.GOLD))
 		v.add_child(U.para("VICTORY REWARDS\n+%d gold · +%d melee XP · %s ×%d" % [int(e.gold),int(e.xp),model.name_of(e.drop),int(e.qty)],14,U.GOLD))
 		v.add_child(U.para("Auto-heal: %s ×%d · at %d%% HP. Defeat stops the queue; your equipment stays safe." % [model.name_of(model.s.settings.food),model.count(model.s.settings.food),int(model.s.settings.threshold*100)],14,U.GREEN if model.count(model.s.settings.food)>0 else U.RED))
 		v.add_child(U.para("%d HP · %d ATK · %d DEF" % [int(e.hp),int(e.attack),int(e.armor)]))
@@ -587,14 +609,17 @@ func offline_dialog(report: Dictionary):
 	U.stat(r,"+%d" % int(report.xp),"XP",U.GREEN)
 	U.stat(r,str(report.kills),tr2("DIKALAHKAN","DEFEATED"))
 	for id in report.gains: v.add_child(U.para("+%d  %s" % [int(report.gains[id]),model.name_of(id)],15,U.GREEN))
+	for id in report.get("fragments",{}): v.add_child(U.para("+%d %s fragments" % [int(report.fragments[id]),RealmChronicle.RELICS[id].name],14,U.GOLD))
+	if report.get("talent_points",0)>0: v.add_child(U.para("+%d talent points ready to spend" % int(report.talent_points),16,U.GOLD))
 	for id in report.spent: v.add_child(U.para("−%d  %s" % [int(report.spent[id]),model.name_of(id)],13,U.MUTED))
 	if not model.s.queue.is_empty() and model.s.active.is_empty() and model.s.fight.is_empty(): v.add_child(U.para(model.requirement(model.s.queue[0].id),15,U.RED))
 	v.add_child(U.para(tr2("Hasil sudah tersimpan. Batas progres offline: 24 jam.","Results are already saved. Offline progress cap: 24 hours."),12))
-	v.add_child(U.button(tr2("Lanjutkan perjalanan","Continue the journey"),func():
+	v.add_child(U.para("YOUR NEXT MOVE\n"+RealmChronicle.focus(model).title,16,U.GOLD))
+	v.add_child(U.button(tr2("Lanjutkan perjalanan","Review my next move"),func():
 		model.s.report = {}
 		persist()
 		dismiss()
-		set_page(page,true)
+		set_page("village")
 		if not model.s.experience.welcome_done: experience.welcome(),true))
 
 func settings_dialog():
@@ -619,10 +644,7 @@ func settings_dialog():
 			U.scale = size_value
 			refresh_shell()
 			settings_dialog()))
-	v.add_child(U.button("Bahasa Indonesia / English",func():
-		send({"type":"setting","id":"locale","value":"en" if model.s.settings.locale=="id" else "id"},false)
-		refresh_shell()
-		settings_dialog()))
+	v.add_child(U.para("Language · English",13))
 	for key in ["music","sfx"]:
 		v.add_child(U.label(tr2("Musik" if key=="music" else "Efek suara","Music" if key=="music" else "Sound effects"),15))
 		var slider = HSlider.new()
@@ -647,7 +669,7 @@ func settings_dialog():
 	v.add_child(U.button("Share",experience.share))
 	v.add_child(U.button("Rate",experience.rate))
 	v.add_child(U.button("Return to main menu",experience.menu))
-	v.add_child(U.para("Version 0.3.0 · Chapter I preview\nFree to play. No ads. No purchases in this build.",12))
+	v.add_child(U.para("Version 0.4.0 · Adventure preview\nFree to play. No ads. No purchases in this build.",12))
 
 func export_save():
 	var fd = FileDialog.new()
@@ -698,6 +720,7 @@ func confirm_restore(incoming: Dictionary):
 	v.add_child(U.button("Restore selected journey",func():
 		persist()
 		incoming.wall = now_ms()
+		incoming.settings.locale = "en"
 		if not incoming.has("experience"):
 			incoming.experience = {"version":2,"welcome_done":false}
 			incoming.settings.locale = "en"

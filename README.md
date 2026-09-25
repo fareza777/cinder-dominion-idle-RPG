@@ -1,18 +1,32 @@
-# Ashen Covenant — Chapter I preview 0.3
+# Ashen Covenant — Adventure preview 0.4
 
 Idle RPG dark fantasy untuk Android. Gratis, tanpa iklan. Build ini untuk dimainkan dan dievaluasi, belum versi rilis publik.
 
 ## Mulai bermain
 
-1. Pasang `build/android/ashen-covenant-0.3.apk` di Android 64-bit. APK memakai identitas aplikasi yang sama dengan 0.1 / 0.2 sehingga bisa dipasang sebagai pembaruan.
-2. Bahasa default adalah **English**. Splash mengantar ke menu utama. Pilih **New game**, ikuti atau lewati intro, lalu baca empat tahap onboarding. **Continue journey** melanjutkan progres yang sudah ada.
+1. Pasang `build/android/ashen-covenant-0.4.apk` di Android 64-bit. APK memakai identitas aplikasi yang sama dengan 0.1–0.3 sehingga bisa dipasang sebagai pembaruan.
+2. Seluruh antarmuka dan narasi game memakai **English**. Splash mengantar ke menu utama. Pilih **New game**, ikuti atau lewati intro, lalu baca empat tahap onboarding. **Continue journey** melanjutkan progres yang sudah ada.
 3. Tekan **Guide →** di bagian atas layar. Panduan menunjukkan tujuan, alasan, lokasi aktivitas dan jumlah yang dibutuhkan. Tekan tindakannya, lalu **Start this objective** untuk memulai jumlah siklus yang tepat.
 4. Tugas awal: 4 copper ore → 2 copper ingots → 1 ash log → Copper Sword → Equip item → 3 Ash Rats. Panduan lalu mengantar lewat musuh berikutnya hingga Bellkeeper, tanpa melompat langsung ke boss.
 5. Pantau activity bar. **Queue** menampilkan tugas berjalan/menunggu, progres target, dan alasan terhambat. **Sources/Find** membantu mencari bahan yang kurang. Satu aktivitas berjalan pada satu waktu.
 6. Buka **Food & survival guide** untuk belajar memancing, memasak, memilih makanan dan menyiapkan auto-heal. Perlengkapan hasil crafting harus dipasang dari **Bag**.
 7. Progres tersimpan otomatis dan berlanjut maksimal 24 jam saat kembali. Menu **☰** tersedia dari dalam permainan. New Game meminta konfirmasi dan menyimpan cadangan terpisah; **Settings → Restore a previous journey** memulihkannya.
 
-## Baru di 0.3
+## Baru di 0.4
+
+**Mulai dengan satu tujuan.** Refuge menampilkan **YOUR NEXT MOVE** di atas ilustrasi: apa yang perlu dikerjakan, alasannya, dan tombol tindakannya. Mulai dari 4 copper ore. Roadmap menjelaskan jalur senjata pertama → perlengkapan dan makanan → Bellkeeper → ekspedisi. Rekomendasi kemudian mengikuti kondisi antrean, talent, relic, gear, makanan dan Smithing.
+
+**Work orders untuk sesi panjang.** Setelah First Supplies, Refuge → Leave work for the refuge membuka empat jenis pesanan. Pilih 1/2/4 batch, tinjau hasil, XP dan estimasi waktu, lalu mulai. Satu batch Feed the Forge menghasilkan 500 copper ingots dari bahan yang dikumpulkan otomatis; empat batch bisa berjalan beberapa jam. Pesanan tidak memulai combat.
+
+**Grind dengan tujuan.** Setiap musuh memberikan fragment relic tertentu secara pasti. Tiga relic memiliki masing-masing 10 rank; pilih satu untuk bonus attack, armor atau pemulihan makanan. Biaya upgrade meningkat, sementara tier ekspedisi lebih tinggi menghasilkan lebih banyak fragment. Tiga jalur talent menyediakan 15 rank dengan batas alokasi 10 poin, satu poin per 250 melee XP, dan reset gratis di luar combat. Tier baru memberi tujuan, build alternatif memberi alasan untuk mencoba lagi.
+
+**Dunia setelah boss.** Peta dunia bergambar orisinal membuka Ashen Wilds, Drowned Sanctum dan Obsidian Crown setelah Bellkeeper. Setiap wilayah punya lima tier. Kalahkan tier sebelumnya sekali untuk lanjut; ulangi tier yang sudah terbuka untuk farming. Ada hadiah first-clear, fragment pasti, peluang 5% loot iron, dan Rare Iron Sword saat pertama menyelesaikan tier 5. Musuh ekspedisi adalah varian yang memakai portrait cast awal.
+
+**Kembali dengan rencana.** Bounty board terbuka setelah First Supplies, berisi gathering, crafting dan hunting. Hadiah: gold, makanan, fragment bertema harian. Board yang belum selesai tetap tersimpan; board yang seluruh hadiahnya sudah diklaim berganti pada hari UTC berikutnya. Tidak ada streak yang hilang. Laporan offline kini mencakup fragment, talent points baru, dan tujuan berikutnya.
+
+**Jalur monetisasi.** Kerangka provider untuk purchase, restore dan rewarded ads ada di `services/commerce.gd` / `data/commerce.json`. Semua provider masih nonaktif. Belum ada SDK Billing/AdMob, produk hidup, pembayaran, atau iklan. Ini fondasi pemisahan integrasi, bukan integrasi toko yang sudah selesai. Detail: `docs/monetization-boundary.md`.
+
+## Fondasi gameplay (0.3)
 
 - **Supply planner:** dari preview resep, pilih **Plan materials & craft automatically**. Tinjau seluruh bahan, urutan kerja, dan estimasi waktu sebelum **Start complete plan**. Mendukung 1–100 hasil; antrean harus kosong. Drop acak dan pembelian tetap manual, dengan petunjuk jelas jika dibutuhkan.
 - **Fighting style:** Vanguard (seimbang, pukulan keempat 2×), Warden (+4 armor, −15% attack, skill pulih 8 HP), Reaver (+25% attack, −3 armor, skill 2.5×). Pilih di Hero/Explore sebelum bertarung. Skill dicoba setiap serangan keempat dan bisa meleset.
@@ -31,18 +45,18 @@ Settings mencakup About, Share, Rate, panduan bermain, replay intro/tips, ukuran
 
 ## Isi build
 
-- Cinderwatch, enam musuh biasa dan satu boss.
+- Cinderwatch, enam musuh biasa, satu boss cerita, dan 15 tier ekspedisi di tiga wilayah tambahan.
 - Woodcutting, Mining, Fishing, Cooking, Smithing, Alchemy; tiga jalur perkembangan melee.
 - 40 jenis item, 20 resep, rarity equipment, perbandingan statistik, lock/favorite, salvage, preset perlengkapan.
 - Antrean 20 langkah dengan target siklus, hasil baru, atau level; pilihan melewati aktivitas yang belum bisa berjalan.
 - Auto-combat, food/potion, loot, progres quest, pedagang, ringkasan offline dan cadangan save.
 - Ilustrasi orisinal, bara bergerak, portrait pertarungan, musik suasana dan bunyi aksi; ukuran huruf, pengurangan gerak, mode hemat daya.
 
-Pembelian kosmetik dan ekspansi adalah model bisnis yang direncanakan, belum diaktifkan. Semua isi build ini gratis.
+Pembelian kosmetik, ekspansi dan AdMob rewarded ads opsional adalah arah monetisasi terbaru, belum diaktifkan. Semua isi build ini gratis.
 
 ## Batas versi
 
-Ini preview satu wilayah. Kampanye lengkap, ranged/magic, pet, sistem bangunan di luar tiga upgrade refuge, affix/rune, cloud save dan Google Play Billing belum tersedia. Inggris menjadi bahasa utama termasuk pesan sistem dan lore; pilihan Indonesia masih ada, tetapi alur baru belum seluruhnya dilokalkan. Catatan historis dari save 0.1 dapat tetap memakai bahasa lamanya. Intro berupa ilustrasi bergerak dan teks, tanpa video 3D atau voice-over. Balance dan variasi perangkat fisik masih memerlukan playtest.
+Ini preview Chapter I dan tiga rangkaian ekspedisi, belum kampanye penuh. Kampanye lengkap, ranged/magic, pet, sistem bangunan di luar tiga upgrade refuge, affix/rune, cloud save dan Google Play Billing belum tersedia. Seluruh antarmuka, katalog, lore, dan pesan sistem versi ini menggunakan English; pengaturan bahasa lama tidak lagi mengubah bahasa tampilan. Catatan historis dari save 0.1 dapat tetap memakai bahasa lamanya. Intro berupa ilustrasi bergerak dan teks, tanpa video 3D atau voice-over. Balance jangka panjang, retensi nyata, dan variasi perangkat fisik masih memerlukan playtest. Board harian menggunakan waktu perangkat; belum ada server waktu atau validasi ekonomi daring.
 
 ## Pengembangan
 
@@ -50,4 +64,4 @@ Buka `project.godot` dengan Godot **4.7.1** dan export template yang sama. Andro
 
 Pemeriksaan ringan: `godot --headless --path . --script tests/essential_checks.gd`. Regenerasi katalog melalui `python tools/build_content.py`. Sumber audio ada di `tools/make_audio.py`; font statis disiapkan dengan `tools/prepare_fonts.py` (fontTools).
 
-Lihat `docs/qa/gameplay-0.3-report.md` dan `docs/qa/foundation-report.md` untuk bukti dan keterbatasan pemeriksaan, serta `assets/manifest.json` untuk asal aset.
+Lihat `docs/qa/gameplay-0.4-report.md` dan `docs/qa/foundation-report.md` untuk bukti dan keterbatasan pemeriksaan, serta `assets/manifest.json` untuk asal aset.

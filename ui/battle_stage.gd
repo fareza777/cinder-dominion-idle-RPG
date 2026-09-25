@@ -9,6 +9,7 @@ var event_text = ""
 var event_side = "enemy"
 var background: Texture2D
 var faces: Array[Texture2D] = []
+var region_art: Dictionary = {}
 
 func _ready():
 	custom_minimum_size.y = 280
@@ -24,6 +25,15 @@ func _ready():
 		face.region = Rect2((index%4)*U.portraits.get_width()/4.0,int(index/4)*U.portraits.get_height()/2.0,U.portraits.get_width()/4.0,U.portraits.get_height()/2.0)
 		face.filter_clip = true
 		faces.append(face)
+	if ResourceLoader.exists("res://assets/art/world-map.png"):
+		var map = load("res://assets/art/world-map.png")
+		var crops = {"wilds":Rect2(0,0,750,500),"marsh":Rect2(700,300,750,500),"crown":Rect2(900,0,636,420)}
+		for region in crops:
+			var art = AtlasTexture.new()
+			art.atlas = map
+			art.region = crops[region]
+			art.filter_clip = true
+			region_art[region] = art
 	serial = int(model.battle_event.serial)
 
 func _process(delta: float):
@@ -49,8 +59,9 @@ func _draw():
 	var fighting = not model.s.fight.is_empty()
 	var f = model.s.fight
 	var enemy = model.data.enemies[f.enemy] if fighting else {}
-	var backdrop_width = size.y*background.get_width()/background.get_height()
-	draw_texture_rect(background,Rect2((size.x-backdrop_width)/2,0,backdrop_width,size.y),false,Color(.65,.65,.65))
+	var backdrop = region_art.get(enemy.get("region",""),background)
+	var backdrop_width = size.y*backdrop.get_width()/backdrop.get_height()
+	draw_texture_rect(backdrop,Rect2((size.x-backdrop_width)/2,0,backdrop_width,size.y),false,Color(.65,.65,.65))
 	draw_rect(Rect2(Vector2.ZERO,size),Color(.025,.04,.055,.48))
 	var w = minf(126,(size.x-64)/2)
 	var left = Rect2(16,45,w,152)

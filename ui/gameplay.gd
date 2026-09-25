@@ -9,8 +9,43 @@ func _init(owner):
 	app = owner
 	m = owner.model
 
+func work_orders(selected: String = "watch", batches: int = 1):
+	var v = app.modal("Work for the refuge")
+	v.add_child(U.para("Leave the hearth well supplied.",26,U.TEXT))
+	v.add_child(U.para("Set a longer gathering and crafting order before you leave. Materials already in your pack are used first. These orders do not start combat.",14))
+	for id in P.ORDERS:
+		v.add_child(U.button(P.ORDERS[id].name,func(): work_orders(id,batches),id==selected))
+	var d = P.ORDERS[selected]
+	v.add_child(U.para(d.detail,15,U.TEXT))
+	var sizes = U.row(6)
+	v.add_child(sizes)
+	for n in [1,2,4]:
+		var b = U.button("%d batch%s" % [n,"es" if n>1 else ""],func(): work_orders(selected,n),n==batches)
+		b.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+		sizes.add_child(b)
+	var plan = P.order_plan(m,selected,batches)
+	if plan.error!="":
+		v.add_child(U.para(plan.error,14,U.RED))
+		if plan.has("unlock_skill"): v.add_child(U.button("Train "+m.local_name(m.data.skills[plan.unlock_skill]),func(): training(plan.unlock_skill,int(plan.unlock_level)),true))
+		if not m.s.queue.is_empty(): v.add_child(U.button("Review current work",app.queue_dialog))
+		return
+	v.add_child(U.label("WHAT YOU WILL BRING HOME",10,U.GOLD))
+	for recipe in d.recipes: v.add_child(U.para("%d × %s" % [int(recipe[1])*batches,m.activity_name(recipe[0])],17,U.TEXT))
+	var experience = {}
+	for step in plan.steps:
+		var a = m.data.activities[step.id]
+		experience[a.skill] = int(experience.get(a.skill,0))+int(a.xp)*int(step.target)
+	for skill in experience: v.add_child(U.para("+%d %s XP" % [int(experience[skill]),m.local_name(m.data.skills[skill])],13,U.GREEN))
+	v.add_child(U.para("About %s · %d queue steps" % [time_label(plan.seconds),plan.steps.size()],14,U.GOLD))
+	v.add_child(U.para("Mastery may shorten this estimate as you work. Orders progress for up to 24 hours while away; finished food must be selected for auto-heal if it is not already your active food.",12))
+	for step in plan.steps: v.add_child(U.para("%s ×%d" % [m.activity_name(step.id),int(step.target)],13))
+	v.add_child(U.button("Begin this order",func():
+		if app.send({"type":"work_order","id":selected,"batches":batches}):
+			app.dismiss()
+			app.toast("Your order is underway. Cinderwatch will keep working while you are away."),true))
+
 func planner(id: String, amount: int = 1):
-	var v = app.modal("Supply planner")
+	var v = app.modal("Crafting plan")
 	v.add_child(U.icon(m.data.activities[id].output,72))
 	v.add_child(U.para("Make %d × %s" % [amount,m.activity_name(id)],24,U.TEXT))
 	v.add_child(U.para("Gather missing materials, then craft in the correct order. Uses stock you already own. Equipment is added to your bag; equip it when finished.",14))
@@ -23,6 +58,7 @@ func planner(id: String, amount: int = 1):
 	var plan = P.plan(m,id,amount)
 	if plan.error!="":
 		v.add_child(U.para(plan.error,15,U.RED))
+		if plan.has("unlock_skill"): v.add_child(U.button("Train "+m.local_name(m.data.skills[plan.unlock_skill])+" to unlock materials",func(): training(plan.unlock_skill,int(plan.unlock_level)),true))
 		if not m.s.queue.is_empty(): v.add_child(U.button("Manage current queue",app.queue_dialog))
 		v.add_child(U.button("Find materials manually",func(): app.activity_dialog(id)))
 		return
@@ -43,6 +79,16 @@ func planner(id: String, amount: int = 1):
 
 func time_label(seconds: float) -> String:
 	return "%dm %ds" % [int(seconds)/60,int(seconds)%60] if seconds>=60 else "%ds" % int(seconds)
+
+func training(skill: String, target: int):
+	for id in m.data.activities:
+		var a = m.data.activities[id]
+		if a.skill!=skill or a.kind=="combat" or m.level(skill)<int(a.level): continue
+		var missing_xp = maxi(1,25*(target-1)*(target-1)-int(m.s.xp[skill]))
+		var cycles = clampi(ceili(float(missing_xp)/int(a.xp)),1,100)
+		if a.inputs.is_empty(): app.activity_dialog(id,cycles)
+		else: planner(id,cycles)
+		return
 
 func tactics():
 	var v = app.modal("Fighting style")

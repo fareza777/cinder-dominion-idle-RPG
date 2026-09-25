@@ -81,6 +81,7 @@ func valid(s, data: Dictionary) -> bool:
 		for id in RealmProgression.UPGRADES:
 			if not counter(p.upgrades.get(id,-1)) or p.upgrades[id]>3: return false
 	if s.fight.has("swings") and not counter(s.fight.swings): return false
+	if s.has("chronicle") and not RealmChronicle.valid(s.chronicle,s.xp): return false
 	var cfg = s.settings
 	for key in ["locale","font","motion","battery","music","sfx","food","threshold","potion","potion_policy"]:
 		if not cfg.has(key): return false
@@ -169,5 +170,11 @@ func resume(model: RealmModel, now: int) -> Dictionary:
 		if amount>0: report.spent[id] = amount
 	for skill in model.s.xp: report.xp += int(model.s.xp[skill])-int(before.xp[skill])
 	for enemy in model.s.kills: report.kills += int(model.s.kills[enemy])-int(before.kills.get(enemy,0))
+	report.fragments = {}
+	report.talent_points = RealmChronicle.points_earned(model)-mini(10,int((before.xp.bladecraft+before.xp.might+before.xp.warding)/250))
+	var previous_fragments = before.get("chronicle",{}).get("fragments",{})
+	for id in RealmChronicle.RELICS:
+		var amount = int(RealmChronicle.state(model).fragments[id])-int(previous_fragments.get(id,0))
+		if amount>0: report.fragments[id] = amount
 	if elapsed>30000: model.s.report = report
 	return report
