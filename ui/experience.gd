@@ -2,7 +2,7 @@ extends RefCounted
 
 const U = preload("res://ui/style.gd")
 const STORE_URL = "" # Set only after a real public listing exists.
-const VERSION = "0.2.0"
+const VERSION = "0.3.0"
 var app
 var front: Control
 var cinematic_page = 0
@@ -301,12 +301,13 @@ func handbook():
 	var v = app.modal("How to play")
 	for section in [
 		["01 · Follow the Journey","Your goal is to restore the beacon by defeating the Bellkeeper. The Journey guide breaks this into 12 objectives and remains available at the top of every game screen."],
-		["02 · Gather and craft","Open Skills. Gather ore, wood and fish; smelt ore, forge equipment and cook food. Activity previews show the ingredients consumed, result and time per cycle."],
+		["02 · Gather and craft","Open Skills. Gather ore, wood and fish; smelt ore, forge equipment and cook food. Use Plan materials & craft automatically to preview and queue a complete supply chain, including missing raw materials."],
 		["03 · Equip your upgrades","Crafted gear goes to Bag. Open an item and choose Equip item. Crafting alone does not improve your stats. Lock or favorite items you want to keep."],
 		["04 · Fight automatically","Open Explore, choose an unlocked enemy and a number of fights. Each victory gives gold, loot and melee XP. Your selected cooked food heals you automatically while available."],
 		["05 · Plan your time","Queue holds up to 20 tasks. Only the first runs. Tasks wait when ingredients or levels are missing. Sources shows how to get materials; Queue lets you cancel blocked tasks."],
 		["06 · Return to your rewards","Your saved queue continues for up to 24 hours while away. You receive a report when you return. No queue means no gathering or combat rewards."],
-		["07 · Find your way around","Refuge: current objective and merchant. Explore: enemies and combat. Skills: gathering and crafting. Bag: equipment and supplies. Hero: stats, food, presets and Settings."]
+		["07 · Build a stronger refuge","Refuge contracts reward milestones with gold, food and scraps. Claim completed contracts, then Rebuild Cinderwatch to improve production speed, armor and recovery. Hero and Explore let you choose Vanguard, Warden or Reaver before a hunt."],
+		["08 · Find your way around","Refuge: current objective and merchant. Explore: enemies and combat. Skills: gathering and crafting. Bag: equipment and supplies. Hero: stats, food, presets and Settings."]
 	]:
 		v.add_child(U.para(section[0],20,U.GOLD))
 		v.add_child(U.para(section[1],16,U.TEXT))

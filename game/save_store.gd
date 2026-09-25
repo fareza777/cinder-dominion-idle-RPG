@@ -68,6 +68,19 @@ func valid(s, data: Dictionary) -> bool:
 		if s.fight.player_at<s.time or s.fight.enemy_at<s.time or s.fight.buff not in ["attack","armor"]: return false
 	if s.has("experience"):
 		if not s.experience is Dictionary or s.experience.get("version",0)!=2 or not s.experience.get("welcome_done",false) is bool: return false
+	if s.has("progression"):
+		var p = s.progression
+		if not p is Dictionary or not RealmProgression.STANCES.has(p.get("stance","")): return false
+		if not p.get("claimed") is Array or not p.get("upgrades") is Dictionary: return false
+		var ids = []
+		for contract in RealmProgression.CONTRACTS: ids.append(contract.id)
+		var seen = []
+		for id in p.claimed:
+			if id not in ids or id in seen: return false
+			seen.append(id)
+		for id in RealmProgression.UPGRADES:
+			if not counter(p.upgrades.get(id,-1)) or p.upgrades[id]>3: return false
+	if s.fight.has("swings") and not counter(s.fight.swings): return false
 	var cfg = s.settings
 	for key in ["locale","font","motion","battery","music","sfx","food","threshold","potion","potion_policy"]:
 		if not cfg.has(key): return false

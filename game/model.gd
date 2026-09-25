@@ -8,12 +8,22 @@ var s: Dictionary
 var rng = RandomNumberGenerator.new()
 var error = ""
 var last_hit = ""
+var battle_event = {"serial":0,"text":"","side":"enemy"}
+var last_reward = ""
+
+func progression() -> Dictionary:
+	return RealmProgression.state(self)
+
+func combat_event(message: String, side: String):
+	battle_event = {"serial":int(battle_event.serial)+1,"text":message,"side":side}
 
 func _init():
 	data = JSON.parse_string(FileAccess.get_file_as_string("res://data/catalog.json"))
 	fresh()
 
 func fresh(seed_value: int = 12345):
+	last_reward = ""
+	last_hit = ""
 	rng.seed = seed_value
 	s = {"version":1,"revision":0,"time":0,"wall":0,"rng":str(rng.state),"gold":20,
 		"bag":{"cooked_minnow":5},"gear":[],"overflow":[],"equipped":{},"next_uid":1,
@@ -37,6 +47,11 @@ func level(skill: String) -> int:
 	return mini(100, 1 + int(sqrt(float(s.xp.get(skill,0)) / 25.0)))
 
 func count(id: String) -> int:
+	if data.items.has(id) and data.items[id].category=="equipment":
+		var total = 0
+		for g in s.gear:
+			if g.id==id: total += int(g.count)
+		return total
 	return int(s.bag.get(id,0))
 
 func gear(uid: String) -> Dictionary:
@@ -54,8 +69,9 @@ func stats() -> Dictionary:
 		st.armor += float(d.get("armor",0))*QUALITY[int(g.q)]
 	if not s.fight.is_empty() and s.fight.get("buff_until",0)>s.time:
 		st[s.fight.buff] += 3
-	st.attack = int(st.attack)
-	st.armor = int(st.armor)
+	var style = RealmProgression.STANCES[progression().stance]
+	st.attack = maxi(1,int(st.attack*float(style.attack)))
+	st.armor = maxi(0,int(st.armor)+int(style.armor)+int(progression().upgrades.ward))
 	return st
 
 func protected(uid: String) -> bool:
@@ -121,6 +137,44 @@ func command(cmd: Dictionary) -> bool:
 	var action = str(cmd.get("type",""))
 	var id = str(cmd.get("id",""))
 	match action:
+		"plan":
+			var plan = RealmProgression.plan(self,id,int(cmd.get("amount",1)))
+			if plan.error!="": return fail(plan.error)
+			s.queue.append_array(plan.steps)
+			start_next()
+		"stance":
+			if not s.fight.is_empty(): return fail("Retreat before changing your fighting style.")
+			if not RealmProgression.STANCES.has(id): return fail("Unknown fighting style")
+			progression().stance = id
+		"equip_best":
+			if not s.fight.is_empty(): return fail("Retreat before changing equipment.")
+			for g in s.gear:
+				var slot = data.items[g.id].slot
+				var current = gear(str(s.equipped.get(slot,"")))
+				if current.is_empty() or gear_score(g)>gear_score(current): s.equipped[slot] = g.uid
+		"claim":
+			var found = false
+			for contract in RealmProgression.CONTRACTS:
+				if contract.id!=id: continue
+				if id in progression().claimed: return fail("Reward already claimed")
+				if RealmProgression.value(self,contract)<int(contract.target): return fail("Complete this contract first")
+				progression().claimed.append(id)
+				s.gold += int(contract.gold)
+				gain("cooked_minnow",int(contract.food))
+				gain("scrap",int(contract.scrap))
+				note("Contract complete: "+contract.title)
+				found = true
+			if not found: return fail("Unknown contract")
+		"upgrade":
+			if not RealmProgression.UPGRADES.has(id): return fail("Unknown refuge upgrade")
+			var rank = int(progression().upgrades[id])
+			if rank>=3: return fail("Maximum rank reached")
+			var upgrade = RealmProgression.UPGRADES[id]
+			if s.gold<int(upgrade.gold)*(rank+1) or count("scrap")<int(upgrade.scrap)*(rank+1): return fail("Earn gold and metal scraps through hunts, contracts, or salvage.")
+			s.gold -= int(upgrade.gold)*(rank+1)
+			spend("scrap",int(upgrade.scrap)*(rank+1))
+			progression().upgrades[id] = rank+1
+			note("%s upgraded to rank %d" % [upgrade.name,rank+1])
 		"queue":
 			if not data.activities.has(id): return fail("Unknown activity")
 			if s.queue.size()>=20: return fail("Queue is full (20 steps). Cancel a step to make room.")
@@ -232,7 +286,22 @@ func duration(a: Dictionary) -> int:
 	var g = gear(str(s.equipped.get(tool_slot,"")))
 	if not g.is_empty(): discount = float(data.items[g.id].get("speed",0))
 	discount += minf(.1,floor(float(s.mastery.get(a.id,0))/100.0)*.01)
-	return maxi(200,int(float(a.duration)*1000*(1-minf(.3,discount))))
+	discount += int(progression().upgrades.forge)*.05
+	return maxi(200,int(float(a.duration)*1000*(1-minf(.45,discount))))
+
+func gear_score(g: Dictionary) -> float:
+	var d = data.items[g.id]
+	return (float(d.get("attack",0))+float(d.get("armor",0)))*QUALITY[int(g.q)]+float(d.get("speed",0))*100
+
+func encounter_advice(id: String) -> String:
+	var d = data.enemies[id]
+	var st = stats()
+	var strikes = ceili(float(d.hp)/hit_damage(int(st.attack),int(d.armor)))
+	var incoming = ceili(strikes*2000.0/int(d.interval))*hit_damage(int(d.attack),int(st.armor))
+	if d.boss: incoming = ceili(incoming*1.3)
+	var reserve = int(s.hp)+count(s.settings.food)*int(data.items[s.settings.food].heal)
+	var rating = "Favorable" if incoming<int(s.hp)*.65 else ("Bring food" if incoming<reserve*.75 else "High risk — upgrade gear")
+	return "%s · about %ds per fight. Estimate excludes critical hits and special skills; repeated hunts consume supplies." % [rating,strikes*2]
 
 func step_complete(step: Dictionary) -> bool:
 	if step.kind=="level": return level(data.activities[step.id].skill)>=int(step.target)
@@ -279,7 +348,7 @@ func advance(ms: int):
 		if not s.fight.is_empty(): resolve_combat()
 		else:
 			if s.hp<100 and s.regen_at<=s.time:
-				s.hp = mini(100,int(s.hp)+1)
+				s.hp = mini(100,int(s.hp)+1+int(progression().upgrades.hearth))
 				s.regen_at = int(s.time)+1000
 			if not s.active.is_empty() and s.active.due<=s.time: finish_production()
 		start_next()
@@ -323,13 +392,23 @@ func resolve_combat():
 	var st = stats()
 	if f.player_at<=s.time:
 		f.player_at = int(s.time)+2000
+		f.swings = int(f.get("swings",0))+1
 		if rng.randf()<st.accuracy:
 			var damage = hit_damage(int(st.attack),int(d.armor))
+			var special = int(f.swings)%4==0
+			if special:
+				match progression().stance:
+					"balanced": damage *= 2
+					"guard": s.hp = mini(100,int(s.hp)+8)
+					"reaver": damage = int(damage*2.5)
 			var crit = rng.randf()<.05
 			if crit: damage = int(damage*1.5)
 			f.hp -= damage
-			last_hit = ("CRIT " if crit else "")+str(damage)
-		else: last_hit = "MISS"
+			last_hit = ("SKILL " if special else ("CRIT " if crit else ""))+str(damage)
+			combat_event(last_hit,"enemy")
+		else:
+			last_hit = "MISS"
+			combat_event("MISS","enemy")
 	if f.hp<=0:
 		win(d)
 		return
@@ -338,9 +417,12 @@ func resolve_combat():
 		f.hits += 1
 		if rng.randf()<.95:
 			var attack = int(d.attack*1.8) if d.boss and int(f.hits)%3==0 else int(d.attack)
-			s.hp -= hit_damage(attack,int(st.armor))
+			var received = hit_damage(attack,int(st.armor))
+			s.hp -= received
+			combat_event("−%d HP" % received,"hero")
 		if s.hp<=0:
 			s.hp = 0
+			last_reward = "DEFEAT · No items lost. Rest, cook food, or upgrade equipment before returning."
 			note("Defeated by %s. Equipment is safe. Recover and prepare food before trying again." % local_name(d))
 			s.fight = {}
 			s.queue.clear()
@@ -353,6 +435,7 @@ func resolve_combat():
 
 func win(enemy: Dictionary):
 	var id = enemy.id
+	last_reward = "VICTORY · +%d gold · +%d XP · %s ×%d" % [int(enemy.gold),int(enemy.xp),name_of(enemy.drop),int(enemy.qty)]
 	s.kills[id] = int(s.kills.get(id,0))+1
 	s.gold += int(enemy.gold)
 	gain(enemy.drop,int(enemy.qty))

@@ -34,6 +34,16 @@ func capture():
 	await process_frame
 	await RenderingServer.frame_post_draw
 	root.get_texture().get_image().save_png("res://docs/qa/screenshots/combat.png")
+	scene.model.command({"type":"clear"})
+	scene.planner_dialog("craft_copper_sword",1)
+	await snap("supply-planner-0.3")
+	scene.tactics_dialog()
+	await snap("fighting-styles-0.3")
+	scene.contracts_dialog()
+	await snap("contracts-0.3")
+	scene.refuge_dialog()
+	await snap("refuge-upgrades-0.3")
+	scene.dismiss()
 	scene.model.fresh(42)
 	scene.mode = "menu"
 	scene.experience.menu()

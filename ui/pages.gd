@@ -83,6 +83,12 @@ func village(parent: Node):
 		c.get_parent().size_flags_horizontal = Control.SIZE_EXPAND_FILL
 		c.add_child(U.label(entry[1],8,U.GOLD))
 		c.add_child(U.button(entry[2]+" →",func(): app.set_page(entry[0])))
+	var contracts = U.card(parent,14,U.GOLD.darkened(.6))
+	contracts.add_child(U.label("A REFUGE WORTH FIGHTING FOR",10,U.GOLD))
+	app.dynamic(contracts,func(): return "%d rewards ready · %d / 8 contracts claimed" % [RealmProgression.ready_count(m),m.progression().claimed.size()],15,U.TEXT)
+	contracts.add_child(U.para("Earn supplies through optional milestones. Rebuild the forge, gates, and hearth for permanent upgrades.",13))
+	contracts.add_child(U.button("Refuge contracts  →",app.contracts_dialog,true))
+	contracts.add_child(U.button("Rebuild Cinderwatch  →",app.refuge_dialog))
 	var refuge = U.card(parent)
 	refuge.add_child(U.label(text("KEHIDUPAN DI SUAKA","LIFE AT THE REFUGE"),10,U.GOLD))
 	refuge.add_child(U.para(text("Tungku menempa harapan baru. Pedagang menyiapkan perbekalan untuk perjalanan berikutnya.","The forge shapes new hope. The merchant prepares supplies for your next journey.")))
@@ -93,41 +99,34 @@ func village(parent: Node):
 
 func explore(parent: Node):
 	heading(parent,text("WILAYAH 01","REGION 01"),text("Pinggiran Cinderwatch","Cinderwatch Outskirts"),text("Bekal, perlengkapan, dan keberanian. Siapkan semuanya.","Choose an enemy and a number of fights. Combat runs automatically. Stock cooked food and equip upgrades first."))
-	var fighting = not m.s.fight.is_empty()
-	if fighting:
-		var enemy_id = str(m.s.fight.enemy)
-		var enemy = m.data.enemies[enemy_id]
-		var battle = U.card(parent,12,U.GOLD.darkened(.55))
-		battle.add_child(U.label(text("PERTEMPURAN BERLANGSUNG","BATTLE IN PROGRESS"),10,U.GOLD))
-		var fighters = U.row(12)
-		battle.add_child(fighters)
-		for index in [0,int(enemy.portrait)]:
-			var v = U.column(6)
-			v.size_flags_horizontal = Control.SIZE_EXPAND_FILL
-			fighters.add_child(v)
-			var portrait = U.portrait(index,Vector2(100,160))
-			v.add_child(portrait)
-			v.add_child(U.label(text("Penjaga Bara","Emberkeeper") if index==0 else m.local_name(enemy),14,U.TEXT))
-			var hp = U.progress(m.s.hp if index==0 else m.s.fight.hp,100 if index==0 else enemy.hp,U.GREEN if index==0 else U.RED,7)
-			v.add_child(hp)
-			app.update_callbacks.append(func():
-				if is_instance_valid(hp): hp.value = m.s.hp if index==0 else (m.s.fight.get("hp",0) if m.s.fight.get("enemy","")==enemy_id else 0)
-				if is_instance_valid(portrait) and m.s.settings.motion: portrait.self_modulate = Color(1,1,1,.93+.07*sin(Time.get_ticks_msec()/750.0+index)))
-		app.dynamic(battle,func():
-			if m.s.fight.is_empty(): return text("Pertarungan selesai. Pilih target berikutnya.","Battle ended. Choose your next target.")
-			return "%d / 100 HP     ·     %s %s" % [int(m.s.hp),text("Pukulan","Hit"),app.model.last_hit],15,U.TEXT)
-		if enemy.boss: battle.add_child(U.para(text("DENTANG KETIGA · Pukulan diperkuat 1,8×","THIRD TOLL · Every third strike is 1.8× stronger"),13,U.RED))
-		battle.add_child(U.button(text("Mundur & hentikan antrean","Retreat & stop queue"),func(): app.send({"type":"clear"})))
-	else:
-		var prep = U.card(parent)
-		var st = m.stats()
-		var r = U.row()
-		prep.add_child(r)
-		U.stat(r,str(int(st.attack)),"ATK",U.GOLD)
-		U.stat(r,str(int(st.armor)),"DEF")
-		U.stat(r,"%d" % m.count(m.s.settings.food),text("BEKAL","FOOD"),U.GREEN)
-		prep.add_child(U.para(text("Auto-heal aktif. Kekalahan menghentikan aktivitas; perlengkapanmu tetap aman.","Selected food heals you automatically while supplies last. Defeat stops the queue; your gear stays safe."),12))
-	parent.add_child(U.button("How food & survival work",app.experience.survival))
+	var battle = U.card(parent,12,U.GOLD.darkened(.55))
+	var stage = Control.new()
+	stage.set_script(preload("res://ui/battle_stage.gd"))
+	stage.model = m
+	battle.add_child(stage)
+	stage.visible = not m.s.fight.is_empty()
+	app.update_callbacks.append(func():
+		if is_instance_valid(stage): stage.visible = not m.s.fight.is_empty())
+	app.dynamic(battle,func(): return m.last_reward if m.last_reward!="" else "Your gear is safe on defeat. Stock cooked food before a long hunt.",13,U.GREEN)
+	app.dynamic(battle,func():
+		if m.s.fight.is_empty(): return "Ready when you are. Choose a target below."
+		var f = m.s.fight
+		if m.data.enemies[f.enemy].boss:
+			return "THIRD TOLL IN %.1fs · 1.8× damage" % [maxf(0,(int(f.enemy_at)-int(m.s.time))/1000.0)] if int(f.hits)%3==2 else "Bellkeeper: every third strike deals 1.8× damage."
+		return "Automatic combat · skills trigger every fourth attack.",13,U.GOLD)
+	var retreat = U.button("Retreat & stop queue",func(): app.send({"type":"clear"}))
+	battle.add_child(retreat)
+	app.update_callbacks.append(func():
+		if is_instance_valid(retreat): retreat.visible = not m.s.fight.is_empty())
+	var prep = U.card(parent)
+	app.dynamic(prep,func(): return "%s · %d ATK · %d DEF" % [RealmProgression.STANCES[m.progression().stance].name,int(m.stats().attack),int(m.stats().armor)],16,U.GOLD)
+	app.dynamic(prep,func(): return "Auto-heal: %s ×%d · triggers at %d%% HP" % [m.name_of(m.s.settings.food),m.count(m.s.settings.food),int(m.s.settings.threshold*100)],13,U.GREEN)
+	var actions = U.row(6)
+	prep.add_child(actions)
+	actions.add_child(U.button("Fighting style",app.tactics_dialog))
+	actions.add_child(U.button("Equip best",func():
+		if app.send({"type":"equip_best"}): app.toast("Best owned equipment equipped.")))
+	prep.add_child(U.button("Prepare 10 × "+m.name_of(m.s.settings.food),func(): app.planner_dialog("craft_"+str(m.s.settings.food),10)))
 	for id in m.data.enemies:
 		var d = m.data.enemies[id]
 		var why = m.available(id)
@@ -141,8 +140,18 @@ func explore(parent: Node):
 		v.add_child(U.para(m.local_name(d),19,U.GOLD if d.boss else U.TEXT))
 		v.add_child(U.label("%d HP  ·  %d ATK  ·  %d DEF" % [int(d.hp),int(d.attack),int(d.armor)],11,U.MUTED))
 		app.dynamic(v,func(): return "%d %s  ·  +%d gold" % [int(m.s.kills.get(id,0)),text("dikalahkan","defeated"),int(d.gold)],11,U.MUTED)
+		var next_region = {"grave_thrall":"Cinder Bandit","cinder_bandit":"Chapel Guard","chapel_guard":"Ember Wraith","ember_wraith":"Bellkeeper"}.get(id,"")
+		if next_region!="":
+			app.dynamic(card,func(): return "%d / 5 victories · unlock %s%s" % [mini(5,int(m.s.kills.get(id,0))),next_region," + Smithing Lv.10" if id=="ember_wraith" else ""],12,U.GOLD)
+			var route_bar = U.progress(m.s.kills.get(id,0),5,U.GOLD,4)
+			card.add_child(route_bar)
+			app.update_callbacks.append(func():
+				if is_instance_valid(route_bar): route_bar.value = m.s.kills.get(id,0))
+		elif id=="hollow_hound": card.add_child(U.para("OPTIONAL HUNT · Gather meat and melee XP.",12,U.GOLD))
 		if why!="": card.add_child(U.para(why,12,U.MUTED))
-		else: card.add_child(U.button(text("Tantang boss" if d.boss else "Buru & kumpulkan loot","Challenge boss" if d.boss else "Hunt & gather loot"),func(): app.activity_dialog("hunt_"+id),d.boss))
+		else:
+			app.dynamic(card,func(): return m.encounter_advice(id),12,U.GREEN)
+			card.add_child(U.button(text("Tantang boss" if d.boss else "Buru & kumpulkan loot","Challenge boss" if d.boss else "Hunt & gather loot"),func(): app.activity_dialog("hunt_"+id),d.boss))
 
 func skills(parent: Node):
 	heading(parent,text("TUMBUH MELALUI LATIHAN","GROW THROUGH PRACTICE"),text("Keahlian","Skills"),text("Setiap bahan memiliki tujuan. Setiap pekerjaan meninggalkan jejak.","Gather raw materials, turn them into supplies, then equip your upgrades. Choose a skill below to see its activities."))
@@ -291,6 +300,13 @@ func character(parent: Node):
 	v.add_child(U.para(text("Kekuatan tumbuh dari perjalanan, bukan pembelian.","Strength is earned through your journey."),12))
 	for id in ["bladecraft","might","warding"]:
 		app.dynamic(c,func(): return "%s   Lv.%d   ·   %d XP" % [m.local_name(m.data.skills[id]),m.level(id),int(m.s.xp[id])],15)
+	var style = U.card(parent)
+	style.add_child(U.label("YOUR FIGHTING STYLE",10,U.GOLD))
+	app.dynamic(style,func(): return RealmProgression.STANCES[m.progression().stance].name,24,U.TEXT)
+	app.dynamic(style,func(): return RealmProgression.STANCES[m.progression().stance].detail,14)
+	style.add_child(U.button("Choose fighting style",app.tactics_dialog,true))
+	style.add_child(U.button("Equip best owned gear",func():
+		if app.send({"type":"equip_best"}): app.toast("Best owned equipment equipped.")))
 	var food = U.card(parent)
 	food.add_child(U.label(text("PERSEDIAAN TEMPUR","BATTLE SUPPLIES"),10,U.GOLD))
 	app.dynamic(food,func(): return "%s ×%d" % [m.name_of(m.s.settings.food),m.count(m.s.settings.food)],17,U.TEXT)

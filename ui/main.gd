@@ -349,7 +349,8 @@ func refresh_objective_page():
 
 func send(cmd: Dictionary, rebuild: bool = true) -> bool:
 	cmd.cid = "%d-%d" % [Time.get_ticks_usec(),model.s.processed.size()]
-	if model.command(cmd):
+	var accepted = model.command(cmd)
+	if accepted:
 		if is_instance_valid(effect):
 			effect.volume_db = linear_to_db(float(model.s.settings.sfx))
 			effect.play()
@@ -357,7 +358,7 @@ func send(cmd: Dictionary, rebuild: bool = true) -> bool:
 		if rebuild: set_page(page,true)
 	else: toast(model.error)
 	refresh()
-	return model.error==""
+	return accepted
 
 func toast(text: String):
 	if not is_instance_valid(toast_label): return
@@ -408,6 +409,18 @@ func modal(title: String) -> VBoxContainer:
 	scroll.add_child(content)
 	return content
 
+func planner_dialog(id: String, amount: int = 1):
+	preload("res://ui/gameplay.gd").new(self).planner(id,amount)
+
+func tactics_dialog():
+	preload("res://ui/gameplay.gd").new(self).tactics()
+
+func contracts_dialog():
+	preload("res://ui/gameplay.gd").new(self).contracts()
+
+func refuge_dialog():
+	preload("res://ui/gameplay.gd").new(self).refuge()
+
 func activity_dialog(id: String, recommended: int = 0):
 	var a = model.data.activities[id]
 	var v = modal(model.activity_name(id))
@@ -430,6 +443,9 @@ func activity_dialog(id: String, recommended: int = 0):
 	if a.kind!="combat":
 		var cost_tip = "No materials are consumed. Your equipped tool is used automatically." if a.inputs.is_empty() else "Ingredients are consumed when a cycle starts."
 		v.add_child(U.para("EACH CYCLE PRODUCES\n1 × "+model.name_of(a.output)+". "+cost_tip,14,U.GREEN))
+	if a.kind!="combat" and not a.inputs.is_empty():
+		v.add_child(U.button("Plan materials & craft automatically",func(): planner_dialog(id,maxi(1,mini(100,recommended))),true))
+	if a.kind=="combat": v.add_child(U.para(model.encounter_advice(a.enemy),14,U.GOLD))
 	var reason = model.requirement(id)
 	if reason!="": v.add_child(U.para(reason+tr2(". Antrean akan menunggu sampai persyaratan terpenuhi.",". The queue will wait for requirements."),14,U.RED))
 	if recommended>0:
@@ -631,7 +647,7 @@ func settings_dialog():
 	v.add_child(U.button("Share",experience.share))
 	v.add_child(U.button("Rate",experience.rate))
 	v.add_child(U.button("Return to main menu",experience.menu))
-	v.add_child(U.para("Version 0.2.0 · Chapter I preview\nFree to play. No ads. No purchases in this build.",12))
+	v.add_child(U.para("Version 0.3.0 · Chapter I preview\nFree to play. No ads. No purchases in this build.",12))
 
 func export_save():
 	var fd = FileDialog.new()
