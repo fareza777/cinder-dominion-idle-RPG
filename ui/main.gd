@@ -651,29 +651,7 @@ func merchant_dialog():
 			merchant_dialog(),true))
 
 func item_dialog(uid: String):
-	var g = model.gear(uid)
-	if g.is_empty(): return
-	var d = model.data.items[g.id]
-	var v = modal(model.name_of(g.id))
-	v.add_child(U.icon(g.id,100))
-	v.add_child(U.label(model.data.rarities[int(g.q)].to_upper()+" · "+str(d.slot).to_upper(),12,U.QUALITY[int(g.q)]))
-	var equipped = model.gear(str(model.s.equipped.get(d.slot,"")))
-	for stat in ["attack","armor","speed"]:
-		if d.get(stat,0)==0: continue
-		var value = float(d[stat])*(100.0 if stat=="speed" else RealmModel.QUALITY[int(g.q)])
-		var old = float(model.data.items[equipped.id].get(stat,0))*(100.0 if stat=="speed" else RealmModel.QUALITY[int(equipped.q)]) if not equipped.is_empty() else 0.0
-		v.add_child(U.para("%s  %.1f%s  (%+.1f)" % ["TOOL TIME REDUCTION" if stat=="speed" else stat.to_upper(),value,"%" if stat=="speed" else "",value-old],19,U.GREEN if value>=old else U.RED))
-	v.add_child(U.button(tr2("Pasang perlengkapan","Equip item"),func():
-		send({"type":"equip","id":uid})
-		dismiss(),true))
-	if RealmWorkshop.eligible(model,g): v.add_child(U.button("Refine this piece · guaranteed quality",func(): preload("res://ui/armory.gd").new(self).workshop(uid)))
-	v.add_child(U.button(tr2("Buka kunci" if g.locked else "Kunci item","Unlock" if g.locked else "Lock item"),func():
-		send({"type":"lock","id":uid})
-		item_dialog(uid)))
-	v.add_child(U.button(tr2("Hapus favorit" if g.favorite else "Jadikan favorit","Unfavorite" if g.favorite else "Favorite"),func():
-		send({"type":"favorite","id":uid})
-		item_dialog(uid)))
-	if not model.protected(uid): v.add_child(U.button(tr2("Lebur perlengkapan…","Salvage item…"),func(): salvage_dialog([uid])))
+	preload("res://ui/equipment_detail.gd").new(self).open(uid)
 
 func salvage_dialog(ids: Array):
 	var v = modal(tr2("Konfirmasi peleburan","Confirm salvage"))

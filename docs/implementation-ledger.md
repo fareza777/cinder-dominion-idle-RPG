@@ -67,3 +67,7 @@ Solo: generated three-scene narrative art, seven milestone-gated story chapters,
 ## 0.14 Queue recovery
 
 Solo: atomic dependency prepending for blocked crafting, queue status/progress polish, stale-action guards and Smithing batch-cap fix. Four targeted checks added (64 total), five phone captures and Android debug export.
+
+## 0.15 Equipment clarity
+
+Solo: item comparison using total build stats, actual tool time preview, same-dialog equip confirmation and explicit combat lock. Three targeted checks added (67 total), five phone captures and Android debug export.
