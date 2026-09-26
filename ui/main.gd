@@ -224,7 +224,6 @@ func build_shell():
 	hr.add_child(title)
 	title.size_flags_horizontal = Control.SIZE_EXPAND_FILL
 	title.add_child(U.para("ASHEN COVENANT",16,U.TEXT))
-	title.add_child(U.label(tr2("PENJAGA BARA TERAKHIR","KEEPER OF THE LAST EMBER"),9,U.GOLD))
 	hr.add_child(U.button("☰",func(): experience.menu()))
 	var counters = U.column(2)
 	hr.add_child(counters)
@@ -243,7 +242,7 @@ func build_shell():
 	journey_words.add_child(U.label("YOUR NEXT STEP",9,U.GOLD))
 	objective_label = U.para("",14,U.TEXT)
 	journey_words.add_child(objective_label)
-	journey_row.add_child(U.button("Guide →",guide_dialog))
+	journey_row.add_child(U.button("Goals",guide_dialog))
 	scroller = ScrollContainer.new()
 	scroller.size_flags_vertical = Control.SIZE_EXPAND_FILL
 	scroller.horizontal_scroll_mode = ScrollContainer.SCROLL_MODE_DISABLED
@@ -378,10 +377,7 @@ func refresh():
 			changes.append(line)
 		seen_levels[id] = current
 	var chapters = RealmStory.count(model)
-	if seen_chapters>=0 and chapters>seen_chapters:
-		toast("New chapter available · Open Story journal in Refuge.")
-		play_cue("reward")
-	elif not changes.is_empty():
+	if not changes.is_empty():
 		toast("\n".join(changes.slice(0,3))+("\n%d more skills leveled up." % (changes.size()-3) if changes.size()>3 else ""))
 		play_cue("reward")
 	if not changes.is_empty() and page=="skills" and not is_instance_valid(dialog) and not rebuild_pending:
@@ -552,11 +548,10 @@ func activity_dialog(id: String, recommended: int = 0):
 		var e = model.data.enemies[a.enemy]
 		var encounter = U.row(16)
 		v.add_child(encounter)
-		encounter.add_child(U.enemy_portrait(e,Vector2(112,172)))
+		encounter.add_child(U.enemy_portrait(e,Vector2(76,100)))
 		var introduction = U.column(10)
 		introduction.size_flags_horizontal = Control.SIZE_EXPAND_FILL
 		encounter.add_child(introduction)
-		introduction.add_child(U.para(RealmTrials.STORIES[e.region] if e.get("trial",false) else e.get("lore_en",e.lore),14))
 		introduction.add_child(U.para("%d HP · %d ATK · %d DEF" % [int(e.hp),int(e.attack),int(e.armor)],13,U.GOLD))
 		v.add_child(U.para(model.encounter_advice(a.enemy),14,U.GOLD))
 		v.add_child(U.para(RealmCombat.mechanic(e),14,U.TEXT))
@@ -564,16 +559,15 @@ func activity_dialog(id: String, recommended: int = 0):
 		var rune = RealmRuneforge.state(model).equipped
 		if rune!="": v.add_child(U.para("EQUIPPED RUNE · "+RealmRuneforge.RUNES[rune].name+"\n"+RealmRuneforge.effect(rune,RealmRuneforge.active_rank(model,rune)),13,U.GREEN))
 		var fragment_id = RealmChronicle.fragments_for(e)
-		v.add_child(U.para("GUARANTEED RELIC DROP\n%d × %s fragments" % [int(e.get("fragments",1)),RealmChronicle.RELICS[fragment_id].name],14,U.GREEN))
+		v.add_child(U.para("%d × %s fragments / win" % [int(e.get("fragments",1)),RealmChronicle.RELICS[fragment_id].name],14,U.GREEN))
 		if e.has("region") and int(model.s.kills.get(e.id,0))==0:
 			if e.get("trial",false): v.add_child(U.para("First clear: Epic %s · 120 bonus fragments · 15 scraps · 20 grilled minnows." % model.name_of(e.trial_reward),13,U.GOLD))
 			else: v.add_child(U.para("First clear: +10 meals and %d scraps.%s" % [5+int(e.tier)," Tier 5 also grants a Rare Iron Sword." if int(e.tier)==5 else ""],13,U.GOLD))
-		v.add_child(U.para("VICTORY REWARDS\n+%d gold · +%d melee XP · %s ×%d" % [int(e.gold),int(e.xp),model.name_of(e.drop),int(e.qty)],14,U.GOLD))
-		v.add_child(U.para("Auto-heal: %s ×%d · at %d%% HP. Defeat stops the queue; your equipment stays safe." % [model.name_of(model.s.settings.food),model.count(model.s.settings.food),int(model.s.settings.threshold*100)],14,U.GREEN if model.count(model.s.settings.food)>0 else U.RED))
-		v.add_child(U.para("Your selected food restores %d HP per meal, including relic bonuses." % RealmCombat.food_heal(model,model.s.settings.food),13,U.GREEN))
+		v.add_child(U.para("+%d gold · +%d melee XP · %s ×%d / win" % [int(e.gold),int(e.xp),model.name_of(e.drop),int(e.qty)],14,U.GOLD))
+		v.add_child(U.para("Food: %s ×%d · heal at %d%% HP" % [model.name_of(model.s.settings.food),model.count(model.s.settings.food),int(model.s.settings.threshold*100)],14,U.GREEN if model.count(model.s.settings.food)>0 else U.RED))
 	if a.kind!="combat":
-		var cost_tip = "No materials are consumed. Your equipped tool is used automatically." if a.inputs.is_empty() else "Ingredients are consumed when a cycle starts."
-		v.add_child(U.para("EACH CYCLE PRODUCES\n1 × "+model.name_of(a.output)+". "+cost_tip,14,U.GREEN))
+		var cost_tip = "No material cost." if a.inputs.is_empty() else "Cost per cycle shown above."
+		v.add_child(U.para("Per cycle: 1 × "+model.name_of(a.output)+". "+cost_tip,14,U.GREEN))
 	if a.kind!="combat" and not a.inputs.is_empty():
 		v.add_child(U.button("Plan materials & craft automatically",func(): planner_dialog(id,maxi(1,mini(100,recommended))),true))
 	var reason = model.requirement(id)
@@ -589,7 +583,6 @@ func activity_dialog(id: String, recommended: int = 0):
 	if reason!="" and a.kind!="combat":
 		for button in dialog_footer.get_children(): button.hide()
 		modal_action("Plan missing materials",func(): planner_dialog(id,maxi(1,mini(100,recommended))))
-	v.add_child(U.para("Use the button below to begin. For a different count, choose a quick start. Tasks begin now if the queue is empty; otherwise they wait their turn.",14))
 	v.add_child(U.label("QUICK START",11,U.GOLD))
 	var targets = U.row(6)
 	v.add_child(targets)
@@ -619,12 +612,11 @@ func activity_dialog(id: String, recommended: int = 0):
 	advanced.add_child(skip)
 	advanced.add_child(U.button(tr2("Tambahkan ke antrean","Add to queue"),func():
 		enqueue_activity(id,int(amount.value),["cycles","output","level"][kind.selected],skip.button_pressed),true))
-	v.add_child(U.para(tr2("Satu aktivitas berjalan. Tutup game dan progres tetap berlanjut hingga 24 jam.","One activity at a time. Close the game and progress continues for up to 24 hours."),13))
 
 func enqueue_activity(id: String, target: int, kind: String = "cycles", skip: bool = false):
 	if send({"type":"queue","id":id,"target":target,"kind":kind,"skip":skip}):
 		dismiss()
-		toast("Task added. Follow its progress in the activity bar below.")
+		toast("Task queued")
 
 func sources_dialog(id: String):
 	var v = modal(tr2("Sumber: ","Sources: ")+model.name_of(id))
@@ -717,7 +709,7 @@ func settings_dialog():
 	v.add_child(U.button("Share",experience.share))
 	v.add_child(U.button("Rate",experience.rate))
 	v.add_child(U.button("Return to main menu",experience.menu))
-	v.add_child(U.para("Version 0.7.0 · Adventure preview\nFree to play. No ads. No purchases in this build.",12))
+	v.add_child(U.para("Version "+experience.VERSION+" · Adventure preview",12))
 
 func export_save():
 	var fd = FileDialog.new()

@@ -24,7 +24,7 @@ func village(parent: Node):
 	heading(parent,text("BAB I  /  SUAKA TERAKHIR","CHAPTER I  /  THE LAST REFUGE"),"Cinderwatch")
 	preload("res://ui/chronicle.gd").new(app).home(parent)
 	var scene = Control.new()
-	scene.custom_minimum_size.y = 150
+	scene.custom_minimum_size.y = 96
 	scene.clip_contents = true
 	parent.add_child(scene)
 	var art = TextureRect.new()
@@ -56,19 +56,19 @@ func village(parent: Node):
 	scene_text.offset_left = 16
 	scene_text.offset_right = -16
 	scene.add_child(scene_text)
-	scene_text.add_child(U.label(text("DI ANTARA ABU, MASIH ADA HARAPAN","AMONG THE ASHES, HOPE REMAINS"),10,U.GOLD))
-	scene_text.add_child(U.label(text("Jaga agar api tetap menyala.","Keep the last fire burning."),27,U.TEXT,true))
 	preload("res://ui/chronicle.gd").new(app).services(parent)
-	parent.add_child(U.label(text("CATATAN TERAKHIR","RECENT CHRONICLE"),10,U.MUTED))
-	app.dynamic(parent,func(): return str(m.s.log[0]) if not m.s.log.is_empty() else text("Perjalananmu baru dimulai.","Your journey is just beginning."),14,U.MUTED)
 
 func explore(parent: Node):
 	var region = m.data.enemies.get(m.s.fight.get("enemy",""),{}).get("region","")
 	var current_enemy = m.data.enemies.get(m.s.fight.get("enemy",""),{})
-	if current_enemy.get("trial",false): heading(parent,"GUARDIAN TRIAL",m.local_name(current_enemy),"Watch for the awakening at half health. Win once for Epic equipment; return for fragments and regional field records.")
-	elif region!="": heading(parent,"EXPEDITION IN PROGRESS",RealmChronicle.REGIONS[region].name,"There is still more to find along these roads. Revisit a familiar hunt for fragments and iron, or prepare for the guardian waiting ahead.")
-	else: heading(parent,"CHAPTER I · THE OUTSKIRTS","Cinderwatch Outskirts","The roads beyond Cinderwatch are no longer safe. Choose your quarry, check your food, and set out when you are ready. Your hero fights automatically.")
+	if current_enemy.get("trial",false): heading(parent,"GUARDIAN TRIAL",m.local_name(current_enemy),"")
+	elif region!="": heading(parent,"EXPEDITION IN PROGRESS",RealmChronicle.REGIONS[region].name,"")
+	else: heading(parent,"CHAPTER I · THE OUTSKIRTS","Cinderwatch Outskirts","")
 	var battle = U.card(parent,12,U.GOLD.darkened(.55))
+	var battle_panel = battle.get_parent()
+	battle_panel.visible = not m.s.fight.is_empty() or m.last_reward!=""
+	app.update_callbacks.append(func():
+		if is_instance_valid(battle_panel): battle_panel.visible = not m.s.fight.is_empty() or m.last_reward!="")
 	var stage = Control.new()
 	stage.set_script(preload("res://ui/battle_stage.gd"))
 	stage.model = m
@@ -76,11 +76,11 @@ func explore(parent: Node):
 	stage.visible = not m.s.fight.is_empty()
 	app.update_callbacks.append(func():
 		if is_instance_valid(stage): stage.visible = not m.s.fight.is_empty())
-	var result_label = app.dynamic(battle,func(): return m.last_reward if m.last_reward!="" else "Your gear is safe on defeat. Stock cooked food before a long hunt.",13,U.GREEN)
+	var result_label = app.dynamic(battle,func(): return m.last_reward if m.last_reward!="" else "",13,U.GREEN)
 	app.update_callbacks.append(func():
 		if is_instance_valid(result_label): result_label.add_theme_color_override("font_color",U.RED if m.last_reward.begins_with("DEFEAT") else U.GREEN))
 	app.dynamic(battle,func():
-		if m.s.fight.is_empty(): return "Ready when you are. Choose a target below."
+		if m.s.fight.is_empty(): return "Choose a target"
 		var f = m.s.fight
 		if m.data.enemies[f.enemy].boss:
 			var special = RealmCombat.move(m,m.data.enemies[f.enemy],3,int(m.stats().armor),RealmTrials.active_phase(m,m.data.enemies[f.enemy]))
@@ -99,7 +99,7 @@ func explore(parent: Node):
 	battle.add_child(retreat)
 	app.update_callbacks.append(func():
 		if is_instance_valid(retreat): retreat.visible = not m.s.fight.is_empty())
-	battle.add_child(U.button("Review this journey · hunt reports",app.hunt_reports_dialog))
+	battle.add_child(U.button("Hunt reports",app.hunt_reports_dialog))
 	var prep = U.card(parent)
 	app.dynamic(prep,func(): return "%s · %d ATK · %d DEF" % [RealmProgression.STANCES[m.progression().stance].name,int(m.stats().attack),int(m.stats().armor)],16,U.GOLD)
 	app.dynamic(prep,func(): return "%s ×%d · heals %d HP at %d%% health" % [m.name_of(m.s.settings.food),m.count(m.s.settings.food),RealmCombat.food_heal(m,m.s.settings.food),int(m.s.settings.threshold*100)],13,U.GREEN)
@@ -109,9 +109,11 @@ func explore(parent: Node):
 	actions.add_child(U.button("Equip best",func():
 		if app.send({"type":"equip_best"}): app.toast("Best owned equipment equipped.")))
 	prep.add_child(U.button("Prepare 10 × "+m.name_of(m.s.settings.food),func(): app.planner_dialog("craft_"+str(m.s.settings.food),10)))
-	prep.add_child(U.button("Switch a complete loadout",app.loadouts_dialog))
-	parent.add_child(U.button("World map · expedition tiers",app.world_dialog,true))
-	parent.add_child(U.button("Guardian trials · the final stand",app.trials_dialog))
+	if m.s.beacon:
+		var routes = U.row(6)
+		parent.add_child(routes)
+		routes.add_child(U.button("World map",app.world_dialog,true))
+		routes.add_child(U.button("Trials",app.trials_dialog))
 	for id in m.data.enemies:
 		var d = m.data.enemies[id]
 		if d.has("region"): continue
@@ -140,7 +142,7 @@ func explore(parent: Node):
 			card.add_child(U.button(text("Tantang boss" if d.boss else "Buru & kumpulkan loot","Challenge boss" if d.boss else "Hunt & gather loot"),func(): app.activity_dialog("hunt_"+id),d.boss))
 
 func skills(parent: Node):
-	heading(parent,text("TUMBUH MELALUI LATIHAN","GROW THROUGH PRACTICE"),text("Keahlian","Skills"),text("Setiap bahan memiliki tujuan. Setiap pekerjaan meninggalkan jejak.","Gather raw materials, turn them into supplies, then equip your upgrades. Choose a skill below to see its activities."))
+	heading(parent,text("TUMBUH MELALUI LATIHAN","GROW THROUGH PRACTICE"),text("Keahlian","Skills"),text("Setiap bahan memiliki tujuan. Setiap pekerjaan meninggalkan jejak.",""))
 	if app.skill=="":
 		var grid = GridContainer.new()
 		grid.columns = 2
@@ -286,7 +288,6 @@ func character(parent: Node):
 	v.add_child(U.label(text("Pengembara","Wanderer"),28,U.TEXT,true))
 	app.dynamic(v,func(): return "HP %d / 100" % int(m.s.hp),18,U.GREEN)
 	app.dynamic(v,func(): return "%d ATK  ·  %d DEF" % [int(m.stats().attack),int(m.stats().armor)],16,U.GOLD)
-	v.add_child(U.para(text("Kekuatan tumbuh dari perjalanan, bukan pembelian.","Strength is earned through your journey."),12))
 	for id in ["bladecraft","might","warding"]:
 		app.dynamic(c,func(): return "%s   Lv.%d   ·   %d XP" % [m.local_name(m.data.skills[id]),m.level(id),int(m.s.xp[id])],15)
 	var legacy = U.card(parent,14,U.GOLD.darkened(.5))

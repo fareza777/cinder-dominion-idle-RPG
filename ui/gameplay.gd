@@ -54,7 +54,7 @@ func planner(id: String, amount: int = 1):
 	var v = app.modal("Crafting plan")
 	v.add_child(U.icon(m.data.activities[id].output,72))
 	v.add_child(U.para("Make %d × %s" % [amount,m.activity_name(id)],24,U.TEXT))
-	v.add_child(U.para("Gather missing materials, then craft in the correct order. Uses stock you already own. Equipment is added to your bag; equip it when finished.",14))
+	v.add_child(U.para("Missing materials included · Equip crafted gear from Bag.",14))
 	var amounts = U.row(6)
 	v.add_child(amounts)
 	for n in [1,5,10,50,100]:

@@ -17,16 +17,15 @@ func locked(v: Node) -> bool:
 
 func home(parent: Node):
 	var card = U.card(parent,16,U.GOLD.darkened(.35))
-	card.add_child(U.label("RECOMMENDED ACTION",10,U.GOLD))
+	card.add_child(U.label("NEXT",10,U.GOLD))
 	app.dynamic(card,func(): return C.focus(m).title,24,U.TEXT)
-	app.dynamic(card,func(): return C.focus(m).why,14)
 	var action = U.button("Continue",act,true)
 	card.add_child(action)
 	var ref = weakref(action)
 	app.update_callbacks.append(func():
 		var b = ref.get_ref()
-		if is_instance_valid(b): b.text = {"story":"Start next objective  →","queue":"View active plan  →","talents":"Choose my talents  →","relics":"Awaken relic  →","equip":"Equip best gear  →","plan":"Review supply plan  →","journal":"Collect field supplies  →","runes":"Review inscription  →"}[C.focus(m).kind])
-	card.add_child(U.button("Progress & farming",roadmap))
+		if is_instance_valid(b): b.text = {"story":m.objective().action,"queue":"Queue","talents":"Talents","relics":"Relics","equip":"Equip best gear  →","plan":"Prepare supplies","journal":"Collect field supplies  →","runes":"Review inscription  →"}[C.focus(m).kind])
+	card.add_child(U.button("Farm & upgrade",roadmap))
 	var latest = U.button("Review latest hunt",app.hunt_reports_dialog)
 	card.add_child(latest)
 	var latest_ref = weakref(latest)
@@ -49,8 +48,7 @@ func services(parent: Node):
 		row.add_child(b)
 	if m.s.tutorial:
 		app.dynamic(parent,func(): return "%d bounty · %d field · %d contract rewards ready" % [C.ready_bounties(m),RealmRuneforge.ready(m),RealmProgression.ready_count(m)],12,U.GOLD)
-	parent.add_child(U.button("Story journal · %d / 7 chapters" % RealmStory.count(m),app.story_dialog))
-	parent.add_child(U.button("Leave a work order before you go",app.work_orders_dialog))
+	parent.add_child(U.button("Work orders",app.work_orders_dialog))
 
 func station(kind: String):
 	var names = {"journey":"Journey","armory":"Equipment & build","supplies":"Food & materials"}
@@ -58,19 +56,15 @@ func station(kind: String):
 	var entries = []
 	match kind:
 		"journey":
-			v.add_child(U.para("Follow your next goal or choose a farming target.",24,U.TEXT))
-			entries = [["Story journal","Read unlocked chapters and see what opens next.",app.story_dialog],["Progress & farming","What to do next, what to farm and how to use it.",app.progress_dialog],["Guardian trials","Three optional challenges beyond regional tier five.",app.trials_dialog],["Journey guide","Your next objective and the path beyond it.",app.guide_dialog],["World map","Story routes, regional guardians and expedition tiers.",app.world_dialog],["Field journal","Guardian tactics and one-time regional rewards.",app.journal_dialog],["Hunt reports","Victories, supplies spent and rewards from recent orders.",app.hunt_reports_dialog],["Bounty board","Small goals that carry over when you are away.",app.bounties_dialog]]
+			entries = [["Story journal","Read unlocked chapters and see what opens next.",app.story_dialog],["Farm & upgrade","What to do next, what to farm and how to use it.",app.progress_dialog],["Guardian trials","Three optional challenges beyond regional tier five.",app.trials_dialog],["Journey guide","Your next objective and the path beyond it.",app.guide_dialog],["World map","Story routes, regional guardians and expedition tiers.",app.world_dialog],["Field journal","Guardian tactics and one-time regional rewards.",app.journal_dialog],["Hunt reports","Victories, supplies spent and rewards from recent orders.",app.hunt_reports_dialog],["Bounty board","Small goals that carry over when you are away.",app.bounties_dialog]]
 		"armory":
-			v.add_child(U.para("Make every piece of your build count.",24,U.TEXT))
 			entries = [["Equipment bag","Compare and equip the gear you already own.",func():
 				app.dismiss()
 				app.set_page("inventory")],["Ember Workshop","Guaranteed equipment refinement, from Fine to Legendary.",app.workshop_dialog],["Complete loadouts","Save equipment, talents, style, rune and supplies together.",app.loadouts_dialog],["Talents","Choose where to spend earned melee experience.",app.talents_dialog],["Relics","Awaken a collection and choose its active bonus.",app.relics_dialog],["Runeforge","Upgrade and equip a rune for a specific combat effect.",app.runeforge_dialog]]
 		"supplies":
-			v.add_child(U.para("Prepare food and materials for your next task.",24,U.TEXT))
 			entries = [["Work orders","Plan gathering and crafting for your time away.",app.work_orders_dialog],["Food & survival","Choose cooked food and understand automatic healing.",app.experience.survival],["Merchant","Buy tools and vials with gold earned on the road.",app.merchant_dialog],["Refuge contracts","Collect milestone supplies you have earned.",app.contracts_dialog],["Rebuild Cinderwatch","Improve the forge, gates and resting hearth.",app.refuge_dialog]]
 	for entry in entries:
 		var card = U.card(v,12)
-		card.add_child(U.para(entry[1],13))
 		card.add_child(U.button(entry[0]+"  →",entry[2]))
 
 func act():
@@ -102,7 +96,7 @@ func talents():
 	var state = C.state(m)
 	app.dynamic(v,func(): return "%d points available · %d / 10 earned" % [C.points_free(m),C.points_earned(m)],18,U.GOLD)
 	var xp = int(m.s.xp.bladecraft+m.s.xp.might+m.s.xp.warding)
-	v.add_child(U.para("Earn one point per 250 melee XP. Every victory trains your hero. Spend up to 10 points across 15 possible ranks; reset for free outside combat. Your build cannot maximize every path at once.",14))
+	v.add_child(U.para("250 melee XP = 1 point · 10 points maximum",14))
 	if C.points_earned(m)<10:
 		v.add_child(U.progress(xp%250,250,U.GOLD,6))
 		app.dynamic(v,func(): return "%d XP until the next point" % (250-int(m.s.xp.bladecraft+m.s.xp.might+m.s.xp.warding)%250),13,U.GREEN)
@@ -128,7 +122,7 @@ func talents():
 func relics():
 	var v = app.modal("Relics of the valley")
 	if locked(v): return
-	v.add_child(U.para("Every victory guarantees fragments of one relic. Awaken and upgrade each collection up to rank 10. One relic can be equipped; switch freely outside combat.",15))
+	v.add_child(U.para("1 relic equipped · 10 ranks each",15))
 	var state = C.state(m)
 	for id in C.RELICS:
 		var d = C.RELICS[id]

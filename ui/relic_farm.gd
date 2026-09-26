@@ -18,20 +18,18 @@ func open(relic: String):
 	v.add_child(U.para("Rank %d / 10 · %d fragments owned" % [rank,owned],18,U.GOLD))
 	if goal.state=="ready":
 		v.add_child(U.para("You have enough to upgrade.",25,U.TEXT))
-		v.add_child(U.para("The next rank costs %d fragments. You do not need another hunt for this upgrade. Fragments are also used by the regional rune, so choose where to spend them." % RealmChronicle.relic_cost(rank),15))
+		v.add_child(U.para("Cost: %d fragments · shared with rune upgrades." % RealmChronicle.relic_cost(rank),15))
 		if not m.s.fight.is_empty(): v.add_child(U.para("Finish or leave combat before upgrading.",14,U.GOLD))
 		var upgrade = app.modal_action("Upgrade · %d fragments" % RealmChronicle.relic_cost(rank),func():
 			if app.send({"type":"relic_upgrade","id":relic}): open(relic))
 		upgrade.disabled = not m.s.fight.is_empty() or not m.s.tutorial
 	elif goal.state=="maximum":
 		v.add_child(U.para("This relic is at maximum rank.",25,U.TEXT))
-		v.add_child(U.para("Further fragments can be spent on its regional rune while that rune has ranks remaining. Farming does not increase this relic beyond rank 10.",15))
+		v.add_child(U.para("Rank 10 / 10 · Fragments also upgrade runes.",15))
 		v.add_child(U.button("Review rune upgrades",app.runeforge_dialog))
 	else:
 		v.add_child(U.para("%d fragments to the next rank" % int(goal.missing),25,U.TEXT))
-		v.add_child(U.para("Choose a hunt, collect the fragments, then return here to upgrade.",14))
 	v.add_child(U.para("Unlocked hunts",19,U.GOLD))
-	v.add_child(U.para("Safer hunts appear first. Try one fight before starting a longer run.",13))
 	var choices = RealmCombat.farms(m,relic)
 	if choices.is_empty(): v.add_child(U.para("Follow your Journey objectives to unlock enemies that drop these fragments.",15))
 	for choice in choices:
@@ -52,13 +50,12 @@ func open(relic: String):
 		if plan.state=="farm":
 			card.add_child(U.para("%d %s needed in total" % [int(plan.wins),"win" if int(plan.wins)==1 else "wins"],16,U.TEXT))
 			if plan.wins>batch: card.add_child(U.para("Next batch: %d fights. Return for another batch if fragments are still missing." % batch,13))
-		else: card.add_child(U.para("Optional farm · no further hunt is needed for the current relic goal.",13))
+		else: card.add_child(U.para("Optional farm",13))
 		if not estimate.stalled:
 			card.add_child(U.para("This batch: about %s · %d meals\nBase yield if all fights are won: %d fragments" % [preload("res://ui/gameplay.gd").new(app).time_label(float(estimate.seconds)*batch),RealmHuntPlan.meals(m,estimate,batch),batch*int(choice.fragments)],14))
-		else: card.add_child(U.para("Enemy recovery may exceed your damage. Improve your build before committing to this farm.",14,U.RED))
-		if enemy.get("trial",false): card.add_child(U.para("Trial first-clear bonus fragments are not included in this target. Try one fight first if its bonus is still available.",12))
+		else: card.add_child(U.para("Too much enemy healing · Improve damage first.",14,U.RED))
+		if enemy.get("trial",false): card.add_child(U.para("Excludes first-clear bonus fragments.",12))
 		card.add_child(U.button("Prepare %d %s" % [batch,"fight" if batch==1 else "fights"],func(): app.activity_dialog("hunt_"+str(choice.id),batch)))
 		card.add_child(U.button("Try one fight",func(): app.activity_dialog("hunt_"+str(choice.id),1)))
-	v.add_child(U.para("Estimates use your current build and supplies. Food use can change with starting health, misses and critical hits.",12))
 	if goal.state!="ready": app.modal_action("Review relic upgrades",app.relics_dialog)
 	else: v.add_child(U.button("Review all relics",app.relics_dialog))

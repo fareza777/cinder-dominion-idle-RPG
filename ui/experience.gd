@@ -2,7 +2,7 @@ extends RefCounted
 
 const U = preload("res://ui/style.gd")
 const STORE_URL = "" # Set only after a real public listing exists.
-const VERSION = "0.17.0"
+const VERSION = "0.18.0"
 var app
 var front: Control
 var cinematic_page = 0
@@ -152,7 +152,7 @@ func begin_new_game():
 	app.filter = "all"
 	app.search_text = ""
 	app.last_objective = ""
-	intro(false)
+	app.enter_world()
 
 func intro(replay=false):
 	if app.mode=="play": app.persist()
@@ -209,58 +209,41 @@ func finish_intro():
 		app.model.s.wall = app.now_ms()
 		app.enter_world()
 
-func welcome(index=0):
-	var cards = [
-		["Welcome, Emberkeeper","YOUR GOAL","Defeat the Bellkeeper and restore Cinderwatch's beacon. You begin with basic tools, a worn sword and five cooked fish.","Begin by mining 4 copper ore. The Recommended action card on Refuge shows what to do next. Progress & farming explains the full path and where to get materials."],
-		["Start one task at a time.","GATHER → CRAFT → EQUIP → FIGHT","One activity runs at a time. Mining, chopping, fishing and crafting repeat automatically for the count you choose.","Start with a better blade. Gather its materials, forge it, and equip it before heading out. Each road you open brings new enemies, relics, and ways to shape your build."],
-		["Craft, then equip.","BUILD YOUR OWN EQUIPMENT","Crafting consumes the ingredients shown before you start. Finished equipment appears in Bag. Open an item and press Equip item to use it.","Use Plan materials & craft automatically to gather missing ingredients in order. Equip best on Hero or Explore installs your strongest owned gear."],
-		["Prepare before you fight.","FOOD KEEPS YOU ALIVE","Combat is automatic. Your selected cooked food heals you at 50% HP. Open Hero to change food settings. Raw fish and raw meat must be cooked first.","Defeat stops your queue but keeps your gear safe. Outside combat, HP recovers. Queued tasks also progress while away, up to 24 hours."]
-	]
-	var card = cards[index]
-	var v = app.modal("Getting started · %d / 4" % (index+1))
-	v.add_child(U.label(card[1],10,U.GOLD))
-	title(v,card[0],32)
-	v.add_child(U.para(card[2],18,U.TEXT))
-	v.add_child(U.para(card[3],16))
-	v.add_child(U.progress(index+1,4,U.GOLD,5))
-	v.add_child(U.button("Show my first task  →" if index==3 else "Next  →",func():
-		if index<3: welcome(index+1)
-		else:
-			app.model.s.experience.welcome_done = true
-			app.persist()
-			guide(),true))
-	if index>0: v.add_child(U.button("Back",func(): welcome(index-1)))
-	v.add_child(U.button("I know the basics · skip tips",func():
+func welcome(_index=0):
+	var v = app.modal("Your first upgrade")
+	v.add_child(U.icon("copper_sword",88))
+	title(v,"Forge a Copper Sword",30)
+	v.add_child(U.para("4 ore  →  2 ingots  +  1 log  →  sword",16,U.GOLD))
+	v.add_child(U.para("Equip it, then defeat 3 Ash Rats.",16))
+	app.modal_action(app.model.objective().action,func():
 		app.model.s.experience.welcome_done = true
 		app.persist()
-		guide()))
+		act_on_goal())
+	v.add_child(U.button("How to play",handbook))
+	v.add_child(U.button("Explore on my own",func():
+		app.model.s.experience.welcome_done = true
+		app.persist()
+		app.dismiss()))
 
 func guide():
 	var o = app.model.objective()
-	var v = app.modal("Your journey · %d / %d" % [o.index,o.total])
+	var v = app.modal("Objectives")
 	app.dialog.set_meta("journey_guide",true)
-	v.add_child(U.label("NEXT OBJECTIVE",10,U.GOLD))
-	title(v,o.title,30)
-	v.add_child(U.para(o.detail,16,U.TEXT))
-	app.dynamic(v,func(): return "%d / %d complete" % [mini(int(app.model.objective().current),int(o.goal)),int(o.goal)],15,U.GOLD)
-	v.add_child(U.para("WHERE TO GO\n"+o.route,14))
-	if o.activity!="":
-		var a = app.model.data.activities[o.activity]
-		for id in a.inputs:
-			var r = U.row()
-			v.add_child(r)
-			r.add_child(U.para("%s: %d owned / %d per craft" % [app.model.name_of(id),app.model.count(id),int(a.inputs[id])],14))
-			r.add_child(U.button("Find",func(): app.sources_dialog(id)))
+	title(v,o.title,28)
+	app.dynamic(v,func(): return "%d / %d" % [mini(int(app.model.objective().current),int(o.goal)),int(o.goal)],18,U.GOLD)
+	var bar = U.progress(o.current,o.goal,U.GOLD,7)
+	v.add_child(bar)
+	app.dialog_callbacks.append(func():
+		if is_instance_valid(bar): bar.value = mini(int(app.model.objective().current),int(o.goal)))
 	if not app.model.s.queue.is_empty():
-		v.add_child(U.para("A task is already queued. Finish it or use Queue to cancel it before starting this objective.",14,U.GOLD))
-		v.add_child(U.button("View my queue",app.queue_dialog))
-	v.add_child(U.button(o.action,act_on_goal,true))
-	v.add_child(U.button("Progress & farming",app.progress_dialog))
-	v.add_child(U.button("Food & survival guide",survival))
-	v.add_child(U.label("CHAPTER I CHECKLIST",11,U.GOLD))
+		v.add_child(U.button("View active queue",app.queue_dialog))
+	v.add_child(U.label("MILESTONES",11,U.GOLD))
 	for step in RealmJourney.steps(app.model):
 		var done = step.current>=step.goal
 		v.add_child(U.para(("✓  " if done else "○  ")+step.title,14,U.GREEN if done else U.MUTED))
+	v.add_child(U.button("Farm & upgrade",app.progress_dialog))
+	v.add_child(U.button("How to play",handbook))
+	app.modal_action(o.action,act_on_goal)
 
 func act_on_goal():
 	var o = app.model.objective()

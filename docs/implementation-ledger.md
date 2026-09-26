@@ -79,3 +79,7 @@ Solo: clearer offline time/cap reporting, level unlock recap, queue status and d
 ## 0.17 Relic farming clarity
 
 Solo: explicit ready/farming/maximum states, direct upgrade action, truthful full-goal versus 100-fight batch, duration and cumulative food budgets, preserved enemy art/mechanics, current-to-next equipped bonus. Three targeted checks added (73 total), six phone captures and Android debug export. No save migration or economy changes.
+
+## 0.18 Action-first direction correction
+
+User explicitly rejects excessive narrative. Preserve this preference in future iterations: concise labels, quantities, progress and direct actions on routine screens; story and detailed teaching are optional. Reference listing and five official store images reviewed, including actual combat/offline layouts; not installed or played. Replaced four-page onboarding, bypassed mandatory cinematic, condensed objectives/farming/activity UI, removed repeated flavor and chapter notifications, made early hunt targets visible sooner. Ten phone captures with real first-task button smoke, existing 73 checks, Android export. See docs/action-first-0.18.md.

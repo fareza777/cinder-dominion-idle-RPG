@@ -1,16 +1,22 @@
-# Ashen Covenant — Adventure preview 0.17
+# Ashen Covenant — Adventure preview 0.18
 
 Idle RPG dark fantasy untuk Android. Gratis, tanpa iklan. Build ini untuk dimainkan dan dievaluasi, belum versi rilis publik.
 
 ## Mulai bermain
 
-1. Pasang `build/android/ashen-covenant-0.17.apk` di Android 64-bit. APK memakai identitas aplikasi yang sama dengan 0.1–0.16 sehingga bisa dipasang sebagai pembaruan.
-2. Seluruh antarmuka dan narasi game memakai **English**. Splash mengantar ke menu utama. Pilih **New game**, ikuti atau lewati intro, lalu baca empat tahap onboarding. **Continue journey** melanjutkan progres yang sudah ada.
-3. Tekan **Guide →** di bagian atas layar. Panduan menunjukkan tujuan, alasan, lokasi aktivitas dan jumlah yang dibutuhkan. Tekan tindakannya, lalu **Begin · 4 cycles** (jumlahnya mengikuti tujuan) untuk memulai jumlah siklus yang tepat.
+1. Pasang `build/android/ashen-covenant-0.18.apk` di Android 64-bit. APK memakai identitas aplikasi yang sama dengan 0.1–0.17 sehingga bisa dipasang sebagai pembaruan.
+2. Seluruh antarmuka dan narasi game memakai **English**. Splash mengantar ke menu utama. Pilih **New game** untuk langsung masuk dan melihat satu kartu target Copper Sword. Intro opsional tersedia di About. **Continue journey** melanjutkan progres yang sudah ada.
+3. Tekan **Goals** di bagian atas layar. Layar menampilkan target, angka progres, checklist dan tombol tugas. Tekan tindakannya, lalu **Begin · 4 cycles** (jumlahnya mengikuti tujuan) untuk memulai jumlah siklus yang tepat.
 4. Tugas awal: 4 copper ore → 2 copper ingots → 1 ash log → Copper Sword → Equip item → 3 Ash Rats. Panduan lalu mengantar lewat musuh berikutnya hingga Bellkeeper, tanpa melompat langsung ke boss.
 5. Pantau activity bar. **Queue** menampilkan tugas berjalan/menunggu, progres target, dan alasan terhambat. **Sources/Find** membantu mencari bahan yang kurang. Satu aktivitas berjalan pada satu waktu.
 6. Buka **Food & survival guide** untuk belajar memancing, memasak, memilih makanan dan menyiapkan auto-heal. Perlengkapan hasil crafting harus dipasang dari **Bag**.
 7. Progres tersimpan otomatis dan berlanjut maksimal 24 jam saat kembali. Menu **☰** tersedia dari dalam permainan. New Game meminta konfirmasi dan menyimpan cadangan terpisah; **Settings → Restore a previous journey** memulihkannya.
+
+## Baru di 0.18 — Lebih sedikit membaca, lebih cepat bermain
+
+New Game langsung masuk ke satu kartu tujuan dengan bahan Copper Sword dan tombol tugas berikutnya. Intro serta cerita opsional. Goals menjadi checklist dengan progres; Farm & upgrade berisi angka dan tombol, tanpa paragraf panduan panjang.
+
+Skills, Explore, Refuge, dialog aktivitas dan laporan kembali dipadatkan. Explore menyembunyikan battle kosong dan pilihan endgame sebelum terbuka agar target hunt lebih cepat terlihat. Petunjuk lengkap tetap di How to play, biaya dan syarat aktivitas tetap terlihat.
 
 ## Baru di 0.17 — Farming relic dengan target yang jelas
 
