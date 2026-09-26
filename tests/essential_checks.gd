@@ -397,5 +397,26 @@ func _init():
 	var long_relic_goal = RealmRelicGoal.plan(9,0,1)
 	check(long_relic_goal.wins==500 and long_relic_goal.batch==100, "relic farming keeps the full goal separate from the queue batch limit")
 	check(RealmRelicGoal.plan(0,5,1).state=="ready" and RealmRelicGoal.plan(0,5,1).wins==0 and RealmRelicGoal.plan(10,0,1).state=="maximum" and RealmRelicGoal.plan(10,0,1).batch==0, "ready and maximum relics do not invent another upgrade hunt")
+	var mastery_m = RealmModel.new()
+	mastery_m.s.kills.ash_rat = 24
+	var rat_enemy = mastery_m.data.enemies.ash_rat
+	var predicted_mastery = RealmHuntMastery.rewards(mastery_m,rat_enemy,2)
+	var old_gold = mastery_m.s.gold
+	var old_fragments = RealmChronicle.state(mastery_m).fragments.fang
+	mastery_m.command({"type":"queue","id":"hunt_ash_rat","target":2})
+	var mastery_copy = RealmModel.new()
+	mastery_copy.s = store.decode(store.encode(mastery_m.s),mastery_copy.data)
+	mastery_m.advance(60000)
+	for i in range(60): mastery_copy.advance(1000)
+	check(mastery_m.s.kills.ash_rat==26 and mastery_m.s.gold-old_gold==predicted_mastery.gold and RealmChronicle.state(mastery_m).fragments.fang-old_fragments==predicted_mastery.fragments, "mastery reward forecast matches real victories across a rank threshold")
+	check(store.decode(store.encode(mastery_m.s),mastery_m.data)==store.decode(store.encode(mastery_copy.s),mastery_copy.data), "mastery threshold remains deterministic across offline chunks and save reload")
+	var mastery_plain = RealmModel.new()
+	var mastery_other = RealmCombat.player_damage(mastery_plain,mastery_plain.data.enemies.hollow_hound,1)
+	var mastery_rat = RealmCombat.player_damage(mastery_plain,mastery_plain.data.enemies.ash_rat,1)
+	mastery_plain.s.kills.ash_rat = 150
+	check(RealmCombat.player_damage(mastery_plain,mastery_plain.data.enemies.ash_rat,1)>mastery_rat and RealmCombat.player_damage(mastery_plain,mastery_plain.data.enemies.hollow_hound,1)==mastery_other and RealmHuntMastery.rank(mastery_plain,"ash_rat")==4, "mastery bonuses are enemy-specific and existing victories receive their rank")
+	var target_mastery = RealmModel.new()
+	target_mastery.s.kills.ash_rat = 24
+	check(RealmHuntMastery.wins_for_fragments(target_mastery,target_mastery.data.enemies.ash_rat,5)==3 and RealmHuntMastery.rewards(target_mastery,target_mastery.data.enemies.ash_rat,3).fragments==5, "fragment goals use the minimum wins including a newly unlocked mastery bonus")
 	print("ESSENTIAL CHECKS: ","PASS" if failed==0 else "FAIL")
 	quit(1 if failed else 0)

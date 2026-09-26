@@ -109,6 +109,7 @@ func explore(parent: Node):
 	actions.add_child(U.button("Equip best",func():
 		if app.send({"type":"equip_best"}): app.toast("Best owned equipment equipped.")))
 	prep.add_child(U.button("Prepare 10 × "+m.name_of(m.s.settings.food),func(): app.planner_dialog("craft_"+str(m.s.settings.food),10)))
+	parent.add_child(U.button("Hunt mastery",func(): preload("res://ui/hunt_mastery.gd").new(app).open()))
 	if m.s.beacon:
 		var routes = U.row(6)
 		parent.add_child(routes)
@@ -127,7 +128,7 @@ func explore(parent: Node):
 		r.add_child(v)
 		v.add_child(U.para(m.local_name(d),19,U.GOLD if d.boss else U.TEXT))
 		v.add_child(U.label("%d HP  ·  %d ATK  ·  %d DEF" % [int(d.hp),int(d.attack),int(d.armor)],11,U.MUTED))
-		app.dynamic(v,func(): return "%d %s  ·  +%d gold" % [int(m.s.kills.get(id,0)),text("dikalahkan","defeated"),int(d.gold)],11,U.MUTED)
+		app.dynamic(v,func(): return "%d %s  ·  +%d gold" % [int(m.s.kills.get(id,0)),text("dikalahkan","defeated"),RealmHuntMastery.gold(m,d)],11,U.MUTED)
 		var next_region = {"grave_thrall":"Cinder Bandit","cinder_bandit":"Chapel Guard","chapel_guard":"Ember Wraith","ember_wraith":"Bellkeeper"}.get(id,"")
 		if next_region!="":
 			app.dynamic(card,func(): return "%d / 5 victories · unlock %s%s" % [mini(5,int(m.s.kills.get(id,0))),next_region," + Smithing Lv.10" if id=="ember_wraith" else ""],12,U.GOLD)

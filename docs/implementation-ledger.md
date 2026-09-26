@@ -87,3 +87,7 @@ User explicitly rejects excessive narrative. Preserve this preference in future 
 ## 0.19 Forged UI surfaces
 
 Solo: shared nine-patch SVG metal frames, corner ornament, bronze primary actions, recessed inputs, themed dropdowns/popups/switches/sliders/scrollbars, activity bar and navigation. Text-safe insets and short-word wrapping fix. Nine captures including advanced count input and 130% text; real queue-button smoke; existing 73 essential checks. Vector templates explicitly added to export includes. Keep the 0.18 action-first direction; no extra narrative introduced.
+
+## 0.20 Hunt Mastery
+
+Four enemy-specific ranks integrated into battle, offline progression, reward previews and fragment goals. Existing victories count. Four focused checks added (77 total), seven phone captures. Direct Realm Idle PC playtest requested; official installer page reached, awaiting Terms consent.

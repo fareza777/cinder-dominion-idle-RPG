@@ -36,6 +36,9 @@ func open(relic: String):
 		var enemy = m.data.enemies[choice.id]
 		var estimate = choice.forecast
 		var plan = RealmRelicGoal.plan(rank,owned,int(choice.fragments))
+		if plan.state=="farm":
+			plan.wins = RealmHuntMastery.wins_for_fragments(m,enemy,int(plan.missing))
+			plan.batch = mini(100,int(plan.wins))
 		var batch = int(plan.batch) if plan.state=="farm" else 10
 		var card = U.card(v,14)
 		var row = U.row(10)
@@ -52,7 +55,7 @@ func open(relic: String):
 			if plan.wins>batch: card.add_child(U.para("Next batch: %d fights. Return for another batch if fragments are still missing." % batch,13))
 		else: card.add_child(U.para("Optional farm",13))
 		if not estimate.stalled:
-			card.add_child(U.para("This batch: about %s · %d meals\nBase yield if all fights are won: %d fragments" % [preload("res://ui/gameplay.gd").new(app).time_label(float(estimate.seconds)*batch),RealmHuntPlan.meals(m,estimate,batch),batch*int(choice.fragments)],14))
+			card.add_child(U.para("This batch: about %s · %d meals\nYield with mastery, if won: %d fragments" % [preload("res://ui/gameplay.gd").new(app).time_label(float(estimate.seconds)*batch),RealmHuntPlan.meals(m,estimate,batch),RealmHuntMastery.rewards(m,enemy,batch).fragments],14))
 		else: card.add_child(U.para("Too much enemy healing · Improve damage first.",14,U.RED))
 		if enemy.get("trial",false): card.add_child(U.para("Excludes first-clear bonus fragments.",12))
 		card.add_child(U.button("Prepare %d %s" % [batch,"fight" if batch==1 else "fights"],func(): app.activity_dialog("hunt_"+str(choice.id),batch)))

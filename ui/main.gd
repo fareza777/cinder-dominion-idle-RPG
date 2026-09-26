@@ -553,16 +553,17 @@ func activity_dialog(id: String, recommended: int = 0):
 		encounter.add_child(introduction)
 		introduction.add_child(U.para("%d HP · %d ATK · %d DEF" % [int(e.hp),int(e.attack),int(e.armor)],13,U.GOLD))
 		v.add_child(U.para(model.encounter_advice(a.enemy),14,U.GOLD))
+		v.add_child(U.button("Mastery · "+RealmHuntMastery.NAMES[RealmHuntMastery.rank(model,a.enemy)],func(): preload("res://ui/hunt_mastery.gd").new(self).detail(a.enemy)))
 		v.add_child(U.para(RealmCombat.mechanic(e),14,U.TEXT))
 		if e.get("trial",false): v.add_child(U.para("PHASE II · "+RealmTrials.phase_text(e),14,U.RED))
 		var rune = RealmRuneforge.state(model).equipped
 		if rune!="": v.add_child(U.para("EQUIPPED RUNE · "+RealmRuneforge.RUNES[rune].name+"\n"+RealmRuneforge.effect(rune,RealmRuneforge.active_rank(model,rune)),13,U.GREEN))
 		var fragment_id = RealmChronicle.fragments_for(e)
-		v.add_child(U.para("%d × %s fragments / win" % [int(e.get("fragments",1)),RealmChronicle.RELICS[fragment_id].name],14,U.GREEN))
+		v.add_child(U.para("%d × %s fragments / win" % [RealmHuntMastery.fragments(model,e),RealmChronicle.RELICS[fragment_id].name],14,U.GREEN))
 		if e.has("region") and int(model.s.kills.get(e.id,0))==0:
 			if e.get("trial",false): v.add_child(U.para("First clear: Epic %s · 120 bonus fragments · 15 scraps · 20 grilled minnows." % model.name_of(e.trial_reward),13,U.GOLD))
 			else: v.add_child(U.para("First clear: +10 meals and %d scraps.%s" % [5+int(e.tier)," Tier 5 also grants a Rare Iron Sword." if int(e.tier)==5 else ""],13,U.GOLD))
-		v.add_child(U.para("+%d gold · +%d melee XP · %s ×%d / win" % [int(e.gold),int(e.xp),model.name_of(e.drop),int(e.qty)],14,U.GOLD))
+		v.add_child(U.para("+%d gold · +%d melee XP · %s ×%d / win" % [RealmHuntMastery.gold(model,e),int(e.xp),model.name_of(e.drop),int(e.qty)],14,U.GOLD))
 		v.add_child(U.para("Food: %s ×%d · heal at %d%% HP" % [model.name_of(model.s.settings.food),model.count(model.s.settings.food),int(model.s.settings.threshold*100)],14,U.GREEN if model.count(model.s.settings.food)>0 else U.RED))
 	if a.kind!="combat":
 		var cost_tip = "No material cost." if a.inputs.is_empty() else "Cost per cycle shown above."

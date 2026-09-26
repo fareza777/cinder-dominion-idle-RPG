@@ -56,7 +56,7 @@ func station(kind: String):
 	var entries = []
 	match kind:
 		"journey":
-			entries = [["Story journal","Read unlocked chapters and see what opens next.",app.story_dialog],["Farm & upgrade","What to do next, what to farm and how to use it.",app.progress_dialog],["Guardian trials","Three optional challenges beyond regional tier five.",app.trials_dialog],["Journey guide","Your next objective and the path beyond it.",app.guide_dialog],["World map","Story routes, regional guardians and expedition tiers.",app.world_dialog],["Field journal","Guardian tactics and one-time regional rewards.",app.journal_dialog],["Hunt reports","Victories, supplies spent and rewards from recent orders.",app.hunt_reports_dialog],["Bounty board","Small goals that carry over when you are away.",app.bounties_dialog]]
+			entries = [["Hunt mastery","",func(): preload("res://ui/hunt_mastery.gd").new(app).open()],["Story journal","Read unlocked chapters and see what opens next.",app.story_dialog],["Farm & upgrade","What to do next, what to farm and how to use it.",app.progress_dialog],["Guardian trials","Three optional challenges beyond regional tier five.",app.trials_dialog],["Journey guide","Your next objective and the path beyond it.",app.guide_dialog],["World map","Story routes, regional guardians and expedition tiers.",app.world_dialog],["Field journal","Guardian tactics and one-time regional rewards.",app.journal_dialog],["Hunt reports","Victories, supplies spent and rewards from recent orders.",app.hunt_reports_dialog],["Bounty board","Small goals that carry over when you are away.",app.bounties_dialog]]
 		"armory":
 			entries = [["Equipment bag","Compare and equip the gear you already own.",func():
 				app.dismiss()

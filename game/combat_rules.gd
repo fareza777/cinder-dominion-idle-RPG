@@ -35,7 +35,7 @@ static func player_damage(m, enemy: Dictionary, swing: int) -> int:
 	var special = swing%4==0
 	var armor = int(enemy.armor)
 	if special: armor = int(armor*(1.0-.25*RealmRuneforge.active_rank(m,"thorn")))
-	var damage = m.hit_damage(int(m.stats().attack),armor)
+	var damage = m.hit_damage(int(m.stats().attack)+RealmHuntMastery.rank(m,enemy.id),armor)
 	if special:
 		match m.progression().stance:
 			"balanced": damage *= 2
@@ -75,7 +75,7 @@ static func forecast(m, id: String) -> Dictionary:
 	var capacity = float(m.s.hp)+minf(m.count(m.s.settings.food),attacks)*effective_heal
 	var risk = stalled or late_special.damage>=100 or incoming>=capacity*.9 or m.s.hp<=0
 	var rating = "Outmatched" if stalled else ("High risk" if risk else ("Food advised" if meals>0 else "Favorable"))
-	var fragments = int(enemy.get("fragments",1))
+	var fragments = RealmHuntMastery.fragments(m,enemy)
 	return {"incoming":incoming,"effective_heal":effective_heal,"seconds":seconds,"meals":meals,"rating":rating,"risk":risk,"stalled":stalled,"fragments_per_minute":0.0 if stalled else fragments*60.0/seconds,"healing":heal,"burst":int(late_special.damage)}
 
 static func farms(m, relic: String) -> Array:
@@ -84,7 +84,7 @@ static func farms(m, relic: String) -> Array:
 		var enemy = m.data.enemies[id]
 		if RealmChronicle.fragments_for(enemy)!=relic or m.available(id)!="": continue
 		var forecast_data = forecast(m,id)
-		choices.append({"id":id,"forecast":forecast_data,"fragments":int(enemy.get("fragments",1))})
+		choices.append({"id":id,"forecast":forecast_data,"fragments":RealmHuntMastery.fragments(m,enemy)})
 	choices.sort_custom(func(a,b):
 		if a.forecast.risk!=b.forecast.risk: return not a.forecast.risk
 		return a.forecast.fragments_per_minute>b.forecast.fragments_per_minute)

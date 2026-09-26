@@ -40,6 +40,7 @@ func next_step(v):
 	app.modal_action(objective.action,app.experience.act_on_goal)
 
 func farming(v):
+	v.add_child(U.button("Hunt mastery",func(): preload("res://ui/hunt_mastery.gd").new(app).open()))
 	var food = section(v,"Food","%s ×%d" % [m.name_of(m.s.settings.food),m.count(m.s.settings.food)])
 	food.add_child(U.button("Cook 15 meals",func(): app.planner_dialog("craft_"+str(m.s.settings.food),15)))
 	var metal = section(v,"Ingots","Equipment & Workshop")

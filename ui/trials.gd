@@ -48,7 +48,7 @@ func show_trial(selected: String = "trial_wilds"):
 	prize.add_child(U.para("120 bonus fragments · 15 metal scraps\n20 grilled minnows",14))
 	prize.add_child(U.para("Already received. Future victories grant the repeat rewards below." if earned else "Granted automatically on your first victory. Find the equipment in Bag and review your rewards in Hunt reports.",12))
 	var relic = RealmChronicle.RELICS[RealmChronicle.fragments_for(e)].name
-	v.add_child(U.para("EVERY VICTORY\n%d %s fragments · %d gold · %d melee XP\n%s ×%d" % [int(e.fragments),relic,int(e.gold),int(e.xp),m.name_of(e.drop),int(e.qty)],14,U.GREEN))
+	v.add_child(U.para("EVERY VICTORY\n%d %s fragments · %d gold · %d melee XP\n%s ×%d" % [RealmHuntMastery.fragments(m,e),relic,RealmHuntMastery.gold(m,e),int(e.xp),m.name_of(e.drop),int(e.qty)],14,U.GREEN))
 	var estimate = RealmCombat.forecast(m,selected)
 	v.add_child(U.para("YOUR CURRENT BUILD · "+estimate.rating.to_upper(),11,U.GOLD))
 	v.add_child(U.para("Strongest special hit: %d damage before food. %s" % [int(estimate.burst),"The guardian may heal faster than you can hurt it." if estimate.stalled else "Estimated fight: %ds · about %d meals." % [int(estimate.seconds),int(estimate.meals)]],14,U.TEXT))

@@ -494,9 +494,9 @@ func win(enemy: Dictionary):
 	var id = enemy.id
 	var legacy = RealmChronicle.state(self)
 	var fragment_id = RealmChronicle.fragments_for(enemy)
-	var fragments = int(enemy.get("fragments",1))
+	var fragments = RealmHuntMastery.fragments(self,enemy)
 	legacy.fragments[fragment_id] += fragments
-	var reward_gold = int(enemy.gold)+int(legacy.talents.fortune)*2
+	var reward_gold = RealmHuntMastery.gold(self,enemy)
 	last_reward = "VICTORY · +%d gold · +%d XP · %s ×%d · +%d %s fragments" % [reward_gold,int(enemy.xp),name_of(enemy.drop),int(enemy.qty),fragments,RealmChronicle.RELICS[fragment_id].name]
 	if enemy.get("trial",false) and int(s.kills.get(id,0))==0:
 		gain("scrap",15)
@@ -514,7 +514,12 @@ func win(enemy: Dictionary):
 			gain("iron_sword",1,3)
 			RealmHunts.equipment(self,"iron_sword",3)
 			last_reward += " · Rare Iron Sword"
+	var previous_mastery = RealmHuntMastery.rank(self,id)
 	s.kills[id] = int(s.kills.get(id,0))+1
+	if RealmHuntMastery.rank(self,id)>previous_mastery:
+		var mastery_message = "%s · %s" % [local_name(enemy),RealmHuntMastery.NAMES[RealmHuntMastery.rank(self,id)]]
+		last_reward += " · "+mastery_message
+		note(mastery_message)
 	s.gold += reward_gold
 	gain(enemy.drop,int(enemy.qty))
 	var xp = int(enemy.xp)
