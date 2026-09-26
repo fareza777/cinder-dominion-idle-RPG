@@ -1,16 +1,22 @@
-# Ashen Covenant — Adventure preview 0.16
+# Ashen Covenant — Adventure preview 0.17
 
 Idle RPG dark fantasy untuk Android. Gratis, tanpa iklan. Build ini untuk dimainkan dan dievaluasi, belum versi rilis publik.
 
 ## Mulai bermain
 
-1. Pasang `build/android/ashen-covenant-0.16.apk` di Android 64-bit. APK memakai identitas aplikasi yang sama dengan 0.1–0.15 sehingga bisa dipasang sebagai pembaruan.
+1. Pasang `build/android/ashen-covenant-0.17.apk` di Android 64-bit. APK memakai identitas aplikasi yang sama dengan 0.1–0.16 sehingga bisa dipasang sebagai pembaruan.
 2. Seluruh antarmuka dan narasi game memakai **English**. Splash mengantar ke menu utama. Pilih **New game**, ikuti atau lewati intro, lalu baca empat tahap onboarding. **Continue journey** melanjutkan progres yang sudah ada.
 3. Tekan **Guide →** di bagian atas layar. Panduan menunjukkan tujuan, alasan, lokasi aktivitas dan jumlah yang dibutuhkan. Tekan tindakannya, lalu **Begin · 4 cycles** (jumlahnya mengikuti tujuan) untuk memulai jumlah siklus yang tepat.
 4. Tugas awal: 4 copper ore → 2 copper ingots → 1 ash log → Copper Sword → Equip item → 3 Ash Rats. Panduan lalu mengantar lewat musuh berikutnya hingga Bellkeeper, tanpa melompat langsung ke boss.
 5. Pantau activity bar. **Queue** menampilkan tugas berjalan/menunggu, progres target, dan alasan terhambat. **Sources/Find** membantu mencari bahan yang kurang. Satu aktivitas berjalan pada satu waktu.
 6. Buka **Food & survival guide** untuk belajar memancing, memasak, memilih makanan dan menyiapkan auto-heal. Perlengkapan hasil crafting harus dipasang dari **Bag**.
 7. Progres tersimpan otomatis dan berlanjut maksimal 24 jam saat kembali. Menu **☰** tersedia dari dalam permainan. New Game meminta konfirmasi dan menyimpan cadangan terpisah; **Settings → Restore a previous journey** memulihkannya.
+
+## Baru di 0.17 — Farming relic dengan target yang jelas
+
+Relic farming membedakan kebutuhan fragments, siap upgrade, dan rank maksimum. Setiap hunt menunjukkan jumlah kemenangan total, batch maksimum 100, estimasi durasi, kebutuhan makanan dan hasil dasar. Target besar tidak lagi terlihat seolah selesai dalam satu batch.
+
+Jika fragments sudah cukup, tombol utama langsung menawarkan upgrade. Rank maksimum mengarahkan ke rune; farming tambahan diberi label opsional. Halaman Relics juga memperlihatkan bonus saat ini dan bonus rank berikutnya saat dipasang.
 
 ## Baru di 0.16 — Kembali bermain dengan tujuan jelas
 

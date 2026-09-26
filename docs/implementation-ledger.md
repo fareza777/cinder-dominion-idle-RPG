@@ -75,3 +75,7 @@ Solo: item comparison using total build stats, actual tool time preview, same-di
 ## 0.16 Return flow and continued iteration
 
 Solo: clearer offline time/cap reporting, level unlock recap, queue status and direct follow-up action. Three targeted checks added (70 total), five captures and Android debug export. User requested ongoing continuation; hourly heartbeat continue-ashen-covenant-development is active for this thread.
+
+## 0.17 Relic farming clarity
+
+Solo: explicit ready/farming/maximum states, direct upgrade action, truthful full-goal versus 100-fight batch, duration and cumulative food budgets, preserved enemy art/mechanics, current-to-next equipped bonus. Three targeted checks added (73 total), six phone captures and Android debug export. No save migration or economy changes.

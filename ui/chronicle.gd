@@ -143,6 +143,9 @@ func relics():
 		details.add_child(U.para(d.name,25,Color(d.color)))
 		details.add_child(U.para("RANK %d / 10%s" % [rank," · EQUIPPED" if state.relic==id else ""],11,U.GOLD))
 		card.add_child(U.para(d.detail,14,U.TEXT))
+		var unit = 3 if id=="heart" else 2
+		var benefit = "food healing" if id=="heart" else ("attack" if id=="fang" else "armor")
+		card.add_child(U.para("While equipped: +%d %s%s" % [rank*unit,benefit," → +%d at the next rank" % ((rank+1)*unit) if rank<10 else " · maximum rank"],14,U.GOLD))
 		card.add_child(U.para("TARGET FARM\n"+d.source,13))
 		app.dynamic(card,func(): return "%d fragments owned" % int(state.fragments[id]),14,Color(d.color))
 		if rank<10:
@@ -161,34 +164,7 @@ func relics():
 		card.add_child(U.button("Find a hunting ground",func(): farms(id)))
 
 func farms(relic: String):
-	var d = C.RELICS[relic]
-	var v = app.modal(d.name+" · hunting grounds")
-	var state = C.state(m)
-	var rank = int(state.relics[relic])
-	var missing = maxi(0,C.relic_cost(rank)-int(state.fragments[relic])) if rank<10 else 0
-	v.add_child(U.para("%d fragments to the next rank" % missing if rank<10 else "This relic is fully awakened.",22,U.TEXT))
-	v.add_child(U.para("Choose a route for your current build. Safer hunts appear first, then the estimated fragment yield. Estimates vary with misses, healing and your remaining supplies.",14))
-	var choices = RealmCombat.farms(m,relic)
-	if choices.is_empty(): v.add_child(U.para("No hunting grounds are open yet. Follow the main journey to reach "+d.source+".",15,U.GOLD))
-	for i in range(choices.size()):
-		var choice = choices[i]
-		var enemy = m.data.enemies[choice.id]
-		var forecast = choice.forecast
-		var card = U.card(v,14,U.GOLD.darkened(.4) if i==0 else U.LINE)
-		var row = U.row(10)
-		card.add_child(row)
-		row.add_child(U.enemy_portrait(enemy,Vector2(64,82)))
-		var description = U.column(4)
-		description.size_flags_horizontal = Control.SIZE_EXPAND_FILL
-		row.add_child(description)
-		description.add_child(U.para(m.local_name(enemy),19,U.TEXT))
-		description.add_child(U.para("%d fragments per victory" % int(choice.fragments),12,U.GOLD))
-		card.add_child(U.para(m.encounter_advice(choice.id),13,U.RED if forecast.risk else U.GREEN))
-		card.add_child(U.para("Estimated %.1f fragments / minute" % float(forecast.fragments_per_minute),13,U.GOLD))
-		if enemy.has("region"): card.add_child(U.para(RealmCombat.mechanic(enemy),12))
-		var wins = clampi(ceili(float(missing)/int(choice.fragments)),1,100) if missing>0 else 10
-		card.add_child(U.button("Plan %d %s" % [wins,"victory" if wins==1 else "victories"],func(): app.activity_dialog("hunt_"+choice.id,wins),i==0 and not forecast.risk))
-	app.modal_action("Return to relics",relics)
+	preload("res://ui/relic_farm.gd").new(app).open(relic)
 
 func bounties():
 	C.sync_day(m,app.now_ms())

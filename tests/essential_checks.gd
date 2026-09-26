@@ -392,5 +392,10 @@ func _init():
 	capped_m.s.wall = 1000
 	var capped_report = store.resume(capped_m,1000+RealmModel.MAX_OFFLINE*2)
 	check(capped_report.capped and capped_report.elapsed==RealmModel.MAX_OFFLINE and capped_report.away==RealmModel.MAX_OFFLINE*2 and capped_report.xp==0 and capped_report.gains.is_empty(), "return report distinguishes capped elapsed time from idle reward generation")
+	var relic_goal = RealmRelicGoal.plan(2,6,8)
+	check(relic_goal.missing==39 and relic_goal.wins==5 and relic_goal.batch==5, "relic targets round up partial fragment wins")
+	var long_relic_goal = RealmRelicGoal.plan(9,0,1)
+	check(long_relic_goal.wins==500 and long_relic_goal.batch==100, "relic farming keeps the full goal separate from the queue batch limit")
+	check(RealmRelicGoal.plan(0,5,1).state=="ready" and RealmRelicGoal.plan(0,5,1).wins==0 and RealmRelicGoal.plan(10,0,1).state=="maximum" and RealmRelicGoal.plan(10,0,1).batch==0, "ready and maximum relics do not invent another upgrade hunt")
 	print("ESSENTIAL CHECKS: ","PASS" if failed==0 else "FAIL")
 	quit(1 if failed else 0)
