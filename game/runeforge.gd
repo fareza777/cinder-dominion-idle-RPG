@@ -15,7 +15,7 @@ static func state(m) -> Dictionary:
 static func victories(m, region: String) -> int:
 	var total = 0
 	for tier in range(1,6): total += int(m.s.kills.get(region+"_"+str(tier),0))
-	return total
+	return total+int(m.s.kills.get("trial_"+region,0))
 
 static func active_rank(m, id: String) -> int:
 	var s = state(m)

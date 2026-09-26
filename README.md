@@ -1,16 +1,24 @@
-# Ashen Covenant — Adventure preview 0.7
+# Ashen Covenant — Adventure preview 0.8
 
 Idle RPG dark fantasy untuk Android. Gratis, tanpa iklan. Build ini untuk dimainkan dan dievaluasi, belum versi rilis publik.
 
 ## Mulai bermain
 
-1. Pasang `build/android/ashen-covenant-0.7.apk` di Android 64-bit. APK memakai identitas aplikasi yang sama dengan 0.1–0.6 sehingga bisa dipasang sebagai pembaruan.
+1. Pasang `build/android/ashen-covenant-0.8.apk` di Android 64-bit. APK memakai identitas aplikasi yang sama dengan 0.1–0.7 sehingga bisa dipasang sebagai pembaruan.
 2. Seluruh antarmuka dan narasi game memakai **English**. Splash mengantar ke menu utama. Pilih **New game**, ikuti atau lewati intro, lalu baca empat tahap onboarding. **Continue journey** melanjutkan progres yang sudah ada.
 3. Tekan **Guide →** di bagian atas layar. Panduan menunjukkan tujuan, alasan, lokasi aktivitas dan jumlah yang dibutuhkan. Tekan tindakannya, lalu **Begin · 4 cycles** (jumlahnya mengikuti tujuan) untuk memulai jumlah siklus yang tepat.
 4. Tugas awal: 4 copper ore → 2 copper ingots → 1 ash log → Copper Sword → Equip item → 3 Ash Rats. Panduan lalu mengantar lewat musuh berikutnya hingga Bellkeeper, tanpa melompat langsung ke boss.
 5. Pantau activity bar. **Queue** menampilkan tugas berjalan/menunggu, progres target, dan alasan terhambat. **Sources/Find** membantu mencari bahan yang kurang. Satu aktivitas berjalan pada satu waktu.
 6. Buka **Food & survival guide** untuk belajar memancing, memasak, memilih makanan dan menyiapkan auto-heal. Perlengkapan hasil crafting harus dipasang dari **Bag**.
 7. Progres tersimpan otomatis dan berlanjut maksimal 24 jam saat kembali. Menu **☰** tersedia dari dalam permainan. New Game meminta konfirmasi dan menyimpan cadangan terpisah; **Settings → Restore a previous journey** memulihkannya.
+
+## Baru di 0.8 — Guardian Trials
+
+Tiga tantangan opsional setelah tier kelima setiap wilayah: **The Thornbound Vigil**, **The Unbroken Hymn**, dan **Crown at Sundown**. Guardian memasuki fase kedua saat HP mencapai setengah; serangan khususnya menguat dan fase tetap aktif walau guardian menyembuhkan diri.
+
+Buka **Explore → Guardian trials** atau **Refuge → Journey → Guardian trials**. Pelajari dua fase, periksa perkiraan risiko build, lalu **Prepare one trial → Begin · 1 fight**. Kemenangan pertama memberi equipment Epic yang pasti, 120 bonus fragments, 15 scraps dan 20 grilled minnows. Kemenangan selanjutnya tetap menghasilkan fragments, gold, XP dan material. Hunt reports membedakan hasil aktual, dan kemenangan trial ikut menghitung field records.
+
+Catatan implementasi dan batas produksi: `docs/guardian-trials-0.8.md`. Pemeriksaan terbatas: `docs/qa/guardian-trials-0.8-report.md`.
 
 ## Baru di 0.7 — iterasi menyeluruh
 

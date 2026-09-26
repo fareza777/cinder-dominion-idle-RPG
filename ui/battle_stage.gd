@@ -136,7 +136,7 @@ func _draw():
 			bar(Rect2(r.position.x,241,w,3),1.0-float(remaining)/interval,U.GOLD)
 	caption(Vector2(16,29),"EMBERKEEPER",U.GOLD,11,w)
 	caption(Vector2(right.position.x,29),model.local_name(enemy).split(" · ")[0].to_upper() if fighting else "THE OUTSKIRTS",U.GOLD,10,w)
-	caption(Vector2(size.x/2-20,127),"VS",U.GOLD,22,40)
+	caption(Vector2(size.x/2-20,127),"II" if fighting and RealmTrials.active_phase(model,enemy) else "VS",U.RED if fighting and RealmTrials.active_phase(model,enemy) else U.GOLD,22,40)
 	if model.s.settings.motion:
 		for i in range(8 if model.s.settings.battery else 14):
 			var x = fmod(i*47.3+sin(elapsed*.4+i)*9,size.x)

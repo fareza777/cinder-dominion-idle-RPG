@@ -30,7 +30,7 @@ english_lore=['Wild scavengers feed on what remains of Cinderwatch.','Its teeth 
 for i,(key,n,en,hp,atk,armor,interval,gold,xp,drop,qty,unlock,lore) in enumerate(rows):
     enemies[key]=dict(id=key,name=n,en=en,hp=hp,attack=atk,armor=armor,interval=interval,gold=gold,xp=xp,drop=drop,qty=qty,unlock=unlock,portrait=i+1,lore=lore,lore_en=english_lore[i],boss=i==6)
     activities['hunt_'+key]=dict(id='hunt_'+key,kind='combat',enemy=key,skill='bladecraft',level=1,output=drop,inputs={},duration=2,xp=xp)
-# Repeatable post-story encounters. Portraits deliberately reuse the original cast.
+# Repeatable post-story encounters; presentation supplies regional guardian art.
 expeditions=[('wilds','Ashen Wilds','Thornbound Sentinel',3,100,9,3,'grave_moss','fang'),('marsh','Drowned Sanctum','Drowned Oracle',6,170,13,5,'emberleaf','heart'),('crown','Obsidian Crown','Crowned Bellkeeper',7,280,17,7,'iron_ingot','ward')]
 for region_index,(region,region_name,title,portrait,hp,attack,armor,drop,relic) in enumerate(expeditions):
     for tier in range(1,6):
@@ -40,6 +40,17 @@ for region_index,(region,region_name,title,portrait,hp,attack,armor,drop,relic) 
         enemy=dict(id=key,name=name,en=name,hp=int(hp*(1+.4*(tier-1))),attack=int(attack*(1+.22*(tier-1))),armor=armor+tier-1,interval=2800,gold=25+region_index*20+tier*8,xp=40+region_index*25+tier*15,drop=drop,qty=2+tier,unlock=gate,portrait=portrait,lore=f'{region_name}: a stronger echo of the fallen.',lore_en=f'{region_name}: a stronger echo of the fallen. Every third strike is empowered. First victory opens the next tier.',boss=True,region=region,tier=tier,relic=relic,fragments=(8+region_index*4)*tier)
         enemies[key]=enemy
         activities['hunt_'+key]=dict(id='hunt_'+key,kind='combat',enemy=key,skill='bladecraft',level=1,output=drop,inputs={},duration=2,xp=enemy['xp'])
+
+for region, title, hp, attack, armor, gold, xp, relic, drop, reward in [
+    ('wilds','The Thornbound Vigil',480,20,10,100,150,'fang','grave_moss','iron_gloves'),
+    ('marsh','The Unbroken Hymn',650,24,12,150,200,'heart','emberleaf','iron_chest'),
+    ('crown','Crown at Sundown',950,32,16,220,250,'ward','iron_ingot','iron_shield')]:
+    key='trial_'+region
+    base=enemies[region+'_5']
+    enemies[key]=dict(base, id=key, name=title, en=title, hp=hp, attack=attack, armor=armor,
+        interval=3000, gold=gold, xp=xp, qty=8, unlock=region+'_5', tier=6, trial=True,
+        trial_reward=reward, fragments={'wilds':48,'marsh':64,'crown':96}[region])
+    activities['hunt_'+key]=dict(id='hunt_'+key,kind='combat',enemy=key,skill='bladecraft',level=1,output=drop,inputs={},duration=2,xp=xp)
 
 region_lore={
     'wilds':'Roots have taken hold inside the armor of a forgotten watchman. Beneath the dead canopy, he still guards a road that leads nowhere.',
@@ -53,6 +64,6 @@ for enemy in enemies.values():
 for entry in list(items.values())+list(skills.values()): entry['name']=entry['en']
 
 doc=dict(items=items,skills=skills,activities=activities,enemies=enemies,merchant={'empty_vial':2,'ash_axe':30,'copper_pick':40,'iron_rod':60},rarities=['Worn','Common','Fine','Rare','Epic','Legendary','Mythic','Relic'])
-assert len(items)==40 and len(recipes)==20 and len(enemies)==22
+assert len(items)==40 and len(recipes)==20 and len(enemies)==25
 (data/'catalog.json').write_text(json.dumps(doc,ensure_ascii=False,indent=2),encoding='utf-8')
-print('Content: 40 items, 20 recipes, 9 trained skills, 7 story enemies + 15 expedition tiers.')
+print('Content: 40 items, 20 recipes, 9 trained skills, 7 story enemies + 15 expedition tiers + 3 guardian trials.')

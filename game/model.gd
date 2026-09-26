@@ -446,10 +446,13 @@ func resolve_combat():
 	if f.hp<=0:
 		win(d)
 		return
+	if RealmTrials.second_phase(d,int(f.hp)) and int(f.get("phase",1))<2:
+		f.phase = 2
+		combat_event("PHASE II","enemy")
 	if f.enemy_at<=s.time:
 		f.enemy_at = int(s.time)+int(d.interval)
 		f.hits += 1
-		var move = RealmCombat.move(self,d,int(f.hits),int(st.armor))
+		var move = RealmCombat.move(self,d,int(f.hits),int(st.armor),int(f.get("phase",1))==2)
 		if move.heal>0:
 			var restored = mini(int(move.heal),int(d.hp)-int(f.hp))
 			f.hp = mini(int(d.hp),int(f.hp)+int(move.heal))
@@ -482,7 +485,15 @@ func win(enemy: Dictionary):
 	legacy.fragments[fragment_id] += fragments
 	var reward_gold = int(enemy.gold)+int(legacy.talents.fortune)*2
 	last_reward = "VICTORY · +%d gold · +%d XP · %s ×%d · +%d %s fragments" % [reward_gold,int(enemy.xp),name_of(enemy.drop),int(enemy.qty),fragments,RealmChronicle.RELICS[fragment_id].name]
-	if enemy.has("region") and int(s.kills.get(id,0))==0:
+	if enemy.get("trial",false) and int(s.kills.get(id,0))==0:
+		gain("scrap",15)
+		gain("cooked_minnow",20)
+		gain(enemy.trial_reward,1,4)
+		RealmHunts.equipment(self,enemy.trial_reward,4)
+		legacy.fragments[fragment_id] += 120
+		fragments += 120
+		last_reward += " · TRIAL CONQUERED: Epic %s, 120 bonus fragments, 15 scraps & 20 meals" % name_of(enemy.trial_reward)
+	elif enemy.has("region") and int(s.kills.get(id,0))==0:
 		gain("scrap",5+int(enemy.tier))
 		gain("cooked_minnow",10)
 		last_reward += " · FIRST CLEAR: +10 meals & scraps"
@@ -514,7 +525,7 @@ func win(enemy: Dictionary):
 	s.fight = {}
 	s.regen_at = int(s.time)+1000
 	check_quest()
-	RealmHunts.victory(self,enemy,before_gains,before_gold)
+	RealmHunts.victory(self,enemy,before_gains,before_gold,fragments)
 	if step_complete(s.queue[0]): RealmHunts.finish(self,"Completed")
 
 func objective() -> Dictionary:

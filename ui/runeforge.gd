@@ -123,7 +123,7 @@ func journal(region: String = "wilds"):
 	detail.size_flags_horizontal = Control.SIZE_EXPAND_FILL
 	row.add_child(detail)
 	detail.add_child(U.para(m.local_name(enemy).split(" · ")[0],23,Color(d.color)))
-	app.dynamic(detail,func(): return "%d victories across all five tiers" % R.victories(m,region),13)
+	app.dynamic(detail,func(): return "%d victories across tiers and trials" % R.victories(m,region),13)
 	var tactics = U.column(10)
 	tactics.add_child(U.para(RealmCombat.mechanic(enemy),14,U.TEXT))
 	var tips = {"wilds":"Thornscript helps your fourth strike find a gap in armored enemies. Against the Sentinel, shorter battles also mean fewer armor-piercing attacks.","marsh":"Stillwater weakens the Oracle's recovery. It can turn a stalled hunt into a winnable one; your weapon still needs to finish the fight.","crown":"Dirge makes your fourth strike more dangerous, but every enemy hit also hurts more. Compare your food needs before committing to a long hunt."}
@@ -132,7 +132,7 @@ func journal(region: String = "wilds"):
 	card.add_child(tactics)
 	tactics.hide()
 	v.add_child(U.para("Your field records",24,U.TEXT))
-	v.add_child(U.para("All tiers count, including past hunts and offline victories. Each record pays once. Progress never expires.",13))
+	v.add_child(U.para("All tiers and trials count, including past hunts and offline victories. Each record pays once. Progress never expires.",13))
 	var ready_target = 0
 	for i in range(R.MILESTONES.size()):
 		var target = R.MILESTONES[i]

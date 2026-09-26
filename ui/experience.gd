@@ -2,7 +2,7 @@ extends RefCounted
 
 const U = preload("res://ui/style.gd")
 const STORE_URL = "" # Set only after a real public listing exists.
-const VERSION = "0.7.0"
+const VERSION = "0.8.0"
 var app
 var front: Control
 var cinematic_page = 0
@@ -338,7 +338,7 @@ func archives():
 func about():
 	var v = app.modal("About Ashen Covenant")
 	title(v,"Keep the last fire burning.",30)
-	v.add_child(U.para("Ashen Covenant is an independent dark fantasy idle RPG about gathering, crafting and preparing for the battles ahead.\n\nVersion "+VERSION+" · Adventure preview\nChapter I + 3 expedition regions · 15 expedition tiers\n3 relic collections · 3 talent paths · 40 items · 20 recipes\n\nFree to play. No ads. No purchases are active in this preview. Cosmetics, content expansions and optional rewarded ads are planned for future releases.",16,U.TEXT))
+	v.add_child(U.para("Ashen Covenant is an independent dark fantasy idle RPG about gathering, crafting and preparing for the battles ahead.\n\nVersion "+VERSION+" · Adventure preview\nChapter I + 3 expedition regions · 15 expedition tiers + 3 guardian trials\n3 relic collections · 3 talent paths · 40 items · 20 recipes\n\nFree to play. No ads. No purchases are active in this preview. Cosmetics, content expansions and optional rewarded ads are planned for future releases.",16,U.TEXT))
 	v.add_child(U.para("Art generated for this project with OpenAI image generation. Original synthesized audio. Fonts: Manrope and Cormorant Garamond. Built with Godot.",14))
 	v.add_child(U.button("Credits & open-source licenses",licenses))
 	v.add_child(U.button("Replay cinematic intro",func(): intro(true)))

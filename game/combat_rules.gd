@@ -5,7 +5,7 @@ static func food_heal(m, id: String) -> int:
 	var legacy = RealmChronicle.state(m)
 	return int(m.data.items[id].get("heal",0))+(int(legacy.relics.heart)*3 if legacy.relic=="heart" else 0)
 
-static func move(m, enemy: Dictionary, strike: int, armor: int) -> Dictionary:
+static func move(m, enemy: Dictionary, strike: int, armor: int, second_phase: bool = false) -> Dictionary:
 	var third = strike%3==0
 	var attack = int(enemy.attack)
 	var defense = armor
@@ -14,13 +14,13 @@ static func move(m, enemy: Dictionary, strike: int, armor: int) -> Dictionary:
 	if third:
 		match enemy.get("region",""):
 			"wilds":
-				defense = int(armor/2)
+				defense = int(armor*(.25 if second_phase else .5))
 				label = "Bramble crush"
 			"marsh":
-				heal = maxi(1,int(enemy.hp*.05))
+				heal = maxi(1,int(enemy.hp*(.08 if second_phase else .05)))
 				label = "Drowned hymn"
 			"crown":
-				attack = int(attack*2.2)
+				attack = int(attack*(2.8 if second_phase else 2.2))
 				label = "Final toll"
 			_:
 				if enemy.boss:
@@ -59,23 +59,24 @@ static func forecast(m, id: String) -> Dictionary:
 	var cycle_damage = player_damage(m,enemy,1)*3+player_damage(m,enemy,4)
 	var damage_per_second = cycle_damage*float(stats.accuracy)*1.025/8.0
 	var ordinary = move(m,enemy,1,int(stats.armor))
-	var special = move(m,enemy,3,int(stats.armor))
+	var late_special = move(m,enemy,3,int(stats.armor),bool(enemy.get("trial",false)))
 	var interval = float(enemy.interval)/1000.0
-	var net_damage = damage_per_second-float(special.heal)/(interval*3.0)
+	# Trials use the stronger phase for a conservative recovery/risk estimate.
+	var net_damage = damage_per_second-float(late_special.heal)/(interval*3.0)
 	var stalled = net_damage<=0
 	var seconds = 3600.0 if stalled else clampf(ceil(float(enemy.hp)/maxf(.01,net_damage)/2.0)*2.0,2,3600)
 	var attacks = floor(seconds/interval)
-	var average_hit = (ordinary.damage*2.0+special.damage)/3.0
+	var average_hit = (ordinary.damage*2.0+late_special.damage)/3.0
 	var incoming = attacks*average_hit*.95
 	if stance=="guard": incoming = maxf(0,incoming-seconds*float(stats.accuracy))
 	var heal = food_heal(m,m.s.settings.food)
 	var effective_heal = minf(heal,100-float(m.s.settings.threshold)*100+average_hit)
 	var meals = ceili(maxf(0,incoming-maxf(0,float(m.s.hp)-float(m.s.settings.threshold)*100))/maxf(1,effective_heal))
 	var capacity = float(m.s.hp)+minf(m.count(m.s.settings.food),attacks)*effective_heal
-	var risk = stalled or special.damage>=100 or incoming>=capacity*.9 or m.s.hp<=0
+	var risk = stalled or late_special.damage>=100 or incoming>=capacity*.9 or m.s.hp<=0
 	var rating = "Outmatched" if stalled else ("High risk" if risk else ("Food advised" if meals>0 else "Favorable"))
 	var fragments = int(enemy.get("fragments",1))
-	return {"seconds":seconds,"meals":meals,"rating":rating,"risk":risk,"stalled":stalled,"fragments_per_minute":0.0 if stalled else fragments*60.0/seconds,"healing":heal,"burst":int(special.damage)}
+	return {"seconds":seconds,"meals":meals,"rating":rating,"risk":risk,"stalled":stalled,"fragments_per_minute":0.0 if stalled else fragments*60.0/seconds,"healing":heal,"burst":int(late_special.damage)}
 
 static func farms(m, relic: String) -> Array:
 	var choices = []

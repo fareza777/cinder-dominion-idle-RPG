@@ -47,7 +47,7 @@ func station(kind: String):
 	match kind:
 		"journey":
 			v.add_child(U.para("Choose your next destination. Bring its story home.",24,U.TEXT))
-			entries = [["Journey guide","Your next objective and the path beyond it.",app.guide_dialog],["World map","Story routes, regional guardians and expedition tiers.",app.world_dialog],["Field journal","Guardian tactics and one-time regional rewards.",app.journal_dialog],["Hunt reports","Victories, supplies spent and rewards from recent orders.",app.hunt_reports_dialog],["Bounty board","Small goals that carry over when you are away.",app.bounties_dialog]]
+			entries = [["Guardian trials","Three optional challenges beyond regional tier five.",app.trials_dialog],["Journey guide","Your next objective and the path beyond it.",app.guide_dialog],["World map","Story routes, regional guardians and expedition tiers.",app.world_dialog],["Field journal","Guardian tactics and one-time regional rewards.",app.journal_dialog],["Hunt reports","Victories, supplies spent and rewards from recent orders.",app.hunt_reports_dialog],["Bounty board","Small goals that carry over when you are away.",app.bounties_dialog]]
 		"armory":
 			v.add_child(U.para("Make every piece of your build count.",24,U.TEXT))
 			entries = [["Equipment bag","Compare and equip the gear you already own.",func():
@@ -257,6 +257,7 @@ func world(selected: String = "wilds"):
 		v.add_child(U.para("Restore Cinderwatch's beacon by defeating the Bellkeeper to begin expeditions. Your next story objective is: "+m.objective().title,15,U.GOLD))
 		v.add_child(U.button("Continue Chapter I",app.guide_dialog,true))
 	v.add_child(U.para("Clear a tier once to open the next. Repeat cleared tiers for guaranteed fragments and a 5% chance of iron equipment. Each guardian has a different third-strike ability.",14))
+	v.add_child(U.button("Guardian trials · beyond tier five",app.trials_dialog))
 	v.add_child(U.button("Field journal · learn this guardian",func(): preload("res://ui/runeforge.gd").new(app).journal(selected)))
 	for region in C.REGIONS:
 		if region!=selected: continue

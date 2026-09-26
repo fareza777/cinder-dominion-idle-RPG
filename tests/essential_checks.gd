@@ -261,5 +261,35 @@ func _init():
 	var invalid_report = smith.s.duplicate(true)
 	invalid_report.hunts.history[0].wins = -1
 	check(store.decode(store.encode(invalid_build),smith.data).is_empty() and store.decode(store.encode(invalid_report),smith.data).is_empty(),"save validation rejects broken loadout references and negative hunt accounting")
+	var trial_m = RealmModel.new()
+	trial_m.s.beacon = true
+	trial_m.s.tutorial = true
+	check(trial_m.available("trial_wilds")!="", "trials require the regional fifth tier")
+	trial_m.s.kills.wilds_5 = 1
+	trial_m.s.bag.cooked_minnow = 1000
+	trial_m.s.settings.threshold = .8
+	for part in ["sword","shield","helm","chest","gloves","boots"]: trial_m.gain("iron_"+part,1,5)
+	trial_m.command({"type":"equip_best"})
+	trial_m.command({"type":"queue","id":"hunt_trial_wilds","target":2})
+	var trial_copy = RealmModel.new()
+	trial_copy.s = trial_m.s.duplicate(true)
+	trial_m.advance(600000)
+	for i in range(600): trial_copy.advance(1000)
+	var trial_report = trial_m.s.hunts.history[0]
+	check(trial_m.s==trial_copy.s and trial_report.wins==2 and trial_report.fragments==216 and trial_report.loot.scrap==15 and trial_report.equipment.get("iron_gloves|4",0)==1, "two trial victories pay one Epic bonus, exact fragments and identical offline rewards")
+	check(RealmRuneforge.victories(trial_m,"wilds")==3 and not store.decode(store.encode(trial_m.s),trial_m.data).is_empty(), "trial victories count toward field records and persist")
+	var phase_m = RealmModel.new()
+	phase_m.s.beacon = true
+	phase_m.s.kills.marsh_5 = 1
+	phase_m.command({"type":"queue","id":"hunt_trial_marsh","target":1})
+	phase_m.s.fight.hp = 325
+	phase_m.s.fight.hits = 2
+	phase_m.s.fight.player_at = 4000
+	phase_m.advance(3000)
+	check(phase_m.s.fight.phase==2 and phase_m.s.fight.hp==377 and RealmTrials.active_phase(phase_m,phase_m.data.enemies.trial_marsh), "phase II stays active when the Oracle heals above half health")
+	var phase_save = phase_m.s.duplicate(true)
+	check(not store.decode(store.encode(phase_save),phase_m.data).is_empty(), "an awakened trial resumes safely from save")
+	phase_save.fight.phase = 3
+	check(store.decode(store.encode(phase_save),phase_m.data).is_empty(), "unknown combat phases are rejected")
 	print("ESSENTIAL CHECKS: ","PASS" if failed==0 else "FAIL")
 	quit(1 if failed else 0)

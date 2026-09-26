@@ -64,7 +64,9 @@ func village(parent: Node):
 
 func explore(parent: Node):
 	var region = m.data.enemies.get(m.s.fight.get("enemy",""),{}).get("region","")
-	if region!="": heading(parent,"EXPEDITION IN PROGRESS",RealmChronicle.REGIONS[region].name,"Repeat cleared tiers for relic fragments and iron loot. Clear the next tier to push deeper into the realm.")
+	var current_enemy = m.data.enemies.get(m.s.fight.get("enemy",""),{})
+	if current_enemy.get("trial",false): heading(parent,"GUARDIAN TRIAL",m.local_name(current_enemy),"Watch for the awakening at half health. Win once for Epic equipment; return for fragments and regional field records.")
+	elif region!="": heading(parent,"EXPEDITION IN PROGRESS",RealmChronicle.REGIONS[region].name,"Repeat cleared tiers for relic fragments and iron loot. Clear the next tier to push deeper into the realm.")
 	else: heading(parent,"CHAPTER I · THE OUTSKIRTS","Cinderwatch Outskirts","Choose an enemy and a number of fights. Combat runs automatically. Stock cooked food and equip upgrades first.")
 	var battle = U.card(parent,12,U.GOLD.darkened(.55))
 	var stage = Control.new()
@@ -81,9 +83,14 @@ func explore(parent: Node):
 		if m.s.fight.is_empty(): return "Ready when you are. Choose a target below."
 		var f = m.s.fight
 		if m.data.enemies[f.enemy].boss:
-			var special = RealmCombat.move(m,m.data.enemies[f.enemy],3,int(m.stats().armor))
+			var special = RealmCombat.move(m,m.data.enemies[f.enemy],3,int(m.stats().armor),RealmTrials.active_phase(m,m.data.enemies[f.enemy]))
 			return "%s in %.1fs" % [special.label,maxf(0,(int(f.enemy_at)-int(m.s.time))/1000.0)] if int(f.hits)%3==2 else "%s · in %d enemy attacks" % [special.label,3-int(f.hits)%3]
 		return "Automatic combat · skills trigger every fourth attack.",13,U.GOLD)
+	app.dynamic(battle,func():
+		if m.s.fight.is_empty(): return ""
+		var enemy = m.data.enemies[m.s.fight.enemy]
+		if not enemy.get("trial",false): return ""
+		return "PHASE II · "+RealmTrials.phase_text(enemy) if RealmTrials.active_phase(m,enemy) else "PHASE I · The guardian awakens at half health.",13,U.RED)
 	var retreat = U.button("Retreat & stop queue",func(): app.send({"type":"clear"}))
 	battle.add_child(retreat)
 	app.update_callbacks.append(func():
@@ -100,6 +107,7 @@ func explore(parent: Node):
 	prep.add_child(U.button("Prepare 10 × "+m.name_of(m.s.settings.food),func(): app.planner_dialog("craft_"+str(m.s.settings.food),10)))
 	prep.add_child(U.button("Switch a complete loadout",app.loadouts_dialog))
 	parent.add_child(U.button("World map · expedition tiers",app.world_dialog,true))
+	parent.add_child(U.button("Guardian trials · the final stand",app.trials_dialog))
 	for id in m.data.enemies:
 		var d = m.data.enemies[id]
 		if d.has("region"): continue

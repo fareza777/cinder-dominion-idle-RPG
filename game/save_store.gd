@@ -85,6 +85,7 @@ func valid(s, data: Dictionary) -> bool:
 			seen.append(id)
 		for id in RealmProgression.UPGRADES:
 			if not counter(p.upgrades.get(id,-1)) or p.upgrades[id]>3: return false
+	if s.fight.has("phase") and (not counter(s.fight.phase) or s.fight.phase<1 or s.fight.phase>2): return false
 	if s.fight.has("swings") and not counter(s.fight.swings): return false
 	if s.has("chronicle") and not RealmChronicle.valid(s.chronicle,s.xp): return false
 	if s.has("runeforge") and not RealmRuneforge.valid(s.runeforge): return false

@@ -21,13 +21,13 @@ static func supplies(m, field: String):
 	var s = state(m)
 	if not s.active.is_empty(): s.active[field] += 1
 
-static func victory(m, enemy: Dictionary, before_gains: Dictionary, before_gold: int):
+static func victory(m, enemy: Dictionary, before_gains: Dictionary, before_gold: int, fragments: int):
 	var s = state(m)
 	if s.active.is_empty(): return
 	s.active.wins += 1
 	s.active.gold += int(m.s.gold)-before_gold
 	s.active.xp += int(enemy.xp)
-	s.active.fragments += int(enemy.get("fragments",1))
+	s.active.fragments += fragments
 	for id in m.s.gains:
 		var amount = int(m.s.gains[id])-int(before_gains.get(id,0))
 		if amount>0: s.active.loot[id] = int(s.active.loot.get(id,0))+amount

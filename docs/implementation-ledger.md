@@ -39,3 +39,7 @@ Implemented solo after the user's request to keep raising quality. Added three m
 ## 0.7 integrated production pass
 
 Implemented the longer solo iteration in `docs/iteration-0.7-plan.md`: deterministic equipment refinement through Legendary; complete build loadouts; persistent bounded hunt records; reorganized refuge services; original regional battle environments and expanded portrait effects; original layered regional ambience and differentiated action/outcome cues. Imagegen supplied the three battlefields; audio synthesis is reproducible with `tools/make_score.py`. Source and rendered-screen review drove wording, stock, rarity, units and navigation fixes. Eight additional focused domain assertions bring the total to 40; real refinement-button and silent audio-state integration were checked. Extended player balancing and physical-device coverage remain for playtesting. Details and limits are in `docs/production-polish-0.7.md`.
+
+## 0.8 Guardian Trials
+
+Solo iteration: three optional two-phase guardian trials; latched phase save state; one-time Epic rewards with exact hunt accounting; field-record integration; accessible trial hall and endgame Journey guidance. Existing artwork reused. Six targeted checks added to the existing lightweight suite, seven portrait UI captures, Android debug export. No monetization or publishing actions.
