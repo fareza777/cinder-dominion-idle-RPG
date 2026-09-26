@@ -26,7 +26,23 @@ static func move(m, enemy: Dictionary, strike: int, armor: int) -> Dictionary:
 				if enemy.boss:
 					attack = int(attack*1.8)
 					label = "Third toll"
-	return {"damage":m.hit_damage(attack,defense),"heal":heal,"label":label}
+	heal = int(heal*(1.0-.25*RealmRuneforge.active_rank(m,"tide")))
+	var damage = m.hit_damage(attack,defense)
+	if RealmRuneforge.active_rank(m,"bell")>0: damage = ceili(damage*1.1)
+	return {"damage":damage,"heal":heal,"label":label}
+
+static func player_damage(m, enemy: Dictionary, swing: int) -> int:
+	var special = swing%4==0
+	var armor = int(enemy.armor)
+	if special: armor = int(armor*(1.0-.25*RealmRuneforge.active_rank(m,"thorn")))
+	var damage = m.hit_damage(int(m.stats().attack),armor)
+	if special:
+		match m.progression().stance:
+			"balanced": damage *= 2
+			"reaver": damage = int(damage*2.5)
+		var rank = RealmRuneforge.active_rank(m,"bell")
+		if rank>0: damage = int(damage*(1.0+[.2,.35,.5][rank-1]))
+	return damage
 
 static func mechanic(enemy: Dictionary) -> String:
 	match enemy.get("region",""):
@@ -40,9 +56,8 @@ static func forecast(m, id: String) -> Dictionary:
 	var enemy = m.data.enemies[id]
 	var stats = m.stats()
 	var stance = m.progression().stance
-	var multiplier = 1.25 if stance=="balanced" else (1.375 if stance=="reaver" else 1.0)
-	var hit = m.hit_damage(int(stats.attack),int(enemy.armor))
-	var damage_per_second = hit*multiplier*float(stats.accuracy)*1.025/2.0
+	var cycle_damage = player_damage(m,enemy,1)*3+player_damage(m,enemy,4)
+	var damage_per_second = cycle_damage*float(stats.accuracy)*1.025/8.0
 	var ordinary = move(m,enemy,1,int(stats.armor))
 	var special = move(m,enemy,3,int(stats.armor))
 	var interval = float(enemy.interval)/1000.0

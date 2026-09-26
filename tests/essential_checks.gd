@@ -54,6 +54,7 @@ func _init():
 	old_save.erase("experience")
 	old_save.erase("chronicle")
 	old_save.erase("progression")
+	old_save.erase("runeforge")
 	check(not store.decode(store.encode(old_save),guided.data).is_empty(),"0.1 saves remain readable")
 	var planned = RealmModel.new()
 	var chain = RealmProgression.plan(planned,"craft_copper_sword",1)
@@ -139,5 +140,60 @@ func _init():
 	marsh.advance(180000)
 	for i in range(180): marsh_chunks.advance(1000)
 	check(marsh.s==marsh_chunks.s,"Oracle healing stays deterministic during offline combat")
+	var rune = RealmModel.new()
+	rune.s.beacon = true
+	rune.s.tutorial = true
+	rune.s.kills.wilds_1 = 5
+	rune.s.gold = 50
+	rune.s.bag.scrap = 3
+	RealmChronicle.state(rune).fragments.fang = 19
+	RealmRuneforge.state(rune)
+	var before_rune = rune.s.duplicate(true)
+	var refused = not rune.command({"type":"rune_forge","id":"thorn"})
+	check(refused and rune.s==before_rune,"inscription with missing materials cannot partially spend resources")
+	rune.s.chronicle.fragments.fang = 20
+	var forged = rune.command({"type":"rune_forge","id":"thorn","cid":"forge-once"})
+	rune.command({"type":"rune_forge","id":"thorn","cid":"forge-once"})
+	check(forged and rune.s.runeforge.ranks.thorn==1 and rune.s.runeforge.equipped=="" and rune.s.gold==0 and rune.count("scrap")==0 and rune.s.chronicle.fragments.fang==0,"inscription spends exact costs once and requires explicit equip")
+	rune.command({"type":"research_claim","id":"wilds","target":5})
+	var claimed_rune = rune.s.duplicate(true)
+	var repeated_claim = not rune.command({"type":"research_claim","id":"wilds","target":5})
+	check(repeated_claim and rune.s==claimed_rune and rune.s.gold==40 and rune.count("scrap")==2 and rune.s.chronicle.fragments.fang==10,"field records count previous victories and never pay twice")
+	rune.command({"type":"rune_equip","id":"thorn"})
+	var saved_rune = store.decode(store.encode(rune.s),rune.data)
+	var corrupted_rune = rune.s.duplicate(true)
+	corrupted_rune.runeforge.ranks.thorn = 4
+	check(not saved_rune.is_empty() and saved_rune.runeforge.equipped=="thorn" and store.decode(store.encode(corrupted_rune),rune.data).is_empty(),"rune ranks and equipped state persist with invalid rank rejection")
+	var effects = RealmModel.new()
+	for part in ["sword","shield","helm","chest","gloves","boots"]: effects.gain("iron_"+part,1,3)
+	effects.command({"type":"equip_best"})
+	var target_enemy = effects.data.enemies.crown_3
+	var base_skill = RealmCombat.player_damage(effects,target_enemy,4)
+	var base_incoming = RealmCombat.move(effects,target_enemy,1,20).damage
+	var runes = RealmRuneforge.state(effects)
+	runes.ranks = {"thorn":3,"tide":3,"bell":3}
+	runes.equipped = "thorn"
+	var piercing = RealmCombat.player_damage(effects,target_enemy,4)>base_skill
+	runes.equipped = "tide"
+	var suppressed = RealmCombat.move(effects,effects.data.enemies.marsh_1,3,20).heal==2
+	runes.equipped = "bell"
+	check(piercing and suppressed and RealmCombat.player_damage(effects,target_enemy,4)>base_skill and RealmCombat.move(effects,target_enemy,1,20).damage>base_incoming,"runes apply armor penetration, recovery suppression and damage tradeoff")
+	var consistent = true
+	for id in RealmRuneforge.RUNES:
+		var online = RealmModel.new()
+		online.s = effects.s.duplicate(true)
+		online.s.beacon = true
+		online.s.tutorial = true
+		online.s.kills.wilds_5 = 1
+		online.s.bag.cooked_minnow = 100
+		online.s.runeforge.equipped = id
+		online.command({"type":"queue","id":"hunt_marsh_1","target":3})
+		var offline = RealmModel.new()
+		offline.s = online.s.duplicate(true)
+		consistent = consistent and not online.command({"type":"rune_equip","id":""})
+		offline.advance(180000)
+		for i in range(180): online.advance(1000)
+		consistent = consistent and online.s==offline.s
+	check(consistent,"all three runes preserve offline combat and cannot be swapped mid-fight")
 	print("ESSENTIAL CHECKS: ","PASS" if failed==0 else "FAIL")
 	quit(1 if failed else 0)

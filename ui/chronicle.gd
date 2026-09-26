@@ -25,7 +25,7 @@ func home(parent: Node):
 	var ref = weakref(action)
 	app.update_callbacks.append(func():
 		var b = ref.get_ref()
-		if is_instance_valid(b): b.text = {"story":"Start next objective  →","queue":"View active plan  →","talents":"Choose my talents  →","relics":"Awaken relic  →","equip":"Equip best gear  →","plan":"Review supply plan  →"}[C.focus(m).kind])
+		if is_instance_valid(b): b.text = {"story":"Start next objective  →","queue":"View active plan  →","talents":"Choose my talents  →","relics":"Awaken relic  →","equip":"Equip best gear  →","plan":"Review supply plan  →","journal":"Collect field supplies  →","runes":"Review inscription  →"}[C.focus(m).kind])
 	card.add_child(U.button("See my progression roadmap",roadmap))
 	if m.s.tutorial:
 		var board = U.card(parent,12)
@@ -37,6 +37,14 @@ func home(parent: Node):
 			b.size_flags_horizontal = Control.SIZE_EXPAND_FILL
 			row.add_child(b)
 		board.add_child(U.button("Leave work for the refuge",app.work_orders_dialog))
+		if m.s.beacon:
+			board.add_child(U.button("Runeforge · shape your next hunt",app.runeforge_dialog))
+			var journal = U.button("Field journal",app.journal_dialog)
+			board.add_child(journal)
+			var journal_ref = weakref(journal)
+			app.update_callbacks.append(func():
+				var b = journal_ref.get_ref()
+				if is_instance_valid(b): b.text = "Field journal · %d rewards ready" % RealmRuneforge.ready(m))
 
 func act():
 	var focus = C.focus(m)
@@ -45,6 +53,15 @@ func act():
 		"story": app.experience.act_on_goal()
 		"talents": talents()
 		"relics": relics()
+		"runes": preload("res://ui/runeforge.gd").new(app).forge(focus.id)
+		"journal":
+			for region in C.REGIONS:
+				var found = false
+				for target in RealmRuneforge.MILESTONES:
+					if RealmRuneforge.victories(m,region)>=target and region+"_"+str(target) not in RealmRuneforge.state(m).claimed: found = true
+				if found:
+					preload("res://ui/runeforge.gd").new(app).journal(region)
+					break
 		"plan": app.planner_dialog(focus.id,int(focus.amount))
 		"equip":
 			if app.send({"type":"equip_best"}): app.toast("Upgrades equipped. Your next recommendation is ready.")
@@ -63,6 +80,7 @@ func roadmap():
 		c.add_child(U.para(stage[2],14,U.TEXT))
 		c.add_child(U.para(stage[3],13))
 	v.add_child(U.para("RETURNING LOOP\nCollect offline progress → claim finished bounties → improve one part of your build → choose a farm or attempt the next tier → queue supplies before leaving.",15,U.GREEN))
+	v.add_child(U.para("AFTER THE BEACON\nDefeat a regional guardian → collect field records at 5, 20 and 50 victories → inscribe its rune → equip one rune alongside your style and relic → compare your next hunt. Every rune has three ranks; Stillwater counters recovery, Thornscript pierces armor, and Dirge trades safety for damage.",14))
 	v.add_child(U.button("Take my next step",act,true))
 
 func talents():
@@ -224,6 +242,7 @@ func world(selected: String = "wilds"):
 		v.add_child(U.para("Restore Cinderwatch's beacon by defeating the Bellkeeper to begin expeditions. Your next story objective is: "+m.objective().title,15,U.GOLD))
 		v.add_child(U.button("Continue Chapter I",app.guide_dialog,true))
 	v.add_child(U.para("Clear a tier once to open the next. Repeat cleared tiers for guaranteed fragments and a 5% chance of iron equipment. Each guardian has a different third-strike ability.",14))
+	v.add_child(U.button("Field journal · learn this guardian",func(): preload("res://ui/runeforge.gd").new(app).journal(selected)))
 	for region in C.REGIONS:
 		if region!=selected: continue
 		var d = C.REGIONS[region]

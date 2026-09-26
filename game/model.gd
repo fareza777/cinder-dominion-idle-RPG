@@ -150,6 +150,9 @@ func command(cmd: Dictionary) -> bool:
 	var action = str(cmd.get("type",""))
 	var id = str(cmd.get("id",""))
 	match action:
+		"rune_forge","rune_equip","research_claim":
+			var why = RealmRuneforge.command(self,cmd)
+			if why!="": return fail(why)
 		"work_order":
 			var plan = RealmProgression.order_plan(self,id,int(cmd.get("batches",1)))
 			if plan.error!="": return fail(plan.error)
@@ -412,17 +415,16 @@ func resolve_combat():
 		f.player_at = int(s.time)+2000
 		f.swings = int(f.get("swings",0))+1
 		if rng.randf()<st.accuracy:
-			var damage = hit_damage(int(st.attack),int(d.armor))
+			var damage = RealmCombat.player_damage(self,d,int(f.swings))
 			var special = int(f.swings)%4==0
-			if special:
-				match progression().stance:
-					"balanced": damage *= 2
-					"guard": s.hp = mini(100,int(s.hp)+8)
-					"reaver": damage = int(damage*2.5)
+			if special and progression().stance=="guard": s.hp = mini(100,int(s.hp)+8)
 			var crit = rng.randf()<.05
 			if crit: damage = int(damage*1.5)
 			f.hp -= damage
-			last_hit = ("SKILL " if special else ("CRIT " if crit else ""))+str(damage)
+			var skill_name = "SKILL "
+			if RealmRuneforge.active_rank(self,"thorn")>0: skill_name = "PIERCE "
+			elif RealmRuneforge.active_rank(self,"bell")>0: skill_name = "DIRGE "
+			last_hit = (skill_name if special else ("CRIT " if crit else ""))+str(damage)
 			combat_event(last_hit,"enemy")
 		else:
 			last_hit = "MISS"

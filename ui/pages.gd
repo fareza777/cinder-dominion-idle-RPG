@@ -294,6 +294,8 @@ func character(parent: Node):
 	app.dynamic(legacy,func(): return "%d talent points available · %s" % [RealmChronicle.points_free(m),RealmChronicle.RELICS[RealmChronicle.state(m).relic].name if RealmChronicle.state(m).relic!="" else "No relic equipped"],14,U.TEXT)
 	legacy.add_child(U.button("Talents · choose your strengths",app.talents_dialog,true))
 	legacy.add_child(U.button("Relics · targeted progression",app.relics_dialog))
+	legacy.add_child(U.button("Runeforge · refine your build",app.runeforge_dialog))
+	app.dynamic(legacy,func(): return "Rune: "+(RealmRuneforge.RUNES[RealmRuneforge.state(m).equipped].name if RealmRuneforge.state(m).equipped!="" else "None equipped"),13,U.GREEN)
 	var style = U.card(parent)
 	style.add_child(U.label("YOUR FIGHTING STYLE",10,U.GOLD))
 	app.dynamic(style,func(): return RealmProgression.STANCES[m.progression().stance].name,24,U.TEXT)

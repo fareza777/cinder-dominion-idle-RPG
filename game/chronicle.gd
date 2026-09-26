@@ -127,6 +127,10 @@ static func focus(m) -> Dictionary:
 		var equipped = m.gear(str(m.s.equipped.get(m.data.items[g.id].slot,"")))
 		if equipped.is_empty() or m.gear_score(g)>m.gear_score(equipped): return {"title":"Equip your stronger gear","why":"Your bag contains an upgrade. Crafting alone does not improve your combat stats.","kind":"equip","id":"","amount":1}
 	if m.count(m.s.settings.food)<15: return {"title":"Prepare food for your next hunt","why":"Aim for 15 cooked meals. Food heals automatically during battle; raw ingredients cannot heal you.","kind":"plan","id":"craft_"+str(m.s.settings.food),"amount":15-m.count(m.s.settings.food)}
+	if RealmRuneforge.ready(m)>0: return {"title":"Bring your field records home","why":"Completed regional hunts have fragments, scraps and gold ready to collect. Put them toward your next rune or relic.","kind":"journal","id":"","amount":1}
+	if m.s.beacon:
+		for id in RealmRuneforge.RUNES:
+			if RealmRuneforge.state(m).ranks[id]==0 and RealmRuneforge.forge_reason(m,id)=="": return {"title":"Inscribe "+RealmRuneforge.RUNES[id].name,"why":"You have discovered this rune and gathered its materials. Review its effect before choosing between a rune and a relic upgrade.","kind":"runes","id":id,"amount":1}
 	for pair in [["shield","copper_shield"],["hands","copper_gloves"],["feet","copper_boots"],["head","copper_helm"],["body","copper_chest"]]:
 		var a = m.data.activities["craft_"+pair[1]]
 		var g = m.gear(str(m.s.equipped.get(pair[0],"")))

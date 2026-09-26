@@ -37,6 +37,12 @@
       "source": "OpenAI image generation in this task, 2026-09-25",
       "kind": "original generated art",
       "prompt_summary": "Three equal vertical boss portraits: deadwood Thornbound Sentinel, veiled Drowned Oracle, obsidian Crowned Bellkeeper. Original painterly dark fantasy, no lettering or UI."
+    },
+    {
+      "file": "art/runestones.png",
+      "source": "OpenAI image generation in this task, 2026-09-26",
+      "kind": "original generated art",
+      "prompt_summary": "Three equal square panels: thorn-carved basalt rune with old brass trim, silver and slate ripple talisman, obsidian broken-bell rune. Tactile dark fantasy artifacts on black, restrained green, teal and ember light. No lettering or existing franchise symbols."
     }
   ],
   "fonts": [

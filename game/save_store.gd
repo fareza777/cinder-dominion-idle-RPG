@@ -82,6 +82,7 @@ func valid(s, data: Dictionary) -> bool:
 			if not counter(p.upgrades.get(id,-1)) or p.upgrades[id]>3: return false
 	if s.fight.has("swings") and not counter(s.fight.swings): return false
 	if s.has("chronicle") and not RealmChronicle.valid(s.chronicle,s.xp): return false
+	if s.has("runeforge") and not RealmRuneforge.valid(s.runeforge): return false
 	var cfg = s.settings
 	for key in ["locale","font","motion","battery","music","sfx","food","threshold","potion","potion_policy"]:
 		if not cfg.has(key): return false

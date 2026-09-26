@@ -1,10 +1,10 @@
-# Ashen Covenant — Adventure preview 0.5
+# Ashen Covenant — Adventure preview 0.6
 
 Idle RPG dark fantasy untuk Android. Gratis, tanpa iklan. Build ini untuk dimainkan dan dievaluasi, belum versi rilis publik.
 
 ## Mulai bermain
 
-1. Pasang `build/android/ashen-covenant-0.5.apk` di Android 64-bit. APK memakai identitas aplikasi yang sama dengan 0.1–0.4 sehingga bisa dipasang sebagai pembaruan.
+1. Pasang `build/android/ashen-covenant-0.6.apk` di Android 64-bit. APK memakai identitas aplikasi yang sama dengan 0.1–0.5 sehingga bisa dipasang sebagai pembaruan.
 2. Seluruh antarmuka dan narasi game memakai **English**. Splash mengantar ke menu utama. Pilih **New game**, ikuti atau lewati intro, lalu baca empat tahap onboarding. **Continue journey** melanjutkan progres yang sudah ada.
 3. Tekan **Guide →** di bagian atas layar. Panduan menunjukkan tujuan, alasan, lokasi aktivitas dan jumlah yang dibutuhkan. Tekan tindakannya, lalu **Begin · 4 cycles** (jumlahnya mengikuti tujuan) untuk memulai jumlah siklus yang tepat.
 4. Tugas awal: 4 copper ore → 2 copper ingots → 1 ash log → Copper Sword → Equip item → 3 Ash Rats. Panduan lalu mengantar lewat musuh berikutnya hingga Bellkeeper, tanpa melompat langsung ke boss.
@@ -12,6 +12,13 @@ Idle RPG dark fantasy untuk Android. Gratis, tanpa iklan. Build ini untuk dimain
 6. Buka **Food & survival guide** untuk belajar memancing, memasak, memilih makanan dan menyiapkan auto-heal. Perlengkapan hasil crafting harus dipasang dari **Bag**.
 7. Progres tersimpan otomatis dan berlanjut maksimal 24 jam saat kembali. Menu **☰** tersedia dari dalam permainan. New Game meminta konfirmasi dan menyimpan cadangan terpisah; **Settings → Restore a previous journey** memulihkannya.
 
+## Baru di 0.6
+
+**Runeforge.** Setelah Bellkeeper, kalahkan guardian suatu wilayah untuk menemukan rune-nya. Kumpulkan fragment, scraps dan gold, tinjau biaya serta perbandingan efek, lalu inscribe dan equip. Thornscript menembus armor pada serangan keempat; Stillwater mengurangi healing musuh; Dirge memperkuat serangan keempat tetapi membuat setiap serangan musuh lebih menyakitkan. Tiga rune memiliki masing-masing tiga rank. Satu rune aktif bersama fighting style dan relic; ganti gratis di luar combat.
+
+**Field journal.** Kemenangan di seluruh tier suatu wilayah terakumulasi menuju 5, 20 dan 50 kemenangan. Setiap milestone memberi hadiah satu kali untuk mendanai rune/relic berikutnya. Kemenangan lama dan offline tetap dihitung. Journal mendahulukan hadiah siap klaim, lalu membantu merencanakan perburuan berikutnya. Taktik guardian bisa dibuka saat dibutuhkan.
+
+**Pilihan lebih terbaca.** Tiga ilustrasi rune orisinal, perbandingan damage sebelum menghabiskan bahan, biaya dan alasan terkunci yang jelas, tombol Equip setelah forging, serta saran progres dan laporan offline yang menunjuk hadiah field journal. Save lama tetap bisa dilanjutkan. Detail efek dan batas versi: `docs/runeforge-0.6.md`.
 ## Baru di 0.5
 
 **Farming sesuai build.** Relic → Find a hunting ground membandingkan wilayah yang sudah terbuka: fragment per kemenangan, estimasi waktu, kebutuhan makanan dan hasil per menit. Pilihan yang lebih aman didahulukan. Tombolnya menyiapkan jumlah kemenangan menuju rank berikutnya. Hadiah ekspedisi meningkat menurut wilayah dan tier, sehingga melawan guardian memberi alasan yang lebih kuat daripada terus berburu musuh awal.
@@ -65,7 +72,7 @@ Pembelian kosmetik, ekspansi dan AdMob rewarded ads opsional adalah arah monetis
 
 ## Batas versi
 
-Ini preview Chapter I dan tiga rangkaian ekspedisi, belum kampanye penuh. Kampanye lengkap, ranged/magic, pet, sistem bangunan di luar tiga upgrade refuge, affix/rune, cloud save dan Google Play Billing belum tersedia. Seluruh antarmuka, katalog, lore, dan pesan sistem versi ini menggunakan English; pengaturan bahasa lama tidak lagi mengubah bahasa tampilan. Catatan historis dari save 0.1 dapat tetap memakai bahasa lamanya. Intro berupa ilustrasi bergerak dan teks, tanpa video 3D atau voice-over. Balance jangka panjang, retensi nyata, dan variasi perangkat fisik masih memerlukan playtest. Board harian menggunakan waktu perangkat; belum ada server waktu atau validasi ekonomi daring.
+Ini preview Chapter I dan tiga rangkaian ekspedisi, belum kampanye penuh. Kampanye lengkap, ranged/magic, pet, sistem bangunan di luar tiga upgrade refuge, affix equipment, cloud save dan Google Play Billing belum tersedia. Seluruh antarmuka, katalog, lore, dan pesan sistem versi ini menggunakan English; pengaturan bahasa lama tidak lagi mengubah bahasa tampilan. Catatan historis dari save 0.1 dapat tetap memakai bahasa lamanya. Intro berupa ilustrasi bergerak dan teks, tanpa video 3D atau voice-over. Balance jangka panjang, retensi nyata, dan variasi perangkat fisik masih memerlukan playtest. Board harian menggunakan waktu perangkat; belum ada server waktu atau validasi ekonomi daring.
 
 ## Pengembangan
 
@@ -73,4 +80,4 @@ Buka `project.godot` dengan Godot **4.7.1** dan export template yang sama. Andro
 
 Pemeriksaan ringan: `godot --headless --path . --script tests/essential_checks.gd`. Regenerasi katalog melalui `python tools/build_content.py`. Sumber audio ada di `tools/make_audio.py`; font statis disiapkan dengan `tools/prepare_fonts.py` (fontTools).
 
-Lihat `docs/review-0.5.md`, `docs/qa/polish-0.5-report.md` dan `docs/qa/foundation-report.md` untuk bukti dan keterbatasan pemeriksaan, serta `assets/manifest.json` untuk asal aset.
+Lihat `docs/qa/runeforge-0.6-report.md`, `docs/review-0.5.md` dan `docs/qa/foundation-report.md` untuk bukti dan keterbatasan pemeriksaan, serta `assets/manifest.json` untuk asal aset.

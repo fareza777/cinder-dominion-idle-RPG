@@ -418,14 +418,20 @@ func modal(title: String) -> VBoxContainer:
 	dialog_footer.hide()
 	return content
 
-func modal_action(label: String, callback: Callable) -> Button:
+func modal_action(label: String, callback: Callable, primary: bool = true) -> Button:
 	dialog_footer.show()
-	var button = U.button(label,callback,true)
+	var button = U.button(label,callback,primary)
 	dialog_footer.add_child(button)
 	return button
 
 func work_orders_dialog():
 	preload("res://ui/gameplay.gd").new(self).work_orders()
+
+func runeforge_dialog():
+	preload("res://ui/runeforge.gd").new(self).forge()
+
+func journal_dialog():
+	preload("res://ui/runeforge.gd").new(self).journal()
 
 func world_dialog():
 	preload("res://ui/chronicle.gd").new(self).world()
@@ -475,6 +481,8 @@ func activity_dialog(id: String, recommended: int = 0):
 		introduction.add_child(U.para("%d HP · %d ATK · %d DEF" % [int(e.hp),int(e.attack),int(e.armor)],13,U.GOLD))
 		v.add_child(U.para(model.encounter_advice(a.enemy),14,U.GOLD))
 		v.add_child(U.para(RealmCombat.mechanic(e),14,U.TEXT))
+		var rune = RealmRuneforge.state(model).equipped
+		if rune!="": v.add_child(U.para("EQUIPPED RUNE · "+RealmRuneforge.RUNES[rune].name+"\n"+RealmRuneforge.effect(rune,RealmRuneforge.active_rank(model,rune)),13,U.GREEN))
 		var fragment_id = RealmChronicle.fragments_for(e)
 		v.add_child(U.para("GUARANTEED RELIC DROP\n%d × %s fragments" % [int(e.get("fragments",1)),RealmChronicle.RELICS[fragment_id].name],14,U.GREEN))
 		if e.has("region"): v.add_child(U.para("First clear: +10 meals and %d scraps.%s" % [5+int(e.tier)," Tier 5 also grants a Rare Iron Sword." if int(e.tier)==5 else ""],13,U.GOLD))
@@ -635,6 +643,9 @@ func offline_dialog(report: Dictionary):
 	for id in report.gains: v.add_child(U.para("+%d  %s" % [int(report.gains[id]),model.name_of(id)],15,U.GREEN))
 	for id in report.get("fragments",{}): v.add_child(U.para("+%d %s fragments" % [int(report.fragments[id]),RealmChronicle.RELICS[id].name],14,U.GOLD))
 	if report.get("talent_points",0)>0: v.add_child(U.para("+%d talent points ready to spend" % int(report.talent_points),16,U.GOLD))
+	if RealmRuneforge.ready(model)>0:
+		v.add_child(U.para("%d field records have supplies ready to collect." % RealmRuneforge.ready(model),15,U.GREEN))
+		v.add_child(U.button("Open the field journal",journal_dialog))
 	for id in report.spent: v.add_child(U.para("−%d  %s" % [int(report.spent[id]),model.name_of(id)],13,U.MUTED))
 	if not model.s.queue.is_empty() and model.s.active.is_empty() and model.s.fight.is_empty(): v.add_child(U.para(model.requirement(model.s.queue[0].id),15,U.RED))
 	v.add_child(U.para(tr2("Hasil sudah tersimpan. Batas progres offline: 24 jam.","Results are already saved. Offline progress cap: 24 hours."),12))
@@ -693,7 +704,7 @@ func settings_dialog():
 	v.add_child(U.button("Share",experience.share))
 	v.add_child(U.button("Rate",experience.rate))
 	v.add_child(U.button("Return to main menu",experience.menu))
-	v.add_child(U.para("Version 0.5.0 · Adventure preview\nFree to play. No ads. No purchases in this build.",12))
+	v.add_child(U.para("Version 0.6.0 · Adventure preview\nFree to play. No ads. No purchases in this build.",12))
 
 func export_save():
 	var fd = FileDialog.new()
