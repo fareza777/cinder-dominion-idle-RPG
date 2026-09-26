@@ -29,6 +29,7 @@ var update_callbacks: Array[Callable] = []
 var dialog_callbacks: Array[Callable] = []
 var pages
 var music: AudioStreamPlayer
+var coach: Control
 var effect: AudioStreamPlayer
 var experience
 var mode = "play"
@@ -71,14 +72,13 @@ func _ready():
 		music = AudioStreamPlayer.new()
 		music.set_script(preload("res://ui/audio_director.gd"))
 		music.app = self
-		music.stream = load("res://assets/audio/refuge.wav")
 		music.volume_db = linear_to_db(float(model.s.settings.music))
 		add_child(music)
-		music.play()
-		music.finished.connect(func(): music.play())
 	effect = AudioStreamPlayer.new()
 	effect.stream = load("res://assets/audio/action.wav")
 	add_child(effect)
+	for i in range(3): effect.add_child(AudioStreamPlayer.new())
+	ensure_coach()
 	experience.splash()
 
 func tr2(_id_text: String, en_text: String) -> String:
@@ -104,7 +104,9 @@ func _notification(what):
 		persist()
 		paused = true
 		if is_instance_valid(music): music.stream_paused = true
-		if is_instance_valid(effect): effect.stop()
+		if is_instance_valid(effect):
+			effect.stop()
+			for voice in effect.get_children(): voice.stop()
 	elif what==NOTIFICATION_APPLICATION_RESUMED and paused:
 		paused = false
 		fraction_ms = 0
@@ -164,6 +166,12 @@ func story_dialog():
 func progress_dialog():
 	preload("res://ui/progress_guide.gd").new(self).open()
 
+func ensure_coach():
+	if is_instance_valid(coach): return
+	coach = preload("res://ui/onboarding_focus.gd").new()
+	coach.app = self
+	add_child(coach)
+
 func guide_dialog():
 	experience.guide()
 
@@ -195,7 +203,7 @@ func build_shell():
 	theme.default_font_size = int(15*U.scale)
 	U.apply_theme(theme)
 	for child in get_children():
-		if child!=music and child!=effect:
+		if child!=music and child!=effect and child!=coach:
 			remove_child(child)
 			child.queue_free()
 	dialog = null
@@ -243,7 +251,9 @@ func build_shell():
 	journey_words.add_child(U.label("YOUR NEXT STEP",9,U.GOLD))
 	objective_label = U.para("",14,U.TEXT)
 	journey_words.add_child(objective_label)
-	journey_row.add_child(U.button("Goals",guide_dialog))
+	var goals = U.button("Goals",guide_dialog)
+	goals.set_meta("coach_target","goals")
+	journey_row.add_child(goals)
 	scroller = ScrollContainer.new()
 	scroller.size_flags_vertical = Control.SIZE_EXPAND_FILL
 	scroller.horizontal_scroll_mode = ScrollContainer.SCROLL_MODE_DISABLED
@@ -277,6 +287,7 @@ func build_shell():
 	fr.add_child(U.button(tr2("Antrean","Queue"),queue_dialog))
 	activity_progress = U.progress(0,1,U.GOLD,3)
 	footer_col.add_child(activity_progress)
+	footer.set_meta("coach_target","running")
 	var nav = U.row(2)
 	var nav_panel = PanelContainer.new()
 	nav_panel.add_theme_stylebox_override("panel",U.box(Color("0e151a"),U.LINE,0,6))
@@ -415,9 +426,16 @@ func play_cue(name: String):
 	if not is_instance_valid(effect) or paused or float(model.s.settings.sfx)<=0: return
 	var path = "res://assets/audio/"+name+".wav"
 	if not ResourceLoader.exists(path): path = "res://assets/audio/action.wav"
-	effect.stream = load(path)
-	effect.volume_db = linear_to_db(float(model.s.settings.sfx))
-	effect.play()
+	var voice = effect
+	if effect.playing:
+		for candidate in effect.get_children():
+			if not candidate.playing:
+				voice = candidate
+				break
+	voice.stream = load(path)
+	voice.pitch_scale = randf_range(.97,1.03) if name in ["strike","hurt","forge"] else 1.0
+	voice.volume_db = linear_to_db(float(model.s.settings.sfx))
+	voice.play()
 
 func dismiss():
 	dialog_callbacks.clear()
@@ -533,6 +551,7 @@ func refuge_dialog():
 func activity_dialog(id: String, recommended: int = 0):
 	var a = model.data.activities[id]
 	var v = modal(model.activity_name(id))
+	dialog.set_meta("coach_activity",id)
 	if a.kind!="combat":
 		v.add_child(U.icon(a.output,92))
 		v.add_child(U.para("%s · Lv.%d · %.1fs · +%d XP" % [model.local_name(model.data.skills[a.skill]),int(a.level),model.duration(a)/1000.0,int(a.xp)]))
@@ -575,6 +594,7 @@ func activity_dialog(id: String, recommended: int = 0):
 	if recommended>0:
 		var unit = ("fight" if recommended==1 else "fights") if a.kind=="combat" else ("cycle" if recommended==1 else "cycles")
 		var suggested = modal_action("Begin · %d %s" % [recommended,unit],func(): enqueue_activity(id,recommended))
+		suggested.set_meta("coach_target","begin")
 		suggested.disabled = reason!="" or not model.s.queue.is_empty()
 		if not model.s.queue.is_empty(): v.add_child(U.button("Manage existing queue first",queue_dialog))
 	else:
@@ -696,8 +716,11 @@ func settings_dialog():
 		v.add_child(slider)
 		slider.value_changed.connect(func(value):
 			model.s.settings[key] = value
-			if key=="music" and is_instance_valid(music): music.volume_db = linear_to_db(value)
+			if key=="sfx" and is_instance_valid(effect):
+				effect.volume_db = linear_to_db(maxf(.00001,value))
+				for voice in effect.get_children(): voice.volume_db = effect.volume_db
 			persist())
+	v.add_child(U.button("Preview sound effects",func(): play_cue("guide")))
 	v.add_child(U.label("PROGRESS & BACKUPS",11,U.GOLD))
 	if has_campaign: v.add_child(U.button(tr2("Ekspor cadangan save","Export save backup"),export_save))
 	v.add_child(U.button(tr2("Impor cadangan save","Import save backup"),import_save))

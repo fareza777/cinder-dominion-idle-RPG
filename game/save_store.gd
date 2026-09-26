@@ -73,6 +73,7 @@ func valid(s, data: Dictionary) -> bool:
 		if s.fight.player_at<s.time or s.fight.enemy_at<s.time or s.fight.buff not in ["attack","armor"]: return false
 	if s.has("experience"):
 		if not s.experience is Dictionary or s.experience.get("version",0)!=2 or not s.experience.get("welcome_done",false) is bool: return false
+		if s.experience.has("coach_active") and not s.experience.coach_active is bool: return false
 	if s.has("progression"):
 		var p = s.progression
 		if not p is Dictionary or not RealmProgression.STANCES.has(p.get("stance","")): return false

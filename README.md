@@ -1,16 +1,22 @@
-# Ashen Covenant — Adventure preview 0.21
+# Ashen Covenant — Adventure preview 0.22
 
 Idle RPG dark fantasy untuk Android. Gratis, tanpa iklan. Build ini untuk dimainkan dan dievaluasi, belum versi rilis publik.
 
 ## Mulai bermain
 
-1. Pasang `build/android/ashen-covenant-0.21.apk` di Android 64-bit. APK memakai identitas aplikasi yang sama dengan 0.1–0.20 sehingga bisa dipasang sebagai pembaruan.
-2. Seluruh antarmuka dan narasi game memakai **English**. Splash mengantar ke menu utama. Pilih **New game** untuk langsung masuk dan melihat satu kartu target Copper Sword. Intro opsional tersedia di About. **Continue journey** melanjutkan progres yang sudah ada.
+1. Pasang `build/android/ashen-covenant-0.22.apk` di Android 64-bit. APK memakai identitas aplikasi yang sama dengan 0.1–0.21 sehingga bisa dipasang sebagai pembaruan.
+2. Seluruh antarmuka dan narasi game memakai **English**. Splash mengantar ke menu utama. Pilih **New game** untuk langsung masuk dan pilih **Show me the way** untuk panduan dengan sorotan emas. Intro opsional tersedia di About. **Continue journey** melanjutkan progres yang sudah ada.
 3. Tekan **Goals** di bagian atas layar. Layar menampilkan target, angka progres, checklist dan tombol tugas. Tekan tindakannya, lalu **Begin · 4 cycles** (jumlahnya mengikuti tujuan) untuk memulai jumlah siklus yang tepat.
 4. Tugas awal: 4 copper ore → 2 copper ingots → 1 ash log → Copper Sword → Equip item → 3 Ash Rats. Panduan lalu mengantar lewat musuh berikutnya hingga Bellkeeper, tanpa melompat langsung ke boss.
 5. Pantau activity bar. **Queue** menampilkan tugas berjalan/menunggu, progres target, dan alasan terhambat. **Sources/Find** membantu mencari bahan yang kurang. Satu aktivitas berjalan pada satu waktu.
 6. Buka **Food & survival guide** untuk belajar memancing, memasak, memilih makanan dan menyiapkan auto-heal. Perlengkapan hasil crafting harus dipasang dari **Bag**.
 7. Progres tersimpan otomatis dan berlanjut maksimal 24 jam saat kembali. Menu **☰** tersedia dari dalam permainan. New Game meminta konfirmasi dan menyimpan cadangan terpisah; **Settings → Restore a previous journey** memulihkannya.
+
+## Baru di 0.22 — Guided onboarding & original score
+
+Onboarding menyorot tombol yang harus ditekan, meredupkan area lain, dan memberi panah serta instruksi singkat dalam English. Enam langkah: ore → ingots → log → sword → equip → tiga Ash Rats. Sorotan berpindah ke progres saat tugas berjalan, lalu kembali ke langkah berikutnya. Skip tersedia; Goals dapat mengaktifkan kembali panduan selama enam langkah awal. Status panduan tersimpan tanpa mengulang progres.
+
+Empat musik stereo orisinal berdurasi 64 detik menggantikan ambience sebelumnya: refuge, wilds, sanctum dan crown. Ada lapisan strings sintetis, plucked melody, bells, perkusi serta transisi silang dua detik. SFX baru untuk panduan, pukulan dan terkena serangan; efek forge, equip, hadiah, kemenangan dan kekalahan diperbarui. Volume music/SFX terpisah, preview SFX tersedia di Settings, dan audio berhenti sementara saat aplikasi dijeda.
 
 ## Baru di 0.21 — Live mastery progress
 

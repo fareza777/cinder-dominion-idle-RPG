@@ -15,6 +15,7 @@ func open(uid: String):
 	var data = m.data.items[item.id]
 	var comparison = RealmEquipmentPreview.compare(m,uid)
 	var v = app.modal(m.name_of(item.id))
+	if item.id=="copper_sword": app.dialog.set_meta("coach_equip",true)
 	var hero = U.card(v,14,U.QUALITY[int(item.q)].darkened(.4))
 	var row = U.row(14)
 	hero.add_child(row)
@@ -52,6 +53,7 @@ func open(uid: String):
 		if app.send({"type":"equip","id":uid}):
 			open(uid)
 			app.toast(m.name_of(item.id)+" equipped."))
+	equip.set_meta("coach_target","equip")
 	equip.disabled = comparison.equipped or not m.s.fight.is_empty()
 	var ref = weakref(equip)
 	app.dialog_callbacks.append(func():

@@ -2,7 +2,7 @@ extends RefCounted
 
 const U = preload("res://ui/style.gd")
 const STORE_URL = "" # Set only after a real public listing exists.
-const VERSION = "0.21.0"
+const VERSION = "0.22.0"
 var app
 var front: Control
 var cinematic_page = 0
@@ -210,20 +210,26 @@ func finish_intro():
 		app.enter_world()
 
 func welcome(_index=0):
-	var v = app.modal("Your first upgrade")
+	app.ensure_coach()
+	var v = app.modal("Learn by playing")
 	v.add_child(U.icon("copper_sword",88))
-	title(v,"Forge a Copper Sword",30)
-	v.add_child(U.para("4 ore  →  2 ingots  +  1 log  →  sword",16,U.GOLD))
-	v.add_child(U.para("Equip it, then defeat 3 Ash Rats.",16))
-	app.modal_action(app.model.objective().action,func():
-		app.model.s.experience.welcome_done = true
-		app.persist()
-		act_on_goal())
-	v.add_child(U.button("How to play",handbook))
+	title(v,"Your first sword. Your first hunt.",28)
+	v.add_child(U.para("Follow the gold highlight. Each step shows exactly where to tap.",17,U.TEXT))
+	v.add_child(U.para("Gather → Forge → Equip → Hunt",16,U.GOLD))
+	app.modal_action("Show me the way",start_guidance)
 	v.add_child(U.button("Explore on my own",func():
 		app.model.s.experience.welcome_done = true
+		app.model.s.experience.coach_active = false
 		app.persist()
 		app.dismiss()))
+
+func start_guidance():
+	app.ensure_coach()
+	app.model.s.experience.welcome_done = true
+	app.model.s.experience.coach_active = true
+	app.persist()
+	app.dismiss()
+	app.play_cue("guide")
 
 func guide():
 	var o = app.model.objective()
@@ -243,7 +249,9 @@ func guide():
 		v.add_child(U.para(("✓  " if done else "○  ")+step.title,14,U.GREEN if done else U.MUTED))
 	v.add_child(U.button("Farm & upgrade",app.progress_dialog))
 	v.add_child(U.button("How to play",handbook))
-	app.modal_action(o.action,act_on_goal)
+	var next = app.modal_action(o.action,act_on_goal)
+	next.set_meta("coach_target","goal_action")
+	if int(o.index)<=6: v.add_child(U.button("Turn on step-by-step guidance",start_guidance))
 
 func act_on_goal():
 	var o = app.model.objective()

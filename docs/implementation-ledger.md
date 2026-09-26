@@ -95,3 +95,7 @@ Four enemy-specific ranks integrated into battle, offline progression, reward pr
 ## 0.21 Live mastery progress
 
 Solo: mastery collection counters, detail rewards, milestone bars and hunt batch actions now follow live victories without reopening the modal or resetting scroll. Actions calculate the current milestone when pressed. No economy or save changes. Existing 77 essential checks plus a focused UI capture script exercising a real rank-up, updated action, collection counters, maximum rank and dialog cleanup. Five phone captures, including narrow 360x800 at 130% text. APK export and details in docs/qa/live-mastery-0.21-report.md.
+
+## 0.22 Guided onboarding and original audio
+
+User requests clear highlight-based step-by-step onboarding and thematic SFX/music. Solo: optional persistent six-step focus overlay follows actual Goals, task, Begin, Equip and progress controls; skip/replay, large text and motion settings respected. Four original 64-second stereo arrangements and nine synthesized cues, looping two-voice music crossfades, overlapping SFX, damage-event sounds and SFX preview. No save reset or economy changes. 77 essential checks and a focused real six-task UI walkthrough with nine phone captures; audio loop/mute/pause/transition checks. See docs/guided-onboarding-0.22.md and QA report. No physical Android or subjective device listening test.
