@@ -52,6 +52,7 @@ func work_orders(selected: String = "watch", batches: int = 1):
 
 func planner(id: String, amount: int = 1):
 	var v = app.modal("Crafting plan")
+	app.dialog.set_meta("coach_plan",id)
 	v.add_child(U.icon(m.data.activities[id].output,72))
 	v.add_child(U.para("Make %d × %s" % [amount,m.activity_name(id)],24,U.TEXT))
 	v.add_child(U.para("Missing materials included · Equip crafted gear from Bag.",14))
@@ -80,7 +81,7 @@ func planner(id: String, amount: int = 1):
 	app.modal_action("Gather & craft",func():
 		if app.send({"type":"plan","id":id,"amount":amount}):
 			app.dismiss()
-			app.toast("Your crafting order is underway. Follow its progress in Queue."))
+			app.toast("Your crafting order is underway. Follow its progress in Queue.")).set_meta("coach_target","plan")
 	v.add_child(U.para("You can cancel at any time. Only the active cycle reserves ingredients; its unused ingredients are refunded on cancellation.",12))
 
 func time_label(seconds: float) -> String:

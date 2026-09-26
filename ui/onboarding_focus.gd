@@ -76,6 +76,15 @@ func _process(delta):
 			key = "begin"
 			text = "Tap Begin. The task repeats automatically until this target is reached."
 			if o.key=="rats": text = "Tap Begin. Attacks are automatic; your starting food heals you when needed."
+			if not app.model.s.queue.is_empty():
+				key = "manage_queue"
+				text = "A task is already queued. Review it before starting another order."
+			elif app.model.requirement(o.activity)!="":
+				key = "materials"
+				text = "You need more materials. Tap here to plan gathering and crafting together."
+		elif app.dialog.get_meta("coach_plan","")==o.activity and o.activity!="":
+			key = "plan"
+			text = "Tap Gather & craft. Materials are gathered first, then your item is made automatically."
 		elif app.dialog.get_meta("coach_equip",false):
 			key = "equip"
 			text = "Tap Equip item to use your new sword in battle."
@@ -86,8 +95,10 @@ func _process(delta):
 		key = "running"
 		if app.model.s.queue[0].id==o.activity:
 			text = "Working automatically · %d / %d. Wait for the target, then follow the next highlight." % [mini(int(o.current),int(o.goal)),int(o.goal)]
+		elif app.model.s.queue.any(func(step): return step.id==o.activity):
+			text = "Earlier tasks run first. This goal is already queued and will start automatically."
 		else: text = "Another task is running. Tap Queue to manage it; your next goal is saved above."
-		if app.model.requirement(app.model.s.queue[0].id)!="": text = "Task waiting: "+app.model.requirement(app.model.s.queue[0].id)+". Tap Queue to manage it."
+		if app.model.s.active.is_empty() and app.model.s.fight.is_empty() and app.model.requirement(app.model.s.queue[0].id)!="": text = "Task waiting: "+app.model.requirement(app.model.s.queue[0].id)+". Tap Queue to manage it."
 	var target = target_in(scope,key)
 	if target==null and not done:
 		hide()

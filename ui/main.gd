@@ -590,19 +590,24 @@ func activity_dialog(id: String, recommended: int = 0):
 	if a.kind!="combat" and not a.inputs.is_empty():
 		v.add_child(U.button("Plan materials & craft automatically",func(): planner_dialog(id,maxi(1,mini(100,recommended))),true))
 	var reason = model.requirement(id)
-	if reason!="": v.add_child(U.para(reason+tr2(". Antrean akan menunggu sampai persyaratan terpenuhi.",". The queue will wait for requirements."),14,U.RED))
+	if reason!="":
+		if model.s.active.get("id","")==id:
+			v.add_child(U.para("Current cycle supplied. More materials are needed for another cycle.",14,U.GOLD))
+		else: v.add_child(U.para(reason+". Gather the missing materials before starting.",14,U.RED))
 	if recommended>0:
 		var unit = ("fight" if recommended==1 else "fights") if a.kind=="combat" else ("cycle" if recommended==1 else "cycles")
 		var suggested = modal_action("Begin · %d %s" % [recommended,unit],func(): enqueue_activity(id,recommended))
 		suggested.set_meta("coach_target","begin")
 		suggested.disabled = reason!="" or not model.s.queue.is_empty()
-		if not model.s.queue.is_empty(): v.add_child(U.button("Manage existing queue first",queue_dialog))
 	else:
 		var begin = modal_action("Begin one fight" if a.kind=="combat" else "Begin one cycle",func(): enqueue_activity(id,1))
 		begin.disabled = reason!=""
-	if reason!="" and a.kind!="combat":
+	if not model.s.queue.is_empty() and recommended>0:
 		for button in dialog_footer.get_children(): button.hide()
-		modal_action("Plan missing materials",func(): planner_dialog(id,maxi(1,mini(100,recommended))))
+		modal_action("Manage existing queue",queue_dialog).set_meta("coach_target","manage_queue")
+	elif reason!="" and a.kind!="combat":
+		for button in dialog_footer.get_children(): button.hide()
+		modal_action("Plan missing materials",func(): planner_dialog(id,maxi(1,mini(100,recommended)))).set_meta("coach_target","materials")
 	v.add_child(U.label("QUICK START",11,U.GOLD))
 	var targets = U.row(6)
 	v.add_child(targets)

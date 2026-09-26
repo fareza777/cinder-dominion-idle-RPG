@@ -99,3 +99,7 @@ Solo: mastery collection counters, detail rewards, milestone bars and hunt batch
 ## 0.22 Guided onboarding and original audio
 
 User requests clear highlight-based step-by-step onboarding and thematic SFX/music. Solo: optional persistent six-step focus overlay follows actual Goals, task, Begin, Equip and progress controls; skip/replay, large text and motion settings respected. Four original 64-second stereo arrangements and nine synthesized cues, looping two-voice music crossfades, overlapping SFX, damage-event sounds and SFX preview. No save reset or economy changes. 77 essential checks and a focused real six-task UI walkthrough with nine phone captures; audio loop/mute/pause/transition checks. See docs/guided-onboarding-0.22.md and QA report. No physical Android or subjective device listening test.
+
+## 0.23 Guided material recovery
+
+Solo follow-up to onboarding: focus follows missing-material planning and the real Gather & craft action, existing queues get a fixed manage action, queued goals explain ordering, and active crafting no longer reports false material blockage after reserving inputs. No save schema or balance changes. Existing 77 checks plus focused UI plan-completion/reserved-input/queue-preservation smoke, five phone captures including narrow 130% text. See docs/qa/guided-recovery-0.23-report.md.
