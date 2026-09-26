@@ -23,6 +23,8 @@ func open(tier: int = 0):
 	v.add_child(U.para("Gather → Forge → Equip → Apex hunt",14,U.TEXT))
 	v.add_child(U.button("Browse Apex hunts",hunts))
 	var metal = METALS[tier]
+	v.add_child(U.para(RealmGearSets.ALL[metal].name+" · Equip 2 armor pieces",18,U.GOLD))
+	v.add_child(U.para(RealmGearSets.ALL[metal].effect,14))
 	var needs = U.card(v,12)
 	needs.add_child(U.para("Start this tier · Lv.%d" % LEVELS[tier],18,U.TEXT))
 	for skill in ["mining","woodcutting","smithing"]:

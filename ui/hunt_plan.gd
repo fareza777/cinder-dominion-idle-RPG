@@ -40,6 +40,7 @@ func show_plan(id: String, minutes: int = 15):
 	v.add_child(U.button("Try one fight first",func(): app.activity_dialog("hunt_"+id,1)))
 	v.add_child(U.button("Prepare more "+m.name_of(m.s.settings.food),func(): app.planner_dialog("craft_"+str(m.s.settings.food),maxi(10,mini(100,meals-m.count(m.s.settings.food))))))
 	v.add_child(U.button("Review my loadouts",app.loadouts_dialog))
+	v.add_child(U.button("Compare builds for this hunt",func(): preload("res://ui/build_compare.gd").new(app).open(id)))
 	var reason = m.available(id)
 	if not m.s.queue.is_empty(): reason = "Finish or clear your current queue before starting this plan."
 	if reason!="": app.dialog_footer.add_child(U.para(reason,12,U.GOLD))

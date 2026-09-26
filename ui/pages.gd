@@ -108,7 +108,7 @@ func explore(parent: Node):
 	prep.add_child(actions)
 	actions.add_child(U.button("Fighting style",app.tactics_dialog))
 	actions.add_child(U.button("Equip best",func():
-		if app.send({"type":"equip_best"}): app.toast("Best owned equipment equipped.")))
+		if app.send({"type":"equip_best"}): app.toast("Highest-stat equipment equipped. Review armor sets before your next hunt.")))
 	prep.add_child(U.button("Prepare 10 × "+m.name_of(m.s.settings.food),func(): app.planner_dialog("craft_"+str(m.s.settings.food),10)))
 	parent.add_child(U.button("Ascension · gear & apex hunts",func(): preload("res://ui/ascension.gd").new(app).open()))
 	parent.add_child(U.button("Hunt mastery",func(): preload("res://ui/hunt_mastery.gd").new(app).open()))
@@ -361,9 +361,12 @@ func character(parent: Node):
 	app.dynamic(style,func(): return RealmProgression.STANCES[m.progression().stance].detail,14)
 	style.add_child(U.button("Choose fighting style",app.tactics_dialog,true))
 	style.add_child(U.button("Save & switch complete loadouts",app.loadouts_dialog))
+	app.dynamic(style,func(): return RealmGearSets.summary(m),14,U.GOLD)
+	style.add_child(U.button("Armor sets · choose your bonuses",func(): preload("res://ui/gear_sets.gd").new(app).open()))
 	style.add_child(U.button("Refine equipment at the workshop",app.workshop_dialog))
-	style.add_child(U.button("Equip best owned gear",func():
-		if app.send({"type":"equip_best"}): app.toast("Best owned equipment equipped.")))
+	style.add_child(U.button("Equip highest-stat gear",func():
+		if app.send({"type":"equip_best"}): app.toast("Highest-stat equipment equipped. Review armor sets before your next hunt.")))
+	style.add_child(U.para("Auto-equip compares base stats. It may break an armor set.",12))
 	var food = U.card(parent)
 	food.add_child(U.label(text("PERSEDIAAN TEMPUR","BATTLE SUPPLIES"),10,U.GOLD))
 	app.dynamic(food,func(): return "%s ×%d" % [m.name_of(m.s.settings.food),m.count(m.s.settings.food)],17,U.TEXT)

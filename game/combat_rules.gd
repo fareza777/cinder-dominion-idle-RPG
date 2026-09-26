@@ -3,7 +3,7 @@ extends RefCounted
 
 static func food_heal(m, id: String) -> int:
 	var legacy = RealmChronicle.state(m)
-	return int(m.data.items[id].get("heal",0))+(int(legacy.relics.heart)*3 if legacy.relic=="heart" else 0)
+	return int(m.data.items[id].get("heal",0))+(int(legacy.relics.heart)*3 if legacy.relic=="heart" else 0)+(8 if RealmGearSets.active(m,"dawnsteel") else 0)
 
 static func move(m, enemy: Dictionary, strike: int, armor: int, second_phase: bool = false) -> Dictionary:
 	var third = strike%3==0
@@ -32,9 +32,11 @@ static func move(m, enemy: Dictionary, strike: int, armor: int, second_phase: bo
 		heal = int(enemy.hp*float(enemy.special_heal))
 		label = enemy.special_name
 	heal = int(heal*(1.0-.25*RealmRuneforge.active_rank(m,"tide")))
+	if RealmGearSets.active(m,"moonsteel"): heal = int(heal*.8)
 	var damage = m.hit_damage(attack,defense)
 	if RealmRuneforge.active_rank(m,"bell")>0: damage = ceili(damage*1.1)
 	damage = maxi(1,ceili(damage*RealmDoctrines.active(m).incoming))
+	if third and RealmGearSets.active(m,"steel"): damage = maxi(1,ceili(damage*.85))
 	return {"damage":damage,"heal":heal,"label":label}
 
 static func player_damage(m, enemy: Dictionary, swing: int) -> int:
@@ -49,7 +51,9 @@ static func player_damage(m, enemy: Dictionary, swing: int) -> int:
 			"reaver": damage = int(damage*2.5)
 		var rank = RealmRuneforge.active_rank(m,"bell")
 		if rank>0: damage = int(damage*(1.0+[.2,.35,.5][rank-1]))
-	return maxi(1,int(damage*RealmDoctrines.active(m).outgoing))
+	damage = maxi(1,int(damage*RealmDoctrines.active(m).outgoing))
+	if special and RealmGearSets.active(m,"dusksteel"): damage = maxi(1,int(damage*1.15))
+	return damage
 
 static func mechanic(enemy: Dictionary) -> String:
 	if enemy.has("special_name"):

@@ -119,3 +119,7 @@ Solo: the tier footer now follows current work, skill requirements, crafting, eq
 ## 0.27 Audit implementation, first delivery
 
 User authorized all recommendations from docs/full-audit-0.26.md. Solo: persistent upgrade targets, advanced work orders, improved training selection, Apex field progress, optional doctrines/loadouts, tier bounty rewards, inventory sort/filter/paging, readiness and bestiary. Original 16-pose combat atlas, Ogg music conversion and budgeted asynchronous offline simulation on a copied state. 83 essential checks, domain checks, async state/report equivalence and 12 phone captures; Android debug APK. Details: docs/qa/audit-upgrade-0.27-report.md. IMPORTANT: full scope is not complete; subsequent autonomous runs must read docs/audit-delivery-roadmap.md and continue its outstanding priorities. Never claim full AAA/SSS completion.
+
+## 0.28 Armor identity and loadout comparison
+
+Solo continuation of the audit: four derived two-piece armor bonuses in shared combat/forecast, set collection and crafting routes, before/after equipment set summary, and read-only saved-build comparison for an unlocked hunt. Existing gear and saves participate without schema migration. Numeric auto-equip limitations explicit. 83 essential checks, focused threshold/effect/save/read-only checks, four-build Lantern Widow sweep with chunk equivalence and six phone captures. Versioned debug APK; full balance/device limitations in docs/qa/armor-sets-0.28-report.md. Continue remaining audit items from docs/audit-delivery-roadmap.md.

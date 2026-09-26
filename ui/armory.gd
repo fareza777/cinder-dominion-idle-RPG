@@ -93,6 +93,7 @@ Requires Smithing Lv.%d" % [int(price.gold),int(price.ingots),m.name_of(price.me
 
 func loadouts():
 	var v = app.modal("Your battle loadouts")
+	v.add_child(U.button("Compare against a hunt",func(): preload("res://ui/build_compare.gd").new(app).open()))
 	v.add_child(U.para("A different answer to every enemy.",26,U.TEXT))
 	v.add_child(U.para("Save equipment, fighting style, advanced training, talents, relic, rune and supplies together. Applying a build selects its supplies; it does not create or reserve them.",14))
 	var saved = RealmLoadouts.state(m)

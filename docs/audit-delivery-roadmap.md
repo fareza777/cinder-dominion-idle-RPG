@@ -27,3 +27,6 @@ User approved the complete audit direction on 2026-09-26: work solo, preserve sa
 8. Loadout forecast comparison, opt-in queue notifications and cloud save conflict design only where useful. Store release/commerce requires a separate implementation and verification stage; current providers remain disabled.
 
 Keep finished changes reviewable and versioned. No publishing, paid service activation, or claims of finished AAA/SSS quality. Read this tracker and implementation ledger in subsequent development runs.
+
+## 0.28 delivered
+Four two-piece armor identities integrated into the shared combat/forecast rules: Steel special-hit defense, Moonsteel enemy-healing suppression, Dusksteel fourth-hit damage and Dawnsteel food strength. Mix two sets across five armor slots; weapons/tools excluded, no higher-piece scaling. Existing equipment gains these identities without save changes. Hero, Ascension and item comparisons expose effects. New read-only loadout comparison targets an unlocked encounter and offers explicit apply/plan actions. Numeric auto-equip is labeled as such. A four-build single-encounter sweep and chunk equivalence passed; broad balance, unique individual item effects and talent milestones remain open.

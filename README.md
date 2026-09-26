@@ -1,16 +1,22 @@
-# Ashen Covenant — Adventure preview 0.27
+# Ashen Covenant — Adventure preview 0.28
 
 Idle RPG dark fantasy untuk Android. Gratis, tanpa iklan. Build ini untuk dimainkan dan dievaluasi, belum versi rilis publik.
 
 ## Mulai bermain
 
-1. Pasang `build/android/ashen-covenant-0.27.apk` di Android 64-bit. APK memakai identitas aplikasi yang sama dengan 0.1–0.26 sehingga bisa dipasang sebagai pembaruan.
+1. Pasang `build/android/ashen-covenant-0.28.apk` di Android 64-bit. APK memakai identitas aplikasi yang sama dengan 0.1–0.27 sehingga bisa dipasang sebagai pembaruan.
 2. Seluruh antarmuka dan narasi game memakai **English**. Splash mengantar ke menu utama. Pilih **New game** untuk langsung masuk dan pilih **Show me the way** untuk panduan dengan sorotan emas. Intro opsional tersedia di About. **Continue journey** melanjutkan progres yang sudah ada.
 3. Tekan **Goals** di bagian atas layar. Layar menampilkan target, angka progres, checklist dan tombol tugas. Tekan tindakannya, lalu **Begin · 4 cycles** (jumlahnya mengikuti tujuan) untuk memulai jumlah siklus yang tepat.
 4. Tugas awal: 4 copper ore → 2 copper ingots → 1 ash log → Copper Sword → Equip item → 3 Ash Rats. Panduan lalu mengantar lewat musuh berikutnya hingga Bellkeeper, tanpa melompat langsung ke boss.
 5. Pantau activity bar. **Queue** menampilkan tugas berjalan/menunggu, progres target, dan alasan terhambat. **Sources/Find** membantu mencari bahan yang kurang. Satu aktivitas berjalan pada satu waktu.
 6. Buka **Food & survival guide** untuk belajar memancing, memasak, memilih makanan dan menyiapkan auto-heal. Perlengkapan hasil crafting harus dipasang dari **Bag**.
 7. Progres tersimpan otomatis dan berlanjut maksimal 24 jam saat kembali. Menu **☰** tersedia dari dalam permainan. New Game meminta konfirmasi dan menyimpan cadangan terpisah; **Settings → Restore a previous journey** memulihkannya.
+
+## Baru di 0.28 — Armor sets & loadout comparison
+
+Dua bagian armor metal yang sama memberi bonus: Steel mengurangi third-hit damage, Moonsteel menekan healing musuh, Dusksteel memperkuat fourth attack, dan Dawnsteel memperkuat makanan. Shield dihitung; weapon/tools tidak. Dua set bisa dikombinasikan. Hero → Armor sets menjelaskan bonus, sementara detail item menampilkan efek pergantian terhadap set aktif.
+
+Loadouts dan hunt planner kini memiliki Compare builds: pilih encounter lalu bandingkan waktu, makanan, damage masuk dan set aktif tanpa mengganti equipment. Apply tetap tindakan eksplisit. Auto-equip berdasarkan base stats dan dapat memutus set. Lihat docs/qa/armor-sets-0.28-report.md untuk hasil pemeriksaan dan batas balance.
 
 ## Baru di 0.27 — Audit implementation, first delivery
 
