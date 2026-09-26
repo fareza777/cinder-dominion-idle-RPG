@@ -36,6 +36,8 @@ var dialog_callbacks: Array[Callable] = []
 var pages
 var music: AudioStreamPlayer
 var coach: Control
+var ads: Node
+var banner_space: Control
 var effect: AudioStreamPlayer
 var experience
 var mode = "play"
@@ -218,6 +220,12 @@ func ensure_coach():
 	coach.app = self
 	add_child(coach)
 
+func ensure_ads():
+	if is_instance_valid(ads): return
+	ads = preload("res://services/admob.gd").new()
+	ads.app = self
+	add_child(ads)
+
 func guide_dialog():
 	experience.guide()
 
@@ -249,7 +257,7 @@ func build_shell():
 	theme.default_font_size = int(15*U.scale)
 	U.apply_theme(theme)
 	for child in get_children():
-		if child!=music and child!=effect and child!=coach:
+		if child!=music and child!=effect and child!=coach and child!=ads:
 			remove_child(child)
 			child.queue_free()
 	dialog = null
@@ -352,6 +360,9 @@ func build_shell():
 		b.add_theme_stylebox_override("normal",U.box(Color("101a21") if key==page else Color("0e151a"),U.GOLD if key==page else Color("0e151a"),4,6))
 		nav.add_child(b)
 	hud = layout
+	banner_space = Control.new()
+	banner_space.hide()
+	layout.add_child(banner_space)
 	toast_label = U.label("",14,U.TEXT)
 	toast_label.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
 	toast_label.add_theme_stylebox_override("normal",U.box(Color("38423b"),U.GOLD,8,14))
@@ -377,7 +388,7 @@ func set_page(next: String, retain_scroll: bool = false):
 		"skills": pages.skills(body)
 		"inventory": pages.inventory(body)
 		"character": pages.character(body)
-	var nav = hud.get_child(hud.get_child_count()-1).get_child(0)
+	var nav = hud.get_child(hud.get_child_count()-2).get_child(0)
 	for b in nav.get_children():
 		b.add_theme_stylebox_override("normal",U.box(Color("1c282f") if b.name==page else Color("0e151a"),U.GOLD if b.name==page else Color("0e151a"),4,6))
 		b.add_theme_color_override("font_color",U.GOLD if b.name==page else U.MUTED)
@@ -775,6 +786,7 @@ func settings_dialog():
 				for voice in effect.get_children(): voice.volume_db = effect.volume_db
 			persist())
 	v.add_child(U.button("Music & sound preview",func(): preload("res://ui/sound_room.gd").new(self).open()))
+	v.add_child(U.button("AdMob · test ads",func(): preload("res://ui/ad_settings.gd").new(self).open()))
 	v.add_child(U.label("PROGRESS & BACKUPS",11,U.GOLD))
 	if has_campaign: v.add_child(U.button(tr2("Ekspor cadangan save","Export save backup"),export_save))
 	v.add_child(U.button(tr2("Impor cadangan save","Import save backup"),import_save))

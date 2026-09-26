@@ -1,0 +1,22 @@
+{
+  "version": "0.32",
+  "generator": "OpenAI built-in image generation",
+  "assets": [
+    {
+      "path": "assets/art/heroes-0.32.png",
+      "prompt": "Production character selection and equipment art for Ashen Covenant dark fantasy RPG. Exact THREE equal columns in a 1536x1024 landscape triptych, no text, no borders. Each cell a full body front-facing hero in cathedral armory alcove, entire boots visible, keep body centered and side edges dark for overlay equipment slots. Original hand painted premium dark fantasy art. LEFT WARDEN: imposing male veteran, weathered face short dark beard, no hood, tarnished layered steel plate, charcoal fur mantle, empty relaxed hands. CENTER RANGER: athletic adult female scout, olive green hood and leather coat, auburn hair, weathered lightweight leather armor, empty relaxed hands. RIGHT ARCANIST: slender androgynous adult mage, long ash white hair, uncovered face, dark burgundy robes with copper embroidery, faint ember fingertips, empty relaxed hands. No weapons held. Consistent camera scale, matching warm gold candles and cool slate cathedral light, restrained worn materials, distinct silhouettes. Anatomically coherent realistic figures, exquisite detail, dignified, no cartoon, no neon. Each occupies central 60 percent of own column and 88 percent height. This is three separate full body character portrait assets laid out side by side for exact cropping."
+    },
+    {
+      "path": "assets/art/work-warden-0.32.png",
+      "prompt": "Edit this production 4-column by 6-row work animation sprite atlas. Preserve EXACT image size, panel boundaries, four animation poses per row, camera positions, workstations and all six backgrounds. Replace the worker in EVERY one of the 24 panels with this consistent original character: male veteran with short dark beard, uncovered head, tarnished steel armor and charcoal fur mantle. Preserve tools and occupational actions: mining, woodcutting, fishing, smithing, cooking, alchemy from top to bottom. Same premium hand painted dark fantasy aesthetic, grounded anatomy, no text or new panels. Every pose must clearly be the same warden. Do not rearrange or merge panels."
+    },
+    {
+      "path": "assets/art/work-ranger-0.32.png",
+      "prompt": "Edit this production 4-column by 6-row work animation sprite atlas. Preserve EXACT image size, panel boundaries, four animation poses per row, camera positions, workstations and all six backgrounds. Replace the worker in EVERY one of the 24 panels with this consistent original character: athletic adult female scout with auburn hair, olive green hood and lightweight weathered leather armor. Preserve tools and occupational actions: mining, woodcutting, fishing, smithing, cooking, alchemy from top to bottom. Same premium hand painted dark fantasy aesthetic, grounded anatomy, no text or new panels. Every pose must clearly be the same ranger. Do not rearrange or merge panels."
+    },
+    {
+      "path": "assets/art/work-arcanist-0.32.png",
+      "prompt": "Edit this production 4-column by 6-row work animation sprite atlas. Preserve EXACT image size, panel boundaries, four animation poses per row, camera positions, workstations and all six backgrounds. Replace the worker in EVERY one of the 24 panels with this consistent original character: slender androgynous adult mage with long ash white hair, uncovered head, dark burgundy robes and copper embroidered cuffs. Preserve tools and occupational actions: mining, woodcutting, fishing, smithing, cooking, alchemy from top to bottom. Same premium hand painted dark fantasy aesthetic, grounded anatomy, no text or new panels. Every pose must clearly be the same arcanist. Do not rearrange or merge panels."
+    }
+  ]
+}

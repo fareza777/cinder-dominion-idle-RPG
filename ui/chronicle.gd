@@ -245,6 +245,7 @@ func world(selected: String = "wilds"):
 		card.add_child(U.para(d.detail,14))
 		for tier in range(1,6):
 			var id = "%s_%d" % [region,tier]
+			if not RealmDiscovery.visible(m,id): continue
 			var enemy = m.data.enemies[id]
 			var why = m.available(id)
 			var cleared = int(m.s.kills.get(id,0))>0

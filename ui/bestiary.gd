@@ -7,6 +7,7 @@ func _init(owner):
 	m = app.model
 func open(region: String = "all"):
 	var v = app.modal("Bestiary")
+	v.add_child(U.para("New enemies appear as you clear hunts and open routes.",14))
 	var picker = OptionButton.new()
 	var regions = ["all","wilds","marsh","crown"]
 	for id in regions: picker.add_item("All regions" if id=="all" else RealmChronicle.REGIONS[id].name)
@@ -15,6 +16,7 @@ func open(region: String = "all"):
 	picker.item_selected.connect(func(index): open(regions[index]))
 	v.add_child(picker)
 	for id in m.data.enemies:
+		if not RealmDiscovery.visible(m,id): continue
 		var e = m.data.enemies[id]
 		if region!="all" and e.get("region","")!=region: continue
 		var c = U.card(v,12)

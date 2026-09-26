@@ -2,7 +2,7 @@ extends RefCounted
 
 const U = preload("res://ui/style.gd")
 const STORE_URL = "" # Set only after a real public listing exists.
-const VERSION = "0.31.0"
+const VERSION = "0.32.0"
 var app
 var front: Control
 var cinematic_page = 0
@@ -107,7 +107,7 @@ func menu():
 	if app.save_blocked:
 		v.add_child(U.para("Your saved progress could not be loaded. Import a backup from Settings. Existing files have been preserved.",13,U.RED))
 	gap(v,12)
-	v.add_child(U.para("FREE TO PLAY · NO ADS\nBuild "+VERSION+" · Adventure preview",11,U.MUTED))
+	v.add_child(U.para("FREE TO PLAY\nBuild "+VERSION+" · Adventure preview",11,U.MUTED))
 	v.add_child(U.button("Exit game",func():
 		app.persist()
 		app.get_tree().quit()))
@@ -123,6 +123,10 @@ func new_game():
 	v.add_child(U.button("Back up progress & start new",begin_new_game))
 
 func begin_new_game():
+	preload("res://ui/character_creation.gd").new(app).open()
+
+func commit_new_game(hero_id: String, hero_name: String):
+	if hero_id not in RealmCharacters.ALL or not RealmCharacters.valid_name(hero_name): return
 	if app.has_campaign:
 		app.persist()
 		DirAccess.make_dir_recursive_absolute("user://archives")
@@ -140,6 +144,7 @@ func begin_new_game():
 	var previous = app.model.s.duplicate(true)
 	var settings = app.model.s.settings.duplicate(true)
 	app.model.fresh(int(Time.get_unix_time_from_system()))
+	app.model.command({"type":"hero_create","id":hero_id,"name":hero_name})
 	for key in ["locale","font","motion","battery","music","sfx"]: app.model.s.settings[key] = settings[key]
 	app.model.s.wall = app.now_ms()
 	if not app.saves.write_state(app.model.s,app.model.data):
@@ -247,6 +252,7 @@ func guide():
 	for step in RealmJourney.steps(app.model):
 		var done = step.current>=step.goal
 		v.add_child(U.para(("✓  " if done else "○  ")+step.title,14,U.GREEN if done else U.MUTED))
+		if not done: break
 	v.add_child(U.button("Farm & upgrade",app.progress_dialog))
 	v.add_child(U.button("How to play",handbook))
 	var next = app.modal_action(o.action,act_on_goal)
@@ -330,19 +336,19 @@ func archives():
 func about():
 	var v = app.modal("About Ashen Covenant")
 	title(v,"Keep the last fire burning.",30)
-	v.add_child(U.para("Ashen Covenant is an independent dark fantasy idle RPG about gathering, crafting and preparing for the battles ahead.\n\nVersion "+VERSION+" · Adventure preview\nChapter I + 3 expedition regions · 15 expedition tiers + 3 guardian trials\n3 relic collections · 3 talent paths · 40 items · 20 recipes\n\nFree to play. No ads. No purchases are active in this preview. Cosmetics, content expansions and optional rewarded ads are planned for future releases.",16,U.TEXT))
+	v.add_child(U.para("Ashen Covenant is an independent dark fantasy idle RPG about gathering, crafting and preparing for the battles ahead.\n\nVersion "+VERSION+" · Adventure preview\nChapter I + 3 expedition regions · 15 expedition tiers + 3 guardian trials\n3 playable characters · class skills · customizable attributes\n\nFree to play. No purchases are active in this preview. Settings includes optional Android test ads. Cosmetics and content expansions are planned for future releases.",16,U.TEXT))
 	v.add_child(U.para("Art generated for this project with OpenAI image generation. Original synthesized audio. Fonts: Manrope and Cormorant Garamond. Built with Godot.",14))
 	v.add_child(U.button("Credits & open-source licenses",licenses))
 	v.add_child(U.button("Replay cinematic intro",func(): intro(true)))
 
 func licenses():
 	var v = app.modal("Credits & licenses")
-	for path in ["res://assets/GODOT-LICENSE.txt","res://assets/fonts/manrope-OFL.txt","res://assets/fonts/cormorantgaramond-OFL.txt","res://assets/GODOT-COPYRIGHT.txt"]:
+	for path in ["res://assets/GODOT-LICENSE.txt","res://assets/fonts/manrope-OFL.txt","res://assets/fonts/cormorantgaramond-OFL.txt","res://assets/GODOT-COPYRIGHT.txt","res://addons/admob/LICENSE"]:
 		v.add_child(U.para(FileAccess.get_file_as_string(path),12))
 
 func share():
 	var v = app.modal("Share Ashen Covenant")
-	var message = "I'm playing Ashen Covenant — a dark fantasy idle RPG. Gather, forge and fight to rekindle the last beacon. Free to play, with no ads."
+	var message = "I'm playing Ashen Covenant — a dark fantasy idle RPG. Gather, forge and fight to rekindle the last beacon. Free to play."
 	if STORE_URL!="": message += "\n"+STORE_URL
 	else: message += "\nCurrently in private preview; a public download link is not available yet."
 	v.add_child(U.para(message,17,U.TEXT))

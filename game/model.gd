@@ -83,6 +83,7 @@ func stats() -> Dictionary:
 	if legacy.relic=="ward": st.armor += int(legacy.relics.ward)*2
 	st.attack = maxi(1,int(st.attack*float(style.attack)))
 	st.armor = maxi(0,int(st.armor)+int(style.armor)+int(progression().upgrades.ward))
+	RealmCharacters.apply_stats(self,st)
 	return st
 
 func protected(uid: String) -> bool:
@@ -154,6 +155,9 @@ func command(cmd: Dictionary) -> bool:
 	var action = str(cmd.get("type",""))
 	var id = str(cmd.get("id",""))
 	match action:
+		"hero_create","attribute_add","attribute_reset":
+			var why = RealmCharacters.command(self,cmd)
+			if why!="": return fail(why)
 		"refine":
 			var why = RealmWorkshop.command(self,id)
 			if why!="": return fail(why)
@@ -468,6 +472,7 @@ func resolve_combat():
 			if crit: damage = int(damage*1.5)
 			f.hp -= damage
 			var skill_name = {"balanced":"CLEAVE ","guard":"WARD ","reaver":"REND "}[progression().stance]
+			if RealmCharacters.rank(self)>0 and RealmCharacters.id(self)!="warden": skill_name = RealmCharacters.ALL[RealmCharacters.id(self)].skill.to_upper()+" "
 			if RealmRuneforge.active_rank(self,"thorn")>0: skill_name = "PIERCE "
 			elif RealmRuneforge.active_rank(self,"bell")>0: skill_name = "DIRGE "
 			last_hit = (skill_name if special else ("CRIT " if crit else ""))+str(damage)

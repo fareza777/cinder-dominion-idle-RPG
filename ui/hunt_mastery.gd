@@ -13,12 +13,12 @@ func open(group: String = "open"):
 	var v = app.modal("Hunt mastery")
 	app.dynamic(v,func():
 		var total = 0
-		for id in m.data.enemies: total += H.rank(m,id)
-		return "%d / %d ranks earned" % [total,m.data.enemies.size()*4],20,U.GOLD)
+		for id in RealmDiscovery.enemies(m): total += H.rank(m,id)
+		return "%d ranks earned · %d enemies discovered" % [total,RealmDiscovery.enemies(m).size()],20,U.GOLD)
 	v.add_child(U.para("Bonuses apply only to that enemy. Past wins count.",13))
 	var tabs = U.row(6)
 	v.add_child(tabs)
-	for choice in [["open","Available"],["all","All enemies"]]:
+	for choice in [["open","Available"],["all","Discovered"]]:
 		tabs.add_child(U.button(choice[1],func(): open(choice[0]),choice[0]==group))
 	var ids = m.data.enemies.keys()
 	ids.sort_custom(func(a,b):
@@ -28,6 +28,7 @@ func open(group: String = "open"):
 		var left_b = H.TARGETS[rb]-int(m.s.kills.get(b,0)) if rb<4 else 1000000
 		return left_a<left_b)
 	for id in ids:
+		if not RealmDiscovery.visible(m,id): continue
 		var enemy = m.data.enemies[id]
 		if group=="open" and m.available(id)!="": continue
 		var card = U.card(v,14)

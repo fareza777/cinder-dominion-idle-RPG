@@ -120,6 +120,7 @@ func explore(parent: Node):
 	for id in m.data.enemies:
 		var d = m.data.enemies[id]
 		if d.has("region"): continue
+		if not RealmDiscovery.visible(m,id): continue
 		var why = m.available(id)
 		var card = U.card(parent,12,U.GOLD.darkened(.55) if d.boss else U.LINE)
 		var r = U.row(12)
@@ -131,7 +132,7 @@ func explore(parent: Node):
 		v.add_child(U.para(m.local_name(d),19,U.GOLD if d.boss else U.TEXT))
 		v.add_child(U.label("%d HP  ·  %d ATK  ·  %d DEF" % [int(d.hp),int(d.attack),int(d.armor)],11,U.MUTED))
 		app.dynamic(v,func(): return "%d %s  ·  +%d gold" % [int(m.s.kills.get(id,0)),text("dikalahkan","defeated"),RealmHuntMastery.gold(m,d)],11,U.MUTED)
-		var next_region = {"grave_thrall":"Cinder Bandit","cinder_bandit":"Chapel Guard","chapel_guard":"Ember Wraith","ember_wraith":"Bellkeeper"}.get(id,"")
+		var next_region = {"grave_thrall":"the next hunt","cinder_bandit":"the next hunt","chapel_guard":"the next hunt","ember_wraith":"the next hunt"}.get(id,"")
 		if next_region!="":
 			app.dynamic(card,func(): return "%d / 5 victories · unlock %s%s" % [mini(5,int(m.s.kills.get(id,0))),next_region," + Smithing Lv.10" if id=="ember_wraith" else ""],12,U.GOLD)
 			var route_bar = U.progress(m.s.kills.get(id,0),5,U.GOLD,4)
@@ -336,7 +337,8 @@ func inventory(parent: Node):
 	if not salvage.is_empty(): parent.add_child(U.button(text("Tinjau peleburan item umum…","Review common item salvage…"),func(): app.salvage_dialog(salvage)))
 
 func character(parent: Node):
-	heading(parent,"EQUIPMENT & BUILD","The Emberkeeper")
+	heading(parent,"EQUIPMENT & BUILD",RealmCharacters.hero_name(m))
+	parent.add_child(U.button("Attributes & class skill" if RealmCharacters.id(m)!="" else "Choose your character · keep progress",func(): preload("res://ui/character_stats.gd").new(app).open()))
 	preload("res://ui/hero_equipment.gd").new(app).home(parent)
 	var c = U.card(parent)
 	c.add_child(U.label("COMBAT SKILLS",11,U.GOLD))

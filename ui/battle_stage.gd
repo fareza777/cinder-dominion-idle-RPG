@@ -24,8 +24,10 @@ var draw_clock = 0.0
 var cast_time = 0.0
 var cast_name = ""
 var poses: Array[Texture2D] = []
+var character_art: Texture2D
 
 func _ready():
+	if RealmCharacters.id(model)!="": character_art = RealmCharacters.portrait(model)
 	for index in range(16): poses.append(U.atlas_tile("res://assets/art/combat-poses-0.27.png",index,4,4))
 	custom_minimum_size.y = 280
 	mouse_filter = Control.MOUSE_FILTER_IGNORE
@@ -161,7 +163,9 @@ func _draw():
 		if side==0 or fighting:
 			var pose_row = 0 if side==0 else {"wilds":1,"marsh":2,"crown":3}.get(enemy.get("region",""),-1)
 			if side==1 and enemy.get("apex",false): pose_row = -1
-			if pose_row>=0:
+			if side==0 and character_art!=null:
+				draw_texture_rect(character_art,r,false,Color(1,.72,.68) if hit else Color.WHITE)
+			elif pose_row>=0:
 				var frame = 3 if hit else (2 if attacks[target]>0 else (1 if windup>.4 else 0))
 				if not model.s.settings.motion: frame = 0
 				var pose_center = (left if side==0 else right).get_center()

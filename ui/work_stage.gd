@@ -12,6 +12,8 @@ var frame = 0
 var clock = 0.0
 var running = false
 var combat = false
+var character_id = "unset"
+var character_art: Texture2D
 
 func _ready():
 	name = "WorkStage"
@@ -19,7 +21,16 @@ func _ready():
 	size_flags_vertical = Control.SIZE_SHRINK_CENTER
 	mouse_filter = Control.MOUSE_FILTER_IGNORE
 	clip_contents = true
-	var sheet = load("res://assets/art/work-poses-0.31.png")
+	load_character()
+	_process(0)
+
+func load_character():
+	character_id = RealmCharacters.id(model)
+	character_art = RealmCharacters.portrait(model)
+	frames.clear()
+	hero_poses.clear()
+	var path = "res://assets/art/work-poses-0.31.png" if character_id=="" else "res://assets/art/work-%s-0.32.png" % character_id
+	var sheet = load(path)
 	# Observed painted row edges, excluding thin separators in the source atlas.
 	var edges = [0,236,474,713,969,1210,1536]
 	for i in range(24):
@@ -30,10 +41,10 @@ func _ready():
 		tile.region = Rect2((i%4)*256+2,edges[row]+2,252,edges[row+1]-edges[row]-4)
 		frames.append(tile)
 	for i in range(4): hero_poses.append(U.atlas_tile("res://assets/art/combat-poses-0.27.png",i,4,4))
-	_process(0)
 
 func _process(delta):
 	if model==null: return
+	if character_id!=RealmCharacters.id(model): load_character()
 	visible = not model.s.queue.is_empty()
 	if not visible: return
 	var step = model.s.queue[0]
@@ -63,7 +74,8 @@ func _draw():
 	if combat:
 		draw_rect(area,Color("152029"))
 		if enemy_art!=null: draw_texture_rect(enemy_art,Rect2(size.x*.52,2,size.x*.46,size.y-4),false,Color(.8,.8,.8))
-		draw_texture_rect(hero_poses[frame],Rect2(-12,3,size.x*.88,size.y-6),false)
+		if character_id=="": draw_texture_rect(hero_poses[frame],Rect2(-12,3,size.x*.88,size.y-6),false)
+		else: draw_texture_rect(character_art,Rect2(1,2,size.x*.5,size.y-4),false)
 		if frame==2: draw_line(Vector2(size.x*.4,15),Vector2(size.x*.70,38),U.GOLD,2,true)
 	else:
 		var texture = frames[skill_index*4+frame]

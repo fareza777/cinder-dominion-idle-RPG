@@ -1,11 +1,15 @@
-# Future IAP and AdMob boundary
+# AdMob test integration and future purchases — 0.32
 
-The latest user direction adds AdMob to the earlier cosmetics/expansions business model. This build contains only a disabled integration seam; there are no ad or billing SDKs, live IDs, products for sale, or fabricated successful purchases.
+Android uses Poing Studios Godot AdMob plugin v5.1.0 (MIT), vendored with Android ads/core AARs. Source: https://github.com/poingstudios/godot-admob-plugin/releases/tag/v5.1.0. Matching android-template-v4.7.1.zip supplies binaries. Exporter declares Google ads-mobile-sdk 1.4.0. One vendor patch makes installation honor disabled iOS instead of downloading it.
 
-`data/commerce.json` declares two future product concepts (cosmetic cloak, later content expansion) and one optional rewarded placement (refuge supplies). These names are internal draft identifiers, not published store products. Neither proposed product is delivered in this build. `services/commerce.gd` provides async `purchase`, `restore_purchases`, and `request_rewarded` methods. With default configuration, each returns an explicit unavailable result. The core simulation has no dependency on those calls, and no reward or entitlement is granted by a UI click or provider return value.
+Project settings and data/ads.json use Google demo application and banner/interstitial/rewarded IDs. services/admob.gd initializes on request, handles failure/timeout, reserves banner space, blocks full-screen requests in combat/onboarding, and imposes a 15-minute interstitial cooldown per session. Settings exposes test buttons; no automatic ads are inserted into gameplay.
 
-Before live use, implement the Android providers, real catalog/prices and restore handling; implement verified purchase/reward processing, durable transaction IDs, duplicate rejection and entitlement persistence. Add platform configuration, network permissions, consent handling appropriate to deployment, store identifiers, and cancellation/error UI. Wire optional rewarded placement only after those pieces exist. Enabling a flag or entering an ID alone does not activate a working purchase/ad integration.
+Rewarded tests grant five selected meals only on the SDK earned-reward callback, once per ad and only to the same journey. Closing/unavailable ads grant nothing. This client callback is not server verification or a tamper-proof economy. No physical Android ad display was tested.
 
-Treat provider results as untrusted receipts/events until verified. Keep game rewards separate from display callbacks. If no ad is available or a purchase is cancelled, gameplay must remain usable. Existing daily bounty progress and simulation remain independent of availability of either provider.
+Production remains blocked. Live rollout requires real IDs, appropriate UMP consent/privacy choices, store disclosures, native device tests and reviewed placements. Trusted monetized rewards need server verification and durable duplicate handling. Setting test_mode=false does not enable production.
 
-Daily boards in this offline preview use a monotonic day_seen bound against device time; unfinished boards carry forward. This is not a trusted economic clock. Server-side time and anti-replay enforcement are still needed for online economy or monetized reward decisions. Save checksums detect accidental corruption, not malicious editing.
+Purchases remain a disabled seam in services/commerce.gd and data/commerce.json. No billing SDK, purchasable character, published product or entitlement verification exists. All three characters are free. The character registry accepts future definitions; paid access additionally requires billing, receipt verification, restore and entitlement handling.
+
+## Rebuilding Android
+
+Use Godot 4.7.1 matching export templates, Java 17 and Android SDK. Install Godot Android build template into the project (android/build is generated and ignored), retaining android/.build_version. The enabled AdMob exporter applies Gradle dependencies. Export Android with Gradle enabled. Native AARs under addons/admob/android/bin/ads are tracked; keystores and machine paths are not. First export requires network access for Gradle/Maven. No paid service was connected.

@@ -18,7 +18,7 @@ func _ready():
 	custom_minimum_size.y = 488
 	clip_contents = true
 	mouse_filter = Control.MOUSE_FILTER_PASS
-	portrait = load("res://assets/art/hero-armory-0.31.png")
+	portrait = RealmCharacters.portrait(app.model)
 	for slot in SLOTS:
 		var b = U.button("",func(): equipment.open_slot(slot))
 		b.name = "Slot_"+slot

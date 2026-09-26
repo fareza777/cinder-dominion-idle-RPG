@@ -7,3 +7,8 @@ build/
 tools/local-paths.json
 
 __pycache__/
+android/build/.gradle/
+android/build/build/
+android/build/app/build/
+android/build/libs/
+android/build/local.properties

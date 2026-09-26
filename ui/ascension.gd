@@ -67,6 +67,7 @@ func hunts():
 	for id in m.data.enemies:
 		var enemy = m.data.enemies[id]
 		if not enemy.get("apex",false): continue
+		if not RealmDiscovery.visible(m,id): continue
 		var card = U.card(v,14)
 		var row = U.row(12)
 		card.add_child(row)

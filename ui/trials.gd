@@ -9,6 +9,12 @@ func _init(owner):
 	m = owner.model
 
 func show_trial(selected: String = "trial_wilds"):
+	var discovered = RealmTrials.IDS.filter(func(id): return RealmDiscovery.visible(m,id))
+	if discovered.is_empty():
+		var locked = app.modal("Guardian Trials")
+		locked.add_child(U.para("Clear a region's fifth tier to discover its Guardian Trial.",17,U.GOLD))
+		return
+	if selected not in discovered: selected = discovered[0]
 	var e = m.data.enemies[selected]
 	var v = app.modal("Guardian Trials")
 	v.add_child(U.para("THE FINAL STAND",11,U.GOLD))
@@ -17,6 +23,7 @@ func show_trial(selected: String = "trial_wilds"):
 	var tabs = U.row(5)
 	v.add_child(tabs)
 	for id in RealmTrials.IDS:
+		if id not in discovered: continue
 		var button = U.button({"trial_wilds":"Thorn","trial_marsh":"Hymn","trial_crown":"Crown"}[id],func(): show_trial(id),selected==id)
 		button.size_flags_horizontal = Control.SIZE_EXPAND_FILL
 		tabs.add_child(button)

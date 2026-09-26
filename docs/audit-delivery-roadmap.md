@@ -38,3 +38,7 @@ Training plans now accept target level and 15/60/240-minute limits for six nonco
 ## 0.31 delivered
 
 Small animated task-bar thumbnail with 24 new work poses across six skills; battle thumbnail reuses existing art. Hero equipment now uses a full-body base illustration with six interactive anatomical slots, plus tool routes. These are four-pose work animations and a fixed base hero portrait, not a layered skeletal rig or equipment-driven body appearance. Remaining animation, icon, balance and device priorities still apply.
+
+## 0.32 delivered
+
+Three free classes, named journeys, attributes and class skill milestones added alongside progressive enemy discovery and distinct generated character/work art. Native AdMob demo controls are available; production consent, serving/device verification, monetized entitlements and long-term class balance remain open. See docs/qa/characters-discovery-0.32-report.md. Earlier audit priorities remain pending.
