@@ -336,17 +336,10 @@ func inventory(parent: Node):
 	if not salvage.is_empty(): parent.add_child(U.button(text("Tinjau peleburan item umum…","Review common item salvage…"),func(): app.salvage_dialog(salvage)))
 
 func character(parent: Node):
-	heading(parent,text("SUMPAH YANG BELUM PADAM","AN OATH STILL BURNING"),text("Penjaga Bara","The Emberkeeper"))
+	heading(parent,"EQUIPMENT & BUILD","The Emberkeeper")
+	preload("res://ui/hero_equipment.gd").new(app).home(parent)
 	var c = U.card(parent)
-	var row = U.row(18)
-	c.add_child(row)
-	row.add_child(U.portrait(0,Vector2(112,146)))
-	var v = U.column(8)
-	v.size_flags_horizontal = Control.SIZE_EXPAND_FILL
-	row.add_child(v)
-	v.add_child(U.label(text("Pengembara","Wanderer"),28,U.TEXT,true))
-	app.dynamic(v,func(): return "HP %d / 100" % int(m.s.hp),18,U.GREEN)
-	app.dynamic(v,func(): return "%d ATK  ·  %d DEF" % [int(m.stats().attack),int(m.stats().armor)],16,U.GOLD)
+	c.add_child(U.label("COMBAT SKILLS",11,U.GOLD))
 	for id in ["bladecraft","might","warding"]:
 		app.dynamic(c,func(): return "%s   Lv.%d   ·   %d XP" % [m.local_name(m.data.skills[id]),m.level(id),int(m.s.xp[id])],15)
 	var legacy = U.card(parent,14,U.GOLD.darkened(.5))

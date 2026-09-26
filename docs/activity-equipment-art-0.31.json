@@ -1,0 +1,36 @@
+{
+  "method": "Built-in image_gen; selected PNGs copied unchanged into project.",
+  "assets": [
+    {
+      "path": "assets/art/hero-armory-0.31.png",
+      "source": "exec-f0b96410-92d6-4d39-9663-cc0d58d35b7e.png",
+      "dimensions": [
+        1024,
+        1536
+      ],
+      "prompt": "Create production game art for Ashen Covenant, original dark fantasy idle RPG. A tall portrait illustration, full body solitary male wandering knight with face hidden by a weathered charcoal hood, modest worn black leather and steel brigandine, long tattered ash-grey cloak, no weapon or shield held, hands relaxed away from torso, boots entirely visible. Frontal symmetrical stance centered in the middle 40 percent of image, subtle natural three-quarter anatomy. Behind him a shadowy cathedral armory alcove, intricate antique brass arch and faint circular engraved floor under his feet, cool desaturated blue stone, warm amber side candles, restrained ember particles. High quality hand-painted dark fantasy game character art, atmospheric light, exquisite worn material detail, dignified and grounded, no cartoon, no neon. Keep left and right outer 25 percent dark and uncluttered for real equipment UI slots rendered separately. Subject spans 88 percent of image height. Portrait 2:3 composition. No text, no UI, no frames, no grids, no symbols pretending to be writing. This is a base hero illustration; no separate item icons.",
+      "usage": "Base hero portrait with interactive six-slot equipment UI. Appearance does not change with equipped armor."
+    },
+    {
+      "path": "assets/art/work-poses-0.31.png",
+      "source": "exec-b5b1fda6-d0e6-4373-a028-66a95b77ccd1.png",
+      "dimensions": [
+        1024,
+        1536
+      ],
+      "prompt": "Production sprite sheet for original dark fantasy idle RPG Ashen Covenant. Exactly FOUR equal columns and SIX equal rows, 24 frames total, edge-to-edge regular grid, no gutter, no borders, no text. Tall canvas ideally 2048x3072, each tile landscape 2:1 or square if needed. Each ROW is a distinct activity, FOUR sequential animation poses from left to right. Consistent hooded charcoal-cloaked male worker full body on LEFT of every frame, workstation on RIGHT, side-on view facing right. Camera and scale locked within each row, same stationary background and workstation across all four frames. Painterly realistic premium game sprites, richly detailed worn materials, dark slate and muted antique amber light. Row1 MINING: underground blue cave, bronze ore rock right, pickaxe raised / descending / striking rock with sparks / recovering. Row2 WOODCUTTING: misty ash forest, tree trunk right, axe windup / swing / impact wood chips / recovery. Row3 FISHING: moonlit marsh jetty with water right, cast rod / line extended / rod bent / reel fish out. Row4 SMITHING: dim forge, anvil right with glowing metal, hammer raised / lowered / sparks impact / recover. Row5 COOKING: hearth kitchen, iron pot and fire right, stir spoon / lift spoon / steam / stir again. Row6 ALCHEMY: stone laboratory, blue green glass flask table right, raise vial / pour / luminous vapor / lower vial. Absolutely keep every worker, tool and workstation inside their own tile. Scenes must fill the entire tile. Not a collage: strict regular 4x6 contact sheet designed to crop into independently animated frames. Four readable distinct poses per activity, no written labels.",
+      "usage": "Four poses each for mining, woodcutting, fishing, smithing, cooking, alchemy. Runtime atlas cropping uses observed painted row edges.",
+      "columns": 4,
+      "row_edges": [
+        0,
+        236,
+        474,
+        713,
+        969,
+        1210,
+        1536
+      ],
+      "crop_inset": 2
+    }
+  ]
+}

@@ -321,6 +321,9 @@ func build_shell():
 	footer.add_child(footer_col)
 	var fr = U.row(8)
 	footer_col.add_child(fr)
+	var work_thumbnail = preload("res://ui/work_stage.gd").new()
+	work_thumbnail.model = model
+	fr.add_child(work_thumbnail)
 	var ft = U.column(3)
 	ft.size_flags_horizontal = Control.SIZE_EXPAND_FILL
 	fr.add_child(ft)

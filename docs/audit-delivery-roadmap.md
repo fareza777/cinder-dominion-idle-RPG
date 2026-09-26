@@ -34,3 +34,7 @@ Four two-piece armor identities integrated into the shared combat/forecast rules
 ## 0.29 delivered
 
 Training plans now accept target level and 15/60/240-minute limits for six noncombat skills. Preview includes dependency XP, time, queue steps and projected level; a saved goal allows continuation after the batch. One available recipe runs for up to 1,000 cycles, with the next batch reconsidering unlocked recipes and current stock. Existing queues cannot be overwritten. First-save Smithing fixture reaches level 7 with 1,054 XP in a nominal 884-second batch. This is a bounded simulation check, not measured full-campaign pacing or a fully adaptive training loop.
+
+## 0.31 delivered
+
+Small animated task-bar thumbnail with 24 new work poses across six skills; battle thumbnail reuses existing art. Hero equipment now uses a full-body base illustration with six interactive anatomical slots, plus tool routes. These are four-pose work animations and a fixed base hero portrait, not a layered skeletal rig or equipment-driven body appearance. Remaining animation, icon, balance and device priorities still apply.

@@ -17,7 +17,14 @@ func open():
 		app.modal_action("View my next objective",app.guide_dialog)
 		return
 	v.add_child(U.para("%d / 20 tasks queued" % m.s.queue.size(),22,U.TEXT))
-	v.add_child(U.para("Only the first task can run. Tasks below it wait their turn. Use Refresh progress to update this view.",14))
+	v.add_child(U.para("One task runs at a time. The animation in the bottom bar follows your active task.",14))
+	var initial = queue_signature()
+	var dialog_ref = weakref(app.dialog)
+	var pending = {"refresh":false}
+	app.dialog_callbacks.append(func():
+		if dialog_ref.get_ref()==app.dialog and not pending.refresh and queue_signature()!=initial:
+			pending.refresh = true
+			call_deferred("refresh_if_current",dialog_ref))
 	var blocked = m.s.active.is_empty() and m.s.fight.is_empty()
 	if blocked:
 		var warning = U.card(v,14,U.RED.darkened(.4))
@@ -35,8 +42,11 @@ func open():
 		card.add_child(U.para(("Waiting for requirements" if blocked else "Running") if i==0 else "Queued",12,U.GOLD if i==0 else U.MUTED))
 		var value = m.level(activity.skill) if step.kind=="level" else int(step.output if step.kind=="output" else step.done)
 		var unit = "skill level" if step.kind=="level" else ("items produced" if step.kind=="output" else ("fights completed" if activity.kind=="combat" else "cycles completed"))
-		card.add_child(U.para("%d / %d %s" % [value,int(step.target),unit],13))
-		card.add_child(U.progress(value,int(step.target),U.GOLD,5))
+		app.dynamic(card,func(): return "%d / %d %s" % [m.level(activity.skill) if step.kind=="level" else int(step.output if step.kind=="output" else step.done),int(step.target),unit],13)
+		var bar = U.progress(value,int(step.target),U.GOLD,5)
+		card.add_child(bar)
+		app.dialog_callbacks.append(func():
+			if is_instance_valid(bar): bar.value = m.level(activity.skill) if step.kind=="level" else int(step.output if step.kind=="output" else step.done))
 		var row = U.row(8)
 		card.add_child(row)
 		if i>1: row.add_child(U.button("Move up",func():
@@ -49,6 +59,14 @@ func open():
 	v.add_child(U.button("Refresh progress",open))
 	app.modal_action("Stop all tasks",func():
 		if app.send({"type":"clear"}): open(),false)
+
+func queue_signature() -> String:
+	var order = []
+	for step in m.s.queue: order.append([step.id,step.target])
+	return JSON.stringify(order)+str(m.s.active.is_empty() and m.s.fight.is_empty())
+
+func refresh_if_current(reference):
+	if reference.get_ref()!=null and reference.get_ref()==app.dialog: open()
 
 func prepare():
 	var v = app.modal("Prepare missing materials")
