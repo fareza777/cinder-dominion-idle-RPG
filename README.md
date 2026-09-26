@@ -1,16 +1,24 @@
-# Ashen Covenant — Adventure preview 0.8
+# Ashen Covenant — Adventure preview 0.9
 
 Idle RPG dark fantasy untuk Android. Gratis, tanpa iklan. Build ini untuk dimainkan dan dievaluasi, belum versi rilis publik.
 
 ## Mulai bermain
 
-1. Pasang `build/android/ashen-covenant-0.8.apk` di Android 64-bit. APK memakai identitas aplikasi yang sama dengan 0.1–0.7 sehingga bisa dipasang sebagai pembaruan.
+1. Pasang `build/android/ashen-covenant-0.9.apk` di Android 64-bit. APK memakai identitas aplikasi yang sama dengan 0.1–0.8 sehingga bisa dipasang sebagai pembaruan.
 2. Seluruh antarmuka dan narasi game memakai **English**. Splash mengantar ke menu utama. Pilih **New game**, ikuti atau lewati intro, lalu baca empat tahap onboarding. **Continue journey** melanjutkan progres yang sudah ada.
 3. Tekan **Guide →** di bagian atas layar. Panduan menunjukkan tujuan, alasan, lokasi aktivitas dan jumlah yang dibutuhkan. Tekan tindakannya, lalu **Begin · 4 cycles** (jumlahnya mengikuti tujuan) untuk memulai jumlah siklus yang tepat.
 4. Tugas awal: 4 copper ore → 2 copper ingots → 1 ash log → Copper Sword → Equip item → 3 Ash Rats. Panduan lalu mengantar lewat musuh berikutnya hingga Bellkeeper, tanpa melompat langsung ke boss.
 5. Pantau activity bar. **Queue** menampilkan tugas berjalan/menunggu, progres target, dan alasan terhambat. **Sources/Find** membantu mencari bahan yang kurang. Satu aktivitas berjalan pada satu waktu.
 6. Buka **Food & survival guide** untuk belajar memancing, memasak, memilih makanan dan menyiapkan auto-heal. Perlengkapan hasil crafting harus dipasang dari **Bag**.
 7. Progres tersimpan otomatis dan berlanjut maksimal 24 jam saat kembali. Menu **☰** tersedia dari dalam permainan. New Game meminta konfirmasi dan menyimpan cadangan terpisah; **Settings → Restore a previous journey** memulihkannya.
+
+## Baru di 0.9 — Combat & journey polish
+
+Animasi portrait kini memiliki ancang-ancang, lunge dan rotasi saat menyerang, recoil saat terkena pukulan, gerak menghindar, efek pemulihan, serta gelombang awakening guardian. Mode reduced motion mempertahankan informasi tanpa gerak karakter; mode battery membatasi redraw arena hingga 30 fps. Ini peningkatan animasi portrait prosedural, belum karakter skeletal atau sprite animasi penuh.
+
+**Plan a longer hunt** pada persiapan musuh menyediakan pilihan 5/15/30 menit, diterjemahkan menjadi jumlah pertarungan tetap. Perkiraan bekal memperhitungkan HP yang berkurang sepanjang hunt, bukan mengasumsikan HP penuh pada setiap pertarungan. Perkiraan hasil mengecualikan loot acak dan bonus first clear. **Return after this fight** menyelesaikan battle berjalan lalu membatalkan sisa antrean setelah konfirmasi yang jelas; risiko kalah tetap berlaku.
+
+Intro dan teks perjalanan diperhalus dalam English. Angka mekanik dan petunjuk tetap eksplisit. Detail: `docs/combat-journey-0.9.md`.
 
 ## Baru di 0.8 — Guardian Trials
 

@@ -5,7 +5,7 @@ const IDS = ["trial_wilds","trial_marsh","trial_crown"]
 const STORIES = {
 	"wilds":"The road has opened, yet the watchman will not leave his post. Beneath his broken armor, a second heart takes root.",
 	"marsh":"You have crossed the drowned cloisters. Now the oracle asks for one final audience, beneath the water where her hymn began.",
-	"crown":"The outer bells are silent. At the throne, the keeper raises the last hammer. This toll will be answered by steel."}
+	"crown":"The outer bells are silent. At the throne, the keeper raises the last hammer. For the first time, the keeper looks down from his throne."}
 
 static func second_phase(enemy: Dictionary, hp: int) -> bool:
 	return bool(enemy.get("trial",false)) and hp*2<=int(enemy.hp)

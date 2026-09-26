@@ -43,3 +43,7 @@ Implemented the longer solo iteration in `docs/iteration-0.7-plan.md`: determini
 ## 0.8 Guardian Trials
 
 Solo iteration: three optional two-phase guardian trials; latched phase save state; one-time Epic rewards with exact hunt accounting; field-record integration; accessible trial hall and endgame Journey guidance. Existing artwork reused. Six targeted checks added to the existing lightweight suite, seven portrait UI captures, Android debug export. No monetization or publishing actions.
+
+## 0.9 Combat and journey polish
+
+Solo: distinct procedural portrait states, reduced-motion and battery handling, focused English narrative revisions, duration-based hunt planning with cumulative food budgeting, finish-current-fight command with explicit queue-cancellation confirmation. Four targeted checks added; full lightweight suite 50 passes, seven UI captures. Android debug APK exported for user playtest; no physical-device or AAA certification claims.

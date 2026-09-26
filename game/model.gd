@@ -229,6 +229,12 @@ func command(cmd: Dictionary) -> bool:
 			var step = s.queue[index]
 			s.queue.remove_at(index)
 			s.queue.insert(index-1,step)
+		"finish_hunt":
+			if s.fight.is_empty() or s.queue.is_empty(): return fail("There is no battle to finish.")
+			s.queue.resize(1)
+			s.queue[0].kind = "cycles"
+			s.queue[0].target = int(s.queue[0].done)+1
+			note("One last fight, then home. The rest of the queue has been cancelled.")
 		"clear":
 			refund_active()
 			s.queue.clear()
@@ -460,6 +466,7 @@ func resolve_combat():
 		if rng.randf()<.95:
 			s.hp -= int(move.damage)
 			combat_event("−%d HP" % int(move.damage),"hero")
+		else: combat_event("MISS","hero")
 		if s.hp<=0:
 			s.hp = 0
 			RealmHunts.finish(self,"Defeated")
@@ -473,7 +480,9 @@ func resolve_combat():
 		if s.hp<=100*float(s.settings.threshold) and count(food)>0:
 			spend(food,1)
 			RealmHunts.supplies(self,"meals")
-			s.hp = mini(100,int(s.hp)+RealmCombat.food_heal(self,food))
+			var restored_food = mini(100-int(s.hp),RealmCombat.food_heal(self,food))
+			s.hp += restored_food
+			combat_event("+%d HP" % restored_food,"hero")
 
 func win(enemy: Dictionary):
 	var before_gains = s.gains.duplicate(true)

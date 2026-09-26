@@ -66,8 +66,8 @@ func explore(parent: Node):
 	var region = m.data.enemies.get(m.s.fight.get("enemy",""),{}).get("region","")
 	var current_enemy = m.data.enemies.get(m.s.fight.get("enemy",""),{})
 	if current_enemy.get("trial",false): heading(parent,"GUARDIAN TRIAL",m.local_name(current_enemy),"Watch for the awakening at half health. Win once for Epic equipment; return for fragments and regional field records.")
-	elif region!="": heading(parent,"EXPEDITION IN PROGRESS",RealmChronicle.REGIONS[region].name,"Repeat cleared tiers for relic fragments and iron loot. Clear the next tier to push deeper into the realm.")
-	else: heading(parent,"CHAPTER I · THE OUTSKIRTS","Cinderwatch Outskirts","Choose an enemy and a number of fights. Combat runs automatically. Stock cooked food and equip upgrades first.")
+	elif region!="": heading(parent,"EXPEDITION IN PROGRESS",RealmChronicle.REGIONS[region].name,"There is still more to find along these roads. Revisit a familiar hunt for fragments and iron, or prepare for the guardian waiting ahead.")
+	else: heading(parent,"CHAPTER I · THE OUTSKIRTS","Cinderwatch Outskirts","The roads beyond Cinderwatch are no longer safe. Choose your quarry, check your food, and set out when you are ready. Your hero fights automatically.")
 	var battle = U.card(parent,12,U.GOLD.darkened(.55))
 	var stage = Control.new()
 	stage.set_script(preload("res://ui/battle_stage.gd"))
@@ -92,6 +92,10 @@ func explore(parent: Node):
 		if not enemy.get("trial",false): return ""
 		return "PHASE II · "+RealmTrials.phase_text(enemy) if RealmTrials.active_phase(m,enemy) else "PHASE I · The guardian awakens at half health.",13,U.RED)
 	var retreat = U.button("Retreat & stop queue",func(): app.send({"type":"clear"}))
+	var finish = U.button("Return after this fight",app.finish_hunt_dialog)
+	battle.add_child(finish)
+	app.update_callbacks.append(func():
+		if is_instance_valid(finish): finish.visible = not m.s.fight.is_empty())
 	battle.add_child(retreat)
 	app.update_callbacks.append(func():
 		if is_instance_valid(retreat): retreat.visible = not m.s.fight.is_empty())

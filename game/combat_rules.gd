@@ -76,7 +76,7 @@ static func forecast(m, id: String) -> Dictionary:
 	var risk = stalled or late_special.damage>=100 or incoming>=capacity*.9 or m.s.hp<=0
 	var rating = "Outmatched" if stalled else ("High risk" if risk else ("Food advised" if meals>0 else "Favorable"))
 	var fragments = int(enemy.get("fragments",1))
-	return {"seconds":seconds,"meals":meals,"rating":rating,"risk":risk,"stalled":stalled,"fragments_per_minute":0.0 if stalled else fragments*60.0/seconds,"healing":heal,"burst":int(late_special.damage)}
+	return {"incoming":incoming,"effective_heal":effective_heal,"seconds":seconds,"meals":meals,"rating":rating,"risk":risk,"stalled":stalled,"fragments_per_minute":0.0 if stalled else fragments*60.0/seconds,"healing":heal,"burst":int(late_special.damage)}
 
 static func farms(m, relic: String) -> Array:
 	var choices = []

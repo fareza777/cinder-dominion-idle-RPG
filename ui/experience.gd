@@ -2,7 +2,7 @@ extends RefCounted
 
 const U = preload("res://ui/style.gd")
 const STORE_URL = "" # Set only after a real public listing exists.
-const VERSION = "0.8.0"
+const VERSION = "0.9.0"
 var app
 var front: Control
 var cinematic_page = 0
@@ -163,9 +163,9 @@ func intro(replay=false):
 
 func intro_scene():
 	var scenes = [
-		["I · THE LONG NIGHT","When the bells rang,\nthe fires went out.","Across the valley, towns became ash. Those who remained followed a single light through the dark.",7],
-		["II · THE LAST REFUGE","Cinderwatch\nstill stands.","Behind broken walls, a forge waits cold and a handful of survivors keep the last ember alive.",0],
-		["III · YOUR COVENANT","Take up the ember.","Gather what the ruins have spared. Forge your own strength. Silence the Bellkeeper and rekindle the beacon.",0]
+		["I · THE LONG NIGHT","When the bells rang,\nthe fires went out.","No one remembers which bell rang first. By dawn, the roads were empty, and every hearth in the valley had gone cold.",7],
+		["II · THE LAST REFUGE","Cinderwatch\nstill stands.","At Cinderwatch, someone kept a fire alive. Now strangers share its warmth, mend the walls, and wait for the roads to open.",0],
+		["III · YOUR COVENANT","Take up the ember.","You came here looking for shelter. Tomorrow, you will take a blade beyond the walls. Somewhere in the dark, the Bellkeeper is still ringing.",0]
 	]
 	var scene = scenes[cinematic_page]
 	var v = screen()
@@ -212,7 +212,7 @@ func finish_intro():
 func welcome(index=0):
 	var cards = [
 		["Welcome, Emberkeeper","YOUR GOAL","Defeat the Bellkeeper and restore Cinderwatch's beacon. You begin with basic tools, a worn sword and five cooked fish.","Begin by mining 4 copper ore. The gold YOUR NEXT MOVE card on Refuge gives one useful action at a time. Follow it to make and equip your first sword."],
-		["Choose a task. Let it work.","GATHER → CRAFT → EQUIP → FIGHT","One activity runs at a time. Mining, chopping, fishing and crafting repeat automatically for the count you choose.","Your first loop is simple: collect materials, make stronger equipment, equip it, then hunt. Later you unlock talents, relic collections and 15 expedition tiers."],
+		["Choose a task. Let it work.","GATHER → CRAFT → EQUIP → FIGHT","One activity runs at a time. Mining, chopping, fishing and crafting repeat automatically for the count you choose.","Start with a better blade. Gather its materials, forge it, and equip it before heading out. Each road you open brings new enemies, relics, and ways to shape your build."],
 		["Materials become strength.","BUILD YOUR OWN EQUIPMENT","Crafting consumes the ingredients shown before you start. Finished equipment appears in Bag. Open an item and press Equip item to use it.","Use Plan materials & craft automatically to gather missing ingredients in order. Equip best on Hero or Explore installs your strongest owned gear."],
 		["Prepare before you fight.","FOOD KEEPS YOU ALIVE","Combat is automatic. Your selected cooked food heals you at 50% HP. Open Hero to change food settings. Raw fish and raw meat must be cooked first.","Defeat stops your queue but keeps your gear safe. Outside combat, HP recovers. Queued tasks also progress while away, up to 24 hours."]
 	]
@@ -303,9 +303,9 @@ func handbook():
 		["01 · Follow the Journey","Your goal is to restore the beacon by defeating the Bellkeeper. The Journey guide breaks this into 12 objectives and remains available at the top of every game screen."],
 		["02 · Gather and craft","Open Skills. Gather ore, wood and fish; smelt ore, forge equipment and cook food. Use Plan materials & craft automatically to preview and queue a complete supply chain, including missing raw materials."],
 		["03 · Equip your upgrades","Crafted gear goes to Bag. Open an item and choose Equip item. Crafting alone does not improve your stats. Lock or favorite items you want to keep."],
-		["04 · Fight automatically","Open Explore, choose an unlocked enemy and a number of fights. Each victory gives gold, loot and melee XP. Your selected cooked food heals you automatically while available."],
+		["04 · Fight automatically","Open Explore, choose an unlocked enemy and a number of fights. Each victory brings gold, loot and melee XP. Plan a longer hunt to estimate time and supplies, or try one fight first. Return after this fight finishes the current battle and cancels the rest of your queue. Selected cooked food heals you automatically while available."],
 		["05 · Plan your time","Queue holds up to 20 tasks. Only the first runs. Tasks wait when ingredients or levels are missing. Sources shows how to get materials; Queue lets you cancel blocked tasks."],
-		["06 · Return to your rewards","Your saved queue continues for up to 24 hours while away. You receive a report when you return. No queue means no gathering or combat rewards."],
+		["06 · Return to your rewards","Your saved queue continues for up to 24 hours while away. You receive a report when you return. Leave a task running before you go; an empty queue earns no gathering or combat rewards."],
 		["07 · Build a stronger refuge","Refuge contracts reward milestones with gold, food and scraps. Claim completed contracts, then Rebuild Cinderwatch to improve production speed, armor and recovery. Hero and Explore let you choose Vanguard, Warden or Reaver before a hunt."],
 		["08 · Grow beyond Chapter I","After First Supplies, earn talent points from melee XP and awaken relics with guaranteed fragments. Unfinished bounties carry over without streak loss. After the Bellkeeper, the World map opens 15 expedition tiers with stronger foes, iron loot and targeted relic farms."],
 		["09 · Make a dependable upgrade","After First Supplies, visit Refuge → Armory → Ember Workshop. Spend ingots, scraps and gold to refine one copper or iron piece by one quality step. Refinement is guaranteed, up to Legendary. Higher qualities require more Smithing experience. Equipped slots and saved builds follow the improved piece."],

@@ -15,6 +15,11 @@ var enemy_face: Texture2D
 var floating: Array = []
 var impacts = {"hero":0.0,"enemy":0.0}
 var recovery = {"hero":0.0,"enemy":0.0}
+var attacks = {"hero":0.0,"enemy":0.0}
+var dodges = {"hero":0.0,"enemy":0.0}
+var awakening = 0.0
+var arrival = 0.0
+var draw_clock = 0.0
 
 func _ready():
 	custom_minimum_size.y = 280
@@ -52,29 +57,42 @@ func _ready():
 
 func _process(delta: float):
 	if model==null: return
+	if not is_visible_in_tree(): return
 	elapsed += delta
+	awakening = maxf(0,awakening-delta)
+	arrival = maxf(0,arrival-delta)
 	for side in impacts:
 		impacts[side] = maxf(0,impacts[side]-delta)
 		recovery[side] = maxf(0,recovery[side]-delta)
+		attacks[side] = maxf(0,attacks[side]-delta)
+		dodges[side] = maxf(0,dodges[side]-delta)
 	flash = maxf(0,flash-delta)
 	for item in floating: item.life -= delta
 	floating = floating.filter(func(item): return item.life>0)
 	var id = str(model.s.fight.get("enemy",""))
 	if id!="" and id!=current_enemy:
 		current_enemy = id
+		arrival = .65
 		enemy_face = U.enemy_texture(model.data.enemies[id])
 	if serial!=int(model.battle_event.serial):
 		for event in model.combat_events:
 			if int(event.serial)>serial and int(model.s.time)-int(event.get("time",0))<1000:
-				if str(event.text).begins_with("+"): recovery[event.side] = .8
-				elif event.text!="MISS": impacts[event.side] = .4
+				if event.text=="PHASE II": awakening = 1.2
+				elif str(event.text).begins_with("+"): recovery[event.side] = .8
+				else:
+					attacks["hero" if event.side=="enemy" else "enemy"] = .45
+					if event.text=="MISS": dodges[event.side] = .45
+					else: impacts[event.side] = .4
 				floating.append({"text":event.text,"side":event.side,"life":1.0})
 				if floating.size()>4: floating.pop_front()
 		serial = int(model.battle_event.serial)
 		flash = .85
 		event_text = model.battle_event.text
 		event_side = model.battle_event.side
-	queue_redraw()
+	draw_clock += delta
+	if draw_clock>= (1.0/30.0 if model.s.settings.battery else 1.0/60.0):
+		draw_clock = 0
+		queue_redraw()
 
 func bar(rect: Rect2, fraction: float, color: Color):
 	draw_rect(rect,Color("30383b"))
@@ -114,11 +132,21 @@ func _draw():
 		var r = left if side==0 else right
 		var target = "hero" if side==0 else "enemy"
 		var hit = impacts[target]>.2
+		var direction = 1 if side==0 else -1
+		var swing = sin(clampf(attacks[target]/.45,0,1)*PI)
+		var evade = sin(clampf(dodges[target]/.45,0,1)*PI)
+		var windup = 0.0
+		if fighting:
+			var until = float(int(f.player_at if side==0 else f.enemy_at)-int(model.s.time))/1000.0
+			windup = clampf(1.0-until/.5,0,1)
 		if model.s.settings.motion:
-			r.position.y += sin(elapsed*1.4+side*2)*1.2
-			var opposite = "enemy" if side==0 else "hero"
-			r.position.x += sin(clampf(impacts[opposite]/.4,0,1)*PI)*7*(1 if side==0 else -1)
-			if hit: r.position.x += sin(elapsed*60)*2
+			r.position.y += sin(elapsed*1.4+side*2)*1.2-evade*3
+			r.position.x += direction*(swing*15-windup*4-evade*11)
+			if side==1: r.position.x += arrival*18
+			if hit: r.position.x -= direction*sin(clampf(impacts[target]/.4,0,1)*PI)*6
+			var center = r.get_center()
+			draw_set_transform(center,direction*(swing*.035-evade*.045),Vector2(1,1+sin(elapsed*1.4+side*2)*.006))
+			r.position -= center
 		draw_rect(r.grow(2),U.GREEN if recovery[target]>.4 else (U.RED if hit else U.GOLD.darkened(.45)))
 		if side==0 or fighting:
 			var face = faces[0] if side==0 else (enemy_face if enemy_face!=null else faces[int(enemy.portrait)])
@@ -126,6 +154,16 @@ func _draw():
 		else:
 			draw_rect(r,U.INK)
 			caption(r.position+Vector2(0,80),"Awaiting hunt",U.MUTED,12,w)
+		if model.s.settings.motion: draw_set_transform(Vector2.ZERO)
+		r = left if side==0 else right
+		if recovery[target]>0:
+			var life = recovery[target]/.8
+			draw_arc(r.get_center(),30+(1-life)*38 if model.s.settings.motion else 48,0,TAU,32,Color(U.GREEN,life*.6),2.0,true)
+		if model.s.settings.motion and attacks[target]>0:
+			var center = (right if side==0 else left).get_center()
+			var progress = 1-attacks[target]/.45
+			var tint = U.GOLD if side==0 else U.RED
+			draw_arc(center,30+progress*12,-1.3+progress*1.7,.4+progress*1.7,18,Color(tint,(1-progress)*.85),2.0,true)
 		var health = float(model.s.hp)/100 if side==0 else (float(f.hp)/enemy.hp if fighting else 0.0)
 		bar(Rect2(r.position.x,207,w,6),health,U.GREEN if side==0 else U.RED)
 		var hp = "%d / 100 HP" % int(model.s.hp) if side==0 else ("%d / %d HP" % [maxi(0,int(f.hp)),int(enemy.hp)] if fighting else "Choose a target below")
@@ -137,6 +175,11 @@ func _draw():
 	caption(Vector2(16,29),"EMBERKEEPER",U.GOLD,11,w)
 	caption(Vector2(right.position.x,29),model.local_name(enemy).split(" · ")[0].to_upper() if fighting else "THE OUTSKIRTS",U.GOLD,10,w)
 	caption(Vector2(size.x/2-20,127),"II" if fighting and RealmTrials.active_phase(model,enemy) else "VS",U.RED if fighting and RealmTrials.active_phase(model,enemy) else U.GOLD,22,40)
+	if awakening>0:
+		var strength = awakening/1.2
+		if model.s.settings.motion:
+			draw_arc(right.get_center(),35+(1-strength)*65,0,TAU,40,Color(U.RED,strength*.7),2.0,true)
+		caption(Vector2(0,190),"THE GUARDIAN AWAKENS",U.GOLD,12,size.x)
 	if model.s.settings.motion:
 		for i in range(8 if model.s.settings.battery else 14):
 			var x = fmod(i*47.3+sin(elapsed*.4+i)*9,size.x)

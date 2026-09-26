@@ -459,6 +459,18 @@ func loadouts_dialog():
 func hunt_reports_dialog():
 	preload("res://ui/armory.gd").new(self).hunt_reports()
 
+func hunt_plan_dialog(id: String, minutes: int = 15):
+	preload("res://ui/hunt_plan.gd").new(self).show_plan(id,minutes)
+
+func finish_hunt_dialog():
+	var v = modal("One last fight")
+	v.add_child(U.para("Finish this battle, then return to Cinderwatch.",24,U.TEXT))
+	v.add_child(U.para("Your current battle continues normally, including the risk of defeat. All remaining fights and waiting tasks will be cancelled. Rewards already earned stay with you.",16))
+	modal_action("Finish this fight & stop",func():
+		if send({"type":"finish_hunt"}):
+			dismiss()
+			toast("One last fight, then home."))
+
 func trials_dialog():
 	preload("res://ui/trials.gd").new(self).show_trial()
 
@@ -499,6 +511,7 @@ func activity_dialog(id: String, recommended: int = 0):
 			r.add_child(U.para("%s   %d / %d" % [model.name_of(key),model.count(key),int(a.inputs[key])]))
 			r.add_child(U.button(tr2("Cari","Find"),func(): sources_dialog(key)))
 	else:
+		v.add_child(U.button("Plan a longer hunt",func(): hunt_plan_dialog(a.enemy)))
 		var e = model.data.enemies[a.enemy]
 		var encounter = U.row(16)
 		v.add_child(encounter)
