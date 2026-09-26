@@ -324,5 +324,21 @@ func _init():
 	other_report.enemy = "ash_rat"
 	var previous_report = RealmHuntReview.previous([trial_report,incomplete_report,other_report,earlier_report],0)
 	check(previous_report==earlier_report and RealmHuntReview.metrics(previous_report).per_win==60 and RealmHuntReview.metrics(previous_report).meals_per_win==3 and not RealmHuntReview.metrics(incomplete_report).comparable, "hunt comparisons normalize by wins and skip incomplete or different enemies")
+	var preview_model = RealmModel.new()
+	preview_model.s.tutorial = true
+	preview_model.s.gold = 1000
+	preview_model.s.bag.scrap = 100
+	preview_model.s.bag.copper_ingot = 100
+	preview_model.s.xp.smithing = 1000
+	var preview_uid = preview_model.add_gear("copper_sword",2)
+	var untouched = preview_model.s.duplicate(true)
+	var forecast_upgrade = RealmWorkshop.preview(preview_model,preview_uid,"ash_rat")
+	check(preview_model.s==untouched and not forecast_upgrade.equipped and forecast_upgrade.after.attack>forecast_upgrade.before.attack, "upgrade preview is read-only and explicitly models equipping bagged gear")
+	preview_model.command({"type":"equip","id":preview_uid})
+	forecast_upgrade = RealmWorkshop.preview(preview_model,preview_uid,"ash_rat")
+	preview_model.command({"type":"refine","id":preview_uid})
+	check(preview_model.stats()==forecast_upgrade.after and RealmCombat.forecast(preview_model,"ash_rat")==forecast_upgrade.hunt_after, "upgrade preview matches actual refined equipped stats and combat estimate")
+	var max_uid = preview_model.add_gear("iron_sword",6)
+	check(RealmWorkshop.preview(preview_model,max_uid,"ash_rat").is_empty(), "Workshop does not preview downgrades for equipment above its refinement cap")
 	print("ESSENTIAL CHECKS: ","PASS" if failed==0 else "FAIL")
 	quit(1 if failed else 0)

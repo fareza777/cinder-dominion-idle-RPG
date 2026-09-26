@@ -8,6 +8,19 @@ static func cost(g: Dictionary) -> Dictionary:
 	var q = clampi(int(g.q),1,4)-1
 	return {"gold":[40,120,360,900][q],"scrap":[2,6,15,35][q],"ingots":[2,5,12,25][q],"level":[3,6,12,20][q],"metal":"iron_ingot" if str(g.id).begins_with("iron_") else "copper_ingot"}
 
+static func preview(m, uid: String, enemy: String) -> Dictionary:
+	var g = m.gear(uid)
+	if not eligible(m,g) or int(g.q)>=5 or not m.data.enemies.has(enemy): return {}
+	var baseline = RealmModel.new()
+	baseline.s = m.s.duplicate(true)
+	var proposed = RealmModel.new()
+	proposed.s = m.s.duplicate(true)
+	proposed.gear(uid).q = int(g.q)+1
+	var slot = m.data.items[g.id].slot
+	proposed.s.equipped[slot] = uid
+	return {"equipped":m.s.equipped.get(slot,"")==uid,"before":baseline.stats(),"after":proposed.stats(),
+		"hunt_before":RealmCombat.forecast(baseline,enemy),"hunt_after":RealmCombat.forecast(proposed,enemy)}
+
 static func reason(m, uid: String) -> String:
 	var g = m.gear(uid)
 	if not eligible(m,g): return "Only copper and iron combat equipment can be refined."

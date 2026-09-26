@@ -55,3 +55,7 @@ Solo clarity pass: three-tab Progress & farming guide, direct activity links, ex
 ## 0.11 Hunt review
 
 Solo: selected report view, comparable per-victory hunt metrics, item-specific supply accounting, crafting restock links, repeat planner and latest report access on Refuge. Legacy reports remain truthful and compatible. Three targeted checks added (54 total), seven isolated UI captures and Android debug export.
+
+## 0.12 Upgrade preview
+
+Solo: read-only build/combat preview for refinement, unlocked-enemy selector, explicit bagged-item equip assumption, visible cost summary and missing-material routes. Above-cap display fixed. Three targeted checks added (57 total), four phone captures, Android debug export.

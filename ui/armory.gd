@@ -8,16 +8,16 @@ func _init(owner):
 	app = owner
 	m = owner.model
 
-func workshop(uid: String = ""):
+func workshop(uid: String = "", target: String = ""):
 	var v = app.modal("The Ember Workshop")
 	if not m.s.tutorial:
-		v.add_child(U.para("A blade worth keeping.",27,U.TEXT))
+		v.add_child(U.para("Upgrade equipment quality",27,U.TEXT))
 		v.add_child(U.para("Finish First Supplies to unlock refinement. Then turn copper and iron equipment into dependable upgrades with ingots, scraps and earned gold. No failed rolls; no lost levels.",15))
 		app.modal_action("Finish First Supplies",app.guide_dialog)
 		return
 	var g = m.gear(uid)
 	if g.is_empty():
-		v.add_child(U.para("Keep the blade. Improve the craft.",26,U.TEXT))
+		v.add_child(U.para("Choose a piece to improve",26,U.TEXT))
 		v.add_child(U.para("Refine one piece at a time through Fine, Rare, Epic and Legendary. Each step is guaranteed. Equipped pieces appear first.",14))
 		var choices = m.s.gear.filter(func(item): return RealmWorkshop.eligible(m,item))
 		choices.sort_custom(func(a,b):
@@ -48,20 +48,34 @@ func workshop(uid: String = ""):
 	details.add_child(U.para(m.name_of(g.id),24,U.TEXT))
 	details.add_child(U.para(m.data.rarities[rank]+(" → "+m.data.rarities[rank+1] if rank<5 else " · Masterwork"),15,U.QUALITY[mini(rank+1,5)]))
 	for stat in ["attack","armor"]:
-		if d.get(stat,0)>0: hero.add_child(U.para("%s contribution   %.1f → %.1f" % [stat.capitalize(),float(d[stat])*RealmModel.QUALITY[rank],float(d[stat])*RealmModel.QUALITY[mini(5,rank+1)]],16,U.GREEN))
+		if d.get(stat,0)>0:
+			var value = float(d[stat])*RealmModel.QUALITY[rank]
+			hero.add_child(U.para("%s contribution   %.1f" % [stat.capitalize(),value] if rank>=5 else "%s contribution   %.1f → %.1f" % [stat.capitalize(),value,float(d[stat])*RealmModel.QUALITY[rank+1]],16,U.GREEN))
 	if rank>=5:
 		v.add_child(U.para("The forge can take this piece no further. Your skills, relic and rune can still shape what it becomes in battle.",16))
 		app.modal_action("Return to the workshop",func(): workshop())
 		return
 	var price = RealmWorkshop.cost(g)
+	v.add_child(U.para("Cost: %d gold · %d %s · %d scraps
+Requires Smithing Lv.%d" % [int(price.gold),int(price.ingots),m.name_of(price.metal),int(price.scrap),int(price.level)],13,U.GOLD))
+	preload("res://ui/upgrade_preview.gd").new(app).show_preview(v,uid,target,func(enemy): workshop(uid,enemy))
 	var materials = U.card(v,14)
-	materials.add_child(U.label("ONE GUARANTEED QUALITY STEP",10,U.GOLD))
+	materials.add_child(U.label("UPGRADE COST · OWNED / NEEDED",10,U.GOLD))
 	app.dynamic(materials,func(): return "Gold  %d / %d" % [int(m.s.gold),int(price.gold)],16)
 	app.dynamic(materials,func(): return "%s  %d / %d" % [m.name_of(price.metal),m.count(price.metal),int(price.ingots)],16)
 	app.dynamic(materials,func(): return "Metal scraps  %d / %d" % [m.count("scrap"),int(price.scrap)],16)
 	app.dynamic(materials,func(): return "Smithing  Lv.%d / %d" % [m.level("smithing"),int(price.level)],13,U.GOLD)
 	var copy_note = "Refines this piece." if g.count==1 else "Refines one of your %d copies; the rest keep their current quality." % int(g.count)
 	v.add_child(U.para(copy_note+" Equipped slots and saved builds follow the upgrade. Locks and favorites are preserved.",13))
+	var missing_gold = maxi(0,int(price.gold)-int(m.s.gold))
+	var missing_scraps = maxi(0,int(price.scrap)-m.count("scrap"))
+	if missing_gold>0 or missing_scraps>0:
+		v.add_child(U.para("Still needed: %d gold · %d scraps" % [missing_gold,missing_scraps],14,U.GOLD))
+		v.add_child(U.button("Check contract rewards",app.contracts_dialog))
+		if m.s.beacon: v.add_child(U.button("Check field record rewards",app.journal_dialog))
+		if missing_scraps>0: v.add_child(U.button("Review spare gear in Bag",func():
+			app.dismiss()
+			app.set_page("inventory")))
 	if m.count(price.metal)<int(price.ingots): v.add_child(U.button("Plan missing ingots",func(): app.planner_dialog("craft_"+str(price.metal),int(price.ingots)-m.count(price.metal))))
 	if m.level("smithing")<price.level: v.add_child(U.button("Train Smithing to level %d" % int(price.level),func(): preload("res://ui/gameplay.gd").new(app).training("smithing",int(price.level))))
 	v.add_child(U.para("Scraps come from salvage, contracts, expedition first clears and field records. Check Bag for unprotected spare equipment.",13))
@@ -69,7 +83,7 @@ func workshop(uid: String = ""):
 	app.dynamic(app.dialog_footer,func(): return RealmWorkshop.reason(m,uid),12,U.GOLD)
 	var refine = app.modal_action("Refine to "+m.data.rarities[rank+1],func():
 		if app.send({"type":"refine","id":uid}):
-			workshop(m.last_forged)
+			workshop(m.last_forged,target)
 			app.toast(m.data.rarities[rank+1]+" "+m.name_of(g.id)+" is ready. One piece refined."))
 	refine.disabled = RealmWorkshop.reason(m,uid)!=""
 	var ref = weakref(refine)
