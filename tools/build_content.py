@@ -65,5 +65,7 @@ for entry in list(items.values())+list(skills.values()): entry['name']=entry['en
 
 doc=dict(items=items,skills=skills,activities=activities,enemies=enemies,merchant={'empty_vial':2,'ash_axe':30,'copper_pick':40,'iron_rod':60},rarities=['Worn','Common','Fine','Rare','Epic','Legendary','Mythic','Relic'])
 assert len(items)==40 and len(recipes)==20 and len(enemies)==25
+from ascension_content import extend
+extend(doc,root)
 (data/'catalog.json').write_text(json.dumps(doc,ensure_ascii=False,indent=2),encoding='utf-8')
-print('Content: 40 items, 20 recipes, 9 trained skills, 7 story enemies + 15 expedition tiers + 3 guardian trials.')
+print('Content catalog regenerated with base and Ascension content.')

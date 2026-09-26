@@ -26,7 +26,7 @@ static func order_plan(m, id: String, batches: int) -> Dictionary:
 	for recipe in ORDERS[id].recipes: append_recipe(m,recipe[0],int(recipe[1])*batches,result,[])
 	if result.steps.size()>20: result.error = "This order needs more than 20 queue slots. Choose fewer batches."
 	return result
-const CONTRACTS = [
+const BASE_CONTRACTS = [
 	{"id":"ore","title":"Fuel the Forge","detail":"Collect 20 copper ore.","source":"gains","key":"copper_ore","target":20,"gold":20,"food":3,"scrap":2,"activity":"mine_copper"},
 	{"id":"ingots","title":"Apprentice Smith","detail":"Smelt 15 copper ingots.","source":"gains","key":"copper_ingot","target":15,"gold":30,"food":0,"scrap":3,"activity":"craft_copper_ingot"},
 	{"id":"food","title":"A Warm Meal","detail":"Cook 15 grilled minnows.","source":"mastery","key":"craft_cooked_minnow","target":15,"gold":20,"food":5,"scrap":1,"activity":"craft_cooked_minnow"},
@@ -35,6 +35,8 @@ const CONTRACTS = [
 	{"id":"bandits","title":"Reclaim the Road","detail":"Defeat 15 cinder bandits.","source":"kills","key":"cinder_bandit","target":15,"gold":60,"food":8,"scrap":5,"activity":"hunt_cinder_bandit"},
 	{"id":"wraiths","title":"Embers in the Mist","detail":"Defeat 15 ember wraiths.","source":"kills","key":"ember_wraith","target":15,"gold":80,"food":10,"scrap":6,"activity":"hunt_ember_wraith"},
 	{"id":"bell","title":"The Last Toll","detail":"Defeat the Bellkeeper.","source":"kills","key":"bellkeeper","target":1,"gold":120,"food":15,"scrap":10,"activity":"hunt_bellkeeper"}]
+
+const CONTRACTS = BASE_CONTRACTS + preload("res://game/ascension_contracts.gd").ALL
 
 static func state(m) -> Dictionary:
 	if not m.s.has("progression"):

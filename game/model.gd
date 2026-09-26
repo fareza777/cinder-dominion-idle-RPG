@@ -529,7 +529,7 @@ func win(enemy: Dictionary):
 	if rng.randf()<.05:
 		var part = ["sword","shield","helm","chest","gloves","boots"][rng.randi_range(0,5)]
 		var q = quality_roll()
-		var metal = "iron_" if enemy.has("region") else "copper_"
+		var metal = str(enemy.get("loot_metal","iron_" if enemy.has("region") else "copper_"))
 		gain(metal+part,1,q)
 		RealmHunts.equipment(self,metal+part,q)
 		note("Loot: %s %s" % [data.rarities[q],name_of(metal+part)])

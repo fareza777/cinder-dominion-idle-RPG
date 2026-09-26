@@ -107,3 +107,7 @@ Solo follow-up to onboarding: focus follows missing-material planning and the re
 ## 0.24 Focused taps and sound room
 
 User reiterates focused onboarding and thematic audio. Added four input shields around the highlighted real control, retaining Skip; pointer-event smoke confirms off-target navigation blocked and Goals/action/Begin/Skip work. New sound room previews four existing original score tracks and five cues; weak dialog ownership returns music to automatic mood on close. No new audio assets, economy or save changes. Four captures, narrow 130% layout, essential checks and versioned APK.
+
+## 0.25 Ascension expansion
+
+User asks for a substantial SSS-directed expansion and many new art assets. Solo: 56 new items, 44 new recipes, 12 gathering actions, 9 Apex encounters and 17 contracts; four material bands at 25/45/65/85 and Smithing recipes through level 100. New gear integrates with matching-metal refinement and loot. Journey adds nine Apex objectives (39 total). Skills defaults to available recipes. Three original generated atlases contain 29 painted tiles, copied into assets/art and used by the runtime. All old catalog definitions preserved byte-value-equivalent. Six focused checks added (83 total), phone captures, versioned debug APK; balance and physical-device limitations documented.

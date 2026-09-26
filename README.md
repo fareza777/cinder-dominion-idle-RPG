@@ -1,16 +1,26 @@
-# Ashen Covenant — Adventure preview 0.24
+# Ashen Covenant — Adventure preview 0.25
 
 Idle RPG dark fantasy untuk Android. Gratis, tanpa iklan. Build ini untuk dimainkan dan dievaluasi, belum versi rilis publik.
 
 ## Mulai bermain
 
-1. Pasang `build/android/ashen-covenant-0.24.apk` di Android 64-bit. APK memakai identitas aplikasi yang sama dengan 0.1–0.23 sehingga bisa dipasang sebagai pembaruan.
+1. Pasang `build/android/ashen-covenant-0.25.apk` di Android 64-bit. APK memakai identitas aplikasi yang sama dengan 0.1–0.24 sehingga bisa dipasang sebagai pembaruan.
 2. Seluruh antarmuka dan narasi game memakai **English**. Splash mengantar ke menu utama. Pilih **New game** untuk langsung masuk dan pilih **Show me the way** untuk panduan dengan sorotan emas. Intro opsional tersedia di About. **Continue journey** melanjutkan progres yang sudah ada.
 3. Tekan **Goals** di bagian atas layar. Layar menampilkan target, angka progres, checklist dan tombol tugas. Tekan tindakannya, lalu **Begin · 4 cycles** (jumlahnya mengikuti tujuan) untuk memulai jumlah siklus yang tepat.
 4. Tugas awal: 4 copper ore → 2 copper ingots → 1 ash log → Copper Sword → Equip item → 3 Ash Rats. Panduan lalu mengantar lewat musuh berikutnya hingga Bellkeeper, tanpa melompat langsung ke boss.
 5. Pantau activity bar. **Queue** menampilkan tugas berjalan/menunggu, progres target, dan alasan terhambat. **Sources/Find** membantu mencari bahan yang kurang. Satu aktivitas berjalan pada satu waktu.
 6. Buka **Food & survival guide** untuk belajar memancing, memasak, memilih makanan dan menyiapkan auto-heal. Perlengkapan hasil crafting harus dipasang dari **Bag**.
 7. Progres tersimpan otomatis dan berlanjut maksimal 24 jam saat kembali. Menu **☰** tersedia dari dalam permainan. New Game meminta konfirmasi dan menyimpan cadangan terpisah; **Settings → Restore a previous journey** memulihkannya.
+
+## Baru di 0.25 — Ascension
+
+Konten sekarang: **96 item, 117 aktivitas, 34 encounter, 64 resep, 39 tujuan Journey dan 25 kontrak**. Empat tier metal baru dimulai pada level 25/45/65/85, dengan Dawnsteel Cuirass pada Smithing level 100. Tiap tier membawa enam combat equipment, tiga tools, ore, ingot, log, ikan dan makanan. Gear baru bisa di-refine hingga Legendary memakai ingot yang sesuai.
+
+Buka **Skills → Gear paths** atau **Explore → Ascension**. Halaman tier menunjukkan level yang dibutuhkan, tombol Train, rencana bahan otomatis, equipment dan makanan. Skills menampilkan Available secara default; All recipes membuka seluruh daftar.
+
+Sembilan Apex Hunt terbuka melalui Guardian Trials dan kemenangan berurutan. Serangan khusus mencakup armor penetration, heavy strikes dan self-healing, memakai aturan yang sama di combat dan forecast. Hunt memberi advanced ore, relic fragments serta peluang gear metal baru. Tujuh belas kontrak tambahan memberi target crafting, gathering dan first clears. Journey berlanjut ke Apex setelah tiga trials.
+
+Art baru: **29 tile lukisan dalam tiga atlas orisinal**—sembilan musuh, enam belas ikon metal/equipment, dan empat lokasi. Atlas dipakai pada inventory, crafting, halaman tier, daftar musuh dan battle. Armor, tools, log dan ikan baru masih memakai ikon lama yang sesuai kategori. Bukan 29 file gambar terpisah.
 
 ## Baru di 0.24 — Focused taps & sound room
 

@@ -1,0 +1,20 @@
+{
+  "method": "Built-in image_gen, three generated atlas assets; original files copied unchanged to workspace",
+  "assets": [
+    {
+      "path": "assets/art/ascension-enemies-0.25.png",
+      "source_file": "exec-866ac13c-9150-4cca-90eb-04133bb578ca.png",
+      "prompt": "Create a production game asset atlas for an original dark fantasy idle RPG called Ashen Covenant. A precise 3 by 3 grid, nine equal square portrait tiles, no gutters, no labels, no text, no interface, each creature centered fully inside its tile with generous inner margins. Cinematic painterly realism, hand-painted dark fantasy collectible enemy portraits, exquisite weathered material detail, readable silhouettes at small mobile size, dramatic restrained rim lighting, desaturated charcoal bronze moss teal. Row 1: thorn-armored undead ranger with antler helm; colossal moss-bound stone beast; ancient tree revenant with ember hollow face. Row 2: drowned knight in corroded diving armor; pale veiled oracle holding spectral lantern; aquatic cathedral guardian with shell and chain armor. Row 3: black obsidian armored executioner with ember axe; skeletal ash bishop with broken bell censer; regal volcanic lich in jagged crown with glowing embers. Each tile has its own atmospheric dark vignetted background, creatures visually distinct and front three-quarter portraits from upper torso, no overlapping neighboring tiles. Entire image square, high resolution. This is an original asset atlas, avoid existing franchise characters."
+    },
+    {
+      "path": "assets/art/ascension-items-0.25.png",
+      "source_file": "exec-8700d461-b39e-4271-8c19-344d933b257e.png",
+      "prompt": "An original dark fantasy RPG inventory asset atlas, exactly 4 columns by 4 rows of equal square tiles, no words, no letters, no numerals, no UI frames. Each tile contains exactly one large centered object, generous 14 percent margin, flat very dark charcoal background throughout, clear silhouettes and finely painted realistic metal, gemstone and weathered surfaces. Row 1 forged gunmetal steel theme: longsword, kite shield, metallic ore rock, stacked ingots. Row 2 moonsteel theme with cool silver blue inlay: elegant longsword, round engraved shield, blue silver ore crystal rock, luminous silver ingots. Row 3 dusksteel theme with restrained amethyst: jagged longsword, angular tower shield, purple black ore crystal, dark violet ingots. Row 4 dawnsteel theme ancient ivory and burnished gold: radiant longsword, sun-etched shield, pale gold ore rock, pale golden ingots. All swords diagonally angled to fit square without clipping. No particle clutter, subtle highlights, beautiful premium hand painted game item artwork, consistent scale and lighting, isolated items, high resolution square sheet."
+    },
+    {
+      "path": "assets/art/ascension-places-0.25.png",
+      "source_file": "exec-cb7f9cad-d82a-4c79-8cd1-16550407e437.png",
+      "prompt": "Create one original dark fantasy environment asset sheet: exactly a two by two grid of four equal landscape paintings, clean straight division at horizontal and vertical midpoint, no gutters, no text, no people, no interface. Premium cinematic painterly realism, stunning atmospheric depth and controlled lighting, readable broad shapes for a small mobile RPG banner. Top left: ancient steel forge quarry in a rainy pine ravine, amber furnace lights, iron rails, rugged medieval industry. Top right: moonlit silver-blue lake in white birch woodland, ruined arched bridge, silver ore in cliffs, mist. Bottom left: subterranean abyss mine, immense obsidian pillars with restrained purple mineral glow, suspended chains and old mining lifts. Bottom right: magnificent abandoned dawn forge on a mountain summit, ivory stone arches and gold sunlight piercing stormclouds, ancient anvil in foreground. Four distinct coherent material-tier locations for Ashen Covenant. Highly detailed original art, quiet open center areas, no letters or symbols that look like writing. Overall wide landscape image."
+    }
+  ]
+}

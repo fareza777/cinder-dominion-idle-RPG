@@ -15,6 +15,7 @@ static var title_font: Font
 static var portraits: Texture2D
 static var items_texture: Texture2D
 static var item_ids: Array = []
+static var item_catalog = {}
 static var scale = 1.0
 static var motion = true
 
@@ -24,6 +25,7 @@ static func setup(data: Dictionary):
 	if ResourceLoader.exists("res://assets/art/portraits.png"): portraits = load("res://assets/art/portraits.png")
 	if ResourceLoader.exists("res://assets/art/items.png"): items_texture = load("res://assets/art/items.png")
 	item_ids = data.items.keys()
+	item_catalog = data.items
 
 static var frame_cache: Dictionary = {}
 
@@ -191,6 +193,7 @@ static func portrait(index: int, dimensions: Vector2) -> TextureRect:
 	return t
 
 static func enemy_texture(enemy: Dictionary) -> Texture2D:
+	if enemy.has("art_tile"): return atlas_tile("res://assets/art/ascension-enemies-0.25.png",int(enemy.art_tile),3,3)
 	if enemy.has("region") and ResourceLoader.exists("res://assets/art/expedition-guardians.png"):
 		var texture = load("res://assets/art/expedition-guardians.png")
 		var atlas = AtlasTexture.new()
@@ -221,8 +224,12 @@ static func icon(id: String, dimension: int = 52) -> TextureRect:
 	t.expand_mode = TextureRect.EXPAND_IGNORE_SIZE
 	t.stretch_mode = TextureRect.STRETCH_KEEP_ASPECT_CENTERED
 	t.mouse_filter = Control.MOUSE_FILTER_IGNORE
-	var index = item_ids.find(id)
-	if index>=0 and items_texture!=null:
+	var data = item_catalog.get(id,{})
+	if data.has("art_tile"):
+		t.texture = atlas_tile("res://assets/art/ascension-items-0.25.png",int(data.art_tile),4,4)
+		return t
+	var index = item_ids.find(str(data.get("icon_alias",id)))
+	if index>=0 and index<40 and items_texture!=null:
 		var a = AtlasTexture.new()
 		a.atlas = items_texture
 		a.filter_clip = true
@@ -241,3 +248,12 @@ static func stat(parent: Node, value: String, title: String, color: Color = TEXT
 	parent.add_child(v)
 	v.add_child(label(value,25,color,true))
 	v.add_child(label(title,11,MUTED))
+
+static func atlas_tile(path: String, index: int, cols: int, rows: int) -> AtlasTexture:
+	var texture = load(path)
+	var atlas = AtlasTexture.new()
+	atlas.atlas = texture
+	atlas.filter_clip = true
+	var cell = Vector2(texture.get_width()/float(cols),texture.get_height()/float(rows))
+	atlas.region = Rect2(Vector2(index%cols,int(index/cols))*cell,cell)
+	return atlas

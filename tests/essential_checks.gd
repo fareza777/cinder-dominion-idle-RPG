@@ -9,7 +9,7 @@ func check(ok: bool, label: String):
 
 func _init():
 	var m = RealmModel.new()
-	check(m.data.items.size()==40,"40 item definitions")
+	check(m.data.items.size()==96,"96 item definitions")
 	m.command({"type":"queue","id":"mine_copper","target":4})
 	m.advance(12000)
 	check(m.count("copper_ore")==4,"gather four ore")
@@ -418,5 +418,40 @@ func _init():
 	var target_mastery = RealmModel.new()
 	target_mastery.s.kills.ash_rat = 24
 	check(RealmHuntMastery.wins_for_fragments(target_mastery,target_mastery.data.enemies.ash_rat,5)==3 and RealmHuntMastery.rewards(target_mastery,target_mastery.data.enemies.ash_rat,3).fragments==5, "fragment goals use the minimum wins including a newly unlocked mastery bonus")
+	var asc = RealmModel.new()
+	for skill in asc.data.skills: asc.s.xp[skill] = 245025
+	var plans_ok = true
+	for activity in asc.data.activities.values():
+		if activity.kind=="craft" and int(activity.level)>=25:
+			plans_ok = plans_ok and RealmProgression.plan(asc,activity.id,1).error==""
+	check(plans_ok,"all advanced recipes have an unlocked finite material plan at level 100")
+	check(asc.command({"type":"plan","id":"craft_dawnsteel_chest","amount":1}),"level 100 cuirass plans its own materials")
+	asc.advance(300000)
+	check(asc.count("dawnsteel_chest")==1 and not store.decode(store.encode(asc.s),asc.data).is_empty(),"advanced gathering and crafting finish and preserve save validity")
+	asc.s.tutorial = true
+	asc.s.gold = 100000
+	asc.s.bag.scrap = 1000
+	asc.s.bag.dawnsteel_ingot = 100
+	var asc_gear = {}
+	for gear in asc.s.gear:
+		if gear.id=="dawnsteel_chest": asc_gear = gear
+	var asc_cost = RealmWorkshop.cost(asc_gear)
+	check(asc_cost.metal=="dawnsteel_ingot" and asc.command({"type":"refine","id":asc_gear.uid}),"advanced refinement consumes its matching metal")
+	var apex = RealmModel.new()
+	for skill in apex.data.skills: apex.s.xp[skill] = 245025
+	apex.s.tutorial = true
+	apex.s.beacon = true
+	apex.s.kills.apex_crown_2 = 1
+	for part in ["sword","shield","helm","chest","gloves","boots"]: apex.gain("dawnsteel_"+part,1,3)
+	apex.command({"type":"equip_best"})
+	apex.s.bag.cooked_dawnsteel_fish = 500
+	apex.s.settings.food = "cooked_dawnsteel_fish"
+	apex.command({"type":"queue","id":"hunt_apex_crown_3","target":1})
+	var apex_copy = RealmModel.new()
+	apex_copy.s = store.decode(store.encode(apex.s),apex_copy.data)
+	apex.advance(3600000)
+	for i in range(360): apex_copy.advance(10000)
+	check(store.decode(store.encode(apex.s),apex.data)==store.decode(store.encode(apex_copy.s),apex_copy.data),"Apex combat and rewards agree across offline time chunks")
+	check(int(apex.s.kills.get("apex_crown_3",0))==1 and apex.count("dawnsteel_ore")>=5 and apex.command({"type":"claim","id":"apex_crown_3"}) and not apex.command({"type":"claim","id":"apex_crown_3"}),"final Apex hunt is beatable with prepared gear and contract reward claims once")
 	print("ESSENTIAL CHECKS: ","PASS" if failed==0 else "FAIL")
 	quit(1 if failed else 0)

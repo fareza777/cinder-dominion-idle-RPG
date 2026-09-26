@@ -5,3 +5,5 @@ build/
 *.jks
 .env
 tools/local-paths.json
+
+__pycache__/

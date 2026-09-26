@@ -2,11 +2,14 @@ class_name RealmWorkshop
 extends RefCounted
 
 static func eligible(m, g: Dictionary) -> bool:
-	return not g.is_empty() and (str(g.id).begins_with("copper_") or str(g.id).begins_with("iron_")) and m.data.items[g.id].slot in ["weapon","shield","head","body","hands","feet"]
+	return not g.is_empty() and str(g.id).get_slice("_",0) in ["copper","iron","steel","moonsteel","dusksteel","dawnsteel"] and m.data.items[g.id].slot in ["weapon","shield","head","body","hands","feet"]
 
 static func cost(g: Dictionary) -> Dictionary:
 	var q = clampi(int(g.q),1,4)-1
-	return {"gold":[40,120,360,900][q],"scrap":[2,6,15,35][q],"ingots":[2,5,12,25][q],"level":[3,6,12,20][q],"metal":"iron_ingot" if str(g.id).begins_with("iron_") else "copper_ingot"}
+	var metal = str(g.id).get_slice("_",0)
+	var base = {"steel":25,"moonsteel":45,"dusksteel":65,"dawnsteel":85}.get(metal,0)
+	var multiplier = 1+int(base/20)
+	return {"gold":[40,120,360,900][q]*multiplier,"scrap":[2,6,15,35][q]*multiplier,"ingots":[2,5,12,25][q],"level":mini(100,maxi([3,6,12,20][q],base+[0,3,7,15][q])),"metal":metal+"_ingot"}
 
 static func preview(m, uid: String, enemy: String) -> Dictionary:
 	var g = m.gear(uid)
@@ -23,7 +26,7 @@ static func preview(m, uid: String, enemy: String) -> Dictionary:
 
 static func reason(m, uid: String) -> String:
 	var g = m.gear(uid)
-	if not eligible(m,g): return "Only copper and iron combat equipment can be refined."
+	if not eligible(m,g): return "Only forged metal combat equipment can be refined."
 	if not m.s.tutorial: return "Complete First Supplies to open the workshop."
 	if not m.s.fight.is_empty(): return "Retreat before refining your equipment."
 	if g.q>=5: return "This piece has reached Legendary quality."

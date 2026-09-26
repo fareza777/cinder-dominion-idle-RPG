@@ -26,6 +26,11 @@ static func move(m, enemy: Dictionary, strike: int, armor: int, second_phase: bo
 				if enemy.boss:
 					attack = int(attack*1.8)
 					label = "Third toll"
+	if third and enemy.has("special_name"):
+		attack = int(enemy.attack*float(enemy.special_attack))
+		defense = int(armor*float(enemy.special_armor))
+		heal = int(enemy.hp*float(enemy.special_heal))
+		label = enemy.special_name
 	heal = int(heal*(1.0-.25*RealmRuneforge.active_rank(m,"tide")))
 	var damage = m.hit_damage(attack,defense)
 	if RealmRuneforge.active_rank(m,"bell")>0: damage = ceili(damage*1.1)
@@ -45,6 +50,11 @@ static func player_damage(m, enemy: Dictionary, swing: int) -> int:
 	return damage
 
 static func mechanic(enemy: Dictionary) -> String:
+	if enemy.has("special_name"):
+		var parts = ["%.1f× attack" % float(enemy.special_attack)]
+		if float(enemy.special_armor)<1: parts.append("ignores %d%% armor" % roundi((1-float(enemy.special_armor))*100))
+		if float(enemy.special_heal)>0: parts.append("restores %.1f%% enemy HP" % (float(enemy.special_heal)*100))
+		return enemy.special_name+" · Every third attack: "+", ".join(parts)+"."
 	match enemy.get("region",""):
 		"wilds": return "Bramble crush · Every third attack ignores half your armor. A stronger blade can shorten your exposure."
 		"marsh": return "Drowned hymn · Every third attack restores 5% of the Oracle's maximum HP, even if her strike misses. Bring enough damage to overcome the healing."

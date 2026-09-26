@@ -12,6 +12,7 @@ var faces: Array[Texture2D] = []
 var region_art: Dictionary = {}
 var current_enemy = ""
 var enemy_face: Texture2D
+var enemy_background: Texture2D
 var floating: Array = []
 var impacts = {"hero":0.0,"enemy":0.0}
 var recovery = {"hero":0.0,"enemy":0.0}
@@ -77,6 +78,7 @@ func _process(delta: float):
 		current_enemy = id
 		arrival = .65
 		enemy_face = U.enemy_texture(model.data.enemies[id])
+		enemy_background = U.atlas_tile("res://assets/art/ascension-places-0.25.png",int(model.data.enemies[id].place_tile),2,2) if model.data.enemies[id].has("place_tile") else null
 	if serial!=int(model.battle_event.serial):
 		for event in model.combat_events:
 			if int(event.serial)>serial and int(model.s.time)-int(event.get("time",0))<1000:
@@ -125,7 +127,7 @@ func _draw():
 	var fighting = not model.s.fight.is_empty()
 	var f = model.s.fight
 	var enemy = model.data.enemies[f.enemy] if fighting else {}
-	var backdrop = region_art.get(enemy.get("region",""),background)
+	var backdrop = enemy_background if enemy_background!=null else region_art.get(enemy.get("region",""),background)
 	var backdrop_width = size.y*backdrop.get_width()/backdrop.get_height()
 	var drift = sin(elapsed*.17)*4 if model.s.settings.motion else 0.0
 	draw_texture_rect(backdrop,Rect2((size.x-backdrop_width)/2+drift-5,-3,backdrop_width+10,size.y+6),false,Color(.88,.88,.88))

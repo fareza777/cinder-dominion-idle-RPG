@@ -109,6 +109,7 @@ func explore(parent: Node):
 	actions.add_child(U.button("Equip best",func():
 		if app.send({"type":"equip_best"}): app.toast("Best owned equipment equipped.")))
 	prep.add_child(U.button("Prepare 10 × "+m.name_of(m.s.settings.food),func(): app.planner_dialog("craft_"+str(m.s.settings.food),10)))
+	parent.add_child(U.button("Ascension · gear & apex hunts",func(): preload("res://ui/ascension.gd").new(app).open()))
 	parent.add_child(U.button("Hunt mastery",func(): preload("res://ui/hunt_mastery.gd").new(app).open()))
 	if m.s.beacon:
 		var routes = U.row(6)
@@ -144,6 +145,7 @@ func explore(parent: Node):
 
 func skills(parent: Node):
 	heading(parent,text("TUMBUH MELALUI LATIHAN","GROW THROUGH PRACTICE"),text("Keahlian","Skills"),text("Setiap bahan memiliki tujuan. Setiap pekerjaan meninggalkan jejak.",""))
+	parent.add_child(U.button("Gear paths · level 25–100",func(): preload("res://ui/ascension.gd").new(app).open()))
 	if app.skill=="":
 		var grid = GridContainer.new()
 		grid.columns = 2
@@ -174,9 +176,16 @@ func skills(parent: Node):
 		var selected = app.skill
 		app.dynamic(parent,func(): return "%s · Lv.%d" % [m.local_name(m.data.skills[selected]),m.level(selected)],26,U.GOLD)
 		preload("res://ui/level_progress.gd").show_progress(app,parent,selected)
+		var visibility = U.row(6)
+		parent.add_child(visibility)
+		for choice in [[false,"Available"],[true,"All recipes"]]:
+			visibility.add_child(U.button(choice[1],func():
+				app.show_locked_recipes = choice[0]
+				app.set_page("skills",true),app.show_locked_recipes==choice[0]))
 		for aid in m.data.activities:
 			var a = m.data.activities[aid]
 			if a.skill!=selected or a.kind=="combat": continue
+			if not app.show_locked_recipes and m.level(selected)<int(a.level): continue
 			var c = U.card(parent,12)
 			var r = U.row(12)
 			c.add_child(r)

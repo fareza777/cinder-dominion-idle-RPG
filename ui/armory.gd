@@ -12,7 +12,7 @@ func workshop(uid: String = "", target: String = ""):
 	var v = app.modal("The Ember Workshop")
 	if not m.s.tutorial:
 		v.add_child(U.para("Upgrade equipment quality",27,U.TEXT))
-		v.add_child(U.para("Finish First Supplies to unlock refinement. Then turn copper and iron equipment into dependable upgrades with ingots, scraps and earned gold. No failed rolls; no lost levels.",15))
+		v.add_child(U.para("Finish First Supplies to unlock refinement. Then turn forged metal equipment into dependable upgrades with ingots, scraps and earned gold. No failed rolls; no lost levels.",15))
 		app.modal_action("Finish First Supplies",app.guide_dialog)
 		return
 	var g = m.gear(uid)

@@ -393,6 +393,586 @@
       "armor": 0,
       "speed": 0.1,
       "icon": "fish"
+    },
+    "steel_ore": {
+      "id": "steel_ore",
+      "name": "Magnetite",
+      "en": "Magnetite",
+      "category": "material",
+      "sell": 1,
+      "art_tile": 2
+    },
+    "steel_ingot": {
+      "id": "steel_ingot",
+      "name": "Steel ingot",
+      "en": "Steel ingot",
+      "category": "material",
+      "sell": 1,
+      "art_tile": 3
+    },
+    "steel_log": {
+      "id": "steel_log",
+      "name": "Blackpine log",
+      "en": "Blackpine log",
+      "category": "material",
+      "sell": 1,
+      "icon_alias": "oak_log"
+    },
+    "steel_fish": {
+      "id": "steel_fish",
+      "name": "Raw river trout",
+      "en": "Raw river trout",
+      "category": "material",
+      "sell": 1,
+      "icon_alias": "raw_perch"
+    },
+    "cooked_steel_fish": {
+      "id": "cooked_steel_fish",
+      "name": "Roasted river trout",
+      "en": "Roasted river trout",
+      "category": "food",
+      "sell": 1,
+      "heal": 50,
+      "icon_alias": "cooked_perch"
+    },
+    "steel_sword": {
+      "id": "steel_sword",
+      "name": "Steel Sword",
+      "en": "Steel Sword",
+      "category": "equipment",
+      "sell": 1,
+      "slot": "weapon",
+      "attack": 12,
+      "armor": 0,
+      "icon_alias": "iron_sword",
+      "art_tile": 0
+    },
+    "steel_shield": {
+      "id": "steel_shield",
+      "name": "Steel Shield",
+      "en": "Steel Shield",
+      "category": "equipment",
+      "sell": 1,
+      "slot": "shield",
+      "attack": 0,
+      "armor": 6,
+      "icon_alias": "iron_shield",
+      "art_tile": 1
+    },
+    "steel_helm": {
+      "id": "steel_helm",
+      "name": "Steel Helm",
+      "en": "Steel Helm",
+      "category": "equipment",
+      "sell": 1,
+      "slot": "head",
+      "attack": 0,
+      "armor": 3,
+      "icon_alias": "iron_helm"
+    },
+    "steel_chest": {
+      "id": "steel_chest",
+      "name": "Steel Cuirass",
+      "en": "Steel Cuirass",
+      "category": "equipment",
+      "sell": 1,
+      "slot": "body",
+      "attack": 0,
+      "armor": 9,
+      "icon_alias": "iron_chest"
+    },
+    "steel_gloves": {
+      "id": "steel_gloves",
+      "name": "Steel Gauntlets",
+      "en": "Steel Gauntlets",
+      "category": "equipment",
+      "sell": 1,
+      "slot": "hands",
+      "attack": 0,
+      "armor": 3,
+      "icon_alias": "iron_gloves"
+    },
+    "steel_boots": {
+      "id": "steel_boots",
+      "name": "Steel Boots",
+      "en": "Steel Boots",
+      "category": "equipment",
+      "sell": 1,
+      "slot": "feet",
+      "attack": 0,
+      "armor": 3,
+      "icon_alias": "iron_boots"
+    },
+    "steel_axe": {
+      "id": "steel_axe",
+      "name": "Steel axe",
+      "en": "Steel axe",
+      "category": "equipment",
+      "sell": 1,
+      "slot": "axe",
+      "attack": 0,
+      "armor": 0,
+      "speed": 0.15,
+      "icon_alias": "ash_axe"
+    },
+    "steel_pick": {
+      "id": "steel_pick",
+      "name": "Steel pick",
+      "en": "Steel pick",
+      "category": "equipment",
+      "sell": 1,
+      "slot": "pick",
+      "attack": 0,
+      "armor": 0,
+      "speed": 0.15,
+      "icon_alias": "copper_pick"
+    },
+    "steel_rod": {
+      "id": "steel_rod",
+      "name": "Steel rod",
+      "en": "Steel rod",
+      "category": "equipment",
+      "sell": 1,
+      "slot": "rod",
+      "attack": 0,
+      "armor": 0,
+      "speed": 0.15,
+      "icon_alias": "iron_rod"
+    },
+    "moonsteel_ore": {
+      "id": "moonsteel_ore",
+      "name": "Moonsteel ore",
+      "en": "Moonsteel ore",
+      "category": "material",
+      "sell": 1,
+      "art_tile": 6
+    },
+    "moonsteel_ingot": {
+      "id": "moonsteel_ingot",
+      "name": "Moonsteel ingot",
+      "en": "Moonsteel ingot",
+      "category": "material",
+      "sell": 1,
+      "art_tile": 7
+    },
+    "moonsteel_log": {
+      "id": "moonsteel_log",
+      "name": "Silver birch log",
+      "en": "Silver birch log",
+      "category": "material",
+      "sell": 1,
+      "icon_alias": "oak_log"
+    },
+    "moonsteel_fish": {
+      "id": "moonsteel_fish",
+      "name": "Raw moon carp",
+      "en": "Raw moon carp",
+      "category": "material",
+      "sell": 1,
+      "icon_alias": "raw_perch"
+    },
+    "cooked_moonsteel_fish": {
+      "id": "cooked_moonsteel_fish",
+      "name": "Roasted moon carp",
+      "en": "Roasted moon carp",
+      "category": "food",
+      "sell": 1,
+      "heal": 65,
+      "icon_alias": "cooked_perch"
+    },
+    "moonsteel_sword": {
+      "id": "moonsteel_sword",
+      "name": "Moonsteel Sword",
+      "en": "Moonsteel Sword",
+      "category": "equipment",
+      "sell": 1,
+      "slot": "weapon",
+      "attack": 20,
+      "armor": 0,
+      "icon_alias": "iron_sword",
+      "art_tile": 4
+    },
+    "moonsteel_shield": {
+      "id": "moonsteel_shield",
+      "name": "Moonsteel Shield",
+      "en": "Moonsteel Shield",
+      "category": "equipment",
+      "sell": 1,
+      "slot": "shield",
+      "attack": 0,
+      "armor": 8,
+      "icon_alias": "iron_shield",
+      "art_tile": 5
+    },
+    "moonsteel_helm": {
+      "id": "moonsteel_helm",
+      "name": "Moonsteel Helm",
+      "en": "Moonsteel Helm",
+      "category": "equipment",
+      "sell": 1,
+      "slot": "head",
+      "attack": 0,
+      "armor": 4,
+      "icon_alias": "iron_helm"
+    },
+    "moonsteel_chest": {
+      "id": "moonsteel_chest",
+      "name": "Moonsteel Cuirass",
+      "en": "Moonsteel Cuirass",
+      "category": "equipment",
+      "sell": 1,
+      "slot": "body",
+      "attack": 0,
+      "armor": 12,
+      "icon_alias": "iron_chest"
+    },
+    "moonsteel_gloves": {
+      "id": "moonsteel_gloves",
+      "name": "Moonsteel Gauntlets",
+      "en": "Moonsteel Gauntlets",
+      "category": "equipment",
+      "sell": 1,
+      "slot": "hands",
+      "attack": 0,
+      "armor": 4,
+      "icon_alias": "iron_gloves"
+    },
+    "moonsteel_boots": {
+      "id": "moonsteel_boots",
+      "name": "Moonsteel Boots",
+      "en": "Moonsteel Boots",
+      "category": "equipment",
+      "sell": 1,
+      "slot": "feet",
+      "attack": 0,
+      "armor": 4,
+      "icon_alias": "iron_boots"
+    },
+    "moonsteel_axe": {
+      "id": "moonsteel_axe",
+      "name": "Moonsteel axe",
+      "en": "Moonsteel axe",
+      "category": "equipment",
+      "sell": 1,
+      "slot": "axe",
+      "attack": 0,
+      "armor": 0,
+      "speed": 0.2,
+      "icon_alias": "ash_axe"
+    },
+    "moonsteel_pick": {
+      "id": "moonsteel_pick",
+      "name": "Moonsteel pick",
+      "en": "Moonsteel pick",
+      "category": "equipment",
+      "sell": 1,
+      "slot": "pick",
+      "attack": 0,
+      "armor": 0,
+      "speed": 0.2,
+      "icon_alias": "copper_pick"
+    },
+    "moonsteel_rod": {
+      "id": "moonsteel_rod",
+      "name": "Moonsteel rod",
+      "en": "Moonsteel rod",
+      "category": "equipment",
+      "sell": 1,
+      "slot": "rod",
+      "attack": 0,
+      "armor": 0,
+      "speed": 0.2,
+      "icon_alias": "iron_rod"
+    },
+    "dusksteel_ore": {
+      "id": "dusksteel_ore",
+      "name": "Dusksteel ore",
+      "en": "Dusksteel ore",
+      "category": "material",
+      "sell": 1,
+      "art_tile": 10
+    },
+    "dusksteel_ingot": {
+      "id": "dusksteel_ingot",
+      "name": "Dusksteel ingot",
+      "en": "Dusksteel ingot",
+      "category": "material",
+      "sell": 1,
+      "art_tile": 11
+    },
+    "dusksteel_log": {
+      "id": "dusksteel_log",
+      "name": "Nightwood log",
+      "en": "Nightwood log",
+      "category": "material",
+      "sell": 1,
+      "icon_alias": "oak_log"
+    },
+    "dusksteel_fish": {
+      "id": "dusksteel_fish",
+      "name": "Raw cave eel",
+      "en": "Raw cave eel",
+      "category": "material",
+      "sell": 1,
+      "icon_alias": "raw_perch"
+    },
+    "cooked_dusksteel_fish": {
+      "id": "cooked_dusksteel_fish",
+      "name": "Roasted cave eel",
+      "en": "Roasted cave eel",
+      "category": "food",
+      "sell": 1,
+      "heal": 80,
+      "icon_alias": "cooked_perch"
+    },
+    "dusksteel_sword": {
+      "id": "dusksteel_sword",
+      "name": "Dusksteel Sword",
+      "en": "Dusksteel Sword",
+      "category": "equipment",
+      "sell": 1,
+      "slot": "weapon",
+      "attack": 30,
+      "armor": 0,
+      "icon_alias": "iron_sword",
+      "art_tile": 8
+    },
+    "dusksteel_shield": {
+      "id": "dusksteel_shield",
+      "name": "Dusksteel Shield",
+      "en": "Dusksteel Shield",
+      "category": "equipment",
+      "sell": 1,
+      "slot": "shield",
+      "attack": 0,
+      "armor": 10,
+      "icon_alias": "iron_shield",
+      "art_tile": 9
+    },
+    "dusksteel_helm": {
+      "id": "dusksteel_helm",
+      "name": "Dusksteel Helm",
+      "en": "Dusksteel Helm",
+      "category": "equipment",
+      "sell": 1,
+      "slot": "head",
+      "attack": 0,
+      "armor": 5,
+      "icon_alias": "iron_helm"
+    },
+    "dusksteel_chest": {
+      "id": "dusksteel_chest",
+      "name": "Dusksteel Cuirass",
+      "en": "Dusksteel Cuirass",
+      "category": "equipment",
+      "sell": 1,
+      "slot": "body",
+      "attack": 0,
+      "armor": 15,
+      "icon_alias": "iron_chest"
+    },
+    "dusksteel_gloves": {
+      "id": "dusksteel_gloves",
+      "name": "Dusksteel Gauntlets",
+      "en": "Dusksteel Gauntlets",
+      "category": "equipment",
+      "sell": 1,
+      "slot": "hands",
+      "attack": 0,
+      "armor": 5,
+      "icon_alias": "iron_gloves"
+    },
+    "dusksteel_boots": {
+      "id": "dusksteel_boots",
+      "name": "Dusksteel Boots",
+      "en": "Dusksteel Boots",
+      "category": "equipment",
+      "sell": 1,
+      "slot": "feet",
+      "attack": 0,
+      "armor": 5,
+      "icon_alias": "iron_boots"
+    },
+    "dusksteel_axe": {
+      "id": "dusksteel_axe",
+      "name": "Dusksteel axe",
+      "en": "Dusksteel axe",
+      "category": "equipment",
+      "sell": 1,
+      "slot": "axe",
+      "attack": 0,
+      "armor": 0,
+      "speed": 0.25,
+      "icon_alias": "ash_axe"
+    },
+    "dusksteel_pick": {
+      "id": "dusksteel_pick",
+      "name": "Dusksteel pick",
+      "en": "Dusksteel pick",
+      "category": "equipment",
+      "sell": 1,
+      "slot": "pick",
+      "attack": 0,
+      "armor": 0,
+      "speed": 0.25,
+      "icon_alias": "copper_pick"
+    },
+    "dusksteel_rod": {
+      "id": "dusksteel_rod",
+      "name": "Dusksteel rod",
+      "en": "Dusksteel rod",
+      "category": "equipment",
+      "sell": 1,
+      "slot": "rod",
+      "attack": 0,
+      "armor": 0,
+      "speed": 0.25,
+      "icon_alias": "iron_rod"
+    },
+    "dawnsteel_ore": {
+      "id": "dawnsteel_ore",
+      "name": "Dawnsteel ore",
+      "en": "Dawnsteel ore",
+      "category": "material",
+      "sell": 1,
+      "art_tile": 14
+    },
+    "dawnsteel_ingot": {
+      "id": "dawnsteel_ingot",
+      "name": "Dawnsteel ingot",
+      "en": "Dawnsteel ingot",
+      "category": "material",
+      "sell": 1,
+      "art_tile": 15
+    },
+    "dawnsteel_log": {
+      "id": "dawnsteel_log",
+      "name": "Sunwood log",
+      "en": "Sunwood log",
+      "category": "material",
+      "sell": 1,
+      "icon_alias": "oak_log"
+    },
+    "dawnsteel_fish": {
+      "id": "dawnsteel_fish",
+      "name": "Raw dawn salmon",
+      "en": "Raw dawn salmon",
+      "category": "material",
+      "sell": 1,
+      "icon_alias": "raw_perch"
+    },
+    "cooked_dawnsteel_fish": {
+      "id": "cooked_dawnsteel_fish",
+      "name": "Roasted dawn salmon",
+      "en": "Roasted dawn salmon",
+      "category": "food",
+      "sell": 1,
+      "heal": 95,
+      "icon_alias": "cooked_perch"
+    },
+    "dawnsteel_sword": {
+      "id": "dawnsteel_sword",
+      "name": "Dawnsteel Sword",
+      "en": "Dawnsteel Sword",
+      "category": "equipment",
+      "sell": 1,
+      "slot": "weapon",
+      "attack": 42,
+      "armor": 0,
+      "icon_alias": "iron_sword",
+      "art_tile": 12
+    },
+    "dawnsteel_shield": {
+      "id": "dawnsteel_shield",
+      "name": "Dawnsteel Shield",
+      "en": "Dawnsteel Shield",
+      "category": "equipment",
+      "sell": 1,
+      "slot": "shield",
+      "attack": 0,
+      "armor": 12,
+      "icon_alias": "iron_shield",
+      "art_tile": 13
+    },
+    "dawnsteel_helm": {
+      "id": "dawnsteel_helm",
+      "name": "Dawnsteel Helm",
+      "en": "Dawnsteel Helm",
+      "category": "equipment",
+      "sell": 1,
+      "slot": "head",
+      "attack": 0,
+      "armor": 6,
+      "icon_alias": "iron_helm"
+    },
+    "dawnsteel_chest": {
+      "id": "dawnsteel_chest",
+      "name": "Dawnsteel Cuirass",
+      "en": "Dawnsteel Cuirass",
+      "category": "equipment",
+      "sell": 1,
+      "slot": "body",
+      "attack": 0,
+      "armor": 18,
+      "icon_alias": "iron_chest"
+    },
+    "dawnsteel_gloves": {
+      "id": "dawnsteel_gloves",
+      "name": "Dawnsteel Gauntlets",
+      "en": "Dawnsteel Gauntlets",
+      "category": "equipment",
+      "sell": 1,
+      "slot": "hands",
+      "attack": 0,
+      "armor": 6,
+      "icon_alias": "iron_gloves"
+    },
+    "dawnsteel_boots": {
+      "id": "dawnsteel_boots",
+      "name": "Dawnsteel Boots",
+      "en": "Dawnsteel Boots",
+      "category": "equipment",
+      "sell": 1,
+      "slot": "feet",
+      "attack": 0,
+      "armor": 6,
+      "icon_alias": "iron_boots"
+    },
+    "dawnsteel_axe": {
+      "id": "dawnsteel_axe",
+      "name": "Dawnsteel axe",
+      "en": "Dawnsteel axe",
+      "category": "equipment",
+      "sell": 1,
+      "slot": "axe",
+      "attack": 0,
+      "armor": 0,
+      "speed": 0.30000000000000004,
+      "icon_alias": "ash_axe"
+    },
+    "dawnsteel_pick": {
+      "id": "dawnsteel_pick",
+      "name": "Dawnsteel pick",
+      "en": "Dawnsteel pick",
+      "category": "equipment",
+      "sell": 1,
+      "slot": "pick",
+      "attack": 0,
+      "armor": 0,
+      "speed": 0.30000000000000004,
+      "icon_alias": "copper_pick"
+    },
+    "dawnsteel_rod": {
+      "id": "dawnsteel_rod",
+      "name": "Dawnsteel rod",
+      "en": "Dawnsteel rod",
+      "category": "equipment",
+      "sell": 1,
+      "slot": "rod",
+      "attack": 0,
+      "armor": 0,
+      "speed": 0.30000000000000004,
+      "icon_alias": "iron_rod"
     }
   },
   "skills": {
@@ -1063,6 +1643,853 @@
       "inputs": {},
       "duration": 2,
       "xp": 250
+    },
+    "mine_steel": {
+      "id": "mine_steel",
+      "kind": "gather",
+      "skill": "mining",
+      "output": "steel_ore",
+      "level": 25,
+      "inputs": {},
+      "xp": 80,
+      "duration": 6,
+      "side": ""
+    },
+    "cut_steel": {
+      "id": "cut_steel",
+      "kind": "gather",
+      "skill": "woodcutting",
+      "output": "steel_log",
+      "level": 25,
+      "inputs": {},
+      "xp": 80,
+      "duration": 6,
+      "side": ""
+    },
+    "fish_steel": {
+      "id": "fish_steel",
+      "kind": "gather",
+      "skill": "fishing",
+      "output": "steel_fish",
+      "level": 25,
+      "inputs": {},
+      "xp": 80,
+      "duration": 6,
+      "side": ""
+    },
+    "craft_steel_ingot": {
+      "id": "craft_steel_ingot",
+      "kind": "craft",
+      "skill": "smithing",
+      "output": "steel_ingot",
+      "level": 25,
+      "inputs": {
+        "steel_ore": 2,
+        "coal": 1
+      },
+      "xp": 110,
+      "duration": 6,
+      "side": ""
+    },
+    "craft_cooked_steel_fish": {
+      "id": "craft_cooked_steel_fish",
+      "kind": "craft",
+      "skill": "cooking",
+      "output": "cooked_steel_fish",
+      "level": 30,
+      "inputs": {
+        "steel_fish": 1,
+        "steel_log": 1
+      },
+      "xp": 100,
+      "duration": 5,
+      "side": ""
+    },
+    "craft_steel_sword": {
+      "id": "craft_steel_sword",
+      "kind": "craft",
+      "skill": "smithing",
+      "output": "steel_sword",
+      "level": 25,
+      "inputs": {
+        "steel_ingot": 2,
+        "steel_log": 1
+      },
+      "xp": 250,
+      "duration": 8,
+      "side": ""
+    },
+    "craft_steel_shield": {
+      "id": "craft_steel_shield",
+      "kind": "craft",
+      "skill": "smithing",
+      "output": "steel_shield",
+      "level": 27,
+      "inputs": {
+        "steel_ingot": 2,
+        "steel_log": 1
+      },
+      "xp": 250,
+      "duration": 8,
+      "side": ""
+    },
+    "craft_steel_helm": {
+      "id": "craft_steel_helm",
+      "kind": "craft",
+      "skill": "smithing",
+      "output": "steel_helm",
+      "level": 30,
+      "inputs": {
+        "steel_ingot": 2,
+        "steel_log": 1
+      },
+      "xp": 250,
+      "duration": 8,
+      "side": ""
+    },
+    "craft_steel_chest": {
+      "id": "craft_steel_chest",
+      "kind": "craft",
+      "skill": "smithing",
+      "output": "steel_chest",
+      "level": 40,
+      "inputs": {
+        "steel_ingot": 4,
+        "steel_log": 1
+      },
+      "xp": 250,
+      "duration": 8,
+      "side": ""
+    },
+    "craft_steel_gloves": {
+      "id": "craft_steel_gloves",
+      "kind": "craft",
+      "skill": "smithing",
+      "output": "steel_gloves",
+      "level": 30,
+      "inputs": {
+        "steel_ingot": 1,
+        "steel_log": 1
+      },
+      "xp": 250,
+      "duration": 8,
+      "side": ""
+    },
+    "craft_steel_boots": {
+      "id": "craft_steel_boots",
+      "kind": "craft",
+      "skill": "smithing",
+      "output": "steel_boots",
+      "level": 35,
+      "inputs": {
+        "steel_ingot": 1,
+        "steel_log": 1
+      },
+      "xp": 250,
+      "duration": 8,
+      "side": ""
+    },
+    "craft_steel_axe": {
+      "id": "craft_steel_axe",
+      "kind": "craft",
+      "skill": "smithing",
+      "output": "steel_axe",
+      "level": 35,
+      "inputs": {
+        "steel_ingot": 2,
+        "steel_log": 2
+      },
+      "xp": 220,
+      "duration": 8,
+      "side": ""
+    },
+    "craft_steel_pick": {
+      "id": "craft_steel_pick",
+      "kind": "craft",
+      "skill": "smithing",
+      "output": "steel_pick",
+      "level": 35,
+      "inputs": {
+        "steel_ingot": 2,
+        "steel_log": 2
+      },
+      "xp": 220,
+      "duration": 8,
+      "side": ""
+    },
+    "craft_steel_rod": {
+      "id": "craft_steel_rod",
+      "kind": "craft",
+      "skill": "smithing",
+      "output": "steel_rod",
+      "level": 35,
+      "inputs": {
+        "steel_ingot": 2,
+        "steel_log": 2
+      },
+      "xp": 220,
+      "duration": 8,
+      "side": ""
+    },
+    "mine_moonsteel": {
+      "id": "mine_moonsteel",
+      "kind": "gather",
+      "skill": "mining",
+      "output": "moonsteel_ore",
+      "level": 45,
+      "inputs": {},
+      "xp": 150,
+      "duration": 7,
+      "side": ""
+    },
+    "cut_moonsteel": {
+      "id": "cut_moonsteel",
+      "kind": "gather",
+      "skill": "woodcutting",
+      "output": "moonsteel_log",
+      "level": 45,
+      "inputs": {},
+      "xp": 150,
+      "duration": 7,
+      "side": ""
+    },
+    "fish_moonsteel": {
+      "id": "fish_moonsteel",
+      "kind": "gather",
+      "skill": "fishing",
+      "output": "moonsteel_fish",
+      "level": 45,
+      "inputs": {},
+      "xp": 150,
+      "duration": 7,
+      "side": ""
+    },
+    "craft_moonsteel_ingot": {
+      "id": "craft_moonsteel_ingot",
+      "kind": "craft",
+      "skill": "smithing",
+      "output": "moonsteel_ingot",
+      "level": 45,
+      "inputs": {
+        "moonsteel_ore": 2,
+        "coal": 1
+      },
+      "xp": 200,
+      "duration": 6,
+      "side": ""
+    },
+    "craft_cooked_moonsteel_fish": {
+      "id": "craft_cooked_moonsteel_fish",
+      "kind": "craft",
+      "skill": "cooking",
+      "output": "cooked_moonsteel_fish",
+      "level": 50,
+      "inputs": {
+        "moonsteel_fish": 1,
+        "moonsteel_log": 1
+      },
+      "xp": 180,
+      "duration": 5,
+      "side": ""
+    },
+    "craft_moonsteel_sword": {
+      "id": "craft_moonsteel_sword",
+      "kind": "craft",
+      "skill": "smithing",
+      "output": "moonsteel_sword",
+      "level": 45,
+      "inputs": {
+        "moonsteel_ingot": 2,
+        "moonsteel_log": 1
+      },
+      "xp": 450,
+      "duration": 9,
+      "side": ""
+    },
+    "craft_moonsteel_shield": {
+      "id": "craft_moonsteel_shield",
+      "kind": "craft",
+      "skill": "smithing",
+      "output": "moonsteel_shield",
+      "level": 47,
+      "inputs": {
+        "moonsteel_ingot": 2,
+        "moonsteel_log": 1
+      },
+      "xp": 450,
+      "duration": 9,
+      "side": ""
+    },
+    "craft_moonsteel_helm": {
+      "id": "craft_moonsteel_helm",
+      "kind": "craft",
+      "skill": "smithing",
+      "output": "moonsteel_helm",
+      "level": 50,
+      "inputs": {
+        "moonsteel_ingot": 2,
+        "moonsteel_log": 1
+      },
+      "xp": 450,
+      "duration": 9,
+      "side": ""
+    },
+    "craft_moonsteel_chest": {
+      "id": "craft_moonsteel_chest",
+      "kind": "craft",
+      "skill": "smithing",
+      "output": "moonsteel_chest",
+      "level": 60,
+      "inputs": {
+        "moonsteel_ingot": 4,
+        "moonsteel_log": 1
+      },
+      "xp": 450,
+      "duration": 9,
+      "side": ""
+    },
+    "craft_moonsteel_gloves": {
+      "id": "craft_moonsteel_gloves",
+      "kind": "craft",
+      "skill": "smithing",
+      "output": "moonsteel_gloves",
+      "level": 50,
+      "inputs": {
+        "moonsteel_ingot": 1,
+        "moonsteel_log": 1
+      },
+      "xp": 450,
+      "duration": 9,
+      "side": ""
+    },
+    "craft_moonsteel_boots": {
+      "id": "craft_moonsteel_boots",
+      "kind": "craft",
+      "skill": "smithing",
+      "output": "moonsteel_boots",
+      "level": 55,
+      "inputs": {
+        "moonsteel_ingot": 1,
+        "moonsteel_log": 1
+      },
+      "xp": 450,
+      "duration": 9,
+      "side": ""
+    },
+    "craft_moonsteel_axe": {
+      "id": "craft_moonsteel_axe",
+      "kind": "craft",
+      "skill": "smithing",
+      "output": "moonsteel_axe",
+      "level": 55,
+      "inputs": {
+        "moonsteel_ingot": 2,
+        "moonsteel_log": 2
+      },
+      "xp": 400,
+      "duration": 8,
+      "side": ""
+    },
+    "craft_moonsteel_pick": {
+      "id": "craft_moonsteel_pick",
+      "kind": "craft",
+      "skill": "smithing",
+      "output": "moonsteel_pick",
+      "level": 55,
+      "inputs": {
+        "moonsteel_ingot": 2,
+        "moonsteel_log": 2
+      },
+      "xp": 400,
+      "duration": 8,
+      "side": ""
+    },
+    "craft_moonsteel_rod": {
+      "id": "craft_moonsteel_rod",
+      "kind": "craft",
+      "skill": "smithing",
+      "output": "moonsteel_rod",
+      "level": 55,
+      "inputs": {
+        "moonsteel_ingot": 2,
+        "moonsteel_log": 2
+      },
+      "xp": 400,
+      "duration": 8,
+      "side": ""
+    },
+    "mine_dusksteel": {
+      "id": "mine_dusksteel",
+      "kind": "gather",
+      "skill": "mining",
+      "output": "dusksteel_ore",
+      "level": 65,
+      "inputs": {},
+      "xp": 220,
+      "duration": 8,
+      "side": ""
+    },
+    "cut_dusksteel": {
+      "id": "cut_dusksteel",
+      "kind": "gather",
+      "skill": "woodcutting",
+      "output": "dusksteel_log",
+      "level": 65,
+      "inputs": {},
+      "xp": 220,
+      "duration": 8,
+      "side": ""
+    },
+    "fish_dusksteel": {
+      "id": "fish_dusksteel",
+      "kind": "gather",
+      "skill": "fishing",
+      "output": "dusksteel_fish",
+      "level": 65,
+      "inputs": {},
+      "xp": 220,
+      "duration": 8,
+      "side": ""
+    },
+    "craft_dusksteel_ingot": {
+      "id": "craft_dusksteel_ingot",
+      "kind": "craft",
+      "skill": "smithing",
+      "output": "dusksteel_ingot",
+      "level": 65,
+      "inputs": {
+        "dusksteel_ore": 2,
+        "coal": 1
+      },
+      "xp": 290,
+      "duration": 6,
+      "side": ""
+    },
+    "craft_cooked_dusksteel_fish": {
+      "id": "craft_cooked_dusksteel_fish",
+      "kind": "craft",
+      "skill": "cooking",
+      "output": "cooked_dusksteel_fish",
+      "level": 70,
+      "inputs": {
+        "dusksteel_fish": 1,
+        "dusksteel_log": 1
+      },
+      "xp": 260,
+      "duration": 5,
+      "side": ""
+    },
+    "craft_dusksteel_sword": {
+      "id": "craft_dusksteel_sword",
+      "kind": "craft",
+      "skill": "smithing",
+      "output": "dusksteel_sword",
+      "level": 65,
+      "inputs": {
+        "dusksteel_ingot": 2,
+        "dusksteel_log": 1
+      },
+      "xp": 650,
+      "duration": 10,
+      "side": ""
+    },
+    "craft_dusksteel_shield": {
+      "id": "craft_dusksteel_shield",
+      "kind": "craft",
+      "skill": "smithing",
+      "output": "dusksteel_shield",
+      "level": 67,
+      "inputs": {
+        "dusksteel_ingot": 2,
+        "dusksteel_log": 1
+      },
+      "xp": 650,
+      "duration": 10,
+      "side": ""
+    },
+    "craft_dusksteel_helm": {
+      "id": "craft_dusksteel_helm",
+      "kind": "craft",
+      "skill": "smithing",
+      "output": "dusksteel_helm",
+      "level": 70,
+      "inputs": {
+        "dusksteel_ingot": 2,
+        "dusksteel_log": 1
+      },
+      "xp": 650,
+      "duration": 10,
+      "side": ""
+    },
+    "craft_dusksteel_chest": {
+      "id": "craft_dusksteel_chest",
+      "kind": "craft",
+      "skill": "smithing",
+      "output": "dusksteel_chest",
+      "level": 80,
+      "inputs": {
+        "dusksteel_ingot": 4,
+        "dusksteel_log": 1
+      },
+      "xp": 650,
+      "duration": 10,
+      "side": ""
+    },
+    "craft_dusksteel_gloves": {
+      "id": "craft_dusksteel_gloves",
+      "kind": "craft",
+      "skill": "smithing",
+      "output": "dusksteel_gloves",
+      "level": 70,
+      "inputs": {
+        "dusksteel_ingot": 1,
+        "dusksteel_log": 1
+      },
+      "xp": 650,
+      "duration": 10,
+      "side": ""
+    },
+    "craft_dusksteel_boots": {
+      "id": "craft_dusksteel_boots",
+      "kind": "craft",
+      "skill": "smithing",
+      "output": "dusksteel_boots",
+      "level": 75,
+      "inputs": {
+        "dusksteel_ingot": 1,
+        "dusksteel_log": 1
+      },
+      "xp": 650,
+      "duration": 10,
+      "side": ""
+    },
+    "craft_dusksteel_axe": {
+      "id": "craft_dusksteel_axe",
+      "kind": "craft",
+      "skill": "smithing",
+      "output": "dusksteel_axe",
+      "level": 75,
+      "inputs": {
+        "dusksteel_ingot": 2,
+        "dusksteel_log": 2
+      },
+      "xp": 580,
+      "duration": 8,
+      "side": ""
+    },
+    "craft_dusksteel_pick": {
+      "id": "craft_dusksteel_pick",
+      "kind": "craft",
+      "skill": "smithing",
+      "output": "dusksteel_pick",
+      "level": 75,
+      "inputs": {
+        "dusksteel_ingot": 2,
+        "dusksteel_log": 2
+      },
+      "xp": 580,
+      "duration": 8,
+      "side": ""
+    },
+    "craft_dusksteel_rod": {
+      "id": "craft_dusksteel_rod",
+      "kind": "craft",
+      "skill": "smithing",
+      "output": "dusksteel_rod",
+      "level": 75,
+      "inputs": {
+        "dusksteel_ingot": 2,
+        "dusksteel_log": 2
+      },
+      "xp": 580,
+      "duration": 8,
+      "side": ""
+    },
+    "mine_dawnsteel": {
+      "id": "mine_dawnsteel",
+      "kind": "gather",
+      "skill": "mining",
+      "output": "dawnsteel_ore",
+      "level": 85,
+      "inputs": {},
+      "xp": 290,
+      "duration": 9,
+      "side": ""
+    },
+    "cut_dawnsteel": {
+      "id": "cut_dawnsteel",
+      "kind": "gather",
+      "skill": "woodcutting",
+      "output": "dawnsteel_log",
+      "level": 85,
+      "inputs": {},
+      "xp": 290,
+      "duration": 9,
+      "side": ""
+    },
+    "fish_dawnsteel": {
+      "id": "fish_dawnsteel",
+      "kind": "gather",
+      "skill": "fishing",
+      "output": "dawnsteel_fish",
+      "level": 85,
+      "inputs": {},
+      "xp": 290,
+      "duration": 9,
+      "side": ""
+    },
+    "craft_dawnsteel_ingot": {
+      "id": "craft_dawnsteel_ingot",
+      "kind": "craft",
+      "skill": "smithing",
+      "output": "dawnsteel_ingot",
+      "level": 85,
+      "inputs": {
+        "dawnsteel_ore": 2,
+        "coal": 1
+      },
+      "xp": 380,
+      "duration": 6,
+      "side": ""
+    },
+    "craft_cooked_dawnsteel_fish": {
+      "id": "craft_cooked_dawnsteel_fish",
+      "kind": "craft",
+      "skill": "cooking",
+      "output": "cooked_dawnsteel_fish",
+      "level": 90,
+      "inputs": {
+        "dawnsteel_fish": 1,
+        "dawnsteel_log": 1
+      },
+      "xp": 340,
+      "duration": 5,
+      "side": ""
+    },
+    "craft_dawnsteel_sword": {
+      "id": "craft_dawnsteel_sword",
+      "kind": "craft",
+      "skill": "smithing",
+      "output": "dawnsteel_sword",
+      "level": 85,
+      "inputs": {
+        "dawnsteel_ingot": 2,
+        "dawnsteel_log": 1
+      },
+      "xp": 850,
+      "duration": 11,
+      "side": ""
+    },
+    "craft_dawnsteel_shield": {
+      "id": "craft_dawnsteel_shield",
+      "kind": "craft",
+      "skill": "smithing",
+      "output": "dawnsteel_shield",
+      "level": 87,
+      "inputs": {
+        "dawnsteel_ingot": 2,
+        "dawnsteel_log": 1
+      },
+      "xp": 850,
+      "duration": 11,
+      "side": ""
+    },
+    "craft_dawnsteel_helm": {
+      "id": "craft_dawnsteel_helm",
+      "kind": "craft",
+      "skill": "smithing",
+      "output": "dawnsteel_helm",
+      "level": 90,
+      "inputs": {
+        "dawnsteel_ingot": 2,
+        "dawnsteel_log": 1
+      },
+      "xp": 850,
+      "duration": 11,
+      "side": ""
+    },
+    "craft_dawnsteel_chest": {
+      "id": "craft_dawnsteel_chest",
+      "kind": "craft",
+      "skill": "smithing",
+      "output": "dawnsteel_chest",
+      "level": 100,
+      "inputs": {
+        "dawnsteel_ingot": 4,
+        "dawnsteel_log": 1
+      },
+      "xp": 850,
+      "duration": 11,
+      "side": ""
+    },
+    "craft_dawnsteel_gloves": {
+      "id": "craft_dawnsteel_gloves",
+      "kind": "craft",
+      "skill": "smithing",
+      "output": "dawnsteel_gloves",
+      "level": 90,
+      "inputs": {
+        "dawnsteel_ingot": 1,
+        "dawnsteel_log": 1
+      },
+      "xp": 850,
+      "duration": 11,
+      "side": ""
+    },
+    "craft_dawnsteel_boots": {
+      "id": "craft_dawnsteel_boots",
+      "kind": "craft",
+      "skill": "smithing",
+      "output": "dawnsteel_boots",
+      "level": 95,
+      "inputs": {
+        "dawnsteel_ingot": 1,
+        "dawnsteel_log": 1
+      },
+      "xp": 850,
+      "duration": 11,
+      "side": ""
+    },
+    "craft_dawnsteel_axe": {
+      "id": "craft_dawnsteel_axe",
+      "kind": "craft",
+      "skill": "smithing",
+      "output": "dawnsteel_axe",
+      "level": 95,
+      "inputs": {
+        "dawnsteel_ingot": 2,
+        "dawnsteel_log": 2
+      },
+      "xp": 760,
+      "duration": 8,
+      "side": ""
+    },
+    "craft_dawnsteel_pick": {
+      "id": "craft_dawnsteel_pick",
+      "kind": "craft",
+      "skill": "smithing",
+      "output": "dawnsteel_pick",
+      "level": 95,
+      "inputs": {
+        "dawnsteel_ingot": 2,
+        "dawnsteel_log": 2
+      },
+      "xp": 760,
+      "duration": 8,
+      "side": ""
+    },
+    "craft_dawnsteel_rod": {
+      "id": "craft_dawnsteel_rod",
+      "kind": "craft",
+      "skill": "smithing",
+      "output": "dawnsteel_rod",
+      "level": 95,
+      "inputs": {
+        "dawnsteel_ingot": 2,
+        "dawnsteel_log": 2
+      },
+      "xp": 760,
+      "duration": 8,
+      "side": ""
+    },
+    "hunt_apex_wilds_1": {
+      "id": "hunt_apex_wilds_1",
+      "kind": "combat",
+      "enemy": "apex_wilds_1",
+      "skill": "bladecraft",
+      "level": 1,
+      "output": "moonsteel_ore",
+      "inputs": {},
+      "duration": 2,
+      "xp": 450
+    },
+    "hunt_apex_wilds_2": {
+      "id": "hunt_apex_wilds_2",
+      "kind": "combat",
+      "enemy": "apex_wilds_2",
+      "skill": "bladecraft",
+      "level": 1,
+      "output": "dusksteel_ore",
+      "inputs": {},
+      "duration": 2,
+      "xp": 600
+    },
+    "hunt_apex_wilds_3": {
+      "id": "hunt_apex_wilds_3",
+      "kind": "combat",
+      "enemy": "apex_wilds_3",
+      "skill": "bladecraft",
+      "level": 1,
+      "output": "dawnsteel_ore",
+      "inputs": {},
+      "duration": 2,
+      "xp": 750
+    },
+    "hunt_apex_marsh_1": {
+      "id": "hunt_apex_marsh_1",
+      "kind": "combat",
+      "enemy": "apex_marsh_1",
+      "skill": "bladecraft",
+      "level": 1,
+      "output": "moonsteel_ore",
+      "inputs": {},
+      "duration": 2,
+      "xp": 450
+    },
+    "hunt_apex_marsh_2": {
+      "id": "hunt_apex_marsh_2",
+      "kind": "combat",
+      "enemy": "apex_marsh_2",
+      "skill": "bladecraft",
+      "level": 1,
+      "output": "dusksteel_ore",
+      "inputs": {},
+      "duration": 2,
+      "xp": 600
+    },
+    "hunt_apex_marsh_3": {
+      "id": "hunt_apex_marsh_3",
+      "kind": "combat",
+      "enemy": "apex_marsh_3",
+      "skill": "bladecraft",
+      "level": 1,
+      "output": "dawnsteel_ore",
+      "inputs": {},
+      "duration": 2,
+      "xp": 750
+    },
+    "hunt_apex_crown_1": {
+      "id": "hunt_apex_crown_1",
+      "kind": "combat",
+      "enemy": "apex_crown_1",
+      "skill": "bladecraft",
+      "level": 1,
+      "output": "moonsteel_ore",
+      "inputs": {},
+      "duration": 2,
+      "xp": 450
+    },
+    "hunt_apex_crown_2": {
+      "id": "hunt_apex_crown_2",
+      "kind": "combat",
+      "enemy": "apex_crown_2",
+      "skill": "bladecraft",
+      "level": 1,
+      "output": "dusksteel_ore",
+      "inputs": {},
+      "duration": 2,
+      "xp": 600
+    },
+    "hunt_apex_crown_3": {
+      "id": "hunt_apex_crown_3",
+      "kind": "combat",
+      "enemy": "apex_crown_3",
+      "skill": "bladecraft",
+      "level": 1,
+      "output": "dawnsteel_ore",
+      "inputs": {},
+      "duration": 2,
+      "xp": 750
     }
   },
   "enemies": {
@@ -1593,6 +3020,285 @@
       "fragments": 96,
       "trial": true,
       "trial_reward": "iron_shield"
+    },
+    "apex_wilds_1": {
+      "id": "apex_wilds_1",
+      "name": "The Briar Marksman",
+      "en": "The Briar Marksman",
+      "hp": 650,
+      "attack": 28,
+      "armor": 10,
+      "interval": 3000,
+      "gold": 280,
+      "xp": 450,
+      "drop": "moonsteel_ore",
+      "qty": 3,
+      "unlock": "trial_wilds",
+      "portrait": 3,
+      "lore": "Apex hunt. Win to open the next challenge; repeat for rare ore, gold and relic fragments.",
+      "lore_en": "Apex hunt. Win to open the next challenge; repeat for rare ore, gold and relic fragments.",
+      "boss": true,
+      "region": "wilds",
+      "tier": 7,
+      "relic": "fang",
+      "fragments": 90,
+      "trial": false,
+      "apex": true,
+      "art_tile": 0,
+      "loot_metal": "moonsteel_",
+      "special_name": "Barbed volley",
+      "special_attack": 1.1,
+      "special_armor": 0.3,
+      "special_heal": 0,
+      "place_tile": 0
+    },
+    "apex_wilds_2": {
+      "id": "apex_wilds_2",
+      "name": "Mossback Colossus",
+      "en": "Mossback Colossus",
+      "hp": 1500,
+      "attack": 42,
+      "armor": 17,
+      "interval": 3000,
+      "gold": 380,
+      "xp": 600,
+      "drop": "dusksteel_ore",
+      "qty": 4,
+      "unlock": "apex_wilds_1",
+      "portrait": 3,
+      "lore": "Apex hunt. Win to open the next challenge; repeat for rare ore, gold and relic fragments.",
+      "lore_en": "Apex hunt. Win to open the next challenge; repeat for rare ore, gold and relic fragments.",
+      "boss": true,
+      "region": "wilds",
+      "tier": 8,
+      "relic": "fang",
+      "fragments": 120,
+      "trial": false,
+      "apex": true,
+      "art_tile": 1,
+      "loot_metal": "dusksteel_",
+      "special_name": "Stonefall",
+      "special_attack": 1.7,
+      "special_armor": 1,
+      "special_heal": 0,
+      "place_tile": 0
+    },
+    "apex_wilds_3": {
+      "id": "apex_wilds_3",
+      "name": "The Emberwood Elder",
+      "en": "The Emberwood Elder",
+      "hp": 3200,
+      "attack": 62,
+      "armor": 24,
+      "interval": 3000,
+      "gold": 480,
+      "xp": 750,
+      "drop": "dawnsteel_ore",
+      "qty": 5,
+      "unlock": "apex_wilds_2",
+      "portrait": 3,
+      "lore": "Apex hunt. Win to open the next challenge; repeat for rare ore, gold and relic fragments.",
+      "lore_en": "Apex hunt. Win to open the next challenge; repeat for rare ore, gold and relic fragments.",
+      "boss": true,
+      "region": "wilds",
+      "tier": 9,
+      "relic": "fang",
+      "fragments": 150,
+      "trial": false,
+      "apex": true,
+      "art_tile": 2,
+      "loot_metal": "dawnsteel_",
+      "special_name": "Root renewal",
+      "special_attack": 1.2,
+      "special_armor": 1,
+      "special_heal": 0.025,
+      "place_tile": 0
+    },
+    "apex_marsh_1": {
+      "id": "apex_marsh_1",
+      "name": "The Chainbound Diver",
+      "en": "The Chainbound Diver",
+      "hp": 830,
+      "attack": 35,
+      "armor": 13,
+      "interval": 3000,
+      "gold": 340,
+      "xp": 450,
+      "drop": "moonsteel_ore",
+      "qty": 3,
+      "unlock": "trial_marsh",
+      "portrait": 6,
+      "lore": "Apex hunt. Win to open the next challenge; repeat for rare ore, gold and relic fragments.",
+      "lore_en": "Apex hunt. Win to open the next challenge; repeat for rare ore, gold and relic fragments.",
+      "boss": true,
+      "region": "marsh",
+      "tier": 7,
+      "relic": "heart",
+      "fragments": 90,
+      "trial": false,
+      "apex": true,
+      "art_tile": 3,
+      "loot_metal": "moonsteel_",
+      "special_name": "Chain drag",
+      "special_attack": 1.3,
+      "special_armor": 0.5,
+      "special_heal": 0,
+      "place_tile": 1
+    },
+    "apex_marsh_2": {
+      "id": "apex_marsh_2",
+      "name": "The Lantern Widow",
+      "en": "The Lantern Widow",
+      "hp": 1800,
+      "attack": 49,
+      "armor": 20,
+      "interval": 3000,
+      "gold": 440,
+      "xp": 600,
+      "drop": "dusksteel_ore",
+      "qty": 4,
+      "unlock": "apex_marsh_1",
+      "portrait": 6,
+      "lore": "Apex hunt. Win to open the next challenge; repeat for rare ore, gold and relic fragments.",
+      "lore_en": "Apex hunt. Win to open the next challenge; repeat for rare ore, gold and relic fragments.",
+      "boss": true,
+      "region": "marsh",
+      "tier": 8,
+      "relic": "heart",
+      "fragments": 120,
+      "trial": false,
+      "apex": true,
+      "art_tile": 4,
+      "loot_metal": "dusksteel_",
+      "special_name": "Widow's prayer",
+      "special_attack": 1,
+      "special_armor": 1,
+      "special_heal": 0.035,
+      "place_tile": 1
+    },
+    "apex_marsh_3": {
+      "id": "apex_marsh_3",
+      "name": "Leviathan of the Choir",
+      "en": "Leviathan of the Choir",
+      "hp": 3700,
+      "attack": 69,
+      "armor": 27,
+      "interval": 3000,
+      "gold": 540,
+      "xp": 750,
+      "drop": "dawnsteel_ore",
+      "qty": 5,
+      "unlock": "apex_marsh_2",
+      "portrait": 6,
+      "lore": "Apex hunt. Win to open the next challenge; repeat for rare ore, gold and relic fragments.",
+      "lore_en": "Apex hunt. Win to open the next challenge; repeat for rare ore, gold and relic fragments.",
+      "boss": true,
+      "region": "marsh",
+      "tier": 9,
+      "relic": "heart",
+      "fragments": 150,
+      "trial": false,
+      "apex": true,
+      "art_tile": 5,
+      "loot_metal": "dawnsteel_",
+      "special_name": "Choirbreaker",
+      "special_attack": 1.9,
+      "special_armor": 1,
+      "special_heal": 0,
+      "place_tile": 1
+    },
+    "apex_crown_1": {
+      "id": "apex_crown_1",
+      "name": "The Ash Executioner",
+      "en": "The Ash Executioner",
+      "hp": 1010,
+      "attack": 42,
+      "armor": 16,
+      "interval": 3000,
+      "gold": 400,
+      "xp": 450,
+      "drop": "moonsteel_ore",
+      "qty": 3,
+      "unlock": "trial_crown",
+      "portrait": 7,
+      "lore": "Apex hunt. Win to open the next challenge; repeat for rare ore, gold and relic fragments.",
+      "lore_en": "Apex hunt. Win to open the next challenge; repeat for rare ore, gold and relic fragments.",
+      "boss": true,
+      "region": "crown",
+      "tier": 7,
+      "relic": "ward",
+      "fragments": 90,
+      "trial": false,
+      "apex": true,
+      "art_tile": 6,
+      "loot_metal": "moonsteel_",
+      "special_name": "Execution stroke",
+      "special_attack": 2,
+      "special_armor": 1,
+      "special_heal": 0,
+      "place_tile": 2
+    },
+    "apex_crown_2": {
+      "id": "apex_crown_2",
+      "name": "Bishop of the Last Bell",
+      "en": "Bishop of the Last Bell",
+      "hp": 2100,
+      "attack": 56,
+      "armor": 23,
+      "interval": 3000,
+      "gold": 500,
+      "xp": 600,
+      "drop": "dusksteel_ore",
+      "qty": 4,
+      "unlock": "apex_crown_1",
+      "portrait": 7,
+      "lore": "Apex hunt. Win to open the next challenge; repeat for rare ore, gold and relic fragments.",
+      "lore_en": "Apex hunt. Win to open the next challenge; repeat for rare ore, gold and relic fragments.",
+      "boss": true,
+      "region": "crown",
+      "tier": 8,
+      "relic": "ward",
+      "fragments": 120,
+      "trial": false,
+      "apex": true,
+      "art_tile": 7,
+      "loot_metal": "dusksteel_",
+      "special_name": "Ash communion",
+      "special_attack": 1,
+      "special_armor": 0.8,
+      "special_heal": 0.02,
+      "place_tile": 2
+    },
+    "apex_crown_3": {
+      "id": "apex_crown_3",
+      "name": "The Cinder Sovereign",
+      "en": "The Cinder Sovereign",
+      "hp": 4200,
+      "attack": 76,
+      "armor": 30,
+      "interval": 3000,
+      "gold": 600,
+      "xp": 750,
+      "drop": "dawnsteel_ore",
+      "qty": 5,
+      "unlock": "apex_crown_2",
+      "portrait": 7,
+      "lore": "Apex hunt. Win to open the next challenge; repeat for rare ore, gold and relic fragments.",
+      "lore_en": "Apex hunt. Win to open the next challenge; repeat for rare ore, gold and relic fragments.",
+      "boss": true,
+      "region": "crown",
+      "tier": 9,
+      "relic": "ward",
+      "fragments": 150,
+      "trial": false,
+      "apex": true,
+      "art_tile": 8,
+      "loot_metal": "dawnsteel_",
+      "special_name": "Sovereign's judgment",
+      "special_attack": 2.2,
+      "special_armor": 1,
+      "special_heal": 0,
+      "place_tile": 3
     }
   },
   "merchant": {

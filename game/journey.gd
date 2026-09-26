@@ -43,4 +43,11 @@ static func current(m) -> Dictionary:
 		if int(m.s.kills.get(trial_id,0))==0:
 			var trial_enemy = m.data.enemies[trial_id]
 			return {"key":trial_id,"title":"Conquer "+m.local_name(trial_enemy),"detail":"This optional boss gains stronger attacks at half health. Check its mechanics, equip your build and bring cooked food. Win once for Epic equipment and 120 bonus fragments.","activity":"hunt_"+trial_id,"current":0,"goal":1,"action":"Prepare guardian trial","route":"World map → Guardian trials","kind":"expedition","index":28+RealmTrials.IDS.find(trial_id),"total":30}
-	return {"key":"complete","title":"All main challenges cleared","detail":"You have cleared all 15 expedition tiers and 3 trials. Repeat hunts for fragments, finish field records, or refine equipment toward Legendary. All hunts remain available.","activity":"","current":1,"goal":1,"action":"Open world map","route":"Expeditions complete","kind":"complete","index":30,"total":30}
+	var apex_index = 30
+	for id in m.data.enemies:
+		var enemy = m.data.enemies[id]
+		if not enemy.get("apex",false): continue
+		apex_index += 1
+		if int(m.s.kills.get(id,0))==0:
+			return {"key":id,"title":"Defeat "+m.local_name(enemy),"detail":"Use Ascension paths to craft stronger equipment, then prepare food and review this hunt. "+RealmCombat.mechanic(enemy),"activity":"hunt_"+id,"current":0,"goal":1,"action":"Prepare Apex hunt","route":"Explore → Ascension → Apex hunts","kind":"expedition","index":apex_index,"total":39}
+	return {"key":"complete","title":"All main challenges cleared","detail":"All expeditions, trials and Apex hunts are cleared. Continue with Hunt Mastery, contracts, relics and equipment refinement.","activity":"","current":1,"goal":1,"action":"Open world map","route":"All routes cleared","kind":"complete","index":39,"total":39}

@@ -6,6 +6,7 @@ var model = RealmModel.new()
 var saves = RealmSave.new()
 var page = "village"
 var skill = ""
+var show_locked_recipes = false
 var filter = "all"
 var search_text = ""
 var body: VBoxContainer
