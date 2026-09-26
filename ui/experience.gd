@@ -2,7 +2,7 @@ extends RefCounted
 
 const U = preload("res://ui/style.gd")
 const STORE_URL = "" # Set only after a real public listing exists.
-const VERSION = "0.13.0"
+const VERSION = "0.14.0"
 var app
 var front: Control
 var cinematic_page = 0
@@ -276,7 +276,7 @@ func act_on_goal():
 	elif o.kind=="level":
 		app.skill = "smithing"
 		app.set_page("skills")
-		app.planner_dialog("craft_copper_ingot",maxi(1,RealmJourney.smithing_batch(app.model)))
+		app.planner_dialog("craft_copper_ingot",clampi(RealmJourney.smithing_batch(app.model),1,100))
 	else:
 		var a = app.model.data.activities[o.activity]
 		if a.kind=="combat": app.set_page("explore")

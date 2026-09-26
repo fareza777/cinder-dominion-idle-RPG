@@ -63,3 +63,7 @@ Solo: read-only build/combat preview for refinement, unlocked-enemy selector, ex
 ## 0.13 Story, motion and leveling
 
 Solo: generated three-scene narrative art, seven milestone-gated story chapters, regional cast effects, named style skills, dialog/button motion and minimum-width fix, next-level recipe guide and non-blocking level feedback. Three targeted checks added (60 total), eleven phone captures. Original art provenance recorded; no new mandatory save fields.
+
+## 0.14 Queue recovery
+
+Solo: atomic dependency prepending for blocked crafting, queue status/progress polish, stale-action guards and Smithing batch-cap fix. Four targeted checks added (64 total), five phone captures and Android debug export.

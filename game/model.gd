@@ -235,6 +235,9 @@ func command(cmd: Dictionary) -> bool:
 			s.queue[0].kind = "cycles"
 			s.queue[0].target = int(s.queue[0].done)+1
 			note("One last fight, then home. The rest of the queue has been cancelled.")
+		"repair_queue":
+			var repair_error = RealmQueueRepair.apply(self)
+			if repair_error!="": return fail(repair_error)
 		"clear":
 			refund_active()
 			s.queue.clear()

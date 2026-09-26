@@ -634,30 +634,7 @@ func sources_dialog(id: String):
 	if model.data.merchant.has(id): v.add_child(U.button(tr2("Beli di pedagang desa","Buy from the village merchant"),merchant_dialog))
 
 func queue_dialog():
-	var v = modal(tr2("Antrean perjalanan","Journey queue"))
-	v.add_child(U.para(tr2("20 slot gratis. Aktivitas pertama berjalan; sisanya menunggu.","20 free slots. The first activity runs; the rest wait.")))
-	if model.s.queue.is_empty(): v.add_child(U.para(tr2("Belum ada aktivitas. Pilih dari Keahlian atau Jelajah.","No activities yet. Choose from Skills or Explore.")))
-	for i in range(model.s.queue.size()):
-		var st = model.s.queue[i]
-		var card = U.card(v)
-		card.add_child(U.para("%02d  %s" % [i+1,model.activity_name(st.id)],16,U.TEXT))
-		var value = model.level(model.data.activities[st.id].skill) if st.kind=="level" else int(st.output if st.kind=="output" else st.done)
-		card.add_child(U.para("%d / %d · %s" % [value,int(st.target),{"cycles":"cycles completed","output":"new items produced","level":"skill level"}[st.kind]],12))
-		if i==0:
-			var blocked = model.requirement(st.id) if model.s.active.is_empty() and model.s.fight.is_empty() else ""
-			card.add_child(U.para("RUNNING" if blocked=="" else "WAITING · "+blocked,12,U.GREEN if blocked=="" else U.RED))
-		var r = U.row()
-		card.add_child(r)
-		if i>1: r.add_child(U.button("↑",func():
-			send({"type":"up","index":i})
-			queue_dialog()))
-		r.add_child(U.button(tr2("Batalkan","Cancel"),func():
-			send({"type":"cancel","index":i})
-			queue_dialog()))
-	if not model.s.queue.is_empty(): v.add_child(U.button(tr2("Hentikan semua aktivitas","Stop all activities"),func():
-		send({"type":"clear"})
-		queue_dialog()))
-	v.add_child(U.para(tr2("Bahan siklus yang belum selesai dikembalikan saat dibatalkan.","Ingredients reserved for an unfinished cycle are returned on cancellation."),12))
+	preload("res://ui/queue_review.gd").new(self).open()
 
 func merchant_dialog():
 	var v = modal(tr2("Pedagang Cinderwatch","Cinderwatch merchant"))

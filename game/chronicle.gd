@@ -135,7 +135,7 @@ static func focus(m) -> Dictionary:
 		var a = m.data.activities["craft_"+pair[1]]
 		var g = m.gear(str(m.s.equipped.get(pair[0],"")))
 		if (g.is_empty() or g.id=="worn_shield") and m.level("smithing")>=int(a.level): return {"title":"Forge "+m.name_of(pair[1]),"why":"Fill your armor slots to reduce incoming damage and stretch your food supplies.","kind":"plan","id":a.id,"amount":1}
-	if o.key=="smith": return {"title":"Reach Smithing level 10","why":"Smelt %d more copper ingots. The planner includes missing ore. Level 10 unlocks iron recipes and access to the Bellkeeper." % RealmJourney.smithing_batch(m),"kind":"plan","id":"craft_copper_ingot","amount":maxi(1,RealmJourney.smithing_batch(m))}
+	if o.key=="smith": return {"title":"Reach Smithing level 10","why":"Smelt %d more copper ingots in total. Plan up to 100 at a time; repeat if needed. The planner includes missing ore." % RealmJourney.smithing_batch(m),"kind":"plan","id":"craft_copper_ingot","amount":clampi(RealmJourney.smithing_batch(m),1,100)}
 	return {"title":o.title,"why":o.detail,"kind":"story","id":"","amount":1}
 
 static func number(v, maximum: int = 1000000000000) -> bool:
