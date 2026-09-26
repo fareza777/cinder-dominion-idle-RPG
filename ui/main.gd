@@ -37,6 +37,7 @@ var last_objective = ""
 var objective_label: Label
 var rebuild_pending = false
 var last_back_ms = -1000
+var last_hunt_audio = -1
 
 func _ready():
 	get_tree().auto_accept_quit = false
@@ -66,6 +67,8 @@ func _ready():
 	Engine.max_fps = 30 if model.s.settings.battery else 60
 	if ResourceLoader.exists("res://assets/audio/refuge.wav"):
 		music = AudioStreamPlayer.new()
+		music.set_script(preload("res://ui/audio_director.gd"))
+		music.app = self
 		music.stream = load("res://assets/audio/refuge.wav")
 		music.volume_db = linear_to_db(float(model.s.settings.music))
 		add_child(music)
@@ -98,6 +101,8 @@ func _notification(what):
 	if what==NOTIFICATION_APPLICATION_PAUSED:
 		persist()
 		paused = true
+		if is_instance_valid(music): music.stream_paused = true
+		if is_instance_valid(effect): effect.stop()
 	elif what==NOTIFICATION_APPLICATION_RESUMED and paused:
 		paused = false
 		fraction_ms = 0
@@ -158,6 +163,11 @@ func _process(delta):
 	var ms = int(fraction_ms)
 	fraction_ms -= ms
 	model.advance(ms)
+	var hunt_history = RealmHunts.state(model).history
+	if hunt_history.is_empty(): last_hunt_audio = -1
+	if not hunt_history.is_empty() and int(hunt_history[0].ended)!=last_hunt_audio:
+		last_hunt_audio = int(hunt_history[0].ended)
+		if int(model.s.time)-last_hunt_audio<1000 and hunt_history[0].result in ["Completed","Defeated"]: play_cue("victory" if hunt_history[0].result=="Completed" else "defeat")
 	save_timer += delta
 	ui_timer += delta
 	if save_timer>=15:
@@ -357,9 +367,8 @@ func send(cmd: Dictionary, rebuild: bool = true) -> bool:
 	cmd.cid = "%d-%d" % [Time.get_ticks_usec(),model.s.processed.size()]
 	var accepted = model.command(cmd)
 	if accepted:
-		if is_instance_valid(effect):
-			effect.volume_db = linear_to_db(float(model.s.settings.sfx))
-			effect.play()
+		var action = str(cmd.get("type",""))
+		if action!="setting": play_cue("forge" if action in ["refine","rune_forge"] else ("equip" if action in ["equip","equip_best","rune_equip","relic_equip","loadout_load"] else ("reward" if action in ["claim","bounty_claim","research_claim"] else "action")))
 		persist()
 		if rebuild: set_page(page,true)
 	else: toast(model.error)
@@ -373,6 +382,14 @@ func toast(text: String):
 	var expected = text
 	get_tree().create_timer(4).timeout.connect(func():
 		if is_instance_valid(toast_label) and toast_label.text==expected: toast_label.hide())
+
+func play_cue(name: String):
+	if not is_instance_valid(effect) or paused or float(model.s.settings.sfx)<=0: return
+	var path = "res://assets/audio/"+name+".wav"
+	if not ResourceLoader.exists(path): path = "res://assets/audio/action.wav"
+	effect.stream = load(path)
+	effect.volume_db = linear_to_db(float(model.s.settings.sfx))
+	effect.play()
 
 func dismiss():
 	dialog_callbacks.clear()
@@ -432,6 +449,15 @@ func runeforge_dialog():
 
 func journal_dialog():
 	preload("res://ui/runeforge.gd").new(self).journal()
+
+func workshop_dialog():
+	preload("res://ui/armory.gd").new(self).workshop()
+
+func loadouts_dialog():
+	preload("res://ui/armory.gd").new(self).loadouts()
+
+func hunt_reports_dialog():
+	preload("res://ui/armory.gd").new(self).hunt_reports()
 
 func world_dialog():
 	preload("res://ui/chronicle.gd").new(self).world()
@@ -601,12 +627,13 @@ func item_dialog(uid: String):
 	var equipped = model.gear(str(model.s.equipped.get(d.slot,"")))
 	for stat in ["attack","armor","speed"]:
 		if d.get(stat,0)==0: continue
-		var value = float(d[stat])*RealmModel.QUALITY[int(g.q)]
-		var old = float(model.data.items[equipped.id].get(stat,0))*RealmModel.QUALITY[int(equipped.q)] if not equipped.is_empty() else 0.0
-		v.add_child(U.para("%s  %.1f  (%+.1f)" % [stat.to_upper(),value,value-old],19,U.GREEN if value>=old else U.RED))
+		var value = float(d[stat])*(100.0 if stat=="speed" else RealmModel.QUALITY[int(g.q)])
+		var old = float(model.data.items[equipped.id].get(stat,0))*(100.0 if stat=="speed" else RealmModel.QUALITY[int(equipped.q)]) if not equipped.is_empty() else 0.0
+		v.add_child(U.para("%s  %.1f%s  (%+.1f)" % ["TOOL TIME REDUCTION" if stat=="speed" else stat.to_upper(),value,"%" if stat=="speed" else "",value-old],19,U.GREEN if value>=old else U.RED))
 	v.add_child(U.button(tr2("Pasang perlengkapan","Equip item"),func():
 		send({"type":"equip","id":uid})
 		dismiss(),true))
+	if RealmWorkshop.eligible(model,g): v.add_child(U.button("Refine this piece · guaranteed quality",func(): preload("res://ui/armory.gd").new(self).workshop(uid)))
 	v.add_child(U.button(tr2("Buka kunci" if g.locked else "Kunci item","Unlock" if g.locked else "Lock item"),func():
 		send({"type":"lock","id":uid})
 		item_dialog(uid)))
@@ -647,6 +674,7 @@ func offline_dialog(report: Dictionary):
 		v.add_child(U.para("%d field records have supplies ready to collect." % RealmRuneforge.ready(model),15,U.GREEN))
 		v.add_child(U.button("Open the field journal",journal_dialog))
 	for id in report.spent: v.add_child(U.para("−%d  %s" % [int(report.spent[id]),model.name_of(id)],13,U.MUTED))
+	if not RealmHunts.state(model).history.is_empty(): v.add_child(U.button("Review recent hunts & supplies used",hunt_reports_dialog))
 	if not model.s.queue.is_empty() and model.s.active.is_empty() and model.s.fight.is_empty(): v.add_child(U.para(model.requirement(model.s.queue[0].id),15,U.RED))
 	v.add_child(U.para(tr2("Hasil sudah tersimpan. Batas progres offline: 24 jam.","Results are already saved. Offline progress cap: 24 hours."),12))
 	v.add_child(U.para("YOUR NEXT MOVE\n"+RealmChronicle.focus(model).title,16,U.GOLD))
@@ -704,7 +732,7 @@ func settings_dialog():
 	v.add_child(U.button("Share",experience.share))
 	v.add_child(U.button("Rate",experience.rate))
 	v.add_child(U.button("Return to main menu",experience.menu))
-	v.add_child(U.para("Version 0.6.0 · Adventure preview\nFree to play. No ads. No purchases in this build.",12))
+	v.add_child(U.para("Version 0.7.0 · Adventure preview\nFree to play. No ads. No purchases in this build.",12))
 
 func export_save():
 	var fd = FileDialog.new()

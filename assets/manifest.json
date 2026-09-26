@@ -43,6 +43,12 @@
       "source": "OpenAI image generation in this task, 2026-09-26",
       "kind": "original generated art",
       "prompt_summary": "Three equal square panels: thorn-carved basalt rune with old brass trim, silver and slate ripple talisman, obsidian broken-bell rune. Tactile dark fantasy artifacts on black, restrained green, teal and ember light. No lettering or existing franchise symbols."
+    },
+    {
+      "file": "art/battlefields.png",
+      "source": "OpenAI image generation in this task, 2026-09-26",
+      "kind": "original generated art",
+      "prompt_summary": "Three eye-level battlefield environments in equal horizontal rows: charred forest watch-road, flooded teal gothic cloister, obsidian volcanic cathedral. Ground-level cinematic painted realism with open centers, no characters, text or existing franchise references."
     }
   ],
   "fonts": [
@@ -64,9 +70,18 @@
   "audio": {
     "files": [
       "audio/refuge.wav",
-      "audio/action.wav"
+      "audio/action.wav",
+      "audio/hearth.wav",
+      "audio/wilds.wav",
+      "audio/sanctum.wav",
+      "audio/crown.wav",
+      "audio/forge.wav",
+      "audio/equip.wav",
+      "audio/victory.wav",
+      "audio/defeat.wav",
+      "audio/reward.wav"
     ],
-    "source": "Original synthesized sine-wave audio from tools/make_audio.py; no third-party samples"
+    "source": "Original procedural synthesis: tools/make_audio.py (legacy ambience/action) and tools/make_score.py (four layered 32-second regional/hearth scores and five interaction/outcome cues). Harmonic pads, sparse chimes and filtered noise; no third-party samples or compositions."
   },
   "icon": {
     "file": "icon.svg",

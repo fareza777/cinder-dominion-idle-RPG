@@ -58,24 +58,7 @@ func village(parent: Node):
 	scene.add_child(scene_text)
 	scene_text.add_child(U.label(text("DI ANTARA ABU, MASIH ADA HARAPAN","AMONG THE ASHES, HOPE REMAINS"),10,U.GOLD))
 	scene_text.add_child(U.label(text("Jaga agar api tetap menyala.","Keep the last fire burning."),27,U.TEXT,true))
-	var links = U.row(10)
-	parent.add_child(links)
-	for entry in [["skills",text("KUMPULKAN & TEMPA","GATHER & FORGE"),text("Keahlian","Skills")],["explore",text("DI BALIK GERBANG","BEYOND THE GATE"),text("Jelajah","Explore")]]:
-		var c = U.card(links,12)
-		c.get_parent().size_flags_horizontal = Control.SIZE_EXPAND_FILL
-		c.add_child(U.label(entry[1],8,U.GOLD))
-		c.add_child(U.button(entry[2]+" →",func(): app.set_page(entry[0])))
-	var contracts = U.card(parent,14,U.GOLD.darkened(.6))
-	contracts.add_child(U.label("A REFUGE WORTH FIGHTING FOR",10,U.GOLD))
-	app.dynamic(contracts,func(): return "%d rewards ready · %d / 8 contracts claimed" % [RealmProgression.ready_count(m),m.progression().claimed.size()],15,U.TEXT)
-	contracts.add_child(U.para("Earn supplies through optional milestones. Rebuild the forge, gates, and hearth for permanent upgrades.",13))
-	contracts.add_child(U.button("Refuge contracts  →",app.contracts_dialog,true))
-	contracts.add_child(U.button("Rebuild Cinderwatch  →",app.refuge_dialog))
-	var refuge = U.card(parent)
-	refuge.add_child(U.label(text("KEHIDUPAN DI SUAKA","LIFE AT THE REFUGE"),10,U.GOLD))
-	refuge.add_child(U.para(text("Tungku menempa harapan baru. Pedagang menyiapkan perbekalan untuk perjalanan berikutnya.","The forge shapes new hope. The merchant prepares supplies for your next journey.")))
-	refuge.add_child(U.button(text("Kunjungi pedagang","Visit the merchant"),app.merchant_dialog))
-	app.dynamic(refuge,func(): return text("Mercusuar: menyala kembali" if m.s.beacon else "Mercusuar: menunggu kejatuhan Penjaga Lonceng","Beacon: rekindled" if m.s.beacon else "Beacon: silence the Bellkeeper to rekindle it"),12,U.GOLD)
+	preload("res://ui/chronicle.gd").new(app).services(parent)
 	parent.add_child(U.label(text("CATATAN TERAKHIR","RECENT CHRONICLE"),10,U.MUTED))
 	app.dynamic(parent,func(): return str(m.s.log[0]) if not m.s.log.is_empty() else text("Perjalananmu baru dimulai.","Your journey is just beginning."),14,U.MUTED)
 
@@ -91,7 +74,9 @@ func explore(parent: Node):
 	stage.visible = not m.s.fight.is_empty()
 	app.update_callbacks.append(func():
 		if is_instance_valid(stage): stage.visible = not m.s.fight.is_empty())
-	app.dynamic(battle,func(): return m.last_reward if m.last_reward!="" else "Your gear is safe on defeat. Stock cooked food before a long hunt.",13,U.GREEN)
+	var result_label = app.dynamic(battle,func(): return m.last_reward if m.last_reward!="" else "Your gear is safe on defeat. Stock cooked food before a long hunt.",13,U.GREEN)
+	app.update_callbacks.append(func():
+		if is_instance_valid(result_label): result_label.add_theme_color_override("font_color",U.RED if m.last_reward.begins_with("DEFEAT") else U.GREEN))
 	app.dynamic(battle,func():
 		if m.s.fight.is_empty(): return "Ready when you are. Choose a target below."
 		var f = m.s.fight
@@ -103,6 +88,7 @@ func explore(parent: Node):
 	battle.add_child(retreat)
 	app.update_callbacks.append(func():
 		if is_instance_valid(retreat): retreat.visible = not m.s.fight.is_empty())
+	battle.add_child(U.button("Review this journey · hunt reports",app.hunt_reports_dialog))
 	var prep = U.card(parent)
 	app.dynamic(prep,func(): return "%s · %d ATK · %d DEF" % [RealmProgression.STANCES[m.progression().stance].name,int(m.stats().attack),int(m.stats().armor)],16,U.GOLD)
 	app.dynamic(prep,func(): return "%s ×%d · heals %d HP at %d%% health" % [m.name_of(m.s.settings.food),m.count(m.s.settings.food),RealmCombat.food_heal(m,m.s.settings.food),int(m.s.settings.threshold*100)],13,U.GREEN)
@@ -112,6 +98,7 @@ func explore(parent: Node):
 	actions.add_child(U.button("Equip best",func():
 		if app.send({"type":"equip_best"}): app.toast("Best owned equipment equipped.")))
 	prep.add_child(U.button("Prepare 10 × "+m.name_of(m.s.settings.food),func(): app.planner_dialog("craft_"+str(m.s.settings.food),10)))
+	prep.add_child(U.button("Switch a complete loadout",app.loadouts_dialog))
 	parent.add_child(U.button("World map · expedition tiers",app.world_dialog,true))
 	for id in m.data.enemies:
 		var d = m.data.enemies[id]
@@ -301,6 +288,8 @@ func character(parent: Node):
 	app.dynamic(style,func(): return RealmProgression.STANCES[m.progression().stance].name,24,U.TEXT)
 	app.dynamic(style,func(): return RealmProgression.STANCES[m.progression().stance].detail,14)
 	style.add_child(U.button("Choose fighting style",app.tactics_dialog,true))
+	style.add_child(U.button("Save & switch complete loadouts",app.loadouts_dialog))
+	style.add_child(U.button("Refine equipment at the workshop",app.workshop_dialog))
 	style.add_child(U.button("Equip best owned gear",func():
 		if app.send({"type":"equip_best"}): app.toast("Best owned equipment equipped.")))
 	var food = U.card(parent)
@@ -320,7 +309,8 @@ func character(parent: Node):
 	food.add_child(U.button(text("Nonaktifkan ramuan","Disable potion"),func(): app.send({"type":"potion","id":""})))
 	food.add_child(U.button("Get more food · step-by-step",app.experience.survival))
 	var presets = U.card(parent)
-	presets.add_child(U.label(text("PRESET PERLENGKAPAN","EQUIPMENT PRESETS"),10,U.GOLD))
+	presets.add_child(U.label("LEGACY GEAR PRESETS",10,U.GOLD))
+	presets.add_child(U.para("Older gear-only presets remain available. Use complete loadouts above to save your entire build.",12))
 	for name in ["Guardian","Reaver"]:
 		var r = U.row(8)
 		presets.add_child(r)

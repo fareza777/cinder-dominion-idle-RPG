@@ -2,7 +2,7 @@ extends RefCounted
 
 const U = preload("res://ui/style.gd")
 const STORE_URL = "" # Set only after a real public listing exists.
-const VERSION = "0.6.0"
+const VERSION = "0.7.0"
 var app
 var front: Control
 var cinematic_page = 0
@@ -308,7 +308,10 @@ func handbook():
 		["06 · Return to your rewards","Your saved queue continues for up to 24 hours while away. You receive a report when you return. No queue means no gathering or combat rewards."],
 		["07 · Build a stronger refuge","Refuge contracts reward milestones with gold, food and scraps. Claim completed contracts, then Rebuild Cinderwatch to improve production speed, armor and recovery. Hero and Explore let you choose Vanguard, Warden or Reaver before a hunt."],
 		["08 · Grow beyond Chapter I","After First Supplies, earn talent points from melee XP and awaken relics with guaranteed fragments. Unfinished bounties carry over without streak loss. After the Bellkeeper, the World map opens 15 expedition tiers with stronger foes, iron loot and targeted relic farms."],
-		["09 · Find your way around","Refuge: current objective and merchant. Explore: enemies and combat. Skills: gathering and crafting. Bag: equipment and supplies. Hero: stats, food, presets and Settings."]
+		["09 · Make a dependable upgrade","After First Supplies, visit Refuge → Armory → Ember Workshop. Spend ingots, scraps and gold to refine one copper or iron piece by one quality step. Refinement is guaranteed, up to Legendary. Higher qualities require more Smithing experience. Equipped slots and saved builds follow the improved piece."],
+		["10 · Keep more than one answer","In Hero, save a complete loadout with your gear, fighting style, talents, relic, rune, food, potion and healing threshold. Apply it outside combat. Loadouts do not create supplies: check your pack before a long hunt."],
+		["11 · Read the road","Hunt reports record completed, recalled and defeated hunting orders, including time away. Gold, loot and fragments are already delivered. Review food consumption, refine your gear or adjust your build before returning."],
+		["12 · Find your way around","Refuge: your objective, Journey, Armory and Supplies. Explore: enemies and combat. Skills: gathering and crafting. Bag: equipment and supplies. Hero: build choices and Settings. The Journey guide remains at the top of every screen."]
 	]:
 		v.add_child(U.para(section[0],20,U.GOLD))
 		v.add_child(U.para(section[1],16,U.TEXT))

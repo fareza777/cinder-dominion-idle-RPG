@@ -1,10 +1,10 @@
-# Ashen Covenant — Adventure preview 0.6
+# Ashen Covenant — Adventure preview 0.7
 
 Idle RPG dark fantasy untuk Android. Gratis, tanpa iklan. Build ini untuk dimainkan dan dievaluasi, belum versi rilis publik.
 
 ## Mulai bermain
 
-1. Pasang `build/android/ashen-covenant-0.6.apk` di Android 64-bit. APK memakai identitas aplikasi yang sama dengan 0.1–0.5 sehingga bisa dipasang sebagai pembaruan.
+1. Pasang `build/android/ashen-covenant-0.7.apk` di Android 64-bit. APK memakai identitas aplikasi yang sama dengan 0.1–0.6 sehingga bisa dipasang sebagai pembaruan.
 2. Seluruh antarmuka dan narasi game memakai **English**. Splash mengantar ke menu utama. Pilih **New game**, ikuti atau lewati intro, lalu baca empat tahap onboarding. **Continue journey** melanjutkan progres yang sudah ada.
 3. Tekan **Guide →** di bagian atas layar. Panduan menunjukkan tujuan, alasan, lokasi aktivitas dan jumlah yang dibutuhkan. Tekan tindakannya, lalu **Begin · 4 cycles** (jumlahnya mengikuti tujuan) untuk memulai jumlah siklus yang tepat.
 4. Tugas awal: 4 copper ore → 2 copper ingots → 1 ash log → Copper Sword → Equip item → 3 Ash Rats. Panduan lalu mengantar lewat musuh berikutnya hingga Bellkeeper, tanpa melompat langsung ke boss.
@@ -12,6 +12,19 @@ Idle RPG dark fantasy untuk Android. Gratis, tanpa iklan. Build ini untuk dimain
 6. Buka **Food & survival guide** untuk belajar memancing, memasak, memilih makanan dan menyiapkan auto-heal. Perlengkapan hasil crafting harus dipasang dari **Bag**.
 7. Progres tersimpan otomatis dan berlanjut maksimal 24 jam saat kembali. Menu **☰** tersedia dari dalam permainan. New Game meminta konfirmasi dan menyimpan cadangan terpisah; **Settings → Restore a previous journey** memulihkannya.
 
+## Baru di 0.7 — iterasi menyeluruh
+
+**Upgrade gear yang pasti.** Refuge → Armory → Ember Workshop memperbaiki satu equipment copper/iron melalui Fine, Rare, Epic, hingga Legendary. Biaya menggunakan gold, ingot dan scraps hasil bermain; syarat Smithing meningkat sampai level 20. Tidak ada kegagalan acak. Hanya satu copy yang ditingkatkan, sementara equipment terpasang dan referensi build mengikuti hasil upgrade.
+
+**Loadout lengkap.** Tiga slot menyimpan equipment, fighting style, talent, relic, rune, food, potion dan ambang healing sekaligus. Ganti di luar combat; persediaan tetap harus disiapkan. Item yang dipakai loadout terlindungi dari salvage. Preset gear lama tetap didukung.
+
+**Hunt reports.** Explore → Review this journey atau Refuge → Journey → Hunt reports memperlihatkan 12 order berburu terakhir: kemenangan, durasi, loot beserta rarity, fragment, gold, XP, makanan dan potion terpakai. Selesai, retreat dan kalah memiliki hasil yang berbeda. Progres offline ikut tercatat; hasil sudah masuk ke tas, bukan hadiah untuk diklaim dua kali.
+
+**Refuge dan pertarungan lebih hidup.** Tujuan utama dan ilustrasi kota kini mendahului tiga kelompok layanan: Journey, Armory dan Supplies. Tiga arena orisinal dilihat dari permukaan tanah. Portrait memiliki gerak serangan/impact, partikel dan peringatan pukulan guardian; pengaturan reduced motion tetap dihormati.
+
+**Audio dan kejelasan.** Empat ambience berlapis untuk hearth dan tiga wilayah, perpindahan suasana bertahap, serta suara berbeda untuk forge, equip, reward, kemenangan dan kekalahan. Musik berhenti sementara saat aplikasi masuk background. Panduan bermain, biaya upgrade, stok loadout, satuan tool speed dan ringkasan hasil diperjelas dalam English.
+
+Detail serta pekerjaan produksi yang masih tersisa: `docs/production-polish-0.7.md`. Bukti pemeriksaan terbatas: `docs/qa/production-polish-0.7-report.md`.
 ## Baru di 0.6
 
 **Runeforge.** Setelah Bellkeeper, kalahkan guardian suatu wilayah untuk menemukan rune-nya. Kumpulkan fragment, scraps dan gold, tinjau biaya serta perbandingan efek, lalu inscribe dan equip. Thornscript menembus armor pada serangan keempat; Stillwater mengurangi healing musuh; Dirge memperkuat serangan keempat tetapi membuat setiap serangan musuh lebih menyakitkan. Tiga rune memiliki masing-masing tiga rank. Satu rune aktif bersama fighting style dan relic; ganti gratis di luar combat.
@@ -32,7 +45,7 @@ Review mendalam, temuan yang dibenahi, dan pekerjaan menuju kualitas produksi ad
 
 **Mulai dengan satu tujuan.** Refuge menampilkan **YOUR NEXT MOVE** di atas ilustrasi: apa yang perlu dikerjakan, alasannya, dan tombol tindakannya. Mulai dari 4 copper ore. Roadmap menjelaskan jalur senjata pertama → perlengkapan dan makanan → Bellkeeper → ekspedisi. Rekomendasi kemudian mengikuti kondisi antrean, talent, relic, gear, makanan dan Smithing.
 
-**Work orders untuk sesi panjang.** Setelah First Supplies, Refuge → Leave work for the refuge membuka empat jenis pesanan. Pilih 1/2/4 batch, tinjau hasil, XP dan estimasi waktu, lalu mulai. Satu batch Feed the Forge menghasilkan 500 copper ingots dari bahan yang dikumpulkan otomatis; empat batch bisa berjalan beberapa jam. Pesanan tidak memulai combat.
+**Work orders untuk sesi panjang.** Setelah First Supplies, Refuge → Supplies → Work orders membuka empat jenis pesanan. Pilih 1/2/4 batch, tinjau hasil, XP dan estimasi waktu, lalu mulai. Satu batch Feed the Forge menghasilkan 500 copper ingots dari bahan yang dikumpulkan otomatis; empat batch bisa berjalan beberapa jam. Pesanan tidak memulai combat.
 
 **Grind dengan tujuan.** Setiap musuh memberikan fragment relic tertentu secara pasti. Tiga relic memiliki masing-masing 10 rank; pilih satu untuk bonus attack, armor atau pemulihan makanan. Biaya upgrade meningkat, sementara tier ekspedisi lebih tinggi menghasilkan lebih banyak fragment. Tiga jalur talent menyediakan 15 rank dengan batas alokasi 10 poin, satu poin per 250 melee XP, dan reset gratis di luar combat. Tier baru memberi tujuan, build alternatif memberi alasan untuk mencoba lagi.
 
@@ -78,6 +91,6 @@ Ini preview Chapter I dan tiga rangkaian ekspedisi, belum kampanye penuh. Kampan
 
 Buka `project.godot` dengan Godot **4.7.1** dan export template yang sama. Android menggunakan Compatibility renderer, ARM64 dan x86_64, Java 17 dan Android SDK. Preset ekspor adalah **Android**. APK saat ini ditandatangani debug; tidak siap diunggah sebagai rilis toko.
 
-Pemeriksaan ringan: `godot --headless --path . --script tests/essential_checks.gd`. Regenerasi katalog melalui `python tools/build_content.py`. Sumber audio ada di `tools/make_audio.py`; font statis disiapkan dengan `tools/prepare_fonts.py` (fontTools).
+Pemeriksaan ringan: `godot --headless --path . --script tests/essential_checks.gd`. Regenerasi katalog melalui `python tools/build_content.py`. Sumber audio ada di `tools/make_audio.py` dan `tools/make_score.py`; font statis disiapkan dengan `tools/prepare_fonts.py` (fontTools).
 
-Lihat `docs/qa/runeforge-0.6-report.md`, `docs/review-0.5.md` dan `docs/qa/foundation-report.md` untuk bukti dan keterbatasan pemeriksaan, serta `assets/manifest.json` untuk asal aset.
+Lihat `docs/qa/production-polish-0.7-report.md`, `docs/production-polish-0.7.md` dan `docs/qa/foundation-report.md` untuk bukti dan keterbatasan pemeriksaan, serta `assets/manifest.json` untuk asal aset.

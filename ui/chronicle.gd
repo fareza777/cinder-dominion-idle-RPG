@@ -27,24 +27,39 @@ func home(parent: Node):
 		var b = ref.get_ref()
 		if is_instance_valid(b): b.text = {"story":"Start next objective  →","queue":"View active plan  →","talents":"Choose my talents  →","relics":"Awaken relic  →","equip":"Equip best gear  →","plan":"Review supply plan  →","journal":"Collect field supplies  →","runes":"Review inscription  →"}[C.focus(m).kind])
 	card.add_child(U.button("See my progression roadmap",roadmap))
+
+func services(parent: Node):
+	parent.add_child(U.label("AROUND THE FIRE",10,U.GOLD))
+	var row = U.row(7)
+	parent.add_child(row)
+	for entry in [["journey","Journey"],["armory","Armory"],["supplies","Supplies"]]:
+		var b = U.button(entry[1],func(): station(entry[0]))
+		b.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+		row.add_child(b)
 	if m.s.tutorial:
-		var board = U.card(parent,12)
-		app.dynamic(board,func(): return "%d talent points · %d bounty rewards ready" % [C.points_free(m),C.ready_bounties(m)],14,U.GOLD)
-		var row = U.row(6)
-		board.add_child(row)
-		for entry in [["Bounties",bounties],["Relics",relics],["World map",world]]:
-			var b = U.button(entry[0],entry[1])
-			b.size_flags_horizontal = Control.SIZE_EXPAND_FILL
-			row.add_child(b)
-		board.add_child(U.button("Leave work for the refuge",app.work_orders_dialog))
-		if m.s.beacon:
-			board.add_child(U.button("Runeforge · shape your next hunt",app.runeforge_dialog))
-			var journal = U.button("Field journal",app.journal_dialog)
-			board.add_child(journal)
-			var journal_ref = weakref(journal)
-			app.update_callbacks.append(func():
-				var b = journal_ref.get_ref()
-				if is_instance_valid(b): b.text = "Field journal · %d rewards ready" % RealmRuneforge.ready(m))
+		app.dynamic(parent,func(): return "%d bounty · %d field · %d contract rewards ready" % [C.ready_bounties(m),RealmRuneforge.ready(m),RealmProgression.ready_count(m)],12,U.GOLD)
+	parent.add_child(U.button("Leave a work order before you go",app.work_orders_dialog))
+
+func station(kind: String):
+	var names = {"journey":"The road ahead","armory":"Steel, oath and ember","supplies":"Before the next watch"}
+	var v = app.modal(names[kind])
+	var entries = []
+	match kind:
+		"journey":
+			v.add_child(U.para("Choose your next destination. Bring its story home.",24,U.TEXT))
+			entries = [["Journey guide","Your next objective and the path beyond it.",app.guide_dialog],["World map","Story routes, regional guardians and expedition tiers.",app.world_dialog],["Field journal","Guardian tactics and one-time regional rewards.",app.journal_dialog],["Hunt reports","Victories, supplies spent and rewards from recent orders.",app.hunt_reports_dialog],["Bounty board","Small goals that carry over when you are away.",app.bounties_dialog]]
+		"armory":
+			v.add_child(U.para("Make every piece of your build count.",24,U.TEXT))
+			entries = [["Equipment bag","Compare and equip the gear you already own.",func():
+				app.dismiss()
+				app.set_page("inventory")],["Ember Workshop","Guaranteed equipment refinement, from Fine to Legendary.",app.workshop_dialog],["Complete loadouts","Save equipment, talents, style, rune and supplies together.",app.loadouts_dialog],["Talents","Choose where to spend earned melee experience.",app.talents_dialog],["Relics","Awaken a collection and choose its active bonus.",app.relics_dialog],["Runeforge","Inscribe a rune that changes your answer to an enemy.",app.runeforge_dialog]]
+		"supplies":
+			v.add_child(U.para("A well-stocked refuge is a promise kept.",24,U.TEXT))
+			entries = [["Work orders","Plan gathering and crafting for your time away.",app.work_orders_dialog],["Food & survival","Choose cooked food and understand automatic healing.",app.experience.survival],["Merchant","Buy tools and vials with gold earned on the road.",app.merchant_dialog],["Refuge contracts","Collect milestone supplies you have earned.",app.contracts_dialog],["Rebuild Cinderwatch","Improve the forge, gates and resting hearth.",app.refuge_dialog]]
+	for entry in entries:
+		var card = U.card(v,12)
+		card.add_child(U.para(entry[1],13))
+		card.add_child(U.button(entry[0]+"  →",entry[2]))
 
 func act():
 	var focus = C.focus(m)

@@ -13,6 +13,8 @@ var region_art: Dictionary = {}
 var current_enemy = ""
 var enemy_face: Texture2D
 var floating: Array = []
+var impacts = {"hero":0.0,"enemy":0.0}
+var recovery = {"hero":0.0,"enemy":0.0}
 
 func _ready():
 	custom_minimum_size.y = 280
@@ -37,11 +39,23 @@ func _ready():
 			art.region = crops[region]
 			art.filter_clip = true
 			region_art[region] = art
+	if ResourceLoader.exists("res://assets/art/battlefields.png"):
+		var arenas = load("res://assets/art/battlefields.png")
+		for index in range(3):
+			var art = AtlasTexture.new()
+			art.atlas = arenas
+			art.region = Rect2(0,index*arenas.get_height()/3.0,arenas.get_width(),arenas.get_height()/3.0)
+			art.filter_clip = true
+			region_art[["wilds","marsh","crown"][index]] = art
+		background = region_art.wilds
 	serial = int(model.battle_event.serial)
 
 func _process(delta: float):
 	if model==null: return
 	elapsed += delta
+	for side in impacts:
+		impacts[side] = maxf(0,impacts[side]-delta)
+		recovery[side] = maxf(0,recovery[side]-delta)
 	flash = maxf(0,flash-delta)
 	for item in floating: item.life -= delta
 	floating = floating.filter(func(item): return item.life>0)
@@ -52,6 +66,8 @@ func _process(delta: float):
 	if serial!=int(model.battle_event.serial):
 		for event in model.combat_events:
 			if int(event.serial)>serial and int(model.s.time)-int(event.get("time",0))<1000:
+				if str(event.text).begins_with("+"): recovery[event.side] = .8
+				elif event.text!="MISS": impacts[event.side] = .4
 				floating.append({"text":event.text,"side":event.side,"life":1.0})
 				if floating.size()>4: floating.pop_front()
 		serial = int(model.battle_event.serial)
@@ -86,17 +102,24 @@ func _draw():
 	var enemy = model.data.enemies[f.enemy] if fighting else {}
 	var backdrop = region_art.get(enemy.get("region",""),background)
 	var backdrop_width = size.y*backdrop.get_width()/backdrop.get_height()
-	draw_texture_rect(backdrop,Rect2((size.x-backdrop_width)/2,0,backdrop_width,size.y),false,Color(.65,.65,.65))
-	draw_rect(Rect2(Vector2.ZERO,size),Color(.025,.04,.055,.48))
+	var drift = sin(elapsed*.17)*4 if model.s.settings.motion else 0.0
+	draw_texture_rect(backdrop,Rect2((size.x-backdrop_width)/2+drift-5,-3,backdrop_width+10,size.y+6),false,Color(.88,.88,.88))
+	draw_rect(Rect2(Vector2.ZERO,size),Color(.025,.04,.055,.25))
+	draw_rect(Rect2(0,0,size.x,38),Color(.015,.025,.035,.72))
+	draw_rect(Rect2(0,202,size.x,78),Color(.015,.025,.035,.83))
 	var w = minf(126,(size.x-64)/2)
 	var left = Rect2(16,45,w,152)
 	var right = Rect2(size.x-16-w,45,w,152)
 	for side in range(2):
 		var r = left if side==0 else right
 		var target = "hero" if side==0 else "enemy"
-		var hit = flash>.55 and target==event_side
-		if hit and model.s.settings.motion: r.position.x += sin(elapsed*75)*3
-		draw_rect(r.grow(2),U.RED if hit else U.GOLD.darkened(.55))
+		var hit = impacts[target]>.2
+		if model.s.settings.motion:
+			r.position.y += sin(elapsed*1.4+side*2)*1.2
+			var opposite = "enemy" if side==0 else "hero"
+			r.position.x += sin(clampf(impacts[opposite]/.4,0,1)*PI)*7*(1 if side==0 else -1)
+			if hit: r.position.x += sin(elapsed*60)*2
+		draw_rect(r.grow(2),U.GREEN if recovery[target]>.4 else (U.RED if hit else U.GOLD.darkened(.45)))
 		if side==0 or fighting:
 			var face = faces[0] if side==0 else (enemy_face if enemy_face!=null else faces[int(enemy.portrait)])
 			draw_face(face,r,Color(1,.72,.68) if hit else Color.WHITE)
@@ -114,6 +137,22 @@ func _draw():
 	caption(Vector2(16,29),"EMBERKEEPER",U.GOLD,11,w)
 	caption(Vector2(right.position.x,29),model.local_name(enemy).split(" · ")[0].to_upper() if fighting else "THE OUTSKIRTS",U.GOLD,10,w)
 	caption(Vector2(size.x/2-20,127),"VS",U.GOLD,22,40)
+	if model.s.settings.motion:
+		for i in range(8 if model.s.settings.battery else 14):
+			var x = fmod(i*47.3+sin(elapsed*.4+i)*9,size.x)
+			var y = 198-fmod(elapsed*(7+i%4)+i*19.7,155)
+			draw_circle(Vector2(x,y),.7+i%2*.4,Color(U.GOLD,.18+.14*sin(elapsed+i)))
+		for target in impacts:
+			if impacts[target]>.18:
+				var center = (left if target=="hero" else right).get_center()
+				var alpha = impacts[target]/.4
+				draw_line(center+Vector2(-29,22),center+Vector2(28,-25),Color(U.GOLD,alpha*.75),2.0,true)
+				draw_line(center+Vector2(-18,28),center+Vector2(35,-12),Color(U.TEXT,alpha*.6),1.0,true)
+	if fighting and enemy.boss and int(f.hits)%3==2:
+		var warning_alpha = .6+.2*sin(elapsed*4) if model.s.settings.motion else .7
+		draw_rect(right.grow(6),Color(U.RED,warning_alpha),false,2.0)
+		var charge = 1.0-clampf(float(int(f.enemy_at)-int(model.s.time))/float(enemy.interval),0,1)
+		bar(Rect2(right.position.x,39,w,3),charge,U.RED)
 	if fighting:
 		var charges = int(f.get("swings",0))%4
 		caption(Vector2(0,268),"STYLE SKILL  %d / 4    ·    NEXT ATTACK %.1fs" % [charges,maxf(0,(int(f.player_at)-int(model.s.time))/1000.0)],U.GOLD,10,size.x)

@@ -55,6 +55,8 @@ func _init():
 	old_save.erase("chronicle")
 	old_save.erase("progression")
 	old_save.erase("runeforge")
+	old_save.erase("loadouts")
+	old_save.erase("hunts")
 	check(not store.decode(store.encode(old_save),guided.data).is_empty(),"0.1 saves remain readable")
 	var planned = RealmModel.new()
 	var chain = RealmProgression.plan(planned,"craft_copper_sword",1)
@@ -195,5 +197,69 @@ func _init():
 		for i in range(180): online.advance(1000)
 		consistent = consistent and online.s==offline.s
 	check(consistent,"all three runes preserve offline combat and cannot be swapped mid-fight")
+	var smith = RealmModel.new()
+	smith.s.tutorial = true
+	smith.s.xp.smithing = 225
+	smith.s.gold = 100
+	smith.s.bag.scrap = 10
+	smith.s.bag.copper_ingot = 1
+	smith.gain("copper_sword",3,1)
+	smith.command({"type":"equip_best"})
+	var original_uid = str(smith.s.equipped.weapon)
+	smith.gear(original_uid).locked = true
+	smith.gear(original_uid).favorite = true
+	smith.command({"type":"preset_save","id":"Guardian"})
+	smith.command({"type":"loadout_save","id":"journey"})
+	var before_refine = smith.s.duplicate(true)
+	check(not smith.command({"type":"refine","id":original_uid}) and smith.s==before_refine,"refinement with insufficient ingots makes no partial changes")
+	smith.s.bag.copper_ingot = 10
+	smith.command({"type":"refine","id":original_uid,"cid":"one-refinement"})
+	smith.command({"type":"refine","id":original_uid,"cid":"one-refinement"})
+	var new_uid = str(smith.last_forged)
+	var refined = smith.gear(new_uid)
+	check(smith.count("copper_sword")==3 and smith.gear(original_uid).count==2 and refined.count==1 and refined.q==2 and refined.locked and refined.favorite and smith.s.gold==60 and smith.count("copper_ingot")==8 and smith.count("scrap")==8 and smith.s.equipped.weapon==new_uid and smith.s.presets.Guardian.weapon==new_uid and smith.s.loadouts.journey.gear.weapon==new_uid,"refinement splits one copy, charges once and follows all protected references")
+	smith.command({"type":"refine","id":original_uid})
+	check(smith.count("copper_sword")==3 and smith.gear(original_uid).count==1 and smith.gear(new_uid).count==2 and smith.s.gold==20,"refinement safely merges into an existing higher-quality stack")
+	smith.s.xp.might = 750
+	smith.progression().stance = "guard"
+	RealmChronicle.state(smith).talents = {"power":1,"guard":2,"fortune":0}
+	smith.s.chronicle.relics.fang = 1
+	smith.s.chronicle.relic = "fang"
+	RealmRuneforge.state(smith).ranks.thorn = 1
+	smith.s.runeforge.equipped = "thorn"
+	smith.s.settings.food = "cooked_meat"
+	smith.s.settings.potion = "healing_draught"
+	smith.s.settings.threshold = .8
+	smith.command({"type":"loadout_save","id":"guardian"})
+	var full_build = RealmLoadouts.snapshot(smith)
+	smith.progression().stance = "reaver"
+	smith.s.chronicle.talents.guard = 0
+	smith.s.settings.threshold = .3
+	smith.command({"type":"loadout_load","id":"guardian"})
+	check(RealmLoadouts.snapshot(smith)==full_build and smith.s.settings.potion_policy=="auto" and smith.protected(new_uid) and not store.decode(store.encode(smith.s),smith.data).is_empty(),"complete loadout restores all build choices, protects gear and survives saves")
+	smith.command({"type":"queue","id":"hunt_ash_rat","target":3})
+	var build_during_fight = RealmLoadouts.snapshot(smith)
+	check(not smith.command({"type":"loadout_load","id":"journey"}) and RealmLoadouts.snapshot(smith)==build_during_fight,"loadout cannot partially apply during combat")
+	var logged_offline = RealmModel.new()
+	logged_offline.s = smith.s.duplicate(true)
+	smith.advance(60000)
+	for i in range(60): logged_offline.advance(1000)
+	var report = RealmHunts.state(smith).history[0]
+	check(smith.s==logged_offline.s and report.result=="Completed" and report.wins==3 and report.fragments==3 and report.gold>0 and report.loot.get("raw_meat",0)==3 and not store.decode(store.encode(smith.s),smith.data).is_empty(),"hunt ledger records exact completed rewards and agrees across offline chunks")
+	var recalled = RealmModel.new()
+	recalled.command({"type":"queue","id":"hunt_ash_rat","target":20})
+	recalled.advance(1000)
+	recalled.command({"type":"clear"})
+	var lost = RealmModel.new()
+	lost.s.hp = 1
+	lost.s.bag.cooked_minnow = 0
+	lost.command({"type":"queue","id":"hunt_ash_rat","target":20})
+	lost.advance(6000)
+	check(recalled.s.hunts.history[0].result=="Recalled" and recalled.s.hunts.history[0].wins==0 and lost.s.hunts.history[0].result=="Defeated" and lost.s.hunts.history[0].ending_hp==0,"retreat and defeat produce separate honest hunt outcomes")
+	var invalid_build = smith.s.duplicate(true)
+	invalid_build.loadouts.guardian.gear.weapon = "missing-gear"
+	var invalid_report = smith.s.duplicate(true)
+	invalid_report.hunts.history[0].wins = -1
+	check(store.decode(store.encode(invalid_build),smith.data).is_empty() and store.decode(store.encode(invalid_report),smith.data).is_empty(),"save validation rejects broken loadout references and negative hunt accounting")
 	print("ESSENTIAL CHECKS: ","PASS" if failed==0 else "FAIL")
 	quit(1 if failed else 0)

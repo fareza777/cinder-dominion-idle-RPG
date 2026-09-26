@@ -11,6 +11,7 @@ var last_hit = ""
 var battle_event = {"serial":0,"text":"","side":"enemy"}
 var combat_events: Array = []
 var last_reward = ""
+var last_forged = ""
 
 func progression() -> Dictionary:
 	return RealmProgression.state(self)
@@ -28,6 +29,7 @@ func fresh(seed_value: int = 12345):
 	combat_events.clear()
 	last_reward = ""
 	last_hit = ""
+	last_forged = ""
 	rng.seed = seed_value
 	s = {"version":1,"revision":0,"time":0,"wall":0,"rng":str(rng.state),"gold":20,
 		"bag":{"cooked_minnow":5},"gear":[],"overflow":[],"equipped":{},"next_uid":1,
@@ -89,6 +91,8 @@ func protected(uid: String) -> bool:
 	if g.locked or g.favorite or uid in s.equipped.values(): return true
 	for slots in s.presets.values():
 		if uid in slots.values(): return true
+	for build in RealmLoadouts.state(self).values():
+		if uid in build.gear.values(): return true
 	return false
 
 func add_gear(id: String, quality: int) -> String:
@@ -150,6 +154,12 @@ func command(cmd: Dictionary) -> bool:
 	var action = str(cmd.get("type",""))
 	var id = str(cmd.get("id",""))
 	match action:
+		"refine":
+			var why = RealmWorkshop.command(self,id)
+			if why!="": return fail(why)
+		"loadout_save","loadout_load":
+			var why = RealmLoadouts.command(self,cmd)
+			if why!="": return fail(why)
 		"rune_forge","rune_equip","research_claim":
 			var why = RealmRuneforge.command(self,cmd)
 			if why!="": return fail(why)
@@ -295,6 +305,7 @@ func fail(message: String) -> bool:
 	return false
 
 func refund_active():
+	RealmHunts.finish(self,"Recalled")
 	if not s.active.is_empty():
 		for id in s.active.reserved:
 			var qty = int(s.active.reserved[id])
@@ -343,6 +354,7 @@ func start_next():
 		var a = data.activities[step.id]
 		if a.kind=="combat":
 			var enemy = data.enemies[a.enemy]
+			RealmHunts.begin(self,a.enemy)
 			s.fight = {"enemy":a.enemy,"hp":enemy.hp,"player_at":int(s.time)+2000,"enemy_at":int(s.time)+int(enemy.interval),"hits":0,"buff_until":0,"buff":"attack","potion_at":0,"spawn_at":0}
 		else:
 			for id in a.inputs: spend(id,int(a.inputs[id]))
@@ -351,6 +363,7 @@ func start_next():
 
 func advance(ms: int):
 	if ms<=0: return
+	if not s.fight.is_empty(): RealmHunts.begin(self,s.fight.enemy)
 	rng.state = int(s.rng)
 	var target = int(s.time)+ms
 	start_next()
@@ -405,6 +418,7 @@ func resolve_combat():
 		var effect = data.items[pot].effect
 		if effect!="heal" or s.hp<=50:
 			spend(pot,1)
+			RealmHunts.supplies(self,"potions")
 			f.potion_at = int(s.time)+60000
 			if effect=="heal": s.hp = mini(100,int(s.hp)+50)
 			else:
@@ -445,6 +459,7 @@ func resolve_combat():
 			combat_event("−%d HP" % int(move.damage),"hero")
 		if s.hp<=0:
 			s.hp = 0
+			RealmHunts.finish(self,"Defeated")
 			last_reward = "DEFEAT · No items lost. Rest, cook food, or upgrade equipment before returning."
 			note("Defeated by %s. Equipment is safe. Recover and prepare food before trying again." % local_name(d))
 			s.fight = {}
@@ -454,9 +469,12 @@ func resolve_combat():
 		var food = str(s.settings.food)
 		if s.hp<=100*float(s.settings.threshold) and count(food)>0:
 			spend(food,1)
+			RealmHunts.supplies(self,"meals")
 			s.hp = mini(100,int(s.hp)+RealmCombat.food_heal(self,food))
 
 func win(enemy: Dictionary):
+	var before_gains = s.gains.duplicate(true)
+	var before_gold = int(s.gold)
 	var id = enemy.id
 	var legacy = RealmChronicle.state(self)
 	var fragment_id = RealmChronicle.fragments_for(enemy)
@@ -470,6 +488,7 @@ func win(enemy: Dictionary):
 		last_reward += " · FIRST CLEAR: +10 meals & scraps"
 		if int(enemy.tier)==5:
 			gain("iron_sword",1,3)
+			RealmHunts.equipment(self,"iron_sword",3)
 			last_reward += " · Rare Iron Sword"
 	s.kills[id] = int(s.kills.get(id,0))+1
 	s.gold += reward_gold
@@ -483,16 +502,20 @@ func win(enemy: Dictionary):
 		var q = quality_roll()
 		var metal = "iron_" if enemy.has("region") else "copper_"
 		gain(metal+part,1,q)
+		RealmHunts.equipment(self,metal+part,q)
 		note("Loot: %s %s" % [data.rarities[q],name_of(metal+part)])
 	if id=="bellkeeper" and not s.beacon:
 		s.beacon = true
 		gain("copper_sword",1,3)
+		RealmHunts.equipment(self,"copper_sword",3)
 		note("The bells fall silent. Cinderwatch burns bright again.")
 	s.queue[0].done += 1
 	s.queue[0].output += int(enemy.qty)
 	s.fight = {}
 	s.regen_at = int(s.time)+1000
 	check_quest()
+	RealmHunts.victory(self,enemy,before_gains,before_gold)
+	if step_complete(s.queue[0]): RealmHunts.finish(self,"Completed")
 
 func objective() -> Dictionary:
 	return RealmJourney.current(self)
