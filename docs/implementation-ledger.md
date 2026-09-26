@@ -51,3 +51,7 @@ Solo: distinct procedural portrait states, reduced-motion and battery handling, 
 ## 0.10 Progression clarity
 
 Solo clarity pass: three-tab Progress & farming guide, direct activity links, explicit resource purposes and unlock rules, minimum required ingot batch for Smithing 10, practical menu names and simpler English. One focused check added (51 total), five UI captures including first-objective button smoke. No new save schema or monetization.
+
+## 0.11 Hunt review
+
+Solo: selected report view, comparable per-victory hunt metrics, item-specific supply accounting, crafting restock links, repeat planner and latest report access on Refuge. Legacy reports remain truthful and compatible. Three targeted checks added (54 total), seven isolated UI captures and Android debug export.

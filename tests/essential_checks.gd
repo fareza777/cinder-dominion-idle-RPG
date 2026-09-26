@@ -309,5 +309,20 @@ func _init():
 	training.s.xp.smithing = 1900
 	var ingots_needed = RealmJourney.smithing_batch(training)
 	check(ingots_needed==16 and 1900+(ingots_needed-1)*8<2025 and 1900+ingots_needed*8>=2025, "Smithing goal computes the minimum ingots needed for level ten")
+	check(trial_report.consumed.get("cooked_minnow",0)==trial_report.meals and trial_report.meals>0, "hunt report records the exact cooked food consumed")
+	var bad_consumption = trial_m.s.duplicate(true)
+	bad_consumption.hunts.history[0].consumed.cooked_minnow += 1
+	check(store.decode(store.encode(bad_consumption),trial_m.data).is_empty(), "save rejects item consumption that disagrees with hunt totals")
+	var earlier_report = trial_report.duplicate(true)
+	earlier_report.ended = int(earlier_report.started)+120000
+	earlier_report.wins = 2
+	earlier_report.meals = 6
+	var incomplete_report = earlier_report.duplicate(true)
+	incomplete_report.result = "Recalled"
+	incomplete_report.wins = 0
+	var other_report = earlier_report.duplicate(true)
+	other_report.enemy = "ash_rat"
+	var previous_report = RealmHuntReview.previous([trial_report,incomplete_report,other_report,earlier_report],0)
+	check(previous_report==earlier_report and RealmHuntReview.metrics(previous_report).per_win==60 and RealmHuntReview.metrics(previous_report).meals_per_win==3 and not RealmHuntReview.metrics(incomplete_report).comparable, "hunt comparisons normalize by wins and skip incomplete or different enemies")
 	print("ESSENTIAL CHECKS: ","PASS" if failed==0 else "FAIL")
 	quit(1 if failed else 0)

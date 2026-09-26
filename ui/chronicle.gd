@@ -27,6 +27,17 @@ func home(parent: Node):
 		var b = ref.get_ref()
 		if is_instance_valid(b): b.text = {"story":"Start next objective  →","queue":"View active plan  →","talents":"Choose my talents  →","relics":"Awaken relic  →","equip":"Equip best gear  →","plan":"Review supply plan  →","journal":"Collect field supplies  →","runes":"Review inscription  →"}[C.focus(m).kind])
 	card.add_child(U.button("Progress & farming",roadmap))
+	var latest = U.button("Review latest hunt",app.hunt_reports_dialog)
+	card.add_child(latest)
+	var latest_ref = weakref(latest)
+	app.update_callbacks.append(func():
+		var button = latest_ref.get_ref()
+		if not is_instance_valid(button): return
+		var history = RealmHunts.state(m).history
+		button.visible = not history.is_empty()
+		if not history.is_empty(): button.text = "Latest hunt · "+str(history[0].result)+" →")
+	latest.visible = not RealmHunts.state(m).history.is_empty()
+
 
 func services(parent: Node):
 	parent.add_child(U.label("REFUGE SERVICES",10,U.GOLD))

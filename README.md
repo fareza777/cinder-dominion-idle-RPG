@@ -1,16 +1,24 @@
-# Ashen Covenant — Adventure preview 0.10
+# Ashen Covenant — Adventure preview 0.11
 
 Idle RPG dark fantasy untuk Android. Gratis, tanpa iklan. Build ini untuk dimainkan dan dievaluasi, belum versi rilis publik.
 
 ## Mulai bermain
 
-1. Pasang `build/android/ashen-covenant-0.10.apk` di Android 64-bit. APK memakai identitas aplikasi yang sama dengan 0.1–0.9 sehingga bisa dipasang sebagai pembaruan.
+1. Pasang `build/android/ashen-covenant-0.11.apk` di Android 64-bit. APK memakai identitas aplikasi yang sama dengan 0.1–0.10 sehingga bisa dipasang sebagai pembaruan.
 2. Seluruh antarmuka dan narasi game memakai **English**. Splash mengantar ke menu utama. Pilih **New game**, ikuti atau lewati intro, lalu baca empat tahap onboarding. **Continue journey** melanjutkan progres yang sudah ada.
 3. Tekan **Guide →** di bagian atas layar. Panduan menunjukkan tujuan, alasan, lokasi aktivitas dan jumlah yang dibutuhkan. Tekan tindakannya, lalu **Begin · 4 cycles** (jumlahnya mengikuti tujuan) untuk memulai jumlah siklus yang tepat.
 4. Tugas awal: 4 copper ore → 2 copper ingots → 1 ash log → Copper Sword → Equip item → 3 Ash Rats. Panduan lalu mengantar lewat musuh berikutnya hingga Bellkeeper, tanpa melompat langsung ke boss.
 5. Pantau activity bar. **Queue** menampilkan tugas berjalan/menunggu, progres target, dan alasan terhambat. **Sources/Find** membantu mencari bahan yang kurang. Satu aktivitas berjalan pada satu waktu.
 6. Buka **Food & survival guide** untuk belajar memancing, memasak, memilih makanan dan menyiapkan auto-heal. Perlengkapan hasil crafting harus dipasang dari **Bag**.
 7. Progres tersimpan otomatis dan berlanjut maksimal 24 jam saat kembali. Menu **☰** tersedia dari dalam permainan. New Game meminta konfirmasi dan menyimpan cadangan terpisah; **Settings → Restore a previous journey** memulihkannya.
+
+## Baru di 0.11 — Review hunt dan persiapan berikutnya
+
+Hunt reports kini menampilkan satu order terpilih, dengan daftar ringkas untuk membuka order lain. Hunt selesai menunjukkan waktu dan makanan per kemenangan, dibandingkan dengan hunt selesai sebelumnya pada musuh yang sama. Hunt yang kalah atau dihentikan tidak dipakai sebagai pembanding.
+
+Makanan dan potion baru dicatat per jenis item. Dari laporan, **Plan … more** membuka rencana crafting untuk mengganti jumlah yang terpakai; bahan tetap harus dikumpulkan dan dibuat. **Plan this hunt again** membuka estimasi hunt. Refuge memberi akses langsung ke laporan terakhir.
+
+Laporan lama tetap kompatibel dan hanya menampilkan rincian yang memang tersimpan. Semua hadiah sudah masuk ke inventori; tombol laporan tidak memberikan hadiah tambahan.
 
 ## Baru di 0.10 — Alur progres lebih jelas
 

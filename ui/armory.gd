@@ -110,41 +110,4 @@ func loadouts():
 		app.set_page("character"))
 
 func hunt_reports():
-	var v = app.modal("Hunt reports")
-	var h = RealmHunts.state(m)
-	v.add_child(U.para("Your recent hunts",25,U.TEXT))
-	v.add_child(U.para("Your last 12 hunting orders, including offline progress. Rewards below are already in your inventory; there is nothing to claim twice.",14))
-	var reports = h.history.duplicate(true)
-	if not h.active.is_empty():
-		reports.push_front(h.active.duplicate(true))
-		v.add_child(U.button("Refresh the current hunt",hunt_reports))
-	if reports.is_empty():
-		v.add_child(U.para("Choose a hunt in Explore. Completed orders, retreats and defeats will appear here, with the supplies spent and rewards earned.",16))
-		app.modal_action("Choose a hunt",func():
-			app.dismiss()
-			app.set_page("explore"))
-		return
-	for report in reports:
-		var d = m.data.enemies[report.enemy]
-		var card = U.card(v,14,U.RED.darkened(.5) if report.result=="Defeated" else U.LINE)
-		var row = U.row(12)
-		card.add_child(row)
-		row.add_child(U.enemy_portrait(d,Vector2(64,86)))
-		var title = U.column(5)
-		title.size_flags_horizontal = Control.SIZE_EXPAND_FILL
-		row.add_child(title)
-		title.add_child(U.para(m.local_name(d),21,U.TEXT))
-		title.add_child(U.para(report.result.to_upper()+" · %d %s" % [int(report.wins),"victory" if report.wins==1 else "victories"],12,U.RED if report.result=="Defeated" else U.GOLD))
-		var seconds = (int(m.s.time) if report.result=="Underway" else int(report.ended))-int(report.started)
-		card.add_child(U.para("%s · %d %s · %d %s used" % [preload("res://ui/gameplay.gd").new(app).time_label(seconds/1000.0),int(report.meals),"meal" if report.meals==1 else "meals",int(report.potions),"potion" if report.potions==1 else "potions"],13))
-		card.add_child(U.para("+%d gold · +%d melee XP\n+%d %s fragments" % [int(report.gold),int(report.xp),int(report.fragments),RealmChronicle.RELICS[RealmChronicle.fragments_for(d)].name],14,U.GREEN))
-		for item in report.loot:
-			if m.data.items[item].category!="equipment" or report.get("equipment",{}).is_empty(): card.add_child(U.para("%s ×%d" % [m.name_of(item),int(report.loot[item])],13))
-		for key in report.get("equipment",{}):
-			var parts = str(key).split("|")
-			var quality = int(parts[1])
-			card.add_child(U.para("%s %s ×%d" % [m.data.rarities[quality],m.name_of(parts[0]),int(report.equipment[key])],15,U.QUALITY[quality]))
-		if report.result=="Defeated":
-			card.add_child(U.para("Your equipment is safe. Rest, refill cooked food and consider a more defensive build before returning.",13,U.GOLD))
-			card.add_child(U.button("Prepare supplies",app.work_orders_dialog))
-		else: card.add_child(U.button("Plan another hunt",func(): app.activity_dialog("hunt_"+str(report.enemy),maxi(1,mini(100,int(report.wins))))))
+	preload("res://ui/hunt_review.gd").new(app).open()

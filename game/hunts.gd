@@ -8,7 +8,7 @@ static func state(m) -> Dictionary:
 static func begin(m, enemy: String):
 	var s = state(m)
 	if not s.active.is_empty(): return
-	s.active = {"enemy":enemy,"started":int(m.s.time),"ended":int(m.s.time),"result":"Underway","wins":0,"gold":0,"xp":0,"fragments":0,"meals":0,"potions":0,"loot":{},"equipment":{},"ending_hp":int(m.s.hp)}
+	s.active = {"enemy":enemy,"started":int(m.s.time),"ended":int(m.s.time),"result":"Underway","wins":0,"gold":0,"xp":0,"fragments":0,"meals":0,"potions":0,"loot":{},"equipment":{},"consumed":{},"ending_hp":int(m.s.hp)}
 
 static func equipment(m, id: String, quality: int):
 	var active = state(m).active
@@ -17,9 +17,13 @@ static func equipment(m, id: String, quality: int):
 	var key = id+"|"+str(quality)
 	active.equipment[key] = int(active.equipment.get(key,0))+1
 
-static func supplies(m, field: String):
+static func supplies(m, field: String, item: String = ""):
 	var s = state(m)
-	if not s.active.is_empty(): s.active[field] += 1
+	if not s.active.is_empty():
+		s.active[field] += 1
+		# Legacy in-progress reports keep their untracked history honest.
+		if s.active.has("consumed") and item!="":
+			s.active.consumed[item] = int(s.active.consumed.get(item,0))+1
 
 static func victory(m, enemy: Dictionary, before_gains: Dictionary, before_gold: int, fragments: int):
 	var s = state(m)
@@ -54,6 +58,16 @@ static func valid(h, data: Dictionary) -> bool:
 		if entry.ending_hp>100 or entry.ended<entry.started: return false
 		for id in entry.loot:
 			if not data.items.has(id) or not RealmChronicle.number(entry.loot[id]): return false
+		if entry.has("consumed"):
+			if not entry.consumed is Dictionary: return false
+			var meals = 0
+			var potions = 0
+			for id in entry.consumed:
+				if not data.items.has(id) or not RealmChronicle.number(entry.consumed[id]): return false
+				if data.items[id].category=="food": meals += int(entry.consumed[id])
+				elif data.items[id].category=="potion": potions += int(entry.consumed[id])
+				else: return false
+			if meals!=int(entry.meals) or potions!=int(entry.potions): return false
 		if entry.has("equipment"):
 			if not entry.equipment is Dictionary: return false
 			for key in entry.equipment:

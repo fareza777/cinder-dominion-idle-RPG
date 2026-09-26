@@ -424,7 +424,7 @@ func resolve_combat():
 		var effect = data.items[pot].effect
 		if effect!="heal" or s.hp<=50:
 			spend(pot,1)
-			RealmHunts.supplies(self,"potions")
+			RealmHunts.supplies(self,"potions",str(s.settings.potion))
 			f.potion_at = int(s.time)+60000
 			if effect=="heal": s.hp = mini(100,int(s.hp)+50)
 			else:
@@ -479,7 +479,7 @@ func resolve_combat():
 		var food = str(s.settings.food)
 		if s.hp<=100*float(s.settings.threshold) and count(food)>0:
 			spend(food,1)
-			RealmHunts.supplies(self,"meals")
+			RealmHunts.supplies(self,"meals",food)
 			var restored_food = mini(100-int(s.hp),RealmCombat.food_heal(self,food))
 			s.hp += restored_food
 			combat_event("+%d HP" % restored_food,"hero")
