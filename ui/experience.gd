@@ -2,7 +2,7 @@ extends RefCounted
 
 const U = preload("res://ui/style.gd")
 const STORE_URL = "" # Set only after a real public listing exists.
-const VERSION = "0.29.0"
+const VERSION = "0.30.0"
 var app
 var front: Control
 var cinematic_page = 0
@@ -211,7 +211,7 @@ func finish_intro():
 
 func welcome(_index=0):
 	app.ensure_coach()
-	var v = app.modal("Learn by playing")
+	var v = app.modal("Learn by playing",false)
 	v.add_child(U.icon("copper_sword",88))
 	title(v,"Your first sword. Your first hunt.",28)
 	v.add_child(U.para("Follow the gold highlight. Each step shows exactly where to tap.",17,U.TEXT))

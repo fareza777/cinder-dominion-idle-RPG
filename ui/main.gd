@@ -490,14 +490,14 @@ func dismiss():
 		dialog.queue_free()
 	dialog = null
 
-func modal(title: String) -> VBoxContainer:
+func modal(title: String, dim_background: bool = true) -> VBoxContainer:
 	dismiss()
 	dialog = Control.new()
 	dialog.set_anchors_and_offsets_preset(Control.PRESET_FULL_RECT)
 	dialog.z_index = 10
 	add_child(dialog)
 	var shade = ColorRect.new()
-	shade.color = Color(0,0,0,.78)
+	shade.color = Color(0,0,0,0 if not dim_background or model.s.experience.get("coach_active",false) else .78)
 	shade.set_anchors_and_offsets_preset(Control.PRESET_FULL_RECT)
 	dialog.add_child(shade)
 	var p = PanelContainer.new()
