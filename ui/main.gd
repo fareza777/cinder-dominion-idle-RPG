@@ -154,6 +154,9 @@ func refresh_shell():
 	set_page(page)
 	if previous_mode!="play": experience.menu()
 
+func progress_dialog():
+	preload("res://ui/progress_guide.gd").new(self).open()
+
 func guide_dialog():
 	experience.guide()
 

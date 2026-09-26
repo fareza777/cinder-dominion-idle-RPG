@@ -2,7 +2,7 @@ extends RefCounted
 
 const U = preload("res://ui/style.gd")
 const STORE_URL = "" # Set only after a real public listing exists.
-const VERSION = "0.9.0"
+const VERSION = "0.10.0"
 var app
 var front: Control
 var cinematic_page = 0
@@ -211,9 +211,9 @@ func finish_intro():
 
 func welcome(index=0):
 	var cards = [
-		["Welcome, Emberkeeper","YOUR GOAL","Defeat the Bellkeeper and restore Cinderwatch's beacon. You begin with basic tools, a worn sword and five cooked fish.","Begin by mining 4 copper ore. The gold YOUR NEXT MOVE card on Refuge gives one useful action at a time. Follow it to make and equip your first sword."],
-		["Choose a task. Let it work.","GATHER → CRAFT → EQUIP → FIGHT","One activity runs at a time. Mining, chopping, fishing and crafting repeat automatically for the count you choose.","Start with a better blade. Gather its materials, forge it, and equip it before heading out. Each road you open brings new enemies, relics, and ways to shape your build."],
-		["Materials become strength.","BUILD YOUR OWN EQUIPMENT","Crafting consumes the ingredients shown before you start. Finished equipment appears in Bag. Open an item and press Equip item to use it.","Use Plan materials & craft automatically to gather missing ingredients in order. Equip best on Hero or Explore installs your strongest owned gear."],
+		["Welcome, Emberkeeper","YOUR GOAL","Defeat the Bellkeeper and restore Cinderwatch's beacon. You begin with basic tools, a worn sword and five cooked fish.","Begin by mining 4 copper ore. The Recommended action card on Refuge shows what to do next. Progress & farming explains the full path and where to get materials."],
+		["Start one task at a time.","GATHER → CRAFT → EQUIP → FIGHT","One activity runs at a time. Mining, chopping, fishing and crafting repeat automatically for the count you choose.","Start with a better blade. Gather its materials, forge it, and equip it before heading out. Each road you open brings new enemies, relics, and ways to shape your build."],
+		["Craft, then equip.","BUILD YOUR OWN EQUIPMENT","Crafting consumes the ingredients shown before you start. Finished equipment appears in Bag. Open an item and press Equip item to use it.","Use Plan materials & craft automatically to gather missing ingredients in order. Equip best on Hero or Explore installs your strongest owned gear."],
 		["Prepare before you fight.","FOOD KEEPS YOU ALIVE","Combat is automatic. Your selected cooked food heals you at 50% HP. Open Hero to change food settings. Raw fish and raw meat must be cooked first.","Defeat stops your queue but keeps your gear safe. Outside combat, HP recovers. Queued tasks also progress while away, up to 24 hours."]
 	]
 	var card = cards[index]
@@ -255,6 +255,7 @@ func guide():
 		v.add_child(U.para("A task is already queued. Finish it or use Queue to cancel it before starting this objective.",14,U.GOLD))
 		v.add_child(U.button("View my queue",app.queue_dialog))
 	v.add_child(U.button(o.action,act_on_goal,true))
+	v.add_child(U.button("Progress & farming",app.progress_dialog))
 	v.add_child(U.button("Food & survival guide",survival))
 	v.add_child(U.label("CHAPTER I CHECKLIST",11,U.GOLD))
 	for step in RealmJourney.steps(app.model):
@@ -275,7 +276,7 @@ func act_on_goal():
 	elif o.kind=="level":
 		app.skill = "smithing"
 		app.set_page("skills")
-		app.planner_dialog("craft_copper_ingot",25)
+		app.planner_dialog("craft_copper_ingot",maxi(1,RealmJourney.smithing_batch(app.model)))
 	else:
 		var a = app.model.data.activities[o.activity]
 		if a.kind=="combat": app.set_page("explore")

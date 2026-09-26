@@ -116,8 +116,8 @@ static func next_expedition(m) -> String:
 
 static func focus(m) -> Dictionary:
 	if not m.s.queue.is_empty():
-		if m.s.active.is_empty() and m.s.fight.is_empty(): return {"title":"Work has come to a halt","why":m.requirement(m.s.queue[0].id),"kind":"queue","id":"","amount":1}
-		return {"title":"Work is underway","why":"Your orders continue while you are away, for up to 24 hours. Review the queue to see what will be ready when you return.","kind":"queue","id":"","amount":1}
+		if m.s.active.is_empty() and m.s.fight.is_empty(): return {"title":"Your queue is blocked","why":m.requirement(m.s.queue[0].id),"kind":"queue","id":"","amount":1}
+		return {"title":"Your task is running","why":"Your orders continue while you are away, for up to 24 hours. Review the queue to see what will be ready when you return.","kind":"queue","id":"","amount":1}
 	var o = m.objective()
 	if not m.s.tutorial: return {"title":o.title,"why":o.detail,"kind":"story","id":"","amount":1}
 	if points_free(m)>0: return {"title":"Spend your talent points","why":"Choose more damage, more armor or more gold. Reset freely outside combat.","kind":"talents","id":"","amount":1}
@@ -127,7 +127,7 @@ static func focus(m) -> Dictionary:
 		var equipped = m.gear(str(m.s.equipped.get(m.data.items[g.id].slot,"")))
 		if equipped.is_empty() or m.gear_score(g)>m.gear_score(equipped): return {"title":"Equip your stronger gear","why":"Your bag contains an upgrade. Crafting alone does not improve your combat stats.","kind":"equip","id":"","amount":1}
 	if m.count(m.s.settings.food)<15: return {"title":"Prepare food for your next hunt","why":"Aim for 15 cooked meals. Food heals automatically during battle; raw ingredients cannot heal you.","kind":"plan","id":"craft_"+str(m.s.settings.food),"amount":15-m.count(m.s.settings.food)}
-	if RealmRuneforge.ready(m)>0: return {"title":"Bring your field records home","why":"Completed regional hunts have fragments, scraps and gold ready to collect. Put them toward your next rune or relic.","kind":"journal","id":"","amount":1}
+	if RealmRuneforge.ready(m)>0: return {"title":"Claim your field record rewards","why":"Completed regional hunts have fragments, scraps and gold ready to collect. Put them toward your next rune or relic.","kind":"journal","id":"","amount":1}
 	if m.s.beacon:
 		for id in RealmRuneforge.RUNES:
 			if RealmRuneforge.state(m).ranks[id]==0 and RealmRuneforge.forge_reason(m,id)=="": return {"title":"Inscribe "+RealmRuneforge.RUNES[id].name,"why":"You have discovered this rune and gathered its materials. Review its effect before choosing between a rune and a relic upgrade.","kind":"runes","id":id,"amount":1}
@@ -135,7 +135,7 @@ static func focus(m) -> Dictionary:
 		var a = m.data.activities["craft_"+pair[1]]
 		var g = m.gear(str(m.s.equipped.get(pair[0],"")))
 		if (g.is_empty() or g.id=="worn_shield") and m.level("smithing")>=int(a.level): return {"title":"Forge "+m.name_of(pair[1]),"why":"Fill your armor slots to reduce incoming damage and stretch your food supplies.","kind":"plan","id":a.id,"amount":1}
-	if o.key=="smith": return {"title":"Train Smithing with 25 ingots","why":"This batch plans all missing ore. Repeat until level 10 to unlock iron gear and the Bellkeeper.","kind":"plan","id":"craft_copper_ingot","amount":25}
+	if o.key=="smith": return {"title":"Reach Smithing level 10","why":"Smelt %d more copper ingots. The planner includes missing ore. Level 10 unlocks iron recipes and access to the Bellkeeper." % RealmJourney.smithing_batch(m),"kind":"plan","id":"craft_copper_ingot","amount":maxi(1,RealmJourney.smithing_batch(m))}
 	return {"title":o.title,"why":o.detail,"kind":"story","id":"","amount":1}
 
 static func number(v, maximum: int = 1000000000000) -> bool:

@@ -110,9 +110,9 @@ func loadouts():
 		app.set_page("character"))
 
 func hunt_reports():
-	var v = app.modal("Tales from the road")
+	var v = app.modal("Hunt reports")
 	var h = RealmHunts.state(m)
-	v.add_child(U.para("Every journey leaves a record.",25,U.TEXT))
+	v.add_child(U.para("Your recent hunts",25,U.TEXT))
 	v.add_child(U.para("Your last 12 hunting orders, including offline progress. Rewards below are already in your inventory; there is nothing to claim twice.",14))
 	var reports = h.history.duplicate(true)
 	if not h.active.is_empty():

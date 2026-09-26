@@ -305,5 +305,9 @@ func _init():
 	var ration_model = RealmModel.new()
 	var ration_forecast = RealmCombat.forecast(ration_model,"ash_rat")
 	check(RealmHuntPlan.meals(ration_model,ration_forecast,100)>int(ration_forecast.meals)*100, "long hunt budgets health once rather than assuming full recovery after every fight")
+	var training = RealmModel.new()
+	training.s.xp.smithing = 1900
+	var ingots_needed = RealmJourney.smithing_batch(training)
+	check(ingots_needed==16 and 1900+(ingots_needed-1)*8<2025 and 1900+ingots_needed*8>=2025, "Smithing goal computes the minimum ingots needed for level ten")
 	print("ESSENTIAL CHECKS: ","PASS" if failed==0 else "FAIL")
 	quit(1 if failed else 0)

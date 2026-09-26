@@ -22,6 +22,10 @@ static func steps(m) -> Array:
 static func entry(key, title, detail, activity, current, goal, action, route, kind="activity") -> Dictionary:
 	return {"key":key,"title":title,"detail":detail,"activity":activity,"current":current,"goal":goal,"action":action,"route":route,"kind":kind}
 
+static func smithing_batch(m) -> int:
+	var remaining = maxi(0,25*9*9-int(m.s.xp.smithing))
+	return ceili(float(remaining)/float(m.data.activities.craft_copper_ingot.xp))
+
 static func current(m) -> Dictionary:
 	var all = steps(m)
 	for i in range(all.size()):
@@ -34,9 +38,9 @@ static func current(m) -> Dictionary:
 	if expedition!="":
 		var enemy = m.data.enemies[expedition]
 		var region_index = RealmChronicle.REGIONS.keys().find(enemy.region)
-		return {"key":expedition,"title":"Clear "+m.local_name(enemy),"detail":"The beacon is restored. Awaken relics, train talents and forge iron equipment for the next challenge. This encounter guarantees %d %s fragments per victory." % [int(enemy.fragments),RealmChronicle.RELICS[enemy.relic].name],"activity":"hunt_"+expedition,"current":0,"goal":1,"action":"Prepare expedition","route":RealmChronicle.REGIONS[enemy.region].name+" → Tier "+str(int(enemy.tier)),"kind":"expedition","index":12+region_index*5+int(enemy.tier),"total":27}
+		return {"key":expedition,"title":"Clear "+m.local_name(enemy),"detail":"Win once to unlock the next tier. If the fight is too costly, farm a cleared tier and upgrade your gear, relic or rune. Each victory gives %d %s fragments per victory." % [int(enemy.fragments),RealmChronicle.RELICS[enemy.relic].name],"activity":"hunt_"+expedition,"current":0,"goal":1,"action":"Prepare expedition","route":RealmChronicle.REGIONS[enemy.region].name+" → Tier "+str(int(enemy.tier)),"kind":"expedition","index":12+region_index*5+int(enemy.tier),"total":27}
 	for trial_id in RealmTrials.IDS:
 		if int(m.s.kills.get(trial_id,0))==0:
 			var trial_enemy = m.data.enemies[trial_id]
-			return {"key":trial_id,"title":"Conquer "+m.local_name(trial_enemy),"detail":"An optional final stand awaits. The guardian awakens at half health. Prepare a loadout, strengthen your rune and bring cooked food. First victory grants guaranteed Epic equipment and 120 bonus fragments.","activity":"hunt_"+trial_id,"current":0,"goal":1,"action":"Prepare guardian trial","route":"World map → Guardian trials","kind":"expedition","index":28+RealmTrials.IDS.find(trial_id),"total":30}
-	return {"key":"complete","title":"Keeper of the three realms","detail":"All 15 expedition tiers and three guardian trials are conquered. Complete your field records, deepen rune inscriptions, awaken your relic collection and try another build. All expedition tiers remain available for farming.","activity":"","current":1,"goal":1,"action":"Open world map","route":"Expeditions complete","kind":"complete","index":30,"total":30}
+			return {"key":trial_id,"title":"Conquer "+m.local_name(trial_enemy),"detail":"This optional boss gains stronger attacks at half health. Check its mechanics, equip your build and bring cooked food. Win once for Epic equipment and 120 bonus fragments.","activity":"hunt_"+trial_id,"current":0,"goal":1,"action":"Prepare guardian trial","route":"World map → Guardian trials","kind":"expedition","index":28+RealmTrials.IDS.find(trial_id),"total":30}
+	return {"key":"complete","title":"All main challenges cleared","detail":"You have cleared all 15 expedition tiers and 3 trials. Repeat hunts for fragments, finish field records, or refine equipment toward Legendary. All hunts remain available.","activity":"","current":1,"goal":1,"action":"Open world map","route":"Expeditions complete","kind":"complete","index":30,"total":30}

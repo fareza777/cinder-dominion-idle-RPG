@@ -47,3 +47,7 @@ Solo iteration: three optional two-phase guardian trials; latched phase save sta
 ## 0.9 Combat and journey polish
 
 Solo: distinct procedural portrait states, reduced-motion and battery handling, focused English narrative revisions, duration-based hunt planning with cumulative food budgeting, finish-current-fight command with explicit queue-cancellation confirmation. Four targeted checks added; full lightweight suite 50 passes, seven UI captures. Android debug APK exported for user playtest; no physical-device or AAA certification claims.
+
+## 0.10 Progression clarity
+
+Solo clarity pass: three-tab Progress & farming guide, direct activity links, explicit resource purposes and unlock rules, minimum required ingot batch for Smithing 10, practical menu names and simpler English. One focused check added (51 total), five UI captures including first-objective button smoke. No new save schema or monetization.

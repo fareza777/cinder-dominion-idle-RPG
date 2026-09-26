@@ -17,7 +17,7 @@ func locked(v: Node) -> bool:
 
 func home(parent: Node):
 	var card = U.card(parent,16,U.GOLD.darkened(.35))
-	card.add_child(U.label("YOUR NEXT MOVE",10,U.GOLD))
+	card.add_child(U.label("RECOMMENDED ACTION",10,U.GOLD))
 	app.dynamic(card,func(): return C.focus(m).title,24,U.TEXT)
 	app.dynamic(card,func(): return C.focus(m).why,14)
 	var action = U.button("Continue",act,true)
@@ -26,10 +26,10 @@ func home(parent: Node):
 	app.update_callbacks.append(func():
 		var b = ref.get_ref()
 		if is_instance_valid(b): b.text = {"story":"Start next objective  →","queue":"View active plan  →","talents":"Choose my talents  →","relics":"Awaken relic  →","equip":"Equip best gear  →","plan":"Review supply plan  →","journal":"Collect field supplies  →","runes":"Review inscription  →"}[C.focus(m).kind])
-	card.add_child(U.button("See my progression roadmap",roadmap))
+	card.add_child(U.button("Progress & farming",roadmap))
 
 func services(parent: Node):
-	parent.add_child(U.label("AROUND THE FIRE",10,U.GOLD))
+	parent.add_child(U.label("REFUGE SERVICES",10,U.GOLD))
 	var row = U.row(7)
 	parent.add_child(row)
 	for entry in [["journey","Journey"],["armory","Armory"],["supplies","Supplies"]]:
@@ -41,20 +41,20 @@ func services(parent: Node):
 	parent.add_child(U.button("Leave a work order before you go",app.work_orders_dialog))
 
 func station(kind: String):
-	var names = {"journey":"The road ahead","armory":"Steel, oath and ember","supplies":"Before the next watch"}
+	var names = {"journey":"Journey","armory":"Equipment & build","supplies":"Food & materials"}
 	var v = app.modal(names[kind])
 	var entries = []
 	match kind:
 		"journey":
-			v.add_child(U.para("Choose your next destination. Bring its story home.",24,U.TEXT))
-			entries = [["Guardian trials","Three optional challenges beyond regional tier five.",app.trials_dialog],["Journey guide","Your next objective and the path beyond it.",app.guide_dialog],["World map","Story routes, regional guardians and expedition tiers.",app.world_dialog],["Field journal","Guardian tactics and one-time regional rewards.",app.journal_dialog],["Hunt reports","Victories, supplies spent and rewards from recent orders.",app.hunt_reports_dialog],["Bounty board","Small goals that carry over when you are away.",app.bounties_dialog]]
+			v.add_child(U.para("Follow your next goal or choose a farming target.",24,U.TEXT))
+			entries = [["Progress & farming","What to do next, what to farm and how to use it.",app.progress_dialog],["Guardian trials","Three optional challenges beyond regional tier five.",app.trials_dialog],["Journey guide","Your next objective and the path beyond it.",app.guide_dialog],["World map","Story routes, regional guardians and expedition tiers.",app.world_dialog],["Field journal","Guardian tactics and one-time regional rewards.",app.journal_dialog],["Hunt reports","Victories, supplies spent and rewards from recent orders.",app.hunt_reports_dialog],["Bounty board","Small goals that carry over when you are away.",app.bounties_dialog]]
 		"armory":
 			v.add_child(U.para("Make every piece of your build count.",24,U.TEXT))
 			entries = [["Equipment bag","Compare and equip the gear you already own.",func():
 				app.dismiss()
-				app.set_page("inventory")],["Ember Workshop","Guaranteed equipment refinement, from Fine to Legendary.",app.workshop_dialog],["Complete loadouts","Save equipment, talents, style, rune and supplies together.",app.loadouts_dialog],["Talents","Choose where to spend earned melee experience.",app.talents_dialog],["Relics","Awaken a collection and choose its active bonus.",app.relics_dialog],["Runeforge","Inscribe a rune that changes your answer to an enemy.",app.runeforge_dialog]]
+				app.set_page("inventory")],["Ember Workshop","Guaranteed equipment refinement, from Fine to Legendary.",app.workshop_dialog],["Complete loadouts","Save equipment, talents, style, rune and supplies together.",app.loadouts_dialog],["Talents","Choose where to spend earned melee experience.",app.talents_dialog],["Relics","Awaken a collection and choose its active bonus.",app.relics_dialog],["Runeforge","Upgrade and equip a rune for a specific combat effect.",app.runeforge_dialog]]
 		"supplies":
-			v.add_child(U.para("A well-stocked refuge is a promise kept.",24,U.TEXT))
+			v.add_child(U.para("Prepare food and materials for your next task.",24,U.TEXT))
 			entries = [["Work orders","Plan gathering and crafting for your time away.",app.work_orders_dialog],["Food & survival","Choose cooked food and understand automatic healing.",app.experience.survival],["Merchant","Buy tools and vials with gold earned on the road.",app.merchant_dialog],["Refuge contracts","Collect milestone supplies you have earned.",app.contracts_dialog],["Rebuild Cinderwatch","Improve the forge, gates and resting hearth.",app.refuge_dialog]]
 	for entry in entries:
 		var card = U.card(v,12)
@@ -82,21 +82,7 @@ func act():
 			if app.send({"type":"equip_best"}): app.toast("Upgrades equipped. Your next recommendation is ready.")
 
 func roadmap():
-	var v = app.modal("Your path through the ashes")
-	v.add_child(U.para("From a worn blade to the far side of the valley.",20,U.TEXT))
-	var stages = [
-		["01","First Supplies","Gather 4 ore → smelt 2 ingots → gather 1 log → forge and equip a sword → defeat 3 rats.","Unlock: talents, relics, bounties and the graveyard.",m.s.tutorial],
-		["02","Prepare to survive","Cook food. Fill armor slots. Hunt each enemy 5 times to open the next route. Spend earned talent points and awaken a relic.","Bring home: materials, stronger gear, gold and relic fragments.",int(m.s.kills.get("ember_wraith",0))>=5],
-		["03","Restore the beacon","Train Smithing to 10. Forge iron gear when its materials are unlocked. Defeat the Bellkeeper with food and your chosen build.","Unlock: three expedition regions and 15 difficulty tiers.",m.s.beacon],
-		["04","Explore the three realms","Clear each tier once to open the next. Repeat a tier to target its relic fragments and iron equipment drops.","Bring home: 30 relic ranks, 15 talent ranks and rare iron gear.",C.next_expedition(m)==""]]
-	for stage in stages:
-		var c = U.card(v,14,U.GREEN if stage[4] else U.LINE)
-		c.add_child(U.para(stage[0]+"  "+stage[1]+(" · COMPLETE" if stage[4] else ""),20,U.GOLD))
-		c.add_child(U.para(stage[2],14,U.TEXT))
-		c.add_child(U.para(stage[3],13))
-	v.add_child(U.para("RETURNING LOOP\nCollect offline progress → claim finished bounties → improve one part of your build → choose a farm or attempt the next tier → queue supplies before leaving.",15,U.GREEN))
-	v.add_child(U.para("AFTER THE BEACON\nDefeat a regional guardian → collect field records at 5, 20 and 50 victories → inscribe its rune → equip one rune alongside your style and relic → compare your next hunt. Every rune has three ranks; Stillwater counters recovery, Thornscript pierces armor, and Dirge trades safety for damage.",14))
-	v.add_child(U.button("Take my next step",act,true))
+	app.progress_dialog()
 
 func talents():
 	var v = app.modal("Talents · shape your build")

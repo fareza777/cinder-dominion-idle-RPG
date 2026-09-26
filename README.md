@@ -1,16 +1,24 @@
-# Ashen Covenant — Adventure preview 0.9
+# Ashen Covenant — Adventure preview 0.10
 
 Idle RPG dark fantasy untuk Android. Gratis, tanpa iklan. Build ini untuk dimainkan dan dievaluasi, belum versi rilis publik.
 
 ## Mulai bermain
 
-1. Pasang `build/android/ashen-covenant-0.9.apk` di Android 64-bit. APK memakai identitas aplikasi yang sama dengan 0.1–0.8 sehingga bisa dipasang sebagai pembaruan.
+1. Pasang `build/android/ashen-covenant-0.10.apk` di Android 64-bit. APK memakai identitas aplikasi yang sama dengan 0.1–0.9 sehingga bisa dipasang sebagai pembaruan.
 2. Seluruh antarmuka dan narasi game memakai **English**. Splash mengantar ke menu utama. Pilih **New game**, ikuti atau lewati intro, lalu baca empat tahap onboarding. **Continue journey** melanjutkan progres yang sudah ada.
 3. Tekan **Guide →** di bagian atas layar. Panduan menunjukkan tujuan, alasan, lokasi aktivitas dan jumlah yang dibutuhkan. Tekan tindakannya, lalu **Begin · 4 cycles** (jumlahnya mengikuti tujuan) untuk memulai jumlah siklus yang tepat.
 4. Tugas awal: 4 copper ore → 2 copper ingots → 1 ash log → Copper Sword → Equip item → 3 Ash Rats. Panduan lalu mengantar lewat musuh berikutnya hingga Bellkeeper, tanpa melompat langsung ke boss.
 5. Pantau activity bar. **Queue** menampilkan tugas berjalan/menunggu, progres target, dan alasan terhambat. **Sources/Find** membantu mencari bahan yang kurang. Satu aktivitas berjalan pada satu waktu.
 6. Buka **Food & survival guide** untuk belajar memancing, memasak, memilih makanan dan menyiapkan auto-heal. Perlengkapan hasil crafting harus dipasang dari **Bag**.
 7. Progres tersimpan otomatis dan berlanjut maksimal 24 jam saat kembali. Menu **☰** tersedia dari dalam permainan. New Game meminta konfirmasi dan menyimpan cadangan terpisah; **Settings → Restore a previous journey** memulihkannya.
+
+## Baru di 0.10 — Alur progres lebih jelas
+
+**Refuge → Progress & farming** menggantikan roadmap lama dengan tiga tab: **Next step**, **Farm**, dan **Upgrade**. Tujuan utama, saran persiapan, kegunaan bahan, cara menaikkan level, dan syarat membuka wilayah dijelaskan terpisah dengan tombol langsung ke aktivitas terkait.
+
+Farming sekarang dijelaskan berdasarkan kebutuhan: makanan untuk hunt, ingot untuk equipment, XP untuk level dan talent, fragments untuk relic/rune, serta scraps dan gold untuk upgrade. Panduan upgrade mengurutkan equip gear → refine quality → pilih bonus → coba satu fight dan periksa hasil.
+
+Tujuan Smithing 10 menghitung jumlah ingot yang masih dibutuhkan berdasarkan XP sekarang. Menu layanan, laporan hunt, onboarding dan teks progres menggunakan nama serta kalimat yang lebih langsung. Seluruh teks baru tetap English.
 
 ## Baru di 0.9 — Combat & journey polish
 
