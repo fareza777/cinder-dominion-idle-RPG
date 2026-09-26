@@ -103,3 +103,7 @@ User requests clear highlight-based step-by-step onboarding and thematic SFX/mus
 ## 0.23 Guided material recovery
 
 Solo follow-up to onboarding: focus follows missing-material planning and the real Gather & craft action, existing queues get a fixed manage action, queued goals explain ordering, and active crafting no longer reports false material blockage after reserving inputs. No save schema or balance changes. Existing 77 checks plus focused UI plan-completion/reserved-input/queue-preservation smoke, five phone captures including narrow 130% text. See docs/qa/guided-recovery-0.23-report.md.
+
+## 0.24 Focused taps and sound room
+
+User reiterates focused onboarding and thematic audio. Added four input shields around the highlighted real control, retaining Skip; pointer-event smoke confirms off-target navigation blocked and Goals/action/Begin/Skip work. New sound room previews four existing original score tracks and five cues; weak dialog ownership returns music to automatic mood on close. No new audio assets, economy or save changes. Four captures, narrow 130% layout, essential checks and versioned APK.

@@ -8,6 +8,13 @@ var active = 0
 var mood = ""
 var event_serial = 0
 var cue_at = -1000
+var preview_mood = ""
+var preview_owner: WeakRef
+
+func preview(id: String, owner: Control):
+	if not tracks.has(id): return
+	preview_mood = id
+	preview_owner = weakref(owner)
 
 func _ready():
 	stop()
@@ -35,6 +42,10 @@ func _process(delta: float):
 		var region = app.model.data.enemies[app.model.s.fight.enemy].get("region","wilds")
 		target = "sanctum" if region=="marsh" else region
 		if not tracks.has(target): target = "wilds"
+	if preview_mood!="":
+		var owner = preview_owner.get_ref() if preview_owner!=null else null
+		if is_instance_valid(owner) and owner.is_inside_tree(): target = preview_mood
+		else: preview_mood = ""
 	# Complete each crossfade before accepting another mood change.
 	if target!=mood and gains[1-active]<=.001 and tracks.has(target):
 		active = 1-active

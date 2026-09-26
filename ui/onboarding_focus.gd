@@ -18,11 +18,17 @@ var focus_rect = Rect2()
 var phase = 0.0
 var state = ""
 var text_scale = -1.0
+var shields: Array[Control] = []
 
 func _ready():
 	set_anchors_and_offsets_preset(Control.PRESET_FULL_RECT)
 	mouse_filter = Control.MOUSE_FILTER_IGNORE
 	z_index = 30
+	for i in range(4):
+		var shield = Control.new()
+		shield.mouse_filter = Control.MOUSE_FILTER_STOP
+		add_child(shield)
+		shields.append(shield)
 	card = PanelContainer.new()
 	card.add_theme_stylebox_override("panel",U.box(U.INK,U.GOLD,12,16))
 	add_child(card)
@@ -123,6 +129,12 @@ func _process(delta):
 	card.size.y = card.get_combined_minimum_size().y
 	var y = size.y*.36 if done else (focus_rect.end.y+20 if focus_rect.get_center().y<size.y*.45 else focus_rect.position.y-card.size.y-20)
 	card.position = Vector2(16,clampf(y,20,maxf(20,size.y-card.size.y-20)))
+	var r = focus_rect.intersection(Rect2(Vector2.ZERO,size))
+	var regions = [Rect2(0,0,size.x,r.position.y),Rect2(0,r.end.y,size.x,maxf(0,size.y-r.end.y)),Rect2(0,r.position.y,r.position.x,r.size.y),Rect2(r.end.x,r.position.y,maxf(0,size.x-r.end.x),r.size.y)]
+	if done: regions = [Rect2(Vector2.ZERO,size),Rect2(),Rect2(),Rect2()]
+	for i in range(4):
+		shields[i].position = regions[i].position
+		shields[i].size = regions[i].size
 	phase += delta
 	queue_redraw()
 

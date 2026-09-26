@@ -725,7 +725,7 @@ func settings_dialog():
 				effect.volume_db = linear_to_db(maxf(.00001,value))
 				for voice in effect.get_children(): voice.volume_db = effect.volume_db
 			persist())
-	v.add_child(U.button("Preview sound effects",func(): play_cue("guide")))
+	v.add_child(U.button("Music & sound preview",func(): preload("res://ui/sound_room.gd").new(self).open()))
 	v.add_child(U.label("PROGRESS & BACKUPS",11,U.GOLD))
 	if has_campaign: v.add_child(U.button(tr2("Ekspor cadangan save","Export save backup"),export_save))
 	v.add_child(U.button(tr2("Impor cadangan save","Import save backup"),import_save))
