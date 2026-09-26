@@ -115,3 +115,7 @@ User asks for a substantial SSS-directed expansion and many new art assets. Solo
 ## 0.26 Ascension next actions
 
 Solo: the tier footer now follows current work, skill requirements, crafting, equipment review/refinement and Journey/Apex access. Counters and training buttons update while open; clicks recalculate their action. Stronger equipped weapons skip lower-tier sword crafting. Existing saves and economy unchanged. 83 essential checks and five phone captures with real plan/queue/equip button signals; narrow 360x800 at 130% text inspected. See docs/qa/ascension-guidance-0.26-report.md.
+
+## 0.27 Audit implementation, first delivery
+
+User authorized all recommendations from docs/full-audit-0.26.md. Solo: persistent upgrade targets, advanced work orders, improved training selection, Apex field progress, optional doctrines/loadouts, tier bounty rewards, inventory sort/filter/paging, readiness and bestiary. Original 16-pose combat atlas, Ogg music conversion and budgeted asynchronous offline simulation on a copied state. 83 essential checks, domain checks, async state/report equivalence and 12 phone captures; Android debug APK. Details: docs/qa/audit-upgrade-0.27-report.md. IMPORTANT: full scope is not complete; subsequent autonomous runs must read docs/audit-delivery-roadmap.md and continue its outstanding priorities. Never claim full AAA/SSS completion.

@@ -34,12 +34,14 @@ static func move(m, enemy: Dictionary, strike: int, armor: int, second_phase: bo
 	heal = int(heal*(1.0-.25*RealmRuneforge.active_rank(m,"tide")))
 	var damage = m.hit_damage(attack,defense)
 	if RealmRuneforge.active_rank(m,"bell")>0: damage = ceili(damage*1.1)
+	damage = maxi(1,ceili(damage*RealmDoctrines.active(m).incoming))
 	return {"damage":damage,"heal":heal,"label":label}
 
 static func player_damage(m, enemy: Dictionary, swing: int) -> int:
 	var special = swing%4==0
 	var armor = int(enemy.armor)
 	if special: armor = int(armor*(1.0-.25*RealmRuneforge.active_rank(m,"thorn")))
+	if special: armor = int(armor*(1.0-RealmDoctrines.active(m).pierce))
 	var damage = m.hit_damage(int(m.stats().attack)+RealmHuntMastery.rank(m,enemy.id),armor)
 	if special:
 		match m.progression().stance:
@@ -47,7 +49,7 @@ static func player_damage(m, enemy: Dictionary, swing: int) -> int:
 			"reaver": damage = int(damage*2.5)
 		var rank = RealmRuneforge.active_rank(m,"bell")
 		if rank>0: damage = int(damage*(1.0+[.2,.35,.5][rank-1]))
-	return damage
+	return maxi(1,int(damage*RealmDoctrines.active(m).outgoing))
 
 static func mechanic(enemy: Dictionary) -> String:
 	if enemy.has("special_name"):

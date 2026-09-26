@@ -49,6 +49,7 @@ func services(parent: Node):
 	if m.s.tutorial:
 		app.dynamic(parent,func(): return "%d bounty · %d field · %d contract rewards ready" % [C.ready_bounties(m),RealmRuneforge.ready(m),RealmProgression.ready_count(m)],12,U.GOLD)
 	parent.add_child(U.button("Work orders",app.work_orders_dialog))
+	parent.add_child(U.button("Bestiary · drops & tactics",func(): preload("res://ui/bestiary.gd").new(app).open()))
 
 func station(kind: String):
 	var names = {"journey":"Journey","armory":"Equipment & build","supplies":"Food & materials"}
@@ -177,8 +178,12 @@ func bounties():
 		card.add_child(U.para(d.name+(" · CLAIMED" if claimed else ""),20,U.TEXT))
 		card.add_child(U.para(d.detail,14))
 		app.dynamic(card,func(): return "%d / %d" % [C.bounty_value(m,id),int(d.target)],13,U.GOLD)
-		card.add_child(U.para("+%d gold · +5 meals · +5 %s fragments" % [int(d.gold),C.RELICS[relic].name],13,U.GREEN))
-		if claimed: continue
+		if claimed:
+			card.add_child(U.para("Reward collected",13,U.GREEN))
+			continue
+		app.dynamic(card,func():
+			var reward = C.bounty_reward(m,id)
+			return "+%d gold · 5 %s · %d %s fragments" % [reward.gold,m.name_of(reward.food),reward.fragments,C.RELICS[relic].name],13,U.GREEN)
 		var button = U.button("Claim reward",func():
 			if app.send({"type":"bounty_claim","id":id}): bounties(),true)
 		button.disabled = C.bounty_value(m,id)<d.target
@@ -187,8 +192,13 @@ func bounties():
 		app.dialog_callbacks.append(func():
 			var b = ref.get_ref()
 			if is_instance_valid(b): b.disabled = C.bounty_value(m,id)<d.target)
-		if id=="gather": card.add_child(U.button("Gather copper · preview task",func(): app.activity_dialog("mine_copper",maxi(1,30-C.bounty_value(m,id)))))
-		elif id=="craft": card.add_child(U.button("Cook meals · supply planner",func(): app.planner_dialog("craft_cooked_minnow",maxi(1,10-C.bounty_value(m,id)))))
+		if id=="gather":
+			var activity = "mine_copper"
+			for aid in m.data.activities:
+				var a = m.data.activities[aid]
+				if a.kind=="gather" and a.skill=="mining" and a.level<=m.level("mining") and a.level>m.data.activities[activity].level: activity = aid
+			card.add_child(U.button("Gather "+m.name_of(m.data.activities[activity].output),func(): app.activity_dialog(activity,maxi(1,30-C.bounty_value(m,id)))))
+		elif id=="craft": card.add_child(U.button("Cook meals · supply planner",func(): app.planner_dialog("craft_"+str(C.bounty_reward(m,id).food),maxi(1,10-C.bounty_value(m,id)))))
 		else: card.add_child(U.button("Hunt Ash Rats · preview task",func(): app.activity_dialog("hunt_ash_rat",maxi(1,8-C.bounty_value(m,id)))))
 	if state.daily.claimed.size()==3: v.add_child(U.para("Board complete. Come back after the next UTC day begins for a fresh board. Your expeditions and farming remain available now.",15,U.GOLD))
 

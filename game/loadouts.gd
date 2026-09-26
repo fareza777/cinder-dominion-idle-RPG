@@ -8,11 +8,12 @@ static func state(m) -> Dictionary:
 	return m.s.loadouts
 
 static func snapshot(m) -> Dictionary:
-	return {"gear":m.s.equipped.duplicate(true),"stance":m.progression().stance,"talents":RealmChronicle.state(m).talents.duplicate(true),"relic":RealmChronicle.state(m).relic,"rune":RealmRuneforge.state(m).equipped,"food":m.s.settings.food,"potion":m.s.settings.potion,"threshold":m.s.settings.threshold}
+	return {"gear":m.s.equipped.duplicate(true),"stance":m.progression().stance,"doctrine":m.s.get("doctrine","none"),"talents":RealmChronicle.state(m).talents.duplicate(true),"relic":RealmChronicle.state(m).relic,"rune":RealmRuneforge.state(m).equipped,"food":m.s.settings.food,"potion":m.s.settings.potion,"threshold":m.s.settings.threshold}
 
 static func valid(build, data: Dictionary, items: Dictionary) -> bool:
 	if not build is Dictionary or not build.get("gear") is Dictionary or not build.get("talents") is Dictionary: return false
 	if build.get("stance","") not in RealmProgression.STANCES: return false
+	if build.get("doctrine","none") not in RealmDoctrines.ALL: return false
 	if build.get("relic",null) not in ["","fang","ward","heart"] or build.get("rune",null) not in ["","thorn","tide","bell"]: return false
 	var total = 0
 	for id in RealmChronicle.TALENTS:
@@ -41,6 +42,7 @@ static func command(m, cmd: Dictionary) -> String:
 	var items = {}
 	for g in m.s.gear: items[g.uid] = g
 	if not valid(build,m.data,items): return "This build references unavailable equipment or settings. Save it again."
+	if build.get("doctrine","none")!="none" and m.level("bladecraft")<25: return "Reach Bladecraft Lv.25 before applying this training."
 	var talent_total = 0
 	for rank in build.talents.values(): talent_total += int(rank)
 	if talent_total>RealmChronicle.points_earned(m): return "Earn more talent points before applying this build."
@@ -48,6 +50,7 @@ static func command(m, cmd: Dictionary) -> String:
 	if build.rune!="" and RealmRuneforge.state(m).ranks[build.rune]<1: return "Inscribe this build's rune first."
 	m.s.equipped = build.gear.duplicate(true)
 	m.progression().stance = build.stance
+	m.s.doctrine = build.get("doctrine","none")
 	RealmChronicle.state(m).talents = build.talents.duplicate(true)
 	RealmChronicle.state(m).relic = build.relic
 	RealmRuneforge.state(m).equipped = build.rune

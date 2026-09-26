@@ -17,9 +17,9 @@ func open(tier: int = 0):
 	banner.texture = U.atlas_tile("res://assets/art/ascension-places-0.25.png",tier,2,2)
 	banner.expand_mode = TextureRect.EXPAND_IGNORE_SIZE
 	banner.stretch_mode = TextureRect.STRETCH_KEEP_ASPECT_COVERED
-	banner.custom_minimum_size.y = 150
+	banner.custom_minimum_size.y = 92
 	v.add_child(banner)
-	v.add_child(U.para(PLACES[tier],25,U.GOLD))
+	v.add_child(U.para(PLACES[tier],22,U.GOLD))
 	v.add_child(U.para("Gather → Forge → Equip → Apex hunt",14,U.TEXT))
 	v.add_child(U.button("Browse Apex hunts",hunts))
 	var metal = METALS[tier]
@@ -48,6 +48,8 @@ func open(tier: int = 0):
 		var plan_button = U.button("Plan materials & craft",func(): app.planner_dialog("craft_"+id,1))
 		plan_button.set_meta("ascension_recipe",id)
 		c.add_child(plan_button)
+		c.add_child(U.button("Track upgrade",func():
+			if app.send({"type":"upgrade_goal","id":id}): preload("res://ui/upgrade_goal.gd").new(app).open()))
 	var food = "cooked_"+metal+"_fish"
 	v.add_child(U.para("Camp supplies · heals %d HP" % m.data.items[food].heal,18,U.GREEN))
 	v.add_child(U.button("Prepare 10 "+m.name_of(food),func(): app.planner_dialog("craft_"+food,10)))

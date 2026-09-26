@@ -23,6 +23,7 @@ func heading(parent: Node, overline: String, title: String, subtitle: String = "
 func village(parent: Node):
 	heading(parent,text("BAB I  /  SUAKA TERAKHIR","CHAPTER I  /  THE LAST REFUGE"),"Cinderwatch")
 	preload("res://ui/chronicle.gd").new(app).home(parent)
+	preload("res://ui/upgrade_goal.gd").new(app).home(parent)
 	var scene = Control.new()
 	scene.custom_minimum_size.y = 96
 	scene.clip_contents = true
@@ -220,6 +221,7 @@ func inventory(parent: Node):
 	filters.add_child(picker)
 	picker.item_selected.connect(func(i):
 		app.filter = kinds[i]
+		app.inventory_page = 0
 		app.set_page("inventory"))
 	filters.add_child(U.button("↻",func(): app.set_page("inventory",true)))
 	var search = U.row(6)
@@ -233,13 +235,59 @@ func inventory(parent: Node):
 	search.add_child(input)
 	var search_action = func():
 		app.search_text = input.text
+		app.inventory_page = 0
 		app.set_page("inventory")
 	search.add_child(U.button(text("Cari","Find"),search_action))
 	input.text_submitted.connect(func(_value): search_action.call())
+	var options = U.row(6)
+	parent.add_child(options)
+	var sorter = OptionButton.new()
+	for label in ["Equipped first","Name","Highest quality","Highest stats"]: sorter.add_item(label)
+	sorter.selected = app.inventory_sort
+	sorter.custom_minimum_size.y = 48
+	sorter.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+	sorter.item_selected.connect(func(index):
+		app.inventory_sort = index
+		app.inventory_page = 0
+		app.set_page("inventory"))
+	options.add_child(sorter)
+	var slots = ["all","weapon","shield","head","body","hands","feet","axe","pick","rod"]
+	var slot_picker = OptionButton.new()
+	for slot in slots: slot_picker.add_item("All slots" if slot=="all" else slot.capitalize())
+	slot_picker.selected = maxi(0,slots.find(app.inventory_slot))
+	slot_picker.custom_minimum_size.y = 48
+	slot_picker.item_selected.connect(func(index):
+		app.inventory_slot = slots[index]
+		app.inventory_page = 0
+		app.set_page("inventory"))
+	options.add_child(slot_picker)
 	var shown = 0
 	if app.filter in ["all","equipment"]:
-		for g in m.s.gear:
-			if app.search_text!="" and not m.name_of(g.id).to_lower().contains(app.search_text.to_lower()): continue
+		var gear_list = m.s.gear.filter(func(g): return (app.search_text=="" or m.name_of(g.id).to_lower().contains(app.search_text.to_lower())) and (app.inventory_slot=="all" or m.data.items[g.id].slot==app.inventory_slot))
+		gear_list.sort_custom(func(a,b):
+			match app.inventory_sort:
+				0:
+					var ae = a.uid in m.s.equipped.values()
+					var be = b.uid in m.s.equipped.values()
+					if ae!=be: return ae
+				2:
+					if a.q!=b.q: return a.q>b.q
+				3:
+					if m.gear_score(a)!=m.gear_score(b): return m.gear_score(a)>m.gear_score(b)
+			return m.name_of(a.id)<m.name_of(b.id) if a.id!=b.id else a.uid<b.uid)
+		var last_page = maxi(0,ceili(gear_list.size()/30.0)-1)
+		app.inventory_page = mini(app.inventory_page,last_page)
+		if last_page>0:
+			var pager = U.row(6)
+			parent.add_child(pager)
+			pager.add_child(U.button("Previous",func():
+				app.inventory_page = maxi(0,app.inventory_page-1)
+				app.set_page("inventory")))
+			pager.add_child(U.para("%d / %d" % [app.inventory_page+1,last_page+1],14))
+			pager.add_child(U.button("Next",func():
+				app.inventory_page = mini(last_page,app.inventory_page+1)
+				app.set_page("inventory")))
+		for g in gear_list.slice(app.inventory_page*30,(app.inventory_page+1)*30):
 			shown += 1
 			var c = U.card(parent,12,U.QUALITY[int(g.q)].darkened(.6))
 			var r = U.row()

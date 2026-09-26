@@ -71,6 +71,12 @@ func valid(s, data: Dictionary) -> bool:
 		for key in ["hp","player_at","enemy_at","hits","buff_until","potion_at","spawn_at"]:
 			if not counter(s.fight[key]): return false
 		if s.fight.player_at<s.time or s.fight.enemy_at<s.time or s.fight.buff not in ["attack","armor"]: return false
+	if s.has("upgrade_goal"):
+		if not s.upgrade_goal is String: return false
+		if s.upgrade_goal!="" and (not data.items.has(s.upgrade_goal) or data.items[s.upgrade_goal].category!="equipment" or not data.activities.has("craft_"+s.upgrade_goal)): return false
+	if s.has("doctrine"):
+		if not s.doctrine is String or not RealmDoctrines.ALL.has(s.doctrine): return false
+		if s.doctrine!="none" and float(s.xp.bladecraft)<14400: return false
 	if s.has("experience"):
 		if not s.experience is Dictionary or s.experience.get("version",0)!=2 or not s.experience.get("welcome_done",false) is bool: return false
 		if s.experience.has("coach_active") and not s.experience.coach_active is bool: return false
@@ -169,6 +175,27 @@ func resume(model: RealmModel, now: int) -> Dictionary:
 	var elapsed = mini(away,RealmModel.MAX_OFFLINE)
 	var before = model.s.duplicate(true)
 	model.advance(elapsed)
+	return resume_report(model,before,now,away,elapsed)
+
+func resume_async(model: RealmModel, now: int, tree: SceneTree, progress: Callable, cancelled: Callable = Callable()) -> Dictionary:
+	var away = maxi(0,now-int(model.s.wall)) if model.s.wall>0 else 0
+	var elapsed = mini(away,RealmModel.MAX_OFFLINE)
+	var before = model.s.duplicate(true)
+	var working = RealmModel.new()
+	working.s = before.duplicate(true)
+	var remaining = elapsed
+	while remaining>0:
+		if cancelled.is_valid() and cancelled.call(): return {}
+		remaining -= working.advance(remaining,4000)
+		progress.call(1.0-float(remaining)/maxi(1,elapsed))
+		await tree.process_frame
+	if cancelled.is_valid() and cancelled.call(): return {}
+	model.s = working.s
+	model.combat_events.clear()
+	model.last_reward = working.last_reward
+	return resume_report(model,before,now,away,elapsed)
+
+func resume_report(model: RealmModel, before: Dictionary, now: int, away: int, elapsed: int) -> Dictionary:
 	model.s.wall = now
 	var report = {"away":away,"capped":away>RealmModel.MAX_OFFLINE,"levels":{},"queued_before":before.queue.size(),"elapsed":elapsed,"gold":int(model.s.gold)-int(before.gold),"gains":{},"spent":{},"xp":0,"kills":0}
 	for id in model.s.gains:

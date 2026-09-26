@@ -10,16 +10,17 @@ func _init(owner):
 	m = owner.model
 
 func work_orders(selected: String = "watch", batches: int = 1):
+	var orders = P.orders(m)
 	var v = app.modal("Work for the refuge")
 	v.add_child(U.para("Leave the hearth well supplied.",26,U.TEXT))
 	v.add_child(U.para("Set a longer gathering and crafting order before you leave. Materials already in your pack are used first. These orders do not start combat.",14))
 	var selector = OptionButton.new()
 	selector.custom_minimum_size.y = 48
-	for id in P.ORDERS: selector.add_item(P.ORDERS[id].name)
-	selector.selected = P.ORDERS.keys().find(selected)
-	selector.item_selected.connect(func(index): work_orders(P.ORDERS.keys()[index],batches))
+	for id in orders: selector.add_item(orders[id].name)
+	selector.selected = orders.keys().find(selected)
+	selector.item_selected.connect(func(index): work_orders(orders.keys()[index],batches))
 	v.add_child(selector)
-	var d = P.ORDERS[selected]
+	var d = orders[selected]
 	v.add_child(U.para(d.detail,15,U.TEXT))
 	var sizes = U.row(6)
 	v.add_child(sizes)
@@ -56,6 +57,9 @@ func planner(id: String, amount: int = 1):
 	v.add_child(U.icon(m.data.activities[id].output,72))
 	v.add_child(U.para("Make %d × %s" % [amount,m.activity_name(id)],24,U.TEXT))
 	v.add_child(U.para("Missing materials included · Equip crafted gear from Bag.",14))
+	if m.data.items[m.data.activities[id].output].category=="equipment":
+		v.add_child(U.button("Track this upgrade",func():
+			if app.send({"type":"upgrade_goal","id":m.data.activities[id].output}): preload("res://ui/upgrade_goal.gd").new(app).open()))
 	var amounts = U.row(6)
 	v.add_child(amounts)
 	for n in [1,5,10,50,100]:
@@ -89,14 +93,28 @@ func time_label(seconds: float) -> String:
 	return "%dm %ds" % [int(seconds)/60,int(seconds)%60] if seconds>=60 else "%ds" % int(seconds)
 
 func training(skill: String, target: int):
+	var best = ""
+	var best_rate = 0.0
 	for id in m.data.activities:
 		var a = m.data.activities[id]
 		if a.skill!=skill or a.kind=="combat" or m.level(skill)<int(a.level): continue
-		var missing_xp = maxi(1,25*(target-1)*(target-1)-int(m.s.xp[skill]))
-		var cycles = clampi(ceili(float(missing_xp)/int(a.xp)),1,100)
-		if a.inputs.is_empty(): app.activity_dialog(id,cycles)
-		else: planner(id,cycles)
+		var seconds = m.duration(a)/1000.0
+		if not a.inputs.is_empty():
+			var plan = P.plan(m,id,100)
+			if plan.error!="": continue
+			seconds = plan.seconds/100.0
+		var rate = float(a.xp)/maxf(.01,seconds)
+		if rate>best_rate:
+			best_rate = rate
+			best = id
+	if best=="":
+		app.toast("No available training recipe. Review this skill for its requirements.")
 		return
+	var selected = m.data.activities[best]
+	var missing_xp = maxi(1,25*(target-1)*(target-1)-int(m.s.xp[skill]))
+	var cycles = clampi(ceili(float(missing_xp)/int(selected.xp)),1,100)
+	if selected.inputs.is_empty(): app.activity_dialog(best,cycles)
+	else: planner(best,cycles)
 
 func tactics():
 	var v = app.modal("Fighting style")
@@ -112,6 +130,22 @@ func tactics():
 		button.disabled = selected or not m.s.fight.is_empty()
 		c.add_child(button)
 	if not m.s.fight.is_empty(): v.add_child(U.para("Retreat from combat to change styles. Your equipment stays safe.",14,U.RED))
+	v.add_child(U.button("Advanced training · Bladecraft Lv.25",advanced_training))
+
+func advanced_training():
+	var v = app.modal("Advanced training")
+	v.add_child(U.para("Advanced training · Bladecraft Lv.25",20,U.GOLD))
+	v.add_child(U.para("Choose one alongside your fighting style. Change it freely between hunts.",14))
+	for id in RealmDoctrines.ALL:
+		var d = RealmDoctrines.ALL[id]
+		var c = U.card(v,12)
+		c.add_child(U.para(d.name,18,U.TEXT))
+		c.add_child(U.para(d.detail,14))
+		var selected = str(m.s.get("doctrine","none"))==id
+		var button = U.button("Selected" if selected else "Choose "+d.name,func():
+			if app.send({"type":"doctrine","id":id}): advanced_training())
+		button.disabled = selected or not m.s.fight.is_empty() or (id!="none" and m.level("bladecraft")<25)
+		c.add_child(button)
 
 func contracts():
 	var v = app.modal("Refuge contracts")

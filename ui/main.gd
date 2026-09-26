@@ -9,6 +9,9 @@ var skill = ""
 var show_locked_recipes = false
 var filter = "all"
 var search_text = ""
+var inventory_sort = 0
+var inventory_slot = "all"
+var inventory_page = 0
 var body: VBoxContainer
 var scroller: ScrollContainer
 var hp_label: Label
@@ -25,6 +28,8 @@ var save_timer = 0.0
 var ui_timer = 0.0
 var fraction_ms = 0.0
 var paused = false
+var recovering = false
+var recovery_cancelled = false
 var save_blocked = false
 var update_callbacks: Array[Callable] = []
 var dialog_callbacks: Array[Callable] = []
@@ -69,7 +74,7 @@ func _ready():
 	set_page("village")
 	if save_blocked: call_deferred("toast",saves.message)
 	Engine.max_fps = 30 if model.s.settings.battery else 60
-	if ResourceLoader.exists("res://assets/audio/refuge.wav"):
+	if ResourceLoader.exists("res://assets/audio/hearth.ogg"):
 		music = AudioStreamPlayer.new()
 		music.set_script(preload("res://ui/audio_director.gd"))
 		music.app = self
@@ -102,6 +107,7 @@ func persist():
 func _notification(what):
 	if not is_node_ready(): return
 	if what==NOTIFICATION_APPLICATION_PAUSED:
+		if recovering: recovery_cancelled = true
 		persist()
 		paused = true
 		if is_instance_valid(music): music.stream_paused = true
@@ -111,8 +117,9 @@ func _notification(what):
 	elif what==NOTIFICATION_APPLICATION_RESUMED and paused:
 		paused = false
 		fraction_ms = 0
+		if recovering: return
 		if mode=="play":
-			var report = saves.resume(model,now_ms())
+			var report = await recover_progress()
 			persist()
 			if report.elapsed>30000: offline_dialog(report)
 	elif what==NOTIFICATION_WM_CLOSE_REQUEST:
@@ -123,6 +130,7 @@ func _notification(what):
 		call_deferred("navigate_back")
 
 func navigate_back():
+	if recovering: return
 	var ticks = Time.get_ticks_msec()
 	if ticks-last_back_ms<300: return
 	last_back_ms = ticks
@@ -143,7 +151,7 @@ func enter_world():
 	if not has_campaign: return
 	experience.clear()
 	dismiss()
-	var report = saves.resume(model,now_ms())
+	var report = await recover_progress()
 	RealmChronicle.sync_day(model,now_ms())
 	mode = "play"
 	paused = false
@@ -154,6 +162,43 @@ func enter_world():
 	persist()
 	if report.elapsed>30000 and (model.s.experience.welcome_done or report.xp>0 or report.gold>0): offline_dialog(report)
 	elif not model.s.experience.welcome_done: experience.welcome()
+
+func recover_progress() -> Dictionary:
+	recovering = true
+	get_viewport().gui_release_focus()
+	var previous_mode = mode
+	mode = "recovering"
+	var overlay = ColorRect.new()
+	overlay.color = Color("0d1318")
+	overlay.set_anchors_and_offsets_preset(Control.PRESET_FULL_RECT)
+	overlay.z_index = 100
+	add_child(overlay)
+	var center = CenterContainer.new()
+	center.set_anchors_and_offsets_preset(Control.PRESET_FULL_RECT)
+	overlay.add_child(center)
+	var content = U.column(16)
+	content.custom_minimum_size.x = 260
+	center.add_child(content)
+	content.add_child(U.para("While you were away",24,U.GOLD))
+	var label = U.para("Gathering your progress…",15,U.TEXT)
+	content.add_child(label)
+	var meter = U.progress(0,100,U.GOLD,8)
+	content.add_child(meter)
+	await get_tree().process_frame
+	var report = {}
+	while report.is_empty():
+		while paused: await get_tree().process_frame
+		recovery_cancelled = false
+		report = await saves.resume_async(model,now_ms(),get_tree(),func(amount):
+			meter.value = amount*100
+			label.text = "Updating your journey · %d%%" % int(amount*100),func(): return recovery_cancelled)
+	overlay.queue_free()
+	recovering = false
+	mode = previous_mode
+	return report
+
+func _input(event):
+	if recovering and event is InputEventKey: get_viewport().set_input_as_handled()
 
 func refresh_shell():
 	var previous_mode = mode

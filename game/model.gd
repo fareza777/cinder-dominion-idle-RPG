@@ -163,6 +163,13 @@ func command(cmd: Dictionary) -> bool:
 		"rune_forge","rune_equip","research_claim":
 			var why = RealmRuneforge.command(self,cmd)
 			if why!="": return fail(why)
+		"upgrade_goal":
+			if id!="" and (not data.items.has(id) or data.items[id].category!="equipment" or not data.activities.has("craft_"+id)):
+				return fail("Choose a craftable equipment target.")
+			s.upgrade_goal = id
+		"doctrine":
+			var why = RealmDoctrines.command(self,id)
+			if why!="": return fail(why)
 		"work_order":
 			var plan = RealmProgression.order_plan(self,id,int(cmd.get("batches",1)))
 			if plan.error!="": return fail(plan.error)
@@ -370,13 +377,18 @@ func start_next():
 			s.active = {"id":step.id,"started":s.time,"due":int(s.time)+duration(a),"reserved":a.inputs.duplicate(true)}
 		return
 
-func advance(ms: int):
-	if ms<=0: return
+func advance(ms: int, budget_usec: int = 0) -> int:
+	if ms<=0: return 0
+	var initial_time = int(s.time)
+	var started = Time.get_ticks_usec()
 	if not s.fight.is_empty(): RealmHunts.begin(self,s.fight.enemy)
 	rng.state = int(s.rng)
 	var target = int(s.time)+ms
 	start_next()
 	while int(s.time)<target:
+		if budget_usec>0 and Time.get_ticks_usec()-started>=budget_usec:
+			target = int(s.time)
+			break
 		var due = target+1
 		if not s.active.is_empty(): due = int(s.active.due)
 		if not s.fight.is_empty():
@@ -395,6 +407,7 @@ func advance(ms: int):
 		start_next()
 	s.time = target
 	s.rng = str(rng.state)
+	return int(s.time)-initial_time
 
 func quality_roll() -> int:
 	var roll = rng.randf()

@@ -19,13 +19,11 @@ func preview(id: String, owner: Control):
 func _ready():
 	stop()
 	for id in ["hearth","wilds","sanctum","crown"]:
-		var path = "res://assets/audio/"+id+".wav"
+		var path = "res://assets/audio/"+id+".ogg"
 		if ResourceLoader.exists(path):
 			var audio = load(path).duplicate()
-			if audio is AudioStreamWAV:
-				audio.loop_mode = AudioStreamWAV.LOOP_FORWARD
-				audio.loop_begin = 0
-				audio.loop_end = int(audio.get_length()*audio.mix_rate)
+			if audio is AudioStreamOggVorbis:
+				audio.loop = true
 			tracks[id] = audio
 	voices.append(self)
 	var other = AudioStreamPlayer.new()

@@ -70,6 +70,16 @@ static func ready_bounties(m) -> int:
 static func bounty_relic(m) -> String:
 	return ["fang","ward","heart"][maxi(0,int(state(m).daily.day))%3]
 
+static func bounty_reward(m, id: String) -> Dictionary:
+	var tier = 0
+	var food = "cooked_minnow"
+	for metal in ["steel","moonsteel","dusksteel","dawnsteel"]:
+		var recipe = m.data.activities["craft_cooked_"+metal+"_fish"]
+		if m.level("cooking")>=recipe.level and m.level("fishing")>=recipe.level-5 and m.level("woodcutting")>=recipe.level-5:
+			tier += 1
+			food = recipe.output
+	return {"gold":int(BOUNTIES[id].gold)*(tier+1),"food":food,"fragments":5*(tier+1)}
+
 static func command(m, cmd: Dictionary) -> String:
 	if not m.s.tutorial: return "Complete First Supplies to unlock your legacy. Follow the Journey guide."
 	var c = state(m)
@@ -100,9 +110,10 @@ static func command(m, cmd: Dictionary) -> String:
 		"bounty_claim":
 			if not BOUNTIES.has(id) or id in c.daily.claimed or bounty_value(m,id)<BOUNTIES[id].target: return "Finish an unclaimed bounty before collecting its reward."
 			c.daily.claimed.append(id)
-			m.s.gold += int(BOUNTIES[id].gold)
-			m.gain("cooked_minnow",5)
-			c.fragments[bounty_relic(m)] += 5
+			var reward = bounty_reward(m,id)
+			m.s.gold += reward.gold
+			m.gain(reward.food,5)
+			c.fragments[bounty_relic(m)] += reward.fragments
 			m.note("Bounty complete: "+BOUNTIES[id].name)
 		_: return "Unknown legacy action"
 	return ""

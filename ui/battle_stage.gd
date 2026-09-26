@@ -23,8 +23,10 @@ var arrival = 0.0
 var draw_clock = 0.0
 var cast_time = 0.0
 var cast_name = ""
+var poses: Array[Texture2D] = []
 
 func _ready():
+	for index in range(16): poses.append(U.atlas_tile("res://assets/art/combat-poses-0.27.png",index,4,4))
 	custom_minimum_size.y = 280
 	mouse_filter = Control.MOUSE_FILTER_IGNORE
 	clip_contents = true
@@ -156,10 +158,22 @@ func _draw():
 			var center = r.get_center()
 			draw_set_transform(center,direction*(swing*.035-evade*.045),Vector2(1,1+sin(elapsed*1.4+side*2)*.006))
 			r.position -= center
-		draw_rect(r.grow(2),U.GREEN if recovery[target]>.4 else (U.RED if hit else U.GOLD.darkened(.45)))
 		if side==0 or fighting:
-			var face = faces[0] if side==0 else (enemy_face if enemy_face!=null else faces[int(enemy.portrait)])
-			draw_face(face,r,Color(1,.72,.68) if hit else Color.WHITE)
+			var pose_row = 0 if side==0 else {"wilds":1,"marsh":2,"crown":3}.get(enemy.get("region",""),-1)
+			if side==1 and enemy.get("apex",false): pose_row = -1
+			if pose_row>=0:
+				var frame = 3 if hit else (2 if attacks[target]>0 else (1 if windup>.4 else 0))
+				if not model.s.settings.motion: frame = 0
+				var pose_center = (left if side==0 else right).get_center()
+				if model.s.settings.motion: pose_center.x += direction*(swing*15-windup*4-evade*11)
+				draw_set_transform(pose_center,0,Vector2(1 if side==0 else -1,1))
+				var area = Rect2(-100,-65,200,133)
+				draw_texture_rect(poses[pose_row*4+frame],area,false,Color(1,.72,.68) if hit else Color.WHITE)
+				draw_set_transform(Vector2.ZERO)
+			else:
+				draw_rect(r.grow(2),U.GREEN if recovery[target]>.4 else (U.RED if hit else U.GOLD.darkened(.45)))
+				var face = enemy_face if enemy_face!=null else faces[int(enemy.portrait)]
+				draw_face(face,r,Color(1,.72,.68) if hit else Color.WHITE)
 		else:
 			draw_rect(r,U.INK)
 			caption(r.position+Vector2(0,80),"Awaiting hunt",U.MUTED,12,w)

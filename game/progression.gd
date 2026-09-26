@@ -17,15 +17,24 @@ const ORDERS = {
 
 static func order_plan(m, id: String, batches: int) -> Dictionary:
 	var result = {"steps":[],"stock":m.s.bag.duplicate(true),"error":"","seconds":0.0}
-	if not ORDERS.has(id) or batches not in [1,2,4]:
+	var available_orders = orders(m)
+	if not available_orders.has(id) or batches not in [1,2,4]:
 		result.error = "Choose a work order and one, two or four batches."
 		return result
 	if not m.s.queue.is_empty():
 		result.error = "Finish or clear your current queue before starting a work order."
 		return result
-	for recipe in ORDERS[id].recipes: append_recipe(m,recipe[0],int(recipe[1])*batches,result,[])
+	for recipe in available_orders[id].recipes: append_recipe(m,recipe[0],int(recipe[1])*batches,result,[])
 	if result.steps.size()>20: result.error = "This order needs more than 20 queue slots. Choose fewer batches."
 	return result
+
+static func orders(m) -> Dictionary:
+	var out = ORDERS.duplicate(true)
+	out["selected_food"] = {"name":"Pack my selected food","detail":"Prepare the food you currently use for auto-heal.","recipes":[["craft_"+str(m.s.settings.food),100]]}
+	for metal in ["steel","moonsteel","dusksteel","dawnsteel"]:
+		var id = "craft_"+metal+"_ingot"
+		out[metal] = {"name":m.name_of(metal+"_ingot")+" reserves","detail":"Gather ore and coal, then smelt 100 ingots for your next upgrades.","recipes":[[id,100]]}
+	return out
 const BASE_CONTRACTS = [
 	{"id":"ore","title":"Fuel the Forge","detail":"Collect 20 copper ore.","source":"gains","key":"copper_ore","target":20,"gold":20,"food":3,"scrap":2,"activity":"mine_copper"},
 	{"id":"ingots","title":"Apprentice Smith","detail":"Smelt 15 copper ingots.","source":"gains","key":"copper_ingot","target":15,"gold":30,"food":0,"scrap":3,"activity":"craft_copper_ingot"},
