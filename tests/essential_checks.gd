@@ -381,5 +381,16 @@ func _init():
 	var tool_result = RealmEquipmentPreview.compare(equipment_m,tool_uid)
 	equipment_m.command({"type":"equip","id":tool_uid})
 	check(tool_result.seconds_after<tool_result.seconds_before and equipment_m.duration(equipment_m.data.activities.mine_copper)/1000.0==tool_result.seconds_after, "tool comparison uses the real gathering duration")
+	var return_m = RealmModel.new()
+	return_m.s.wall = 1000
+	return_m.command({"type":"queue","id":"mine_copper","target":100})
+	var return_report = store.resume(return_m,601000)
+	check(return_report.away==600000 and not return_report.capped and return_report.levels.mining.before==1 and return_report.levels.mining.after==return_m.level("mining") and return_report.queued_before==1, "return report records actual level gains and previous queued work")
+	var repeat_return = store.resume(return_m,601000)
+	check(repeat_return.elapsed==0 and repeat_return.xp==0 and repeat_return.gains.is_empty(), "reopening at the same time does not duplicate offline rewards")
+	var capped_m = RealmModel.new()
+	capped_m.s.wall = 1000
+	var capped_report = store.resume(capped_m,1000+RealmModel.MAX_OFFLINE*2)
+	check(capped_report.capped and capped_report.elapsed==RealmModel.MAX_OFFLINE and capped_report.away==RealmModel.MAX_OFFLINE*2 and capped_report.xp==0 and capped_report.gains.is_empty(), "return report distinguishes capped elapsed time from idle reward generation")
 	print("ESSENTIAL CHECKS: ","PASS" if failed==0 else "FAIL")
 	quit(1 if failed else 0)

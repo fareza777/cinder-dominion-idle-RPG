@@ -71,3 +71,7 @@ Solo: atomic dependency prepending for blocked crafting, queue status/progress p
 ## 0.15 Equipment clarity
 
 Solo: item comparison using total build stats, actual tool time preview, same-dialog equip confirmation and explicit combat lock. Three targeted checks added (67 total), five phone captures and Android debug export.
+
+## 0.16 Return flow and continued iteration
+
+Solo: clearer offline time/cap reporting, level unlock recap, queue status and direct follow-up action. Three targeted checks added (70 total), five captures and Android debug export. User requested ongoing continuation; hourly heartbeat continue-ashen-covenant-development is active for this thread.

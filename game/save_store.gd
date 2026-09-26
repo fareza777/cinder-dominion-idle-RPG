@@ -164,18 +164,22 @@ func write_state(s: Dictionary, data: Dictionary, directory: String = DIRECTORY)
 	return true
 
 func resume(model: RealmModel, now: int) -> Dictionary:
-	var elapsed = clampi(now-int(model.s.wall),0,RealmModel.MAX_OFFLINE) if model.s.wall>0 else 0
+	var away = maxi(0,now-int(model.s.wall)) if model.s.wall>0 else 0
+	var elapsed = mini(away,RealmModel.MAX_OFFLINE)
 	var before = model.s.duplicate(true)
 	model.advance(elapsed)
 	model.s.wall = now
-	var report = {"elapsed":elapsed,"gold":int(model.s.gold)-int(before.gold),"gains":{},"spent":{},"xp":0,"kills":0}
+	var report = {"away":away,"capped":away>RealmModel.MAX_OFFLINE,"levels":{},"queued_before":before.queue.size(),"elapsed":elapsed,"gold":int(model.s.gold)-int(before.gold),"gains":{},"spent":{},"xp":0,"kills":0}
 	for id in model.s.gains:
 		var amount = int(model.s.gains[id])-int(before.gains.get(id,0))
 		if amount>0: report.gains[id] = amount
 	for id in model.s.spent:
 		var amount = int(model.s.spent[id])-int(before.spent.get(id,0))
 		if amount>0: report.spent[id] = amount
-	for skill in model.s.xp: report.xp += int(model.s.xp[skill])-int(before.xp[skill])
+	for skill in model.s.xp:
+		report.xp += int(model.s.xp[skill])-int(before.xp[skill])
+		var old_level = mini(100,1+int(sqrt(float(before.xp[skill])/25.0)))
+		if model.level(skill)>old_level: report.levels[skill] = {"before":old_level,"after":model.level(skill)}
 	for enemy in model.s.kills: report.kills += int(model.s.kills[enemy])-int(before.kills.get(enemy,0))
 	report.fragments = {}
 	report.talent_points = RealmChronicle.points_earned(model)-mini(10,int((before.xp.bladecraft+before.xp.might+before.xp.warding)/250))

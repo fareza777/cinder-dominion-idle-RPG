@@ -668,33 +668,7 @@ func salvage_dialog(ids: Array):
 		dismiss(),true))
 
 func offline_dialog(report: Dictionary):
-	var v = modal(tr2("Selamat datang kembali","Welcome back"))
-	v.add_child(U.label(tr2("BARA TETAP MENYALA","THE EMBER ENDURES"),11,U.GOLD))
-	v.add_child(U.para(tr2("Petualanganmu berlanjut selama","Your journey continued for"),16))
-	var seconds = int(report.elapsed/1000)
-	v.add_child(U.label("%ds" % seconds if seconds<60 else "%dh %02dm" % [int(seconds/3600),int(seconds/60)%60],42,U.TEXT,true))
-	var r = U.row()
-	v.add_child(r)
-	U.stat(r,"%+d" % int(report.gold),"GOLD",U.GOLD)
-	U.stat(r,"+%d" % int(report.xp),"XP",U.GREEN)
-	U.stat(r,str(report.kills),tr2("DIKALAHKAN","DEFEATED"))
-	for id in report.gains: v.add_child(U.para("+%d  %s" % [int(report.gains[id]),model.name_of(id)],15,U.GREEN))
-	for id in report.get("fragments",{}): v.add_child(U.para("+%d %s fragments" % [int(report.fragments[id]),RealmChronicle.RELICS[id].name],14,U.GOLD))
-	if report.get("talent_points",0)>0: v.add_child(U.para("+%d talent points ready to spend" % int(report.talent_points),16,U.GOLD))
-	if RealmRuneforge.ready(model)>0:
-		v.add_child(U.para("%d field records have supplies ready to collect." % RealmRuneforge.ready(model),15,U.GREEN))
-		v.add_child(U.button("Open the field journal",journal_dialog))
-	for id in report.spent: v.add_child(U.para("−%d  %s" % [int(report.spent[id]),model.name_of(id)],13,U.MUTED))
-	if not RealmHunts.state(model).history.is_empty(): v.add_child(U.button("Review recent hunts & supplies used",hunt_reports_dialog))
-	if not model.s.queue.is_empty() and model.s.active.is_empty() and model.s.fight.is_empty(): v.add_child(U.para(model.requirement(model.s.queue[0].id),15,U.RED))
-	v.add_child(U.para(tr2("Hasil sudah tersimpan. Batas progres offline: 24 jam.","Results are already saved. Offline progress cap: 24 hours."),12))
-	v.add_child(U.para("YOUR NEXT MOVE\n"+RealmChronicle.focus(model).title,16,U.GOLD))
-	v.add_child(U.button(tr2("Lanjutkan perjalanan","Review my next move"),func():
-		model.s.report = {}
-		persist()
-		dismiss()
-		set_page("village")
-		if not model.s.experience.welcome_done: experience.welcome(),true))
+	preload("res://ui/return_report.gd").new(self).open(report)
 
 func settings_dialog():
 	var v = modal(tr2("Pengaturan","Settings"))
