@@ -90,4 +90,8 @@ Solo: shared nine-patch SVG metal frames, corner ornament, bronze primary action
 
 ## 0.20 Hunt Mastery
 
-Four enemy-specific ranks integrated into battle, offline progression, reward previews and fragment goals. Existing victories count. Four focused checks added (77 total), seven phone captures. Direct Realm Idle PC playtest requested; official installer page reached, awaiting Terms consent.
+Four enemy-specific ranks integrated into battle, offline progression, reward previews and fragment goals. Existing victories count. Four focused checks added (77 total), seven phone captures. Direct Realm Idle PC playtest requested; Google Play Games 26.9.341.0 subsequently installed; launch automation stalled and the user aborted. Realm Idle itself has not been installed or played.
+
+## 0.21 Live mastery progress
+
+Solo: mastery collection counters, detail rewards, milestone bars and hunt batch actions now follow live victories without reopening the modal or resetting scroll. Actions calculate the current milestone when pressed. No economy or save changes. Existing 77 essential checks plus a focused UI capture script exercising a real rank-up, updated action, collection counters, maximum rank and dialog cleanup. Five phone captures, including narrow 360x800 at 130% text. APK export and details in docs/qa/live-mastery-0.21-report.md.
