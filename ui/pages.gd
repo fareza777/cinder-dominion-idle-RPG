@@ -147,6 +147,7 @@ func explore(parent: Node):
 func skills(parent: Node):
 	heading(parent,text("TUMBUH MELALUI LATIHAN","GROW THROUGH PRACTICE"),text("Keahlian","Skills"),text("Setiap bahan memiliki tujuan. Setiap pekerjaan meninggalkan jejak.",""))
 	parent.add_child(U.button("Gear paths · level 25–100",func(): preload("res://ui/ascension.gd").new(app).open()))
+	preload("res://ui/training.gd").new(app).home(parent)
 	if app.skill=="":
 		var grid = GridContainer.new()
 		grid.columns = 2

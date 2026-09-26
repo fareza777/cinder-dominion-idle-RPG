@@ -123,3 +123,7 @@ User authorized all recommendations from docs/full-audit-0.26.md. Solo: persiste
 ## 0.28 Armor identity and loadout comparison
 
 Solo continuation of the audit: four derived two-piece armor bonuses in shared combat/forecast, set collection and crafting routes, before/after equipment set summary, and read-only saved-build comparison for an unlocked hunt. Existing gear and saves participate without schema migration. Numeric auto-equip limitations explicit. 83 essential checks, focused threshold/effect/save/read-only checks, four-build Lantern Widow sweep with chunk equivalence and six phone captures. Versioned debug APK; full balance/device limitations in docs/qa/armor-sets-0.28-report.md. Continue remaining audit items from docs/audit-delivery-roadmap.md.
+
+## 0.29 Training plans
+
+Solo: target-level training batches for six gathering/crafting skills, with 15/60/240-minute limits, dependency materials and XP, projected level, and persistent optional goal in Skills. Recomputes against current state on start; existing work is preserved. Preview uses a cloned model to avoid lazy progression mutations. Same recipe continues through unlocks; next visit recomputes the available recipe. Save validation handles integer-valued JSON numbers. 83 essential checks, focused batch/goal/save/offline-equivalence checks and five phone captures, including 360x800 at 130% text. APK version 29 exported. See docs/qa/training-plans-0.29-report.md; broader audit remains ongoing.

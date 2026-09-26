@@ -24,4 +24,6 @@ static func show_progress(app, parent, skill: String):
 		var names = RealmStory.unlocks(m,skill,level,next_level)
 		card.add_child(U.para("Next unlock · level %d\n%s" % [next_level,", ".join(names)],14,U.TEXT))
 		card.add_child(U.button("Plan training toward level %d" % next_level,func(): preload("res://ui/gameplay.gd").new(app).training(skill,next_level)))
-	else: card.add_child(U.para("All recipes unlocked.",14))
+	else:
+		card.add_child(U.para("All recipes unlocked.",14))
+		card.add_child(U.button("Plan training to level 100",func(): preload("res://ui/gameplay.gd").new(app).training(skill,100)))

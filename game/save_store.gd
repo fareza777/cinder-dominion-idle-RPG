@@ -77,6 +77,11 @@ func valid(s, data: Dictionary) -> bool:
 	if s.has("doctrine"):
 		if not s.doctrine is String or not RealmDoctrines.ALL.has(s.doctrine): return false
 		if s.doctrine!="none" and float(s.xp.bladecraft)<14400: return false
+	if s.has("training_goal"):
+		var goal = s.training_goal
+		if not goal is Dictionary or goal.get("skill","") not in RealmTraining.SKILLS: return false
+		if not counter(goal.get("target",-1)) or goal.target<2 or goal.target>100: return false
+		if not counter(goal.get("minutes",-1)) or int(goal.minutes) not in RealmTraining.MINUTES: return false
 	if s.has("experience"):
 		if not s.experience is Dictionary or s.experience.get("version",0)!=2 or not s.experience.get("welcome_done",false) is bool: return false
 		if s.experience.has("coach_active") and not s.experience.coach_active is bool: return false

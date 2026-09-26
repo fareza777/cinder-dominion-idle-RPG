@@ -175,6 +175,16 @@ func command(cmd: Dictionary) -> bool:
 			if plan.error!="": return fail(plan.error)
 			s.queue.append_array(plan.steps)
 			start_next()
+		"training":
+			var target = int(cmd.get("target",2))
+			var minutes = int(cmd.get("minutes",60))
+			var plan = RealmTraining.plan(self,id,target,minutes)
+			if plan.error!="": return fail(plan.error)
+			s.training_goal = {"skill":id,"target":target,"minutes":minutes}
+			s.queue.append_array(plan.steps)
+			start_next()
+		"training_clear":
+			s.erase("training_goal")
 		"talent","talent_reset","relic_upgrade","relic_equip","bounty_claim":
 			var why = RealmChronicle.command(self,cmd)
 			if why!="": return fail(why)

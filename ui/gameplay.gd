@@ -93,28 +93,7 @@ func time_label(seconds: float) -> String:
 	return "%dm %ds" % [int(seconds)/60,int(seconds)%60] if seconds>=60 else "%ds" % int(seconds)
 
 func training(skill: String, target: int):
-	var best = ""
-	var best_rate = 0.0
-	for id in m.data.activities:
-		var a = m.data.activities[id]
-		if a.skill!=skill or a.kind=="combat" or m.level(skill)<int(a.level): continue
-		var seconds = m.duration(a)/1000.0
-		if not a.inputs.is_empty():
-			var plan = P.plan(m,id,100)
-			if plan.error!="": continue
-			seconds = plan.seconds/100.0
-		var rate = float(a.xp)/maxf(.01,seconds)
-		if rate>best_rate:
-			best_rate = rate
-			best = id
-	if best=="":
-		app.toast("No available training recipe. Review this skill for its requirements.")
-		return
-	var selected = m.data.activities[best]
-	var missing_xp = maxi(1,25*(target-1)*(target-1)-int(m.s.xp[skill]))
-	var cycles = clampi(ceili(float(missing_xp)/int(selected.xp)),1,100)
-	if selected.inputs.is_empty(): app.activity_dialog(best,cycles)
-	else: planner(best,cycles)
+	preload("res://ui/training.gd").new(app).open(skill,target)
 
 func tactics():
 	var v = app.modal("Fighting style")
