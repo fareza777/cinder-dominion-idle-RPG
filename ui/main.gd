@@ -38,6 +38,8 @@ var objective_label: Label
 var rebuild_pending = false
 var last_back_ms = -1000
 var last_hunt_audio = -1
+var seen_levels = {}
+var seen_chapters = -1
 
 func _ready():
 	get_tree().auto_accept_quit = false
@@ -133,6 +135,8 @@ func navigate_back():
 			get_tree().quit()))
 
 func enter_world():
+	seen_levels.clear()
+	seen_chapters = -1
 	if not has_campaign: return
 	experience.clear()
 	dismiss()
@@ -153,6 +157,9 @@ func refresh_shell():
 	build_shell()
 	set_page(page)
 	if previous_mode!="play": experience.menu()
+
+func story_dialog():
+	preload("res://ui/story.gd").new(self).open()
 
 func progress_dialog():
 	preload("res://ui/progress_guide.gd").new(self).open()
@@ -182,6 +189,7 @@ func _process(delta):
 		refresh()
 
 func build_shell():
+	U.motion = bool(model.s.settings.motion)
 	theme = Theme.new()
 	theme.default_font = U.body_font
 	theme.default_font_size = int(15*U.scale)
@@ -343,7 +351,7 @@ func refresh():
 			call_deferred("refresh_objective_page")
 	else: last_objective = objective.key
 	if model.s.queue.is_empty():
-		activity_label.text = tr2("Api menantikan langkahmu","The hearth is quiet")
+		activity_label.text = tr2("Api menantikan langkahmu","No task running")
 		activity_sub.text = tr2("Pilih aktivitas · progres offline hingga 24 jam","Choose work or a hunt before you leave")
 		activity_progress.value = 0
 	else:
@@ -360,6 +368,26 @@ func refresh():
 		else: activity_sub.text = model.requirement(step.id)
 		activity_progress.max_value = 1
 		activity_progress.value = fraction
+	var changes = []
+	for id in model.data.skills:
+		var current = model.level(id)
+		if seen_levels.has(id) and current>int(seen_levels[id]):
+			var unlocked = RealmStory.unlocks(model,id,int(seen_levels[id]),current)
+			var line = model.local_name(model.data.skills[id])+" reached level "+str(current)
+			if not unlocked.is_empty(): line += " · Unlocked: "+str(unlocked[0])+(" and %d more" % (unlocked.size()-1) if unlocked.size()>1 else "")
+			changes.append(line)
+		seen_levels[id] = current
+	var chapters = RealmStory.count(model)
+	if seen_chapters>=0 and chapters>seen_chapters:
+		toast("New chapter available · Open Story journal in Refuge.")
+		play_cue("reward")
+	elif not changes.is_empty():
+		toast("\n".join(changes.slice(0,3))+("\n%d more skills leveled up." % (changes.size()-3) if changes.size()>3 else ""))
+		play_cue("reward")
+	if not changes.is_empty() and page=="skills" and not is_instance_valid(dialog) and not rebuild_pending:
+		rebuild_pending = true
+		call_deferred("refresh_objective_page")
+	seen_chapters = chapters
 	for callback in update_callbacks+dialog_callbacks: callback.call()
 
 func refresh_objective_page():
@@ -417,7 +445,10 @@ func modal(title: String) -> VBoxContainer:
 	p.offset_right = -20
 	p.offset_top = 100
 	p.offset_bottom = -80
-	p.add_theme_stylebox_override("panel",U.box(U.INK,U.LINE,12,18))
+	var panel_style = U.box(U.INK,U.LINE,12,18)
+	panel_style.shadow_color = Color(0,0,0,.45)
+	panel_style.shadow_size = 10
+	p.add_theme_stylebox_override("panel",panel_style)
 	dialog.add_child(p)
 	var root = U.column(14)
 	p.add_child(root)
@@ -436,6 +467,9 @@ func modal(title: String) -> VBoxContainer:
 	dialog_footer = U.column(8)
 	root.add_child(dialog_footer)
 	dialog_footer.hide()
+	if model.s.settings.motion:
+		p.modulate.a = 0
+		p.create_tween().tween_property(p,"modulate:a",1.0,.18).set_trans(Tween.TRANS_SINE)
 	return content
 
 func modal_action(label: String, callback: Callable, primary: bool = true) -> Button:

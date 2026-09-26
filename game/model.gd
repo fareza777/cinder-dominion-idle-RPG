@@ -16,8 +16,8 @@ var last_forged = ""
 func progression() -> Dictionary:
 	return RealmProgression.state(self)
 
-func combat_event(message: String, side: String):
-	battle_event = {"serial":int(battle_event.serial)+1,"text":message,"side":side,"time":int(s.time)}
+func combat_event(message: String, side: String, kind: String = "hit"):
+	battle_event = {"serial":int(battle_event.serial)+1,"text":message,"side":side,"time":int(s.time),"kind":kind}
 	combat_events.append(battle_event)
 	if combat_events.size()>8: combat_events.pop_front()
 
@@ -441,7 +441,7 @@ func resolve_combat():
 			var crit = rng.randf()<.05
 			if crit: damage = int(damage*1.5)
 			f.hp -= damage
-			var skill_name = "SKILL "
+			var skill_name = {"balanced":"CLEAVE ","guard":"WARD ","reaver":"REND "}[progression().stance]
 			if RealmRuneforge.active_rank(self,"thorn")>0: skill_name = "PIERCE "
 			elif RealmRuneforge.active_rank(self,"bell")>0: skill_name = "DIRGE "
 			last_hit = (skill_name if special else ("CRIT " if crit else ""))+str(damage)
@@ -459,6 +459,7 @@ func resolve_combat():
 		f.enemy_at = int(s.time)+int(d.interval)
 		f.hits += 1
 		var move = RealmCombat.move(self,d,int(f.hits),int(st.armor),int(f.get("phase",1))==2)
+		if int(f.hits)%3==0 and d.boss: combat_event(move.label,"hero","cast")
 		if move.heal>0:
 			var restored = mini(int(move.heal),int(d.hp)-int(f.hp))
 			f.hp = mini(int(d.hp),int(f.hp)+int(move.heal))

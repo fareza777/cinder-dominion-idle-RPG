@@ -20,6 +20,8 @@ var dodges = {"hero":0.0,"enemy":0.0}
 var awakening = 0.0
 var arrival = 0.0
 var draw_clock = 0.0
+var cast_time = 0.0
+var cast_name = ""
 
 func _ready():
 	custom_minimum_size.y = 280
@@ -59,6 +61,7 @@ func _process(delta: float):
 	if model==null: return
 	if not is_visible_in_tree(): return
 	elapsed += delta
+	cast_time = maxf(0,cast_time-delta)
 	awakening = maxf(0,awakening-delta)
 	arrival = maxf(0,arrival-delta)
 	for side in impacts:
@@ -77,6 +80,10 @@ func _process(delta: float):
 	if serial!=int(model.battle_event.serial):
 		for event in model.combat_events:
 			if int(event.serial)>serial and int(model.s.time)-int(event.get("time",0))<1000:
+				if event.get("kind","")=="cast":
+					cast_time = .9
+					cast_name = str(event.text)
+					continue
 				if event.text=="PHASE II": awakening = 1.2
 				elif str(event.text).begins_with("+"): recovery[event.side] = .8
 				else:
@@ -191,6 +198,20 @@ func _draw():
 				var alpha = impacts[target]/.4
 				draw_line(center+Vector2(-29,22),center+Vector2(28,-25),Color(U.GOLD,alpha*.75),2.0,true)
 				draw_line(center+Vector2(-18,28),center+Vector2(35,-12),Color(U.TEXT,alpha*.6),1.0,true)
+	if fighting and cast_time>0:
+		var strength = cast_time/.9
+		if model.s.settings.motion:
+			var origin = left.get_center()
+			match enemy.get("region",""):
+				"wilds":
+					for i in range(5):
+						var x = left.position.x+12+i*23
+						draw_polyline(PackedVector2Array([Vector2(x,196),Vector2(x-8,176-strength*25),Vector2(x+4,150-strength*30)]),Color(U.GREEN,strength*.7),2.0,true)
+				"marsh":
+					for i in range(3): draw_arc(right.get_center(),25+i*13+(1-strength)*20,0,TAU,28,Color(.5,.8,.8,strength*.55),2.0,true)
+				_:
+					draw_arc(origin,18+(1-strength)*80,0,TAU,32,Color(U.GOLD,strength*.8),3.0,true)
+		caption(Vector2(0,190),cast_name.to_upper(),U.GOLD,12,size.x)
 	if fighting and enemy.boss and int(f.hits)%3==2:
 		var warning_alpha = .6+.2*sin(elapsed*4) if model.s.settings.motion else .7
 		draw_rect(right.grow(6),Color(U.RED,warning_alpha),false,2.0)
@@ -198,7 +219,7 @@ func _draw():
 		bar(Rect2(right.position.x,39,w,3),charge,U.RED)
 	if fighting:
 		var charges = int(f.get("swings",0))%4
-		caption(Vector2(0,268),"STYLE SKILL  %d / 4    ·    NEXT ATTACK %.1fs" % [charges,maxf(0,(int(f.player_at)-int(model.s.time))/1000.0)],U.GOLD,10,size.x)
+		caption(Vector2(0,268),"%s  %d / 4    ·    NEXT ATTACK %.1fs" % [{"balanced":"CLEAVE","guard":"WARD","reaver":"REND"}[model.progression().stance],charges,maxf(0,(int(f.player_at)-int(model.s.time))/1000.0)],U.GOLD,10,size.x)
 	else: caption(Vector2(0,268),"PREPARE  ·  HUNT  ·  BRING HOPE HOME",U.GOLD,10,size.x)
 	var lanes = {"hero":0,"enemy":0}
 	for i in range(floating.size()):

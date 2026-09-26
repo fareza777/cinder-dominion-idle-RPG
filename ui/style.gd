@@ -16,6 +16,7 @@ static var portraits: Texture2D
 static var items_texture: Texture2D
 static var item_ids: Array = []
 static var scale = 1.0
+static var motion = true
 
 static func setup(data: Dictionary):
 	body_font = load("res://assets/fonts/manrope-readable.ttf")
@@ -81,7 +82,9 @@ static func button(text: String, callback: Callable, primary: bool = false) -> B
 	var b = Button.new()
 	b.mouse_filter = Control.MOUSE_FILTER_PASS
 	b.text = text
+	b.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
 	b.custom_minimum_size.y = 48
+	b.custom_minimum_size.x = clampf(body_font.get_string_size(text,HORIZONTAL_ALIGNMENT_LEFT,-1,int(15*scale)).x+22,48,140)
 	b.add_theme_font_override("font",body_font)
 	b.add_theme_font_size_override("font_size",int(15*scale))
 	b.add_theme_color_override("font_color",INK if primary else TEXT)
@@ -93,6 +96,16 @@ static func button(text: String, callback: Callable, primary: bool = false) -> B
 	b.add_theme_stylebox_override("pressed",box(GOLD.darkened(.12) if primary else Color("111a21"),GOLD,6,10))
 	b.add_theme_stylebox_override("disabled",box(Color("182027"),LINE,6,10))
 	b.add_theme_stylebox_override("focus",box(Color(0,0,0,0),GOLD,6,2))
+	var reference = weakref(b)
+	b.button_down.connect(func():
+		var button = reference.get_ref()
+		if is_instance_valid(button) and motion: button.modulate = Color(.88,.88,.88))
+	b.button_up.connect(func():
+		var button = reference.get_ref()
+		if is_instance_valid(button): button.modulate = Color.WHITE)
+	b.mouse_exited.connect(func():
+		var button = reference.get_ref()
+		if is_instance_valid(button): button.modulate = Color.WHITE)
 	b.pressed.connect(callback)
 	return b
 

@@ -1,16 +1,24 @@
-# Ashen Covenant — Adventure preview 0.12
+# Ashen Covenant — Adventure preview 0.13
 
 Idle RPG dark fantasy untuk Android. Gratis, tanpa iklan. Build ini untuk dimainkan dan dievaluasi, belum versi rilis publik.
 
 ## Mulai bermain
 
-1. Pasang `build/android/ashen-covenant-0.12.apk` di Android 64-bit. APK memakai identitas aplikasi yang sama dengan 0.1–0.11 sehingga bisa dipasang sebagai pembaruan.
+1. Pasang `build/android/ashen-covenant-0.13.apk` di Android 64-bit. APK memakai identitas aplikasi yang sama dengan 0.1–0.12 sehingga bisa dipasang sebagai pembaruan.
 2. Seluruh antarmuka dan narasi game memakai **English**. Splash mengantar ke menu utama. Pilih **New game**, ikuti atau lewati intro, lalu baca empat tahap onboarding. **Continue journey** melanjutkan progres yang sudah ada.
 3. Tekan **Guide →** di bagian atas layar. Panduan menunjukkan tujuan, alasan, lokasi aktivitas dan jumlah yang dibutuhkan. Tekan tindakannya, lalu **Begin · 4 cycles** (jumlahnya mengikuti tujuan) untuk memulai jumlah siklus yang tepat.
 4. Tugas awal: 4 copper ore → 2 copper ingots → 1 ash log → Copper Sword → Equip item → 3 Ash Rats. Panduan lalu mengantar lewat musuh berikutnya hingga Bellkeeper, tanpa melompat langsung ke boss.
 5. Pantau activity bar. **Queue** menampilkan tugas berjalan/menunggu, progres target, dan alasan terhambat. **Sources/Find** membantu mencari bahan yang kurang. Satu aktivitas berjalan pada satu waktu.
 6. Buka **Food & survival guide** untuk belajar memancing, memasak, memilih makanan dan menyiapkan auto-heal. Perlengkapan hasil crafting harus dipasang dari **Bag**.
 7. Progres tersimpan otomatis dan berlanjut maksimal 24 jam saat kembali. Menu **☰** tersedia dari dalam permainan. New Game meminta konfirmasi dan menyimpan cadangan terpisah; **Settings → Restore a previous journey** memulihkannya.
+
+## Baru di 0.13 — Cerita, battle dan leveling
+
+**Story journal** di Refuge berisi tujuh bab English singkat, terbuka berdasarkan First Supplies, Bellkeeper, tier kelima tiap wilayah, dan tiga trial. Tiga ilustrasi baru buatan image_gen dipasang ke jurnal. Setiap bab memisahkan cerita dari petunjuk langkah berikutnya; cerita terkunci tidak ditampilkan.
+
+Battle mendapatkan efek khusus regional: akar Bramble crush, gelombang Drowned hymn, dan hentakan Final toll. Nama skill style tampil sebagai Cleave, Ward dan Rend. Dialog memiliki fade singkat, tombol memiliki feedback tekan dan pembungkusan teks dengan ukuran minimum yang menjaga tombol header tetap terbaca. Reduced motion menonaktifkan animasi tambahan.
+
+Skills menampilkan XP menuju level berikutnya, resep yang akan terbuka, dan tombol rencana latihan. Level-up menampilkan notifikasi beserta unlock dari catalog. Tidak ada popup wajib atau hadiah tambahan hanya karena membuka jurnal.
 
 ## Baru di 0.12 — Preview dampak upgrade
 

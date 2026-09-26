@@ -340,5 +340,15 @@ func _init():
 	check(preview_model.stats()==forecast_upgrade.after and RealmCombat.forecast(preview_model,"ash_rat")==forecast_upgrade.hunt_after, "upgrade preview matches actual refined equipped stats and combat estimate")
 	var max_uid = preview_model.add_gear("iron_sword",6)
 	check(RealmWorkshop.preview(preview_model,max_uid,"ash_rat").is_empty(), "Workshop does not preview downgrades for equipment above its refinement cap")
+	var story_model = RealmModel.new()
+	check(RealmStory.count(story_model)==1 and not RealmStory.unlocked(story_model,1), "story starts with only the opening chapter unlocked")
+	story_model.s.tutorial = true
+	story_model.s.beacon = true
+	for region in ["wilds","marsh","crown"]: story_model.s.kills[region+"_5"] = 1
+	check(RealmStory.count(story_model)==6 and not RealmStory.unlocked(story_model,6), "regional story chapters follow actual milestones without unlocking the finale early")
+	for id in RealmTrials.IDS: story_model.s.kills[id] = 1
+	var story_copy = RealmModel.new()
+	story_copy.s = store.decode(store.encode(story_model.s),story_model.data)
+	check(RealmStory.count(story_copy)==7 and "Iron ingot" in RealmStory.unlocks(story_model,"smithing",9,10) and RealmStory.unlocks(story_model,"smithing",10,10).is_empty(), "story unlocks survive save reload and level rewards use catalog requirements")
 	print("ESSENTIAL CHECKS: ","PASS" if failed==0 else "FAIL")
 	quit(1 if failed else 0)

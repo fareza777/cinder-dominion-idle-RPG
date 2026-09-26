@@ -49,6 +49,7 @@ func services(parent: Node):
 		row.add_child(b)
 	if m.s.tutorial:
 		app.dynamic(parent,func(): return "%d bounty · %d field · %d contract rewards ready" % [C.ready_bounties(m),RealmRuneforge.ready(m),RealmProgression.ready_count(m)],12,U.GOLD)
+	parent.add_child(U.button("Story journal · %d / 7 chapters" % RealmStory.count(m),app.story_dialog))
 	parent.add_child(U.button("Leave a work order before you go",app.work_orders_dialog))
 
 func station(kind: String):
@@ -58,7 +59,7 @@ func station(kind: String):
 	match kind:
 		"journey":
 			v.add_child(U.para("Follow your next goal or choose a farming target.",24,U.TEXT))
-			entries = [["Progress & farming","What to do next, what to farm and how to use it.",app.progress_dialog],["Guardian trials","Three optional challenges beyond regional tier five.",app.trials_dialog],["Journey guide","Your next objective and the path beyond it.",app.guide_dialog],["World map","Story routes, regional guardians and expedition tiers.",app.world_dialog],["Field journal","Guardian tactics and one-time regional rewards.",app.journal_dialog],["Hunt reports","Victories, supplies spent and rewards from recent orders.",app.hunt_reports_dialog],["Bounty board","Small goals that carry over when you are away.",app.bounties_dialog]]
+			entries = [["Story journal","Read unlocked chapters and see what opens next.",app.story_dialog],["Progress & farming","What to do next, what to farm and how to use it.",app.progress_dialog],["Guardian trials","Three optional challenges beyond regional tier five.",app.trials_dialog],["Journey guide","Your next objective and the path beyond it.",app.guide_dialog],["World map","Story routes, regional guardians and expedition tiers.",app.world_dialog],["Field journal","Guardian tactics and one-time regional rewards.",app.journal_dialog],["Hunt reports","Victories, supplies spent and rewards from recent orders.",app.hunt_reports_dialog],["Bounty board","Small goals that carry over when you are away.",app.bounties_dialog]]
 		"armory":
 			v.add_child(U.para("Make every piece of your build count.",24,U.TEXT))
 			entries = [["Equipment bag","Compare and equip the gear you already own.",func():

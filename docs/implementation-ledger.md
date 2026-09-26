@@ -59,3 +59,7 @@ Solo: selected report view, comparable per-victory hunt metrics, item-specific s
 ## 0.12 Upgrade preview
 
 Solo: read-only build/combat preview for refinement, unlocked-enemy selector, explicit bagged-item equip assumption, visible cost summary and missing-material routes. Above-cap display fixed. Three targeted checks added (57 total), four phone captures, Android debug export.
+
+## 0.13 Story, motion and leveling
+
+Solo: generated three-scene narrative art, seven milestone-gated story chapters, regional cast effects, named style skills, dialog/button motion and minimum-width fix, next-level recipe guide and non-blocking level feedback. Three targeted checks added (60 total), eleven phone captures. Original art provenance recorded; no new mandatory save fields.

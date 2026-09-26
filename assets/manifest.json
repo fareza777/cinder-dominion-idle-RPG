@@ -49,6 +49,13 @@
       "source": "OpenAI image generation in this task, 2026-09-26",
       "kind": "original generated art",
       "prompt_summary": "Three eye-level battlefield environments in equal horizontal rows: charred forest watch-road, flooded teal gothic cloister, obsidian volcanic cathedral. Ground-level cinematic painted realism with open centers, no characters, text or existing franchise references."
+    },
+    {
+      "file": "art/story-chapters-0.13.png",
+      "source": "OpenAI built-in image_gen tool, 2026-09-26",
+      "kind": "original generated art",
+      "prompt": "Create an original production game illustration atlas for Ashen Covenant, a grounded dark fantasy idle RPG. Landscape canvas 1536x1024, divided into exactly THREE equal WIDTH vertical panels side by side, no borders or gutters. Each panel a separate coherent tall oil-painted cinematic scene with focal subjects centered within its own third. Left panel: human blacksmith woman in practical leather apron at a warm ember forge, a newly forged sword on anvil, battered medieval refuge starting to recover, brass and amber light, hopeful not cheerful. Center panel: solitary hooded traveler seen from behind at stone gate overlooking a ruined drowned cathedral and winding path, cool desaturated teal atmosphere, readable silhouette, distant warm beacon. Right panel: battered armored sentinel kneeling beside a broken bell at sunrise, ash blowing over black volcanic steps, muted burgundy and pale gold rays, solemn victory. Rich material detail, disciplined composition readable at small mobile size, premium narrative RPG concept art, painterly realism, no cartoon, no neon, no text, no lettering, no logos, no UI, no frame, no recognizable existing franchise. Uniform lighting quality and visual language across all three scenes. Save the generated image for project use.",
+      "use": "Three narrative scenes cropped by Story journal; no existing project art overwritten."
     }
   ],
   "fonts": [

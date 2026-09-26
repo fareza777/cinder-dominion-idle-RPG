@@ -170,6 +170,7 @@ func skills(parent: Node):
 			app.set_page("skills")))
 		var selected = app.skill
 		app.dynamic(parent,func(): return "%s · Lv.%d" % [m.local_name(m.data.skills[selected]),m.level(selected)],26,U.GOLD)
+		preload("res://ui/level_progress.gd").show_progress(app,parent,selected)
 		for aid in m.data.activities:
 			var a = m.data.activities[aid]
 			if a.skill!=selected or a.kind=="combat": continue
