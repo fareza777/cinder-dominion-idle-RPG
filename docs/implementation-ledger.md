@@ -83,3 +83,7 @@ Solo: explicit ready/farming/maximum states, direct upgrade action, truthful ful
 ## 0.18 Action-first direction correction
 
 User explicitly rejects excessive narrative. Preserve this preference in future iterations: concise labels, quantities, progress and direct actions on routine screens; story and detailed teaching are optional. Reference listing and five official store images reviewed, including actual combat/offline layouts; not installed or played. Replaced four-page onboarding, bypassed mandatory cinematic, condensed objectives/farming/activity UI, removed repeated flavor and chapter notifications, made early hunt targets visible sooner. Ten phone captures with real first-task button smoke, existing 73 checks, Android export. See docs/action-first-0.18.md.
+
+## 0.19 Forged UI surfaces
+
+Solo: shared nine-patch SVG metal frames, corner ornament, bronze primary actions, recessed inputs, themed dropdowns/popups/switches/sliders/scrollbars, activity bar and navigation. Text-safe insets and short-word wrapping fix. Nine captures including advanced count input and 130% text; real queue-button smoke; existing 73 essential checks. Vector templates explicitly added to export includes. Keep the 0.18 action-first direction; no extra narrative introduced.

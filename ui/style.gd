@@ -25,17 +25,71 @@ static func setup(data: Dictionary):
 	if ResourceLoader.exists("res://assets/art/items.png"): items_texture = load("res://assets/art/items.png")
 	item_ids = data.items.keys()
 
-static func box(color: Color = PANEL, border: Color = LINE, radius: int = 10, padding: int = 14) -> StyleBoxFlat:
-	var b = StyleBoxFlat.new()
-	b.bg_color = color
-	b.border_color = border
-	b.set_border_width_all(1)
-	b.set_corner_radius_all(radius)
-	b.content_margin_left = padding
-	b.content_margin_right = padding
-	b.content_margin_top = padding
-	b.content_margin_bottom = padding
-	return b
+static var frame_cache: Dictionary = {}
+
+static func box(color: Color = PANEL, border: Color = LINE, radius: int = 10, padding: int = 14) -> StyleBox:
+	# Tiny meters and transparent focus outlines keep crisp geometry.
+	if (radius>0 and radius<=3) or color.a<0.1:
+		var flat = StyleBoxFlat.new()
+		flat.bg_color = color
+		flat.border_color = border
+		flat.set_border_width_all(1 if color.a>0 else 2)
+		flat.set_corner_radius_all(2)
+		flat.set_content_margin_all(padding)
+		return flat
+	return frame(color,border,"panel" if radius>=10 else "button",padding)
+
+static func frame(color: Color, border: Color, kind: String, padding: int) -> StyleBoxTexture:
+	var key = color.to_html()+border.to_html()+kind
+	if not frame_cache.has(key):
+		var svg = FileAccess.get_file_as_string("res://assets/ui/"+kind+"-frame.svg.txt")
+		var edge = border.lerp(Color("8c7050"),.4)
+		var colors = {"BASE":color,"TOP":color.lightened(.055),"BOTTOM":color.darkened(.3),"EDGE":edge,"LIGHT":edge.lightened(.24),"DARK":edge.darkened(.45)}
+		for token in colors: svg = svg.replace("{"+token+"}","#"+colors[token].to_html(false))
+		var img = Image.new()
+		if img.load_svg_from_string(svg)==OK: frame_cache[key] = ImageTexture.create_from_image(img)
+	var style = StyleBoxTexture.new()
+	style.texture = frame_cache.get(key)
+	for side in [SIDE_LEFT,SIDE_TOP,SIDE_RIGHT,SIDE_BOTTOM]:
+		style.set_texture_margin(side,24 if kind=="panel" else 12)
+		style.set_content_margin(side,padding)
+	return style
+
+static func apply_theme(theme: Theme):
+	for type in ["LineEdit","TextEdit"]:
+		theme.set_stylebox("normal",type,frame(Color("10171b"),Color("75644e"),"input",12))
+		theme.set_stylebox("focus",type,box(Color(0,0,0,0),GOLD,2,12))
+		theme.set_stylebox("read_only",type,frame(INK,LINE,"input",12))
+		theme.set_color("font_color",type,TEXT)
+		theme.set_color("font_placeholder_color",type,MUTED)
+		theme.set_color("caret_color",type,GOLD)
+		theme.set_color("selection_color",type,Color("665138"))
+	for type in ["OptionButton","Button"]:
+		for state in ["normal","hover","pressed","disabled"]:
+			var style = frame(Color("20282b") if state!="pressed" else INK,GOLD if state=="hover" else LINE,"button",12)
+			if type=="OptionButton": style.content_margin_right = 34
+			theme.set_stylebox(state,type,style)
+		theme.set_stylebox("focus",type,box(Color(0,0,0,0),GOLD,2,2))
+		for state in ["font_color","font_hover_color","font_pressed_color"]: theme.set_color(state,type,TEXT)
+		theme.set_color("font_disabled_color",type,MUTED.darkened(.25))
+	theme.set_stylebox("panel","PopupMenu",frame(INK,GOLD.darkened(.4),"panel",16))
+	theme.set_stylebox("hover","PopupMenu",frame(PANEL,GOLD,"button",8))
+	theme.set_color("font_color","PopupMenu",TEXT)
+	theme.set_color("font_hover_color","PopupMenu",GOLD)
+	theme.set_constant("v_separation","PopupMenu",14)
+	for state in ["on","off"]:
+		for suffix in ["","_disabled","_mirrored","_disabled_mirrored"]:
+			theme.set_icon(("checked" if state=="on" else "unchecked")+suffix,"CheckButton",load("res://assets/ui/"+state+".svg"))
+	theme.set_color("font_color","CheckButton",TEXT)
+	theme.set_constant("h_separation","CheckButton",12)
+	for type in ["HSlider","VSlider"]:
+		theme.set_stylebox("slider",type,box(INK,Color("6a5943"),2,3))
+		theme.set_stylebox("grabber_area",type,box(GOLD.darkened(.35),GOLD.darkened(.15),2,3))
+		theme.set_stylebox("grabber_area_highlight",type,box(GOLD.darkened(.15),GOLD,2,3))
+		for icon_name in ["grabber","grabber_highlight","grabber_disabled"]: theme.set_icon(icon_name,type,load("res://assets/ui/slider-gem.svg"))
+	for type in ["VScrollBar","HScrollBar"]:
+		theme.set_stylebox("scroll",type,box(INK,INK,2,3))
+		for state in ["grabber","grabber_highlight","grabber_pressed"]: theme.set_stylebox(state,type,box(GOLD.darkened(.4),GOLD.darkened(.3),2,3))
 
 static func label(text: String, size: int = 16, color: Color = TEXT, serif: bool = false) -> Label:
 	var l = Label.new()
@@ -82,18 +136,18 @@ static func button(text: String, callback: Callable, primary: bool = false) -> B
 	var b = Button.new()
 	b.mouse_filter = Control.MOUSE_FILTER_PASS
 	b.text = text
-	b.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
+	b.autowrap_mode = TextServer.AUTOWRAP_WORD
 	b.custom_minimum_size.y = 48
-	b.custom_minimum_size.x = clampf(body_font.get_string_size(text,HORIZONTAL_ALIGNMENT_LEFT,-1,int(15*scale)).x+22,48,140)
+	b.custom_minimum_size.x = clampf(body_font.get_string_size(text,HORIZONTAL_ALIGNMENT_LEFT,-1,int(15*scale)).x+40,52,156)
 	b.add_theme_font_override("font",body_font)
 	b.add_theme_font_size_override("font_size",int(15*scale))
-	b.add_theme_color_override("font_color",INK if primary else TEXT)
-	b.add_theme_color_override("font_hover_color",INK if primary else GOLD)
-	b.add_theme_color_override("font_pressed_color",INK if primary else GOLD)
+	b.add_theme_color_override("font_color",TEXT)
+	b.add_theme_color_override("font_hover_color",GOLD)
+	b.add_theme_color_override("font_pressed_color",GOLD)
 	b.add_theme_color_override("font_disabled_color",Color("737e84"))
-	b.add_theme_stylebox_override("normal",box(GOLD if primary else Color("202a31"),GOLD if primary else LINE,6,10))
-	b.add_theme_stylebox_override("hover",box(GOLD.lightened(.12) if primary else Color("2c353a"),GOLD,6,10))
-	b.add_theme_stylebox_override("pressed",box(GOLD.darkened(.12) if primary else Color("111a21"),GOLD,6,10))
+	b.add_theme_stylebox_override("normal",box(Color("493620") if primary else Color("20282b"),GOLD if primary else LINE,6,12))
+	b.add_theme_stylebox_override("hover",box(Color("60462a") if primary else Color("2c353a"),GOLD,6,12))
+	b.add_theme_stylebox_override("pressed",box(Color("302519") if primary else Color("111a21"),GOLD,6,12))
 	b.add_theme_stylebox_override("disabled",box(Color("182027"),LINE,6,10))
 	b.add_theme_stylebox_override("focus",box(Color(0,0,0,0),GOLD,6,2))
 	var reference = weakref(b)

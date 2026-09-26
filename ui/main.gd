@@ -193,6 +193,7 @@ func build_shell():
 	theme = Theme.new()
 	theme.default_font = U.body_font
 	theme.default_font_size = int(15*U.scale)
+	U.apply_theme(theme)
 	for child in get_children():
 		if child!=music and child!=effect:
 			remove_child(child)
@@ -442,8 +443,6 @@ func modal(title: String) -> VBoxContainer:
 	p.offset_top = 100
 	p.offset_bottom = -80
 	var panel_style = U.box(U.INK,U.LINE,12,18)
-	panel_style.shadow_color = Color(0,0,0,.45)
-	panel_style.shadow_size = 10
 	p.add_theme_stylebox_override("panel",panel_style)
 	dialog.add_child(p)
 	var root = U.column(14)

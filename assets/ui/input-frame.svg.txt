@@ -1,0 +1,7 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="128" height="128" viewBox="0 0 128 128">
+<defs><linearGradient id="surface" x2="0" y2="1"><stop stop-color="{TOP}"/><stop offset=".35" stop-color="{BASE}"/><stop offset="1" stop-color="{BOTTOM}"/></linearGradient><linearGradient id="metal" x2=".2" y2="1"><stop stop-color="{LIGHT}"/><stop offset=".45" stop-color="{EDGE}"/><stop offset="1" stop-color="{DARK}"/></linearGradient></defs>
+<path d="M 6 1 H 122 L 127 6 V 122 L 122 127 H 6 L 1 122 V 6 Z" fill="url(#surface)" stroke="url(#metal)" stroke-width="2"/>
+<path d="M 14 4 H 114 M 4 15 V 112 M 14 124 H 114 M 124 15 V 112" fill="none" stroke="{EDGE}" opacity=".3"/>
+<path d="M 24 7 H 104 M 24 121 H 104" fill="none" stroke="{LIGHT}" opacity=".18"/>
+<path d="M 4 17 V 9 L 9 4 H 17 M 111 124 H 119 L 124 119 V 111" fill="none" stroke="{LIGHT}" opacity=".6"/>
+</svg>
