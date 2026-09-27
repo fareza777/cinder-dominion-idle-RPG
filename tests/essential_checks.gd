@@ -9,7 +9,7 @@ func check(ok: bool, label: String):
 
 func _init():
 	var m = RealmModel.new()
-	check(m.data.items.size()==96,"96 item definitions")
+	check(m.data.items.size()==123,"123 item definitions")
 	m.command({"type":"queue","id":"mine_copper","target":4})
 	m.advance(12000)
 	check(m.count("copper_ore")==4,"gather four ore")
@@ -114,7 +114,7 @@ func _init():
 	var preview = RealmProgression.order_plan(order,"forge",1)
 	order.command({"type":"work_order","id":"forge","batches":1})
 	order.advance(5000000)
-	check(preview.steps.size()==2 and order.count("copper_ingot")==500 and order.count("copper_ore")==0 and order.s.xp.smithing==4000 and order.s.queue.is_empty(),"long work order gathers inputs, earns XP and finishes while offline")
+	check(preview.steps.size()==2 and order.count("copper_ingot")==526 and order.count("copper_ore")==76 and order.s.xp.smithing==4000 and order.s.queue.is_empty(),"long work order gathers inputs, includes earned mastery yield, earns XP and finishes offline")
 	var wild = RealmCombat.move(expedition,expedition.data.enemies.wilds_1,3,20)
 	var plain = RealmCombat.move(expedition,expedition.data.enemies.wilds_1,1,20)
 	var oracle = RealmCombat.move(expedition,expedition.data.enemies.marsh_1,3,20)
@@ -422,9 +422,9 @@ func _init():
 	for skill in asc.data.skills: asc.s.xp[skill] = 245025
 	var plans_ok = true
 	for activity in asc.data.activities.values():
-		if activity.kind=="craft" and int(activity.level)>=25:
+		if activity.kind=="craft" and int(activity.level)>=25 and not activity.has("blueprint") and not activity.output.begins_with("socket_"):
 			plans_ok = plans_ok and RealmProgression.plan(asc,activity.id,1).error==""
-	check(plans_ok,"all advanced recipes have an unlocked finite material plan at level 100")
+	check(plans_ok,"ordinary advanced recipes have a finite material plan at level 100")
 	check(asc.command({"type":"plan","id":"craft_dawnsteel_chest","amount":1}),"level 100 cuirass plans its own materials")
 	asc.advance(300000)
 	check(asc.count("dawnsteel_chest")==1 and not store.decode(store.encode(asc.s),asc.data).is_empty(),"advanced gathering and crafting finish and preserve save validity")

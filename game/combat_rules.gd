@@ -4,7 +4,7 @@ extends RefCounted
 static func food_heal(m, id: String) -> int:
 	var legacy = RealmChronicle.state(m)
 	var remedy = 6+3*(RealmCharacters.rank(m)-1) if RealmCharacters.id(m)=="apothecary" and RealmCharacters.rank(m)>0 else 0
-	return int(m.data.items[id].get("heal",0))+(int(legacy.relics.heart)*3 if legacy.relic=="heart" else 0)+(8 if RealmGearSets.active(m,"dawnsteel") else 0)+remedy
+	return maxi(1,int(m.data.items[id].get("heal",0))+(int(legacy.relics.heart)*3 if legacy.relic=="heart" else 0)+(8 if RealmGearSets.active(m,"dawnsteel") else 0)+remedy+RealmPaths.food_bonus(m))
 
 static func move(m, enemy: Dictionary, strike: int, armor: int, second_phase: bool = false) -> Dictionary:
 	var third = strike%3==0
@@ -34,17 +34,24 @@ static func move(m, enemy: Dictionary, strike: int, armor: int, second_phase: bo
 		label = enemy.special_name
 	heal = int(heal*(1.0-.25*RealmRuneforge.active_rank(m,"tide")))
 	if RealmGearSets.active(m,"moonsteel"): heal = int(heal*.8)
+	if RealmPaths.active(m)=="Blight": heal = int(heal*.65)
+	if RealmPaths.has_item(m,"relic_4"): heal = int(heal*.75)
 	var damage = m.hit_damage(attack,defense)
 	if RealmRuneforge.active_rank(m,"bell")>0: damage = ceili(damage*1.1)
 	damage = maxi(1,ceili(damage*RealmDoctrines.active(m).incoming))
 	if third and RealmGearSets.active(m,"steel"): damage = maxi(1,ceili(damage*.85))
 	if third and RealmCharacters.id(m)=="warden" and RealmCharacters.rank(m)>0:
 		damage = maxi(1,ceili(damage*(.75-.05*(RealmCharacters.rank(m)-1))))
+	damage = RealmPaths.incoming(m,strike,damage)
+	damage = RealmEndgame.move(m,enemy,strike,damage,second_phase)
 	return {"damage":damage,"heal":heal,"label":label}
 
 static func player_damage(m, enemy: Dictionary, swing: int) -> int:
 	var special = swing%4==0
 	var armor = int(enemy.armor)
+	if RealmPaths.active(m)=="Fracture": armor = int(armor*.8)
+	if RealmPaths.has_item(m,"relic_5"): armor = int(armor*.9)
+	if special and "fracture" in RealmPaths.sockets(m): armor = int(armor*.85)
 	if special: armor = int(armor*(1.0-.25*RealmRuneforge.active_rank(m,"thorn")))
 	if special: armor = int(armor*(1.0-RealmDoctrines.active(m).pierce))
 	if special and RealmCharacters.id(m)=="arcanist" and RealmCharacters.rank(m)>0:
@@ -62,9 +69,13 @@ static func player_damage(m, enemy: Dictionary, swing: int) -> int:
 		if RealmCharacters.id(m)=="ranger": damage = maxi(1,int(damage*(1.2+.1*(RealmCharacters.rank(m)-1))))
 		if RealmCharacters.id(m)=="reaver" and enemy.boss: damage = maxi(1,int(damage*(1.25+.1*(RealmCharacters.rank(m)-1))))
 		damage = maxi(1,int(damage*(1+.03*RealmCharacters.allocated(m,"focus"))))
-	return damage
+	damage = RealmPaths.outgoing(m,enemy,swing,damage)
+	return maxi(1,int(damage*(1-float(enemy.get("resist",0)))))
 
 static func mechanic(enemy: Dictionary) -> String:
+	if enemy.get("secret",false) or enemy.get("depth",false):
+		var recovery = " Restores %.1f%% HP." % (float(enemy.special_heal)*100) if enemy.special_heal>0 else ""
+		return "%s · Every third attack: %.2f× attack, ignores %d%% armor, +%d pressure damage.%s\nBelow half HP: +18%% damage, double pressure. Every 15 attacks: +12%% damage (cap +150%%). Resists %d%% of your damage." % [enemy.special_name,enemy.special_attack,roundi((1-float(enemy.special_armor))*100),enemy.pressure,recovery,roundi(float(enemy.get("resist",0))*100)]
 	if enemy.has("special_name"):
 		var parts = ["%.1f× attack" % float(enemy.special_attack)]
 		if float(enemy.special_armor)<1: parts.append("ignores %d%% armor" % roundi((1-float(enemy.special_armor))*100))
@@ -78,18 +89,23 @@ static func mechanic(enemy: Dictionary) -> String:
 
 # A bounded analytical forecast, not a second simulation and never a reward source.
 static func forecast(m, id: String) -> Dictionary:
-	var enemy = m.data.enemies[id]
+	var enemy = RealmEndgame.enemy(m,m.data.enemies[id])
 	var stats = m.stats()
 	var stance = m.progression().stance
 	var cycle_damage = player_damage(m,enemy,1)*3+player_damage(m,enemy,4)
 	var damage_per_second = cycle_damage*float(stats.accuracy)*1.025/8.0
 	var ordinary = move(m,enemy,1,int(stats.armor))
-	var late_special = move(m,enemy,3,int(stats.armor),bool(enemy.get("trial",false)))
+	var late_special = move(m,enemy,3,int(stats.armor),bool(enemy.get("trial",false)) or enemy.get("secret",false) or enemy.get("depth",false))
 	var interval = float(enemy.interval)/1000.0
 	# Trials use the stronger phase for a conservative recovery/risk estimate.
 	var net_damage = damage_per_second-float(late_special.heal)/(interval*3.0)
 	var stalled = net_damage<=0
 	var seconds = 3600.0 if stalled else clampf(ceil(float(enemy.hp)/maxf(.01,net_damage)/2.0)*2.0,2,3600)
+	if enemy.get("secret",false) or enemy.get("depth",false):
+		var late_strike = maxi(3,int(seconds/interval))
+		late_strike += (3-late_strike%3)%3
+		late_special = move(m,enemy,late_strike,int(stats.armor),true)
+		ordinary = move(m,enemy,maxi(1,late_strike-1),int(stats.armor),true)
 	var attacks = floor(seconds/interval)
 	var average_hit = (ordinary.damage*2.0+late_special.damage)/3.0
 	var incoming = attacks*average_hit*.95

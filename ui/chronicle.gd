@@ -48,6 +48,7 @@ func services(parent: Node):
 		row.add_child(b)
 	if m.s.tutorial:
 		app.dynamic(parent,func(): return "%d bounty · %d field · %d contract rewards ready" % [C.ready_bounties(m),RealmRuneforge.ready(m),RealmProgression.ready_count(m)],12,U.GOLD)
+	if m.s.beacon: parent.add_child(U.button("Beyond the beacon",func(): preload("res://ui/endgame.gd").new(app).open()))
 	parent.add_child(U.button("Work orders",app.work_orders_dialog))
 	parent.add_child(U.button("Bestiary · drops & tactics",func(): preload("res://ui/bestiary.gd").new(app).open()))
 

@@ -130,7 +130,7 @@ func _draw():
 	if model==null or faces.is_empty(): return
 	var fighting = not model.s.fight.is_empty()
 	var f = model.s.fight
-	var enemy = model.data.enemies[f.enemy] if fighting else {}
+	var enemy = RealmEndgame.enemy(model,model.data.enemies[f.enemy]) if fighting else {}
 	var backdrop = enemy_background if enemy_background!=null else region_art.get(enemy.get("region",""),background)
 	var backdrop_width = size.y*backdrop.get_width()/backdrop.get_height()
 	var drift = sin(elapsed*.17)*4 if model.s.settings.motion else 0.0

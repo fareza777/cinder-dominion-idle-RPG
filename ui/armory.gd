@@ -95,7 +95,7 @@ func loadouts():
 	var v = app.modal("Your battle loadouts")
 	v.add_child(U.button("Compare against a hunt",func(): preload("res://ui/build_compare.gd").new(app).open()))
 	v.add_child(U.para("A different answer to every enemy.",26,U.TEXT))
-	v.add_child(U.para("Save equipment, fighting style, advanced training, talents, relic, rune and supplies together. Applying a build selects its supplies; it does not create or reserve them.",14))
+	v.add_child(U.para("Save gear, style, training, specialization, sockets, talents, relic, rune and supplies together. Applying a build selects its supplies; it does not create or reserve them.",14))
 	var saved = RealmLoadouts.state(m)
 	for id in RealmLoadouts.NAMES:
 		var card = U.card(v,14)
@@ -106,6 +106,9 @@ func loadouts():
 			var rune = RealmRuneforge.RUNES[build.rune].name if build.rune!="" else "No rune"
 			card.add_child(U.para(RealmProgression.STANCES[build.stance].name+" · "+relic+" · "+rune,14,U.TEXT))
 			card.add_child(U.para(RealmDoctrines.ALL[build.get("doctrine","none")].name,13,U.GOLD))
+			var path = int(build.get("path",-1))
+			var name = RealmPaths.ALL[RealmCharacters.id(m)][path][0] if path>=0 and RealmCharacters.id(m) in RealmPaths.ALL else "No specialization"
+			card.add_child(U.para("%s · %d socket relics" % [name,build.get("sockets",[]).size()],13))
 			card.add_child(U.para("%d gear slots · Blade %d · Bastion %d · Fortune %d\n%s at %d%% HP · %s" % [build.gear.size(),int(build.talents.power),int(build.talents.guard),int(build.talents.fortune),m.name_of(build.food),int(build.threshold*100),m.name_of(build.potion) if build.potion!="" else "No potion"],13))
 			app.dynamic(card,func(): return "In your pack: %d meals%s" % [m.count(build.food)," · %d potions" % m.count(build.potion) if build.potion!="" else ""],12,U.GREEN)
 			var apply = U.button("Apply this loadout",func():

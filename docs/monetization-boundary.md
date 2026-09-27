@@ -13,3 +13,7 @@ Purchases remain a disabled seam in services/commerce.gd and data/commerce.json.
 ## Rebuilding Android
 
 Use Godot 4.7.1 matching export templates, Java 17 and Android SDK. Install Godot Android build template into the project (android/build is generated and ignored), retaining android/.build_version. The enabled AdMob exporter applies Gradle dependencies. Export Android with Gradle enabled. Native AARs under addons/admob/android/bin/ads are tracked; keystores and machine paths are not. First export requires network access for Gradle/Maven. No paid service was connected.
+
+## 0.34 rewarded queue assistance
+
+Refuge → Beyond the beacon → Rewarded queue assistance adds a distinct placement. The SDK earned-reward callback unlocks four hours of simulated/offline assistance, enabled manually afterward. It creates no resources or combat power; expires after the current cycle; first optional clears and Depths remain manual. Existing explicit queues and crafting plans remain free. An unavailable/early-closed ad grants no lease. Capturing the journey at request time and guarding each callback prevents local duplicate or new-journey rewards. Mock callbacks verify the client flow only; native device serving and production consent remain unverified. All five characters are free; purchases stay disabled.

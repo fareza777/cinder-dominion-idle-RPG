@@ -23,6 +23,7 @@ func home(parent):
 		var b = U.button(NAMES[slot],func(): open_slot(slot))
 		b.size_flags_horizontal = Control.SIZE_EXPAND_FILL
 		tools.add_child(b)
+	parent.add_child(U.button("Specialization & socket relics",func(): preload("res://ui/endgame.gd").new(app).builds()))
 	parent.add_child(U.button("Save & switch loadouts",app.loadouts_dialog))
 
 func open_slot(slot: String):

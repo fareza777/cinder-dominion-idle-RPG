@@ -1,0 +1,5 @@
+# 0.34 scope
+
+Implement the approved gameplay recommendations together: seven optional superboss locations; deterministic first-clear blueprints, repeat materials and token alternatives; two-stage legendary recipes; four limited socket relics; two specializations for each of five classes; target farming, selectable route trade-offs and production mastery; rewarded-only four-hour adaptive queue assistance; repeatable Hollow Depths with escalating danger and bankable rewards; carry-over choice contracts and a weekly challenge; compact progress reporting. Preserve the manual queue, existing progress, English text and concealed faces.
+
+Audit the existing campaign and new endgame with bounded simulations spanning underprepared, current-tier and optimized builds. New threats must not scale down to the player. Boss-specific counters and supplies matter. Infinite-depth progression must eventually exceed even optimized builds; do not advertise all depths as beatable. Record actual measurements and unresolved device/long-session limits. Test ads remain demo-only until production configuration/consent/device work is separately completed.

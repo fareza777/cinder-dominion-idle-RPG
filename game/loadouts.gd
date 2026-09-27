@@ -8,13 +8,20 @@ static func state(m) -> Dictionary:
 	return m.s.loadouts
 
 static func snapshot(m) -> Dictionary:
-	return {"gear":m.s.equipped.duplicate(true),"stance":m.progression().stance,"doctrine":m.s.get("doctrine","none"),"talents":RealmChronicle.state(m).talents.duplicate(true),"relic":RealmChronicle.state(m).relic,"rune":RealmRuneforge.state(m).equipped,"food":m.s.settings.food,"potion":m.s.settings.potion,"threshold":m.s.settings.threshold}
+	return {"gear":m.s.equipped.duplicate(true),"stance":m.progression().stance,"doctrine":m.s.get("doctrine","none"),"talents":RealmChronicle.state(m).talents.duplicate(true),"relic":RealmChronicle.state(m).relic,"rune":RealmRuneforge.state(m).equipped,"food":m.s.settings.food,"potion":m.s.settings.potion,"threshold":m.s.settings.threshold,"path":m.s.get("path_choice",-1),"sockets":RealmPaths.sockets(m).duplicate()}
 
 static func valid(build, data: Dictionary, items: Dictionary) -> bool:
 	if not build is Dictionary or not build.get("gear") is Dictionary or not build.get("talents") is Dictionary: return false
 	if build.get("stance","") not in RealmProgression.STANCES: return false
 	if build.get("doctrine","none") not in RealmDoctrines.ALL: return false
 	if build.get("relic",null) not in ["","fang","ward","heart"] or build.get("rune",null) not in ["","thorn","tide","bell"]: return false
+	var path = build.get("path",-1)
+	if typeof(path) not in [TYPE_INT,TYPE_FLOAT] or not RealmSave.counter(float(path)+1) or path>1 or not build.get("sockets",[]) is Array: return false
+	var seen = []
+	for id in build.get("sockets",[]):
+		if id not in RealmPaths.SOCKETS or id in seen: return false
+		seen.append(id)
+	if seen.size()>3: return false
 	var total = 0
 	for id in RealmChronicle.TALENTS:
 		if not RealmChronicle.number(build.talents.get(id,-1),5): return false
@@ -48,6 +55,12 @@ static func command(m, cmd: Dictionary) -> String:
 	if talent_total>RealmChronicle.points_earned(m): return "Earn more talent points before applying this build."
 	if build.relic!="" and RealmChronicle.state(m).relics[build.relic]<1: return "Awaken this build's relic first."
 	if build.rune!="" and RealmRuneforge.state(m).ranks[build.rune]<1: return "Inscribe this build's rune first."
+	if build.get("path",-1)!=-1 and (m.level("bladecraft")<25 or RealmCharacters.id(m)==""): return "Unlock your specialization first."
+	if build.get("sockets",[]).size()>RealmPaths.slots(m): return "Unlock this build's socket slots first."
+	for key in build.get("sockets",[]):
+		if m.count("socket_"+key)<1: return "Forge the missing socket relic before applying this build."
+	m.s.path_choice = build.get("path",-1)
+	m.s.sockets = build.get("sockets",[]).duplicate()
 	m.s.equipped = build.gear.duplicate(true)
 	m.progression().stance = build.stance
 	m.s.doctrine = build.get("doctrine","none")

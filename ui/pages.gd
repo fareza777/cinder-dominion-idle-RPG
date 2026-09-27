@@ -62,7 +62,8 @@ func village(parent: Node):
 func explore(parent: Node):
 	var region = m.data.enemies.get(m.s.fight.get("enemy",""),{}).get("region","")
 	var current_enemy = m.data.enemies.get(m.s.fight.get("enemy",""),{})
-	if current_enemy.get("trial",false): heading(parent,"GUARDIAN TRIAL",m.local_name(current_enemy),"")
+	if current_enemy.has("secret_tile"): heading(parent,"OPTIONAL EXPEDITION",current_enemy.location,"")
+	elif current_enemy.get("trial",false): heading(parent,"GUARDIAN TRIAL",m.local_name(current_enemy),"")
 	elif region!="": heading(parent,"EXPEDITION IN PROGRESS",RealmChronicle.REGIONS[region].name,"")
 	else: heading(parent,"CHAPTER I · THE OUTSKIRTS","Cinderwatch Outskirts","")
 	var battle = U.card(parent,12,U.GOLD.darkened(.55))
@@ -90,6 +91,8 @@ func explore(parent: Node):
 	app.dynamic(battle,func():
 		if m.s.fight.is_empty(): return ""
 		var enemy = m.data.enemies[m.s.fight.enemy]
+		if enemy.get("secret",false) or enemy.get("depth",false):
+			return "PHASE II · Heavy-strike pressure doubled. Finish the fight before danger builds." if RealmTrials.active_phase(m,enemy) else "PHASE I · Danger rises every 15 enemy attacks."
 		if not enemy.get("trial",false): return ""
 		return "PHASE II · "+RealmTrials.phase_text(enemy) if RealmTrials.active_phase(m,enemy) else "PHASE I · The guardian awakens at half health.",13,U.RED)
 	var retreat = U.button("Retreat & stop queue",func(): app.send({"type":"clear"}))

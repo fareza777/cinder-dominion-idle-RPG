@@ -1,0 +1,171 @@
+extends RefCounted
+
+const U = preload("res://ui/style.gd")
+var app
+var m
+func _init(owner):
+	app = owner
+	m = owner.model
+
+func action(parent, title: String, cmd: Dictionary, reopen: Callable, primary: bool = false):
+	parent.add_child(U.button(title,func():
+		if app.send(cmd): reopen.call(),primary))
+
+func open():
+	var v = app.modal("Beyond the beacon")
+	v.add_child(U.para("Choose a relic. Find its guardian. Learn the fight, then return for materials.",18,U.TEXT))
+	var target = RealmEndgame.target_status(m)
+	if not target.is_empty():
+		var c = U.card(v,12)
+		c.add_child(U.para(m.name_of(target.item),20,U.GOLD))
+		app.dynamic(c,func(): return RealmEndgame.target_status(m).get("text",""),14)
+	v.add_child(U.button("Optional expeditions",locations,true))
+	v.add_child(U.button("Relic forge & targets",forge))
+	v.add_child(U.button("Hollow Depths",depths))
+	v.add_child(U.button("Hunting routes",routes))
+	v.add_child(U.button("Contracts & weekly hunt",contracts))
+	v.add_child(U.button("Rewarded queue assistance",assistance))
+	v.add_child(U.para("Level 100 is the skill cap. Beyond it, improve your build, perfect relics and push deeper expeditions.",14))
+
+func locations():
+	var v = app.modal("Optional expeditions")
+	var revealed = 0
+	for id in RealmEndgame.IDS:
+		if m.available(id)!="" and m.s.kills.get(id,0)==0: break
+		revealed += 1
+		var e = m.data.enemies[id]
+		var c = U.card(v,12,U.GOLD.darkened(.5))
+		var portrait = U.enemy_portrait(e,Vector2(0,180))
+		portrait.stretch_mode = TextureRect.STRETCH_KEEP_ASPECT_CENTERED
+		c.add_child(portrait)
+		c.add_child(U.para(e.location,21,U.GOLD))
+		c.add_child(U.para(e.en,17,U.TEXT))
+		c.add_child(U.para(RealmCombat.mechanic(e),14))
+		c.add_child(U.para("First victory: blueprint + 3 cores. Repeat victories: 1 core. Every victory: 2 Dread Seals and an 8% unique relic chance.",14))
+		c.add_child(U.para("%d victories · %s" % [m.s.kills.get(id,0),m.name_of("relic_"+str(int(e.secret_tile)))],14,U.GOLD))
+		c.add_child(U.button("Prepare hunt",func(): app.activity_dialog("hunt_"+id),true))
+		action(c,"Track this relic",{"type":"end_target","id":"relic_"+str(int(e.secret_tile))},forge)
+	if revealed<7:
+		var c = U.card(v,12)
+		c.add_child(U.para("Uncharted · %d locations remain" % (7-revealed),18,U.MUTED))
+		c.add_child(U.para("Defeat the final Crown Apex guardian to find the first location." if revealed==0 else "Defeat the latest optional guardian to reveal the next location.",14))
+	app.modal_action("Back",open,false)
+
+func forge():
+	var v = app.modal("Relic forge")
+	v.add_child(U.para("Forge an unfinished component, then complete its relic. Eight victories also unlock a guaranteed purchase for 16 Dread Seals.",16))
+	app.dynamic(v,func(): return "%d Dread Seals · %d Hollow Shards" % [m.count("dread_token"),m.count("depth_shard")],16,U.GOLD)
+	for i in range(7):
+		var boss = "secret_%d" % i
+		if m.available(boss)!="" and m.s.kills.get(boss,0)==0: continue
+		var id = "relic_%d" % i
+		var c = U.card(v,12)
+		c.add_child(U.para(m.name_of(id),21,U.GOLD))
+		c.add_child(U.para(m.data.items[id].get("unique_effect",""),14))
+		action(c,"Track relic" if RealmEndgame.state(m).target!=id else "Tracking this relic",{"type":"end_target","id":id},forge)
+		if m.s.kills.get(boss,0)<1:
+			c.add_child(U.para("Defeat this guardian to learn its blueprint.",14))
+			continue
+		c.add_child(U.button("1 · Forge unfinished component",func(): app.planner_dialog("craft_blank_%d" % i,1)))
+		c.add_child(U.button("2 · Complete relic",func(): app.planner_dialog("craft_"+id,1)))
+		action(c,"Guaranteed relic · 16 seals · %d/8 wins" % mini(8,int(m.s.kills.get(boss,0))),{"type":"end_trade","id":id},forge)
+		for g in m.s.gear:
+			if g.id!=id or int(g.q)>=3: continue
+			var cost = 10*(int(g.q)+1)
+			action(c,"Temper %s · %d seals + %d shards" % [m.data.rarities[int(g.q)],cost,cost],{"type":"end_temper","id":g.uid},forge)
+	v.add_child(U.para("Unique relics reach Rare quality through tempering. Their special effects work only while equipped.",14))
+	app.modal_action("Back",open,false)
+
+func builds():
+	var v = app.modal("Specialization & sockets")
+	var character = RealmCharacters.id(m)
+	if character not in RealmPaths.ALL:
+		v.add_child(U.para("Choose your character from the hero screen first.",17))
+		return
+	v.add_child(U.para("One specialization at a time. Change it freely between hunts from Bladecraft Lv.25.",16))
+	for i in range(2):
+		var path = RealmPaths.ALL[character][i]
+		var c = U.card(v,12)
+		c.add_child(U.para(path[0],21,U.GOLD))
+		c.add_child(U.para(path[1],15))
+		action(c,"Selected" if m.s.get("path_choice",-1)==i else "Choose "+path[0],{"type":"path_choose","choice":i},builds)
+	v.add_child(U.para("Socket relics · %d / %d equipped" % [RealmPaths.sockets(m).size(),RealmPaths.slots(m)],20,U.GOLD))
+	v.add_child(U.para("Slots unlock at the beacon, Bladecraft Lv.75, and the fifth optional guardian. Each relic can be used once per build.",14))
+	for id in RealmPaths.SOCKETS:
+		var c = U.card(v,12)
+		c.add_child(U.para(RealmPaths.SOCKETS[id][0],19,U.TEXT))
+		c.add_child(U.para(RealmPaths.SOCKETS[id][1],14))
+		if m.count("socket_"+id)>0:
+			action(c,"Remove" if id in RealmPaths.sockets(m) else "Socket",{"type":"socket_toggle","id":id},builds)
+		else: c.add_child(U.button("Forge relic",func(): app.planner_dialog("craft_socket_"+id,1)))
+
+func routes():
+	var v = app.modal("Hunting routes")
+	v.add_child(U.para("Choose your preparation before a hunt. Routes affect all combat, including offline hunts. Enemy loot chances stay the same.",16))
+	for id in RealmEndgame.ROUTES:
+		var c = U.card(v,12)
+		c.add_child(U.para({"safe":"Sheltered route","resource":"Standard route","elite":"Dangerous route","mastery":"Training route"}[id],21,U.GOLD))
+		c.add_child(U.para(RealmEndgame.ROUTES[id],15))
+		action(c,"Selected" if RealmEndgame.route(m)==id else "Choose route",{"type":"end_route","id":id},routes)
+	app.modal_action("Back",open,false)
+
+func depths():
+	var v = app.modal("Hollow Depths")
+	var d = RealmEndgame.state(m).depth
+	v.add_child(U.enemy_portrait(m.data.enemies.hollow_depth,Vector2(0,140)))
+	v.add_child(U.para("Clear one room, then bank your shards or risk the next. Defeat loses unbanked shards. Banked rewards and equipment stay safe.",16))
+	app.dynamic(v,func(): return "Next depth %d · Best %d\n%d unbanked Hollow Shards" % [d.floor if d.active else 1,d.best,d.stash],21,U.GOLD)
+	v.add_child(U.para("Each depth raises enemy health, attack and armor. Heavy strikes grow stronger, and long fights become more dangerous. Eventually, you must return with a stronger build.",14))
+	if m.s.kills.get("secret_2",0)<1:
+		v.add_child(U.para("Defeat the third optional guardian to discover this expedition.",16,U.GOLD))
+	else:
+		var preview = RealmModel.new()
+		preview.s = m.s.duplicate(true)
+		RealmEndgame.state(preview).depth.risk = "steady"
+		var outlook = RealmCombat.forecast(preview,"hollow_depth")
+		v.add_child(U.para("Steady risk · %s\nAbout %ds · roughly %d meals · heavy hit up to %d HP" % [outlook.rating,outlook.seconds,outlook.meals,outlook.burst],15,U.GOLD))
+		action(v,"Continue · steady risk" if d.active else "Enter · steady risk",{"type":"end_depth","id":"steady"},depths,true)
+		action(v,"Perilous · enemy attack +20%, extra shard per room",{"type":"end_depth","id":"perilous"},depths)
+		if d.active: action(v,"Bank shards & leave",{"type":"end_bank"},depths)
+	app.modal_action("Back",open,false)
+
+func contracts():
+	var v = app.modal("Contracts & weekly hunt")
+	v.add_child(U.para("Choose three contracts. Unfinished contracts carry over; a completed board refreshes on a later day. No streak resets.",16))
+	var s = RealmEndgame.state(m)
+	for id in RealmEndgame.CONTRACTS:
+		var def = RealmEndgame.CONTRACTS[id]
+		var c = U.card(v,12)
+		c.add_child(U.para(def[0],20,U.GOLD))
+		var selected = id in s.board.selected
+		if selected:
+			app.dynamic(c,func(): return "%d / %d" % [mini(def[1],RealmEndgame.totals(m)[id]-s.board.baseline[id]),def[1]],16)
+			if id in s.board.claimed: c.add_child(U.para("Reward collected",14))
+			else: action(c,"Collect gold & 5 scraps",{"type":"end_claim","id":id},contracts)
+		else: action(c,"Choose · %d required" % def[1],{"type":"end_contract","id":id},contracts)
+	var c = U.card(v,12)
+	c.add_child(U.para("Weekly guardian",21,U.GOLD))
+	if s.weekly_enemy!="":
+		c.add_child(U.para(m.data.enemies[s.weekly_enemy].en,17))
+		app.dynamic(c,func(): return "%d / 3 victories" % mini(3,int(m.s.kills.get(s.weekly_enemy,0))-int(s.weekly_base)),15)
+		if not s.weekly_claimed: action(c,"Collect 3 seals & 5 shards",{"type":"end_week_claim"},contracts)
+	c.add_child(U.para("A rotating target from guardians you have beaten. An accepted hunt carries over until you finish it.",14))
+	action(c,"Accept this week's hunt",{"type":"end_week"},contracts)
+	app.modal_action("Back",open,false)
+
+func assistance():
+	var v = app.modal("Rewarded queue assistance")
+	var s = RealmAutomation.state(m)
+	v.add_child(U.para("A completed rewarded ad unlocks four hours of assistance. It prepares at least 30 selected meals (more for demanding hunts), works toward your tracked relic, then repeats your chosen hunt.",16))
+	v.add_child(U.para("Uses normal materials and time. Stops for unsafe or undiscovered hunts. Manual queues stay available without ads. The four hours also pass while you are away.",14))
+	app.dynamic(v,func(): return "%d min remaining · %s" % [maxi(0,ceili((int(s.until)-int(m.s.time))/60000.0)),"On" if s.enabled else "Off"],20,U.GOLD)
+	app.dynamic(v,func(): return str(s.status),14)
+	v.add_child(U.button("Watch test rewarded ad · unlock 4 hours",func(): app.ads.request("rewarded","automation"),true))
+	app.dynamic(v,func(): return str(app.ads.status),13)
+	v.add_child(U.para("This preview uses Android test ads. No reward is granted when an ad is unavailable or closed early.",13))
+	action(v,"Enable · tracked relic only",{"type":"assist_start","id":""},assistance)
+	for id in m.data.enemies:
+		if id=="hollow_depth" or m.available(id)!="" or int(m.s.kills.get(id,0))<1: continue
+		action(v,"Enable · "+m.data.enemies[id].en,{"type":"assist_start","id":id},assistance)
+	action(v,"Stop assistance",{"type":"assist_stop"},assistance)
+	app.modal_action("Back",open,false)

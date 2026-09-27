@@ -78,6 +78,9 @@ static func append_recipe(m, aid: String, amount: int, result: Dictionary, trail
 		result.error = "This supply chain cannot be automated. Use Sources to gather the missing materials."
 		return
 	var a = m.data.activities[aid]
+	if a.has("blueprint") and int(m.s.kills.get(a.blueprint,0))<1:
+		result.error = "Defeat its optional guardian to learn this blueprint."
+		return
 	if a.kind=="combat" or m.level(a.skill)<int(a.level):
 		result.error = "Unlock %s Lv.%d first." % [m.local_name(m.data.skills[a.skill]),int(a.level)]
 		result.unlock_skill = a.skill

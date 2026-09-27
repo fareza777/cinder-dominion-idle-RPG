@@ -52,6 +52,9 @@ func valid(s, data: Dictionary) -> bool:
 		for id in s.loadouts:
 			if id not in RealmLoadouts.NAMES or not RealmLoadouts.valid(s.loadouts[id],data,uids): return false
 	if s.has("hero") and not RealmCharacters.valid(s.hero,s.xp): return false
+	if not RealmPaths.valid(s): return false
+	if s.has("endgame") and not RealmEndgame.valid(s.endgame,data): return false
+	if s.has("assistant_queue") and not RealmAutomation.valid(s.assistant_queue,data): return false
 	if s.has("hunts") and not RealmHunts.valid(s.hunts,data): return false
 	for step in s.queue:
 		if not step is Dictionary: return false

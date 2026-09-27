@@ -193,6 +193,7 @@ static func portrait(index: int, dimensions: Vector2) -> TextureRect:
 	return t
 
 static func enemy_texture(enemy: Dictionary) -> Texture2D:
+	if enemy.has("secret_tile"): return atlas_tile("res://assets/art/superbosses-0.34.png",int(enemy.secret_tile),3,3)
 	if enemy.has("art_tile"): return atlas_tile("res://assets/art/ascension-enemies-0.25.png",int(enemy.art_tile),3,3)
 	if enemy.has("region") and ResourceLoader.exists("res://assets/art/expedition-guardians.png"):
 		var texture = load("res://assets/art/expedition-guardians.png")

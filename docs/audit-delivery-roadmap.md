@@ -46,3 +46,7 @@ Three free classes, named journeys, attributes and class skill milestones added 
 ## 0.33 delivered
 
 Visual direction revised at user request: concealed faces across runtime art, including enemies/statues/legacy fallbacks. Reaver and Apothecary expand the free roster to five with shared forecast/runtime effects. Broad balance, native device checks and production monetization remain open. See docs/qa/faceless-roster-0.33-report.md.
+
+## 0.34 delivered
+
+Optional-guardian and build-depth package: seven unique gear effects with first-clear blueprints and deterministic acquisition fallback, four socket relics, ten class paths, three socket unlock milestones, tempering, target farming/routes, Depths and mastery yield. Rewarded-only adaptive queue assistance uses the native demo callback, no free grant or production activation. Added player-chosen carry-over contracts and a rotating weekly guardian target. Broad but bounded five-class difficulty sweep now establishes a rising late-game ceiling; 45 selected-counter/seed checks pass while unchanged strong builds fail deeper fights. It is not a fresh-save pacing/retention study or exhaustive build proof. Continue physical Android/consent/serving, shutdown cleanup, full progression economy, richer weekly mechanics and remaining audio/animation/controller priorities. See docs/qa/endgame-0.34-report.md.

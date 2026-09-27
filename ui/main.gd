@@ -615,6 +615,7 @@ func activity_dialog(id: String, recommended: int = 0):
 	if a.kind!="combat":
 		v.add_child(U.icon(a.output,92))
 		v.add_child(U.para("%s · Lv.%d · %.1fs · +%d XP" % [model.local_name(model.data.skills[a.skill]),int(a.level),model.duration(a)/1000.0,int(a.xp)]))
+		v.add_child(U.para("Mastery %d · At 250 completions: +1 output every 10 cycles. At 1,000: every 5 cycles. Applies to ordinary materials and food." % int(model.s.mastery.get(id,0)),13))
 		for key in a.inputs:
 			var r = U.row()
 			v.add_child(r)
@@ -623,7 +624,7 @@ func activity_dialog(id: String, recommended: int = 0):
 			r.add_child(U.button(tr2("Cari","Find"),func(): sources_dialog(key)))
 	else:
 		v.add_child(U.button("Plan a longer hunt",func(): hunt_plan_dialog(a.enemy)))
-		var e = model.data.enemies[a.enemy]
+		var e = RealmEndgame.enemy(model,model.data.enemies[a.enemy])
 		var encounter = U.row(16)
 		v.add_child(encounter)
 		encounter.add_child(U.enemy_portrait(e,Vector2(76,100)))

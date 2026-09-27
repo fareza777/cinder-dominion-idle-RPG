@@ -47,6 +47,12 @@ func open(report: Dictionary):
 		used.add_child(U.para("Materials and supplies used",17,U.TEXT))
 		for id in report.spent: used.add_child(U.para("%s ×%d" % [m.name_of(id),int(report.spent[id])],13))
 	if not RealmHunts.state(m).history.is_empty(): v.add_child(U.button("Review hunt results",app.hunt_reports_dialog))
+	if m.s.has("assistant_queue"):
+		v.add_child(U.para("Queue assistance · "+RealmAutomation.state(m).status,14))
+	if m.s.get("endgame",{}).get("target","")!="":
+		var target = RealmEndgame.target_status(m)
+		v.add_child(U.para(m.name_of(target.item)+" · "+target.text,16,U.GOLD))
+		v.add_child(U.button("Review relic target",func(): preload("res://ui/endgame.gd").new(app).forge()))
 	v.add_child(U.para("Rewards saved",12))
 	var focus = RealmChronicle.focus(m)
 	v.add_child(U.para("Next: "+focus.title,18,U.TEXT))

@@ -26,6 +26,9 @@ func open(uid: String):
 	title.add_child(U.para(m.data.rarities[int(item.q)],23,U.QUALITY[int(item.q)]))
 	title.add_child(U.para(SLOTS.get(data.slot,data.slot)+" · %d owned" % int(item.count),14))
 	title.add_child(U.para("Equipped" if comparison.equipped else "In your bag",13,U.GOLD))
+	if data.has("unique_effect"):
+		hero.add_child(U.para("Unique effect · "+data.unique_effect,15,U.GOLD))
+		hero.add_child(U.button("Relic forge & tempering",func(): preload("res://ui/endgame.gd").new(app).forge()))
 	var current = comparison.current
 	v.add_child(U.para("Currently equipped: "+(m.data.rarities[int(current.q)]+" "+m.name_of(current.id) if not current.is_empty() else "Nothing in this slot"),14))
 	var changes = U.card(v,14)

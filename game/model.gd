@@ -124,6 +124,7 @@ func note(message: String):
 
 func available(enemy_id: String) -> String:
 	var d = data.enemies[enemy_id]
+	if d.get("secret",false) or d.get("depth",false): return RealmEndgame.available(self,enemy_id)
 	if d.has("region"):
 		if not s.beacon: return "Defeat the Bellkeeper in Chapter I first"
 		if d.unlock=="beacon" or int(s.kills.get(d.unlock,0))>=1: return ""
@@ -143,6 +144,7 @@ func requirement(aid: String) -> String:
 		if locked!="": return locked
 		if s.hp<=0: return "Recover HP outside combat before hunting"
 	else:
+		if a.has("blueprint") and int(s.kills.get(a.blueprint,0))<1: return "Defeat its optional guardian to learn this blueprint."
 		if level(a.skill)<int(a.level): return "%s Lv.%d" % [local_name(data.skills[a.skill]),int(a.level)]
 		for id in a.inputs:
 			if count(id)<int(a.inputs[id]): return "Need %s (owned %d / required %d)" % [name_of(id),count(id),int(a.inputs[id])]
@@ -154,7 +156,17 @@ func command(cmd: Dictionary) -> bool:
 	if cid!="" and cid in s.processed: return true
 	var action = str(cmd.get("type",""))
 	var id = str(cmd.get("id",""))
+	if action in ["queue","clear","cancel","finish_hunt","work_order"]: RealmAutomation.stop(self,"Manual control. Enable rewarded assistance again when ready.")
 	match action:
+		"end_route","end_target","end_trade","end_temper","end_depth","end_bank","end_contract","end_claim","end_week","end_week_claim":
+			var why = RealmEndgame.command(self,cmd)
+			if why!="": return fail(why)
+		"path_choose","socket_toggle":
+			var why = RealmPaths.command(self,cmd)
+			if why!="": return fail(why)
+		"assist_start","assist_stop":
+			var why = RealmAutomation.command(self,cmd)
+			if why!="": return fail(why)
 		"hero_create","attribute_add","attribute_reset":
 			var why = RealmCharacters.command(self,cmd)
 			if why!="": return fail(why)
@@ -232,8 +244,9 @@ func command(cmd: Dictionary) -> bool:
 			note("%s upgraded to rank %d" % [upgrade.name,rank+1])
 		"queue":
 			if not data.activities.has(id): return fail("Unknown activity")
+			if id=="hunt_hollow_depth" and (int(cmd.get("target",1))!=1 or cmd.get("kind","cycles")!="cycles" or not s.queue.is_empty()): return fail("Enter one Depths room at a time, then choose whether to bank or continue.")
 			if s.queue.size()>=20: return fail("Queue is full (20 steps). Cancel a step to make room.")
-			var target = clampi(int(cmd.get("target",50)),1,1000000)
+			var target = 1 if id=="hunt_hollow_depth" else clampi(int(cmd.get("target",50)),1,1000000)
 			var kind = str(cmd.get("kind","cycles"))
 			if kind not in ["cycles","output","level"]: return fail("Invalid activity target")
 			s.queue.append({"id":id,"target":mini(target,100) if kind=="level" else target,"kind":kind,"done":0,"output":0,"skip":bool(cmd.get("skip",false))})
@@ -297,6 +310,7 @@ func command(cmd: Dictionary) -> bool:
 			if not data.items.has(id) or data.items[id].category=="equipment": return fail("Salvage equipment to recover metal scraps.")
 			var qty = clampi(int(cmd.get("amount",1)),1,1000)
 			if count(id)<qty: return fail("Not enough items")
+			if id.begins_with("socket_") and id.trim_prefix("socket_") in RealmPaths.sockets(self) and count(id)-qty<1: return fail("Remove this socket relic from your build before selling it.")
 			spend(id,qty)
 			s.gold += qty
 		"food":
@@ -369,6 +383,8 @@ func step_complete(step: Dictionary) -> bool:
 
 func start_next():
 	if not s.active.is_empty() or not s.fight.is_empty(): return
+	while not s.queue.is_empty() and step_complete(s.queue[0]): s.queue.pop_front()
+	if s.queue.is_empty(): RealmAutomation.next(self)
 	while not s.queue.is_empty():
 		var step = s.queue[0]
 		if step_complete(step):
@@ -383,7 +399,7 @@ func start_next():
 			return
 		var a = data.activities[step.id]
 		if a.kind=="combat":
-			var enemy = data.enemies[a.enemy]
+			var enemy = RealmEndgame.enemy(self,data.enemies[a.enemy])
 			RealmHunts.begin(self,a.enemy)
 			s.fight = {"enemy":a.enemy,"hp":enemy.hp,"player_at":int(s.time)+2000,"enemy_at":int(s.time)+int(enemy.interval),"hits":0,"buff_until":0,"buff":"attack","potion_at":0,"spawn_at":0}
 		else:
@@ -431,13 +447,17 @@ func finish_production():
 	var a = data.activities[s.active.id]
 	var previous_level = level(a.skill)
 	var q = quality_roll() if data.items[a.output].category=="equipment" else 1
-	gain(a.output,1,q)
+	if a.output.begins_with("relic_"): q = 1
+	var completed = int(s.mastery.get(a.id,0))+1
+	var bonus = data.items[a.output].category in ["food","material"] and not a.has("blueprint") and ((completed>=1000 and completed%5==0) or (completed>=250 and completed%10==0))
+	var produced = 2 if bonus else 1
+	gain(a.output,produced,q)
 	if a.side!="" and rng.randf()<.2: gain(a.side,1)
 	s.xp[a.skill] = int(s.xp[a.skill])+int(a.xp)
 	if level(a.skill)>previous_level: note("%s reached level %d. Check Skills for new recipes and resources." % [local_name(data.skills[a.skill]),level(a.skill)])
 	s.mastery[a.id] = int(s.mastery.get(a.id,0))+1
 	s.queue[0].done += 1
-	s.queue[0].output += 1
+	s.queue[0].output += produced
 	s.active = {}
 	if q>=2: note("%s · %s" % [data.rarities[q],name_of(a.output)])
 	check_quest()
@@ -447,7 +467,7 @@ func hit_damage(atk: int, armor: int) -> int:
 
 func resolve_combat():
 	var f = s.fight
-	var d = data.enemies[f.enemy]
+	var d = RealmEndgame.enemy(self,data.enemies[f.enemy])
 	if f.buff_until>0 and f.buff_until<=s.time: f.buff_until = 0
 	var pot = str(s.settings.potion)
 	if pot!="" and count(pot)>0 and f.potion_at<=s.time:
@@ -501,9 +521,12 @@ func resolve_combat():
 			combat_event("−%d HP" % int(move.damage),"hero")
 		else: combat_event("MISS","hero")
 		if s.hp<=0:
+			RealmAutomation.stop(self,"Defeated. Review your build before restarting assistance.")
+			RealmEndgame.defeat(self)
 			s.hp = 0
 			RealmHunts.finish(self,"Defeated")
 			last_reward = "DEFEAT · No items lost. Rest, cook food, or upgrade equipment before returning."
+			if d.get("depth",false): last_reward = "DEFEAT · Unbanked shards lost. Banked rewards and equipment are safe."
 			note("Defeated by %s. Equipment is safe. Recover and prepare food before trying again." % local_name(d))
 			s.fight = {}
 			s.queue.clear()
@@ -521,12 +544,23 @@ func win(enemy: Dictionary):
 	var before_gains = s.gains.duplicate(true)
 	var before_gold = int(s.gold)
 	var id = enemy.id
+	RealmEndgame.victory(self,enemy)
 	var legacy = RealmChronicle.state(self)
 	var fragment_id = RealmChronicle.fragments_for(enemy)
 	var fragments = RealmHuntMastery.fragments(self,enemy)
 	legacy.fragments[fragment_id] += fragments
 	var reward_gold = RealmHuntMastery.gold(self,enemy)
-	last_reward = "VICTORY · +%d gold · +%d XP · %s ×%d · +%d %s fragments" % [reward_gold,int(enemy.xp),name_of(enemy.drop),int(enemy.qty),fragments,RealmChronicle.RELICS[fragment_id].name]
+	if RealmEndgame.route(self) in ["safe","mastery"]: reward_gold = int(reward_gold*.8)
+	elif RealmEndgame.route(self)=="elite": reward_gold = int(reward_gold*1.25)
+	var xp = int(enemy.xp)
+	if RealmEndgame.route(self)=="safe": xp = int(xp*.8)
+	elif RealmEndgame.route(self)=="mastery": xp = int(xp*1.2)
+	elif RealmEndgame.route(self)=="elite": xp = int(xp*1.25)
+	last_reward = "VICTORY · +%d gold · +%d XP · %s ×%d · +%d %s fragments" % [reward_gold,xp,name_of(enemy.drop),int(enemy.qty),fragments,RealmChronicle.RELICS[fragment_id].name]
+	if enemy.get("secret",false):
+		last_reward = "VICTORY · +%d gold · +%d XP · %s ×%d · +2 Dread Seals" % [reward_gold,xp,name_of(enemy.drop),3 if s.kills.get(id,0)==0 else 1]
+		if s.kills.get(id,0)==0: last_reward += " · Blueprint learned"
+	if enemy.get("depth",false): last_reward = "DEPTH CLEARED · +%d gold · +%d XP · %d shards waiting to be banked" % [reward_gold,xp,RealmEndgame.state(self).depth.stash]
 	if enemy.get("trial",false) and int(s.kills.get(id,0))==0:
 		gain("scrap",15)
 		gain("cooked_minnow",20)
@@ -550,8 +584,7 @@ func win(enemy: Dictionary):
 		last_reward += " · "+mastery_message
 		note(mastery_message)
 	s.gold += reward_gold
-	gain(enemy.drop,int(enemy.qty))
-	var xp = int(enemy.xp)
+	if not enemy.get("depth",false): gain(enemy.drop,int(enemy.qty))
 	s.xp.bladecraft += xp-int(xp/3)*2
 	s.xp.might += int(xp/3)
 	s.xp.warding += int(xp/3)

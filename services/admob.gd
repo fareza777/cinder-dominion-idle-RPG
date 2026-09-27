@@ -13,6 +13,8 @@ var last_interstitial = -900000
 var requested_at = 0
 var generation = 0
 var active_ad
+var reward_placement = "meals"
+var request_journey
 
 func _process(_delta):
 	if busy and Time.get_ticks_msec()-requested_at>45000:
@@ -31,7 +33,7 @@ func _process(_delta):
 			var ratio = app.size.y/maxf(1,app.get_viewport().get_visible_rect().size.y)
 			app.banner_space.custom_minimum_size.y = maxf(60,banner.get_height_in_pixels()*ratio+8)
 
-func request(format: String):
+func request(format: String, placement: String = "meals"):
 	if OS.get_name()!="Android" or not Engine.has_singleton("PoingGodotAdMob"):
 		status = "Native ad testing requires the Android APK. No ad was shown."
 		return
@@ -39,6 +41,7 @@ func request(format: String):
 		status = "Production ads need release configuration and device verification."
 		return
 	if busy or full_screen: return
+	if placement not in ["meals","automation"]: return
 	if not app.model.s.fight.is_empty() or app.model.s.experience.get("coach_active",false):
 		status = "Finish your hunt or beginner guidance before testing an ad."
 		return
@@ -46,6 +49,8 @@ func request(format: String):
 		status = "Interstitial cooldown: 15 minutes between displays."
 		return
 	busy = true
+	reward_placement = placement
+	request_journey = app.model.s
 	requested_at = Time.get_ticks_msec()
 	generation += 1
 	var attempt = generation
@@ -104,7 +109,8 @@ func show_fullscreen(ad, rewarded: bool, attempt: int):
 	active_ad = ad
 	full_screen = true
 	var completed = {"reward":false}
-	var journey = app.model.s
+	var journey = request_journey
+	var placement = reward_placement
 	var food = str(app.model.s.settings.food)
 	var callbacks = FullScreenContentCallback.new()
 	callbacks.on_ad_dismissed_full_screen_content = func():
@@ -123,9 +129,10 @@ func show_fullscreen(ad, rewarded: bool, attempt: int):
 		listener.on_user_earned_reward = func(_reward):
 			if completed.reward or not is_same(app.model.s,journey): return
 			completed.reward = true
-			app.model.gain(food,int(config.reward_meals))
+			if placement=="automation": RealmAutomation.earned(app.model)
+			else: app.model.gain(food,int(config.reward_meals))
 			app.persist()
-			app.toast("Test reward: +%d %s." % [config.reward_meals,app.model.name_of(food)])
+			app.toast("Test reward: four hours of queue assistance unlocked." if placement=="automation" else "Test reward: +%d %s." % [config.reward_meals,app.model.name_of(food)])
 		ad.show(listener)
 	else:
 		last_interstitial = Time.get_ticks_msec()
