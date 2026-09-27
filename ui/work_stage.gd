@@ -30,6 +30,7 @@ func load_character():
 	frames.clear()
 	hero_poses.clear()
 	var path = "res://assets/art/work-poses-0.31.png" if character_id=="" else "res://assets/art/work-%s-0.32.png" % character_id
+	if character_id in ["reaver","apothecary"]: path = "res://assets/art/work-%s-0.33.png" % character_id
 	var sheet = load(path)
 	# Observed painted row edges, excluding thin separators in the source atlas.
 	var edges = [0,236,474,713,969,1210,1536]

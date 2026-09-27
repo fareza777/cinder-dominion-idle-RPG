@@ -3,7 +3,8 @@ extends RefCounted
 
 static func food_heal(m, id: String) -> int:
 	var legacy = RealmChronicle.state(m)
-	return int(m.data.items[id].get("heal",0))+(int(legacy.relics.heart)*3 if legacy.relic=="heart" else 0)+(8 if RealmGearSets.active(m,"dawnsteel") else 0)
+	var remedy = 6+3*(RealmCharacters.rank(m)-1) if RealmCharacters.id(m)=="apothecary" and RealmCharacters.rank(m)>0 else 0
+	return int(m.data.items[id].get("heal",0))+(int(legacy.relics.heart)*3 if legacy.relic=="heart" else 0)+(8 if RealmGearSets.active(m,"dawnsteel") else 0)+remedy
 
 static func move(m, enemy: Dictionary, strike: int, armor: int, second_phase: bool = false) -> Dictionary:
 	var third = strike%3==0
@@ -59,6 +60,7 @@ static func player_damage(m, enemy: Dictionary, swing: int) -> int:
 	if special and RealmGearSets.active(m,"dusksteel"): damage = maxi(1,int(damage*1.15))
 	if special and RealmCharacters.rank(m)>0:
 		if RealmCharacters.id(m)=="ranger": damage = maxi(1,int(damage*(1.2+.1*(RealmCharacters.rank(m)-1))))
+		if RealmCharacters.id(m)=="reaver" and enemy.boss: damage = maxi(1,int(damage*(1.25+.1*(RealmCharacters.rank(m)-1))))
 		damage = maxi(1,int(damage*(1+.03*RealmCharacters.allocated(m,"focus"))))
 	return damage
 

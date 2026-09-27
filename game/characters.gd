@@ -4,7 +4,9 @@ extends RefCounted
 const ALL = {
 	"warden":{"name":"Warden","role":"Armored defender","trade":"+3 armor · 10% less attack","attack":.9,"armor":1.0,"guard":3,"tile":0,"skill":"Iron Guard","detail":"Every third incoming attack deals 25% less damage."},
 	"ranger":{"name":"Ranger","role":"Relentless hunter","trade":"15% more attack · 20% less armor","attack":1.15,"armor":.8,"guard":0,"tile":1,"skill":"Marked Strike","detail":"Every fourth attack deals 20% more damage."},
-	"arcanist":{"name":"Arcanist","role":"Armor-breaking spellblade","trade":"5% more attack · 30% less armor","attack":1.05,"armor":.7,"guard":0,"tile":2,"skill":"Ember Lance","detail":"Every fourth attack ignores 40% of enemy armor."}
+	"arcanist":{"name":"Arcanist","role":"Armor-breaking spellblade","trade":"5% more attack · 30% less armor","attack":1.05,"armor":.7,"guard":0,"tile":2,"skill":"Ember Lance","detail":"Every fourth attack ignores 40% of enemy armor."},
+	"reaver":{"name":"Reaver","role":"Relentless boss hunter","trade":"20% more attack · 40% less armor","attack":1.2,"armor":.6,"guard":0,"tile":0,"skill":"Sundering Blow","detail":"Every fourth attack deals 25% more damage against bosses."},
+	"apothecary":{"name":"Apothecary","role":"Resourceful survivor","trade":"+1 armor · 15% less attack","attack":.85,"armor":1.0,"guard":1,"tile":1,"skill":"Field Remedy","detail":"Each meal restores 6 extra HP in battle."}
 }
 const ATTRIBUTES = {"might":"Might","resolve":"Resolve","focus":"Focus"}
 
@@ -54,4 +56,18 @@ static func apply_stats(m, stats: Dictionary):
 
 static func portrait(m) -> Texture2D:
 	if id(m)=="": return load("res://assets/art/hero-armory-0.31.png")
-	return preload("res://ui/style.gd").atlas_tile("res://assets/art/heroes-0.32.png",ALL[id(m)].tile,3,1)
+	return portrait_for(id(m))
+
+static func portrait_for(character: String) -> Texture2D:
+	var added = character in ["reaver","apothecary"]
+	return preload("res://ui/style.gd").atlas_tile("res://assets/art/heroes-new-0.33.png" if added else "res://assets/art/heroes-0.32.png",ALL[character].tile,2 if added else 3,1)
+
+static func skill_description(character: String, skill_rank: int) -> String:
+	var step = maxi(0,skill_rank-1)
+	match character:
+		"warden": return "Every third incoming attack deals %d%% less damage." % (25+5*step)
+		"ranger": return "Every fourth attack deals %d%% more damage." % (20+10*step)
+		"arcanist": return "Every fourth attack ignores %d%% of enemy armor." % (40+10*step)
+		"reaver": return "Every fourth attack deals %d%% more damage against bosses." % (25+10*step)
+		"apothecary": return "Each meal restores %d extra HP in battle." % (6+3*step)
+	return ""

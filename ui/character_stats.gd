@@ -25,8 +25,7 @@ func open():
 		card.add_child(b)
 	var rank = RealmCharacters.rank(m)
 	v.add_child(U.para(c.skill+" · Rank %d / 4" % rank,21,U.GOLD))
-	var amount = {"warden":25+5*maxi(0,rank-1),"ranger":20+10*maxi(0,rank-1),"arcanist":40+10*maxi(0,rank-1)}[RealmCharacters.id(m)]
-	v.add_child(U.para({"warden":"Every third incoming attack deals %d%% less damage.","ranger":"Every fourth attack deals %d%% more damage.","arcanist":"Every fourth attack ignores %d%% of enemy armor."}[RealmCharacters.id(m)] % amount,15,U.TEXT))
+	v.add_child(U.para(RealmCharacters.skill_description(RealmCharacters.id(m),rank),15,U.TEXT))
 	v.add_child(U.para("Automatic in battle. Ranks unlock at Bladecraft levels 5, 25, 50 and 75. Gear, stance and rune bonuses still apply.",13))
 	if rank==0: v.add_child(U.para("Not active yet · reach Bladecraft Lv.5.",14,U.GOLD))
 	var reset = app.modal_action("Reset attributes · free",func():

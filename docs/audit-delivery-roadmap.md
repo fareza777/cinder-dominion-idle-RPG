@@ -42,3 +42,7 @@ Small animated task-bar thumbnail with 24 new work poses across six skills; batt
 ## 0.32 delivered
 
 Three free classes, named journeys, attributes and class skill milestones added alongside progressive enemy discovery and distinct generated character/work art. Native AdMob demo controls are available; production consent, serving/device verification, monetized entitlements and long-term class balance remain open. See docs/qa/characters-discovery-0.32-report.md. Earlier audit priorities remain pending.
+
+## 0.33 delivered
+
+Visual direction revised at user request: concealed faces across runtime art, including enemies/statues/legacy fallbacks. Reaver and Apothecary expand the free roster to five with shared forecast/runtime effects. Broad balance, native device checks and production monetization remain open. See docs/qa/faceless-roster-0.33-report.md.

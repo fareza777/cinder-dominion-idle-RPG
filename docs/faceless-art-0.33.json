@@ -1,0 +1,94 @@
+{
+  "version": "0.33",
+  "method": "Built-in image_gen editing and generation",
+  "rule": "STRICT VISUAL RULE: every human, creature, animal, skull, statue, carving and decoration must have NO visible facial features: no eyes, eye sockets, glowing eyes, nose, nostrils, mouth, teeth, lips or facial anatomy. Completely cover each head/front of face with opaque heavy cloth or a smooth featureless closed helmet; deep hoods contain uniform black empty void, not a dim face. No face-shaped mask, no eye slits. Remove skull ornaments and replace with plain stones/metal. Keep elegant dark fantasy painted game art, crisp readable silhouette and material texture.",
+  "assets": [
+    {
+      "source": "C:\\Users\\FAJAR\\.codex\\generated_images\\01a0d6c6-87cf-7541-95c2-3388b3b24491\\exec-062887d2-6289-4683-bbff-043a9e02e42f.png",
+      "target": "assets/art/heroes-0.32.png",
+      "prompt": "Edit target game atlas. Preserve exactly THREE equal columns, same poses, scale, positions and costumes. Warden gets deep black hood and opaque black face veil under fur; Ranger gets deep olive hood with opaque face veil; Arcanist gets deep burgundy hood with opaque face veil, no hair visible. Remove ALL statues in background and replace with empty stone alcoves, remove every skull in room. STRICT VISUAL RULE: every human, creature, animal, skull, statue, carving and decoration must have NO visible facial features: no eyes, eye sockets, glowing eyes, nose, nostrils, mouth, teeth, lips or facial anatomy. Completely cover each head/front of face with opaque heavy cloth or a smooth featureless closed helmet; deep hoods contain uniform black empty void, not a dim face. No face-shaped mask, no eye slits. Remove skull ornaments and replace with plain stones/metal. Keep elegant dark fantasy painted game art, crisp readable silhouette and material texture. Preserve exact panel boundaries, dimensions, framing and all non-character scenery. NO text."
+    },
+    {
+      "source": "C:\\Users\\FAJAR\\.codex\\generated_images\\01a0d6c6-87cf-7541-95c2-3388b3b24491\\exec-052d19d4-8529-4a39-907a-aaa95c2d03cc.png",
+      "target": "assets/art/portraits.png",
+      "prompt": "Edit target game atlas. Preserve exact 4 columns x 2 rows grid and each tile subject identity. Cover ALL heads, including rat and hound, with opaque dark cloth wrappings without any openings; retain rat/hound body silhouettes and fur only outside covered head. Human figures get sealed hoods or plain opaque metal helmets. Specter hood is empty black. Remove skulls. STRICT VISUAL RULE: every human, creature, animal, skull, statue, carving and decoration must have NO visible facial features: no eyes, eye sockets, glowing eyes, nose, nostrils, mouth, teeth, lips or facial anatomy. Completely cover each head/front of face with opaque heavy cloth or a smooth featureless closed helmet; deep hoods contain uniform black empty void, not a dim face. No face-shaped mask, no eye slits. Remove skull ornaments and replace with plain stones/metal. Keep elegant dark fantasy painted game art, crisp readable silhouette and material texture. Preserve exact panel boundaries, dimensions, framing and all non-character scenery. NO text."
+    },
+    {
+      "source": "C:\\Users\\FAJAR\\.codex\\generated_images\\01a0d6c6-87cf-7541-95c2-3388b3b24491\\exec-17ea2b95-7369-456f-8a26-68f40a74c34e.png",
+      "target": "assets/art/combat-poses-0.27.png",
+      "prompt": "Edit target game atlas. Preserve exact FOUR columns by FOUR rows and all SIXTEEN poses, equipment, composition and spacing. Every figure has an opaque enclosed head, row1 deepblackhood, row2 plain fullyclosed mossyhelmet NO skull, row3 deeptealhood void NO skull, row4 sealed featureless metalhelmet without slits. Remove facial features in every frame. STRICT VISUAL RULE: every human, creature, animal, skull, statue, carving and decoration must have NO visible facial features: no eyes, eye sockets, glowing eyes, nose, nostrils, mouth, teeth, lips or facial anatomy. Completely cover each head/front of face with opaque heavy cloth or a smooth featureless closed helmet; deep hoods contain uniform black empty void, not a dim face. No face-shaped mask, no eye slits. Remove skull ornaments and replace with plain stones/metal. Keep elegant dark fantasy painted game art, crisp readable silhouette and material texture. Preserve exact panel boundaries, dimensions, framing and all non-character scenery. NO text."
+    },
+    {
+      "source": "C:\\Users\\FAJAR\\.codex\\generated_images\\01a0d6c6-87cf-7541-95c2-3388b3b24491\\exec-820f1c5f-6ef3-4173-bee9-7a74a404f6bb.png",
+      "target": "assets/art/expedition-guardians.png",
+      "prompt": "Edit target game atlas. Preserve exactly THREE vertical panels, replace all guardian faces with opaque coverings: left fully sealed bark plate without facial contours; center ornate teal hood with opaque black cloth veil covering entire face; right completely sealed dark iron faceplate without holes. Remove humanoid statues behind center and replace stone pillars. STRICT VISUAL RULE: every human, creature, animal, skull, statue, carving and decoration must have NO visible facial features: no eyes, eye sockets, glowing eyes, nose, nostrils, mouth, teeth, lips or facial anatomy. Completely cover each head/front of face with opaque heavy cloth or a smooth featureless closed helmet; deep hoods contain uniform black empty void, not a dim face. No face-shaped mask, no eye slits. Remove skull ornaments and replace with plain stones/metal. Keep elegant dark fantasy painted game art, crisp readable silhouette and material texture. Preserve exact panel boundaries, dimensions, framing and all non-character scenery. NO text."
+    },
+    {
+      "source": "C:\\Users\\FAJAR\\.codex\\generated_images\\01a0d6c6-87cf-7541-95c2-3388b3b24491\\exec-a458a86e-93ef-4019-aa79-55c153c13ae6.png",
+      "target": "assets/art/story-chapters-0.13.png",
+      "prompt": "Edit target game atlas. Preserve THREE panels and scenes. Foreground smith in left panel wears deep hood plus opaque complete face veil. Remove ALL background people from left panel. Remove raven in middle panel. Middle traveler completely back turned hidden head. Right knight completely closed featureless helmet, remove face-shaped carvings on bell. STRICT VISUAL RULE: every human, creature, animal, skull, statue, carving and decoration must have NO visible facial features: no eyes, eye sockets, glowing eyes, nose, nostrils, mouth, teeth, lips or facial anatomy. Completely cover each head/front of face with opaque heavy cloth or a smooth featureless closed helmet; deep hoods contain uniform black empty void, not a dim face. No face-shaped mask, no eye slits. Remove skull ornaments and replace with plain stones/metal. Keep elegant dark fantasy painted game art, crisp readable silhouette and material texture. Preserve exact panel boundaries, dimensions, framing and all non-character scenery. NO text."
+    },
+    {
+      "source": "C:\\Users\\FAJAR\\.codex\\generated_images\\01a0d6c6-87cf-7541-95c2-3388b3b24491\\exec-3825483f-b534-4cd2-b46d-7f24b68dd914.png",
+      "target": "assets/art/ascension-enemies-0.25.png",
+      "prompt": "Edit target game atlas. Keep exact 3x3 nine enemy tiles. Every skull replaced opaque deep hood or closed helmet; central white-robed figure wears opaque white face veil covering entire head front. Tree creatures have blank bark slabs without holes or face outlines. Knight and diving helmets closed entirely, remove glowing eyes. No birds. undefined Preserve all grid boundaries and overall dimensions. No text."
+    },
+    {
+      "source": "C:\\Users\\FAJAR\\.codex\\generated_images\\01a0d6c6-87cf-7541-95c2-3388b3b24491\\exec-c47c3a9b-9b57-465a-a070-112a1ee17800.png",
+      "target": "assets/art/battlefields.png",
+      "prompt": "Edit target game atlas. Keep three horizontal environment panels. Remove ALL humanoid statues and face carvings, replacing them with plain ruined obelisks and empty alcoves. No living creatures or people. undefined Preserve all grid boundaries and overall dimensions. No text."
+    },
+    {
+      "source": "C:\\Users\\FAJAR\\.codex\\generated_images\\01a0d6c6-87cf-7541-95c2-3388b3b24491\\exec-a2dcb8c6-0da4-46e1-8f0e-5d85f2bfa826.png",
+      "target": "assets/art/items.png",
+      "prompt": "Edit target game atlas. Keep exact 8 columns x 5 rows all forty item positions, colors and types. Change FOUR fish icons (row1 column8; row2 columns1,7,8) into neatly prepared HEADLESS fish fillets with tail, no blood, NO head NO face NO eyes. Keep all other icons unchanged. undefined Preserve all grid boundaries and overall dimensions. No text."
+    },
+    {
+      "source": "C:\\Users\\FAJAR\\.codex\\generated_images\\01a0d6c6-87cf-7541-95c2-3388b3b24491\\exec-0620b49a-1722-4190-b7dc-d20c3b5b68bc.png",
+      "target": "assets/art/hero-armory-0.31.png",
+      "prompt": "Edit this full-body equipment portrait. Preserve dimensions, body, clothes, pose, light, dark fantasy stone room. Replace the faint human face inside hood with completely flat opaque black cloth and deep empty shadow: no eyes, nose, mouth or facial anatomy even under lifted exposure. Remove face/skull-like ornaments anywhere. undefined"
+    },
+    {
+      "source": "C:\\Users\\FAJAR\\.codex\\generated_images\\01a0d6c6-87cf-7541-95c2-3388b3b24491\\exec-8213425f-3387-445c-a12a-e4e706b3b65d.png",
+      "target": "assets/art/heroes-new-0.33.png",
+      "prompt": "Create polished dark fantasy RPG equipment portrait atlas, landscape 1536x1024, EXACT TWO equal-width vertical panels. Each panel contains one full-body hero from head to boots, front three-quarter view, centered with generous side room. LEFT: Reaver, broad armored figure in weathered black plate with oxidized copper edges, deep rust-red hood and cape, heavy axe lowered beside body. RIGHT: Apothecary, lean layered teal wool traveler robes, deep teal hood, leather satchels, herb pouches, brass lantern and small green potion vials at belt, gloves. BOTH ENTIRE FACE COMPLETELY COVERED with flat opaque black cloth without facial contour under deep hood, absolutely no eyes, nose, mouth, skin, hair, glowing eyes or holes. Distinct silhouettes, dignified grounded craftsmanship, fine fabric folds, candlelit stone armory with EMPTY alcoves and no statues. No skulls, no animal decorations, no faces anywhere. Soft warm rim lights against cool charcoal room, restrained painterly premium fantasy game art, no text, no borders."
+    },
+    {
+      "source": "C:\\Users\\FAJAR\\.codex\\generated_images\\01a0d6c6-87cf-7541-95c2-3388b3b24491\\exec-cf9b1f48-e7cd-4a4e-b76d-619f262c6daa.png",
+      "target": "assets/art/work-warden-0.32.png",
+      "prompt": "Edit this work animation atlas into warden character. EXACTLY preserve 4 columns x 6 rows, all 24 poses and activity objects, same boundaries and camera. In EVERY cell dress worker in black plate armor and black fur mantle, deep charcoal hood. Entire face and head front COMPLETELY concealed by opaque black cloth under hood; NO visible facial anatomy in ANY of 24 frames. No exposed hair. Replace any caught fish with a small CLOSED wicker catch basket dangling from line, no fish visible. In cooking row replace spoon-tasting pose with spoon inspecting at chest level; face stays covered. Rows remain mining, chopping wood, fishing, smithing, cooking, alchemy. undefined Preserve original image dimensions 1024x1536, backgrounds and four-pose movements. No labels."
+    },
+    {
+      "source": "C:\\Users\\FAJAR\\.codex\\generated_images\\01a0d6c6-87cf-7541-95c2-3388b3b24491\\exec-472a23b6-f812-479e-9f6e-198f871f36a8.png",
+      "target": "assets/art/work-ranger-0.32.png",
+      "prompt": "Edit this work animation atlas into ranger character. EXACTLY preserve 4 columns x 6 rows, all 24 poses and activity objects, same boundaries and camera. In EVERY cell dress worker in olive leather armor, long sleeves and gloves, deep olive hood, quiver. Entire face and head front COMPLETELY concealed by opaque black cloth under hood; NO visible facial anatomy in ANY of 24 frames. No exposed hair. Replace any caught fish with a small CLOSED wicker catch basket dangling from line, no fish visible. In cooking row replace spoon-tasting pose with spoon inspecting at chest level; face stays covered. Rows remain mining, chopping wood, fishing, smithing, cooking, alchemy. undefined Preserve original image dimensions 1024x1536, backgrounds and four-pose movements. No labels."
+    },
+    {
+      "source": "C:\\Users\\FAJAR\\.codex\\generated_images\\01a0d6c6-87cf-7541-95c2-3388b3b24491\\exec-24b0c40b-bd45-4b0a-857b-a805874555a0.png",
+      "target": "assets/art/work-arcanist-0.32.png",
+      "prompt": "Edit this work animation atlas into arcanist character. EXACTLY preserve 4 columns x 6 rows, all 24 poses and activity objects, same boundaries and camera. In EVERY cell dress worker in burgundy robes with restrained gold trim, gloves, deep burgundy hood. Entire face and head front COMPLETELY concealed by opaque black cloth under hood; NO visible facial anatomy in ANY of 24 frames. No exposed hair. Replace any caught fish with a small CLOSED wicker catch basket dangling from line, no fish visible. In cooking row replace spoon-tasting pose with spoon inspecting at chest level; face stays covered. Rows remain mining, chopping wood, fishing, smithing, cooking, alchemy. undefined Preserve original image dimensions 1024x1536, backgrounds and four-pose movements. No labels."
+    },
+    {
+      "source": "C:\\Users\\FAJAR\\.codex\\generated_images\\01a0d6c6-87cf-7541-95c2-3388b3b24491\\exec-5b10fa83-0f0c-4630-9506-25247b066aaf.png",
+      "target": "assets/art/work-reaver-0.33.png",
+      "prompt": "Edit this work animation atlas into reaver character. EXACTLY preserve 4 columns x 6 rows, all 24 poses and activity objects, same boundaries and camera. In EVERY cell dress worker in black plate armor with oxidized copper trim, rust-red cape and deep rust-red hood, strong broad build. Entire face and head front COMPLETELY concealed by opaque black cloth under hood; NO visible facial anatomy in ANY of 24 frames. No exposed hair. Replace any caught fish with a small CLOSED wicker catch basket dangling from line, no fish visible. In cooking row replace spoon-tasting pose with spoon inspecting at chest level; face stays covered. Rows remain mining, chopping wood, fishing, smithing, cooking, alchemy. undefined Preserve original image dimensions 1024x1536, backgrounds and four-pose movements. No labels."
+    },
+    {
+      "source": "C:\\Users\\FAJAR\\.codex\\generated_images\\01a0d6c6-87cf-7541-95c2-3388b3b24491\\exec-4fa5e5f3-b176-43cf-93cf-5e22bc568ce7.png",
+      "target": "assets/art/work-apothecary-0.33.png",
+      "prompt": "Edit this work animation atlas into apothecary character. EXACTLY preserve 4 columns x 6 rows, all 24 poses and activity objects, same boundaries and camera. In EVERY cell dress worker in layered teal wool robes, leather herb satchels and potion belt, gloves and deep teal hood. Entire face and head front COMPLETELY concealed by opaque black cloth under hood; NO visible facial anatomy in ANY of 24 frames. No exposed hair. Replace any caught fish with a small CLOSED wicker catch basket dangling from line, no fish visible. In cooking row replace spoon-tasting pose with spoon inspecting at chest level; face stays covered. Rows remain mining, chopping wood, fishing, smithing, cooking, alchemy. undefined Preserve original image dimensions 1024x1536, backgrounds and four-pose movements. No labels."
+    }
+  ],
+  "additionalReplacement": {
+    "assets/art/work-poses-0.31.png": "Copy of approved work-warden-0.32.png, prevents legacy fish/face fallback"
+  },
+  "reviewedUnchanged": [
+    "ascension-items-0.25.png",
+    "ascension-places-0.25.png",
+    "runestones.png",
+    "cinderwatch.png",
+    "world-map.png",
+    "cinematic.png"
+  ],
+  "notes": "Reviewed all 19 original runtime raster images and the SVG UI/icon set. Unchanged scenery has no discernible complete faces; cinematic traveler is fully back-turned. Historical docs/qa screenshots are not runtime assets and are excluded from Android export. Criteria implement the user's visual preference, not a religious certification."
+}

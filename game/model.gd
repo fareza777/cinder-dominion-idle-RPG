@@ -472,7 +472,8 @@ func resolve_combat():
 			if crit: damage = int(damage*1.5)
 			f.hp -= damage
 			var skill_name = {"balanced":"CLEAVE ","guard":"WARD ","reaver":"REND "}[progression().stance]
-			if RealmCharacters.rank(self)>0 and RealmCharacters.id(self)!="warden": skill_name = RealmCharacters.ALL[RealmCharacters.id(self)].skill.to_upper()+" "
+			var character = RealmCharacters.id(self)
+			if RealmCharacters.rank(self)>0 and (character in ["ranger","arcanist"] or (character=="reaver" and d.boss)): skill_name = RealmCharacters.ALL[character].skill.to_upper()+" "
 			if RealmRuneforge.active_rank(self,"thorn")>0: skill_name = "PIERCE "
 			elif RealmRuneforge.active_rank(self,"bell")>0: skill_name = "DIRGE "
 			last_hit = (skill_name if special else ("CRIT " if crit else ""))+str(damage)
