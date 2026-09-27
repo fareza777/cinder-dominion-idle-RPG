@@ -233,7 +233,7 @@ func command(cmd: Dictionary) -> bool:
 				found = true
 			if not found: return fail("Unknown contract")
 		"upgrade":
-			if not RealmProgression.UPGRADES.has(id): return fail("Unknown refuge upgrade")
+			if not RealmProgression.UPGRADES.has(id): return fail("Unknown stronghold upgrade")
 			var rank = int(progression().upgrades[id])
 			if rank>=3: return fail("Maximum rank reached")
 			var upgrade = RealmProgression.UPGRADES[id]

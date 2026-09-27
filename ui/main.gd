@@ -2,6 +2,7 @@ extends Control
 
 const U = preload("res://ui/style.gd")
 const Pages = preload("res://ui/pages.gd")
+const Brand = preload("res://ui/brand.gd")
 var model = RealmModel.new()
 var saves = RealmSave.new()
 var page = "village"
@@ -51,6 +52,7 @@ var seen_levels = {}
 var seen_chapters = -1
 
 func _ready():
+	DisplayServer.window_set_title(Brand.TITLE)
 	get_tree().auto_accept_quit = false
 	get_tree().quit_on_go_back = false
 	var loaded = saves.read_state(model.data)
@@ -282,11 +284,12 @@ func build_shell():
 	layout.add_child(header)
 	var hr = U.row(12)
 	header.add_child(hr)
-	hr.add_child(U.portrait(0,Vector2(44,54)))
+	hr.add_child(Brand.emblem(Vector2(48,48)))
 	var title = U.column(0)
 	hr.add_child(title)
 	title.size_flags_horizontal = Control.SIZE_EXPAND_FILL
-	title.add_child(U.para("ASHEN COVENANT",16,U.TEXT))
+	title.add_child(U.para(Brand.SHORT,15,U.TEXT))
+	title.add_child(U.label("IDLE RPG",10,U.GOLD))
 	hr.add_child(U.button("☰",func(): experience.menu()))
 	var counters = U.column(2)
 	hr.add_child(counters)
@@ -350,11 +353,12 @@ func build_shell():
 	nav_panel.add_theme_stylebox_override("panel",U.box(Color("0e151a"),U.LINE,0,6))
 	nav_panel.add_child(nav)
 	layout.add_child(nav_panel)
-	for entry in [["village","Desa","Refuge"],["explore","Jelajah","Explore"],["skills","Keahlian","Skills"],["inventory","Tas","Bag"],["character","Karakter","Hero"]]:
+	for entry in [["village","Desa","Stronghold"],["explore","Jelajah","Explore"],["skills","Keahlian","Skills"],["inventory","Tas","Bag"],["character","Karakter","Hero"]]:
 		var key = entry[0]
 		var b = U.button(tr2(entry[1],entry[2]),func(): set_page(key))
 		b.name = key
 		b.custom_minimum_size.y = 55
+		b.custom_minimum_size.x = 0
 		b.size_flags_horizontal = Control.SIZE_EXPAND_FILL
 		b.add_theme_font_size_override("font_size",int(12*U.scale))
 		b.add_theme_stylebox_override("normal",U.box(Color("101a21") if key==page else Color("0e151a"),U.GOLD if key==page else Color("0e151a"),4,6))
@@ -795,7 +799,7 @@ func settings_dialog():
 	v.add_child(U.label("HELP & COMMUNITY",11,U.GOLD))
 	v.add_child(U.button("How to play",experience.handbook))
 	if mode=="play": v.add_child(U.button("Replay beginner tips",experience.welcome))
-	v.add_child(U.button("About Ashen Covenant",experience.about))
+	v.add_child(U.button("About Cinder Dominion",experience.about))
 	v.add_child(U.button("Share",experience.share))
 	v.add_child(U.button("Rate",experience.rate))
 	v.add_child(U.button("Return to main menu",experience.menu))

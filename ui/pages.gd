@@ -21,7 +21,7 @@ func heading(parent: Node, overline: String, title: String, subtitle: String = "
 	if subtitle!="": v.add_child(U.para(subtitle,14))
 
 func village(parent: Node):
-	heading(parent,text("BAB I  /  SUAKA TERAKHIR","CHAPTER I  /  THE LAST REFUGE"),"Cinderwatch")
+	heading(parent,text("BAB I  /  SUAKA TERAKHIR","YOUR STRONGHOLD"),"Cinderwatch")
 	preload("res://ui/chronicle.gd").new(app).home(parent)
 	preload("res://ui/upgrade_goal.gd").new(app).home(parent)
 	var scene = Control.new()

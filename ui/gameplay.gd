@@ -11,7 +11,7 @@ func _init(owner):
 
 func work_orders(selected: String = "watch", batches: int = 1):
 	var orders = P.orders(m)
-	var v = app.modal("Work for the refuge")
+	var v = app.modal("Prepare for the hunt")
 	v.add_child(U.para("Leave the hearth well supplied.",26,U.TEXT))
 	v.add_child(U.para("Set a longer gathering and crafting order before you leave. Materials already in your pack are used first. These orders do not start combat.",14))
 	var selector = OptionButton.new()
@@ -127,8 +127,8 @@ func advanced_training():
 		c.add_child(button)
 
 func contracts():
-	var v = app.modal("Refuge contracts")
-	v.add_child(U.para("Optional milestones. Progress is counted automatically across your entire journey. Each reward can be claimed once. Spend scraps and gold on permanent refuge upgrades.",14))
+	var v = app.modal("Stronghold contracts")
+	v.add_child(U.para("Optional milestones. Progress is counted automatically across your entire journey. Each reward can be claimed once. Spend scraps and gold on permanent stronghold upgrades.",14))
 	for c in P.CONTRACTS:
 		var claimed = c.id in m.progression().claimed
 		var ready = P.value(m,c)>=c.target

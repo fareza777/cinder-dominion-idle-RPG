@@ -39,7 +39,7 @@ func home(parent: Node):
 
 
 func services(parent: Node):
-	parent.add_child(U.label("REFUGE SERVICES",10,U.GOLD))
+	parent.add_child(U.label("TOWN",10,U.GOLD))
 	var row = U.row(7)
 	parent.add_child(row)
 	for entry in [["journey","Journey"],["armory","Armory"],["supplies","Supplies"]]:
@@ -64,7 +64,7 @@ func station(kind: String):
 				app.dismiss()
 				app.set_page("inventory")],["Ember Workshop","Guaranteed equipment refinement, from Fine to Legendary.",app.workshop_dialog],["Complete loadouts","Save equipment, talents, style, rune and supplies together.",app.loadouts_dialog],["Talents","Choose where to spend earned melee experience.",app.talents_dialog],["Relics","Awaken a collection and choose its active bonus.",app.relics_dialog],["Runeforge","Upgrade and equip a rune for a specific combat effect.",app.runeforge_dialog]]
 		"supplies":
-			entries = [["Work orders","Plan gathering and crafting for your time away.",app.work_orders_dialog],["Food & survival","Choose cooked food and understand automatic healing.",app.experience.survival],["Merchant","Buy tools and vials with gold earned on the road.",app.merchant_dialog],["Refuge contracts","Collect milestone supplies you have earned.",app.contracts_dialog],["Rebuild Cinderwatch","Improve the forge, gates and resting hearth.",app.refuge_dialog]]
+			entries = [["Work orders","Plan gathering and crafting for your time away.",app.work_orders_dialog],["Food & survival","Choose cooked food and understand automatic healing.",app.experience.survival],["Merchant","Buy tools and vials with gold earned on the road.",app.merchant_dialog],["Stronghold contracts","Collect milestone supplies you have earned.",app.contracts_dialog],["Rebuild Cinderwatch","Improve the forge, gates and resting hearth.",app.refuge_dialog]]
 	for entry in entries:
 		var card = U.card(v,12)
 		card.add_child(U.button(entry[0]+"  →",entry[2]))
@@ -204,7 +204,7 @@ func bounties():
 	if state.daily.claimed.size()==3: v.add_child(U.para("Board complete. Come back after the next UTC day begins for a fresh board. Your expeditions and farming remain available now.",15,U.GOLD))
 
 func world(selected: String = "wilds"):
-	var v = app.modal("Beyond the last refuge")
+	var v = app.modal("Beyond the walls")
 	var art = TextureRect.new()
 	art.texture = load("res://assets/art/world-map.png") if ResourceLoader.exists("res://assets/art/world-map.png") else load("res://assets/art/cinderwatch.png")
 	art.expand_mode = TextureRect.EXPAND_IGNORE_SIZE

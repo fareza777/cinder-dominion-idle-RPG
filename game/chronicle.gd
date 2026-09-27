@@ -4,7 +4,7 @@ extends RefCounted
 const TALENTS = {
 	"power":{"name":"Blade of Dawn","detail":"+1 attack per rank. Finish fights sooner."},
 	"guard":{"name":"Last Bastion","detail":"+1 armor per rank. Spend less food on long hunts."},
-	"fortune":{"name":"Wayfarer's Fortune","detail":"+2 gold per victory per rank. Fund refuge upgrades."}}
+	"fortune":{"name":"Wayfarer's Fortune","detail":"+2 gold per victory per rank. Fund stronghold upgrades."}}
 const RELICS = {
 	"fang":{"name":"Ashfang","detail":"+2 attack per rank while equipped.","source":"Ash Rats, Hollow Hounds, Cinder Bandits; Ashen Wilds","enemy":"ash_rat","icon":"copper_sword","color":"d9b477"},
 	"ward":{"name":"Hollow Aegis","detail":"+2 armor per rank while equipped.","source":"Grave Thralls, Chapel Guards, Bellkeeper; Obsidian Crown","enemy":"grave_thrall","icon":"iron_shield","color":"91b5db"},
@@ -14,7 +14,7 @@ const REGIONS = {
 	"marsh":{"name":"Drowned Sanctum","detail":"The cloisters sank, but their oracle never left. Seek Emberheart fragments in the ruins.","color":"83bcb8","relic":"heart"},
 	"crown":{"name":"Obsidian Crown","detail":"Beyond the ridge, the second bell is still ringing. Defeat its keeper for Hollow Aegis fragments.","color":"d295aa","relic":"ward"}}
 const BOUNTIES = {
-	"gather":{"name":"Supply the Refuge","target":30,"detail":"Complete 30 gathering cycles of any kind.","gold":25},
+	"gather":{"name":"Supply the Stronghold","target":30,"detail":"Complete 30 gathering cycles of any kind.","gold":25},
 	"craft":{"name":"Keep the Forges Warm","target":10,"detail":"Cook, smelt or forge 10 items.","gold":35},
 	"hunt":{"name":"Hold the Line","target":8,"detail":"Win 8 battles against any enemies.","gold":45}}
 

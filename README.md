@@ -1,10 +1,10 @@
-# Ashen Covenant — Adventure preview 0.34
+# Cinder Dominion: Idle RPG — Adventure preview 0.35
 
 Idle RPG dark fantasy untuk Android. Gratis; iklan uji Android tersedia secara opsional di Settings dan bantuan antrean. Build ini untuk dimainkan dan dievaluasi, belum versi rilis publik.
 
 ## Mulai bermain
 
-1. Pasang `build/android/ashen-covenant-0.34.apk` di Android 64-bit. APK memakai identitas aplikasi yang sama dengan 0.1–0.33 sehingga bisa dipasang sebagai pembaruan.
+1. Pasang `build/android/cinder-dominion-0.35.apk` di Android 64-bit. APK memakai identitas aplikasi yang sama dengan 0.1–0.34 sehingga bisa dipasang sebagai pembaruan.
 2. Seluruh antarmuka dan narasi game memakai **English**. Splash mengantar ke menu utama. Pilih **New game** untuk memilih Warden, Ranger, Arcanist, Reaver atau Apothecary dan memasukkan nama, lalu pilih **Show me the way** untuk panduan dengan sorotan emas. Intro opsional tersedia di About. **Continue journey** melanjutkan progres yang sudah ada.
 3. Tekan **Goals** di bagian atas layar. Layar menampilkan target, angka progres, checklist dan tombol tugas. Tekan tindakannya, lalu **Begin · 4 cycles** (jumlahnya mengikuti tujuan) untuk memulai jumlah siklus yang tepat.
 4. Tugas awal: 4 copper ore → 2 copper ingots → 1 ash log → Copper Sword → Equip item → 3 Ash Rats. Panduan lalu mengantar lewat musuh berikutnya hingga Bellkeeper, tanpa melompat langsung ke boss.
@@ -12,11 +12,15 @@ Idle RPG dark fantasy untuk Android. Gratis; iklan uji Android tersedia secara o
 6. Buka **Food & survival guide** untuk belajar memancing, memasak, memilih makanan dan menyiapkan auto-heal. Perlengkapan hasil crafting harus dipasang dari **Bag**.
 7. Progres tersimpan otomatis dan berlanjut maksimal 24 jam saat kembali. Menu **☰** tersedia dari dalam permainan. New Game meminta konfirmasi dan menyimpan cadangan terpisah; **Settings → Restore a previous journey** memulihkannya.
 
+## Baru di 0.35 — New identity
+
+Nama publik menjadi **Cinder Dominion: Idle RPG**. Emblem mahkota besi dan bara memakai PNG transparan, tanpa latar kotak, pada splash/menu/header. Ikon aplikasi ikut diganti. Tab **Stronghold** menggantikan Refuge; **Town** menggantikan Refuge Services. Save dan identitas paket Android tetap kompatibel. Rekomendasi desain halaman berikutnya: [arah visual premium](docs/premium-ui-direction-0.35.md).
+
 ## Baru di 0.34 — Optional guardians & rewarded assistance
 
 Tujuh penjaga opsional dengan lokasi bertahap, art wajah tertutup, tujuh equipment unik, blueprint dua tahap, core khusus dan pembelian pasti setelah delapan kemenangan. Hero mendapat sepuluh pilihan spesialisasi serta empat socket relic. Hollow Depths menawarkan pilihan menyimpan hadiah atau melanjutkan dengan risiko meningkat; tiga kontrak pilihan dan target mingguan tetap tersimpan sampai selesai.
 
-Setelah beacon terbuka, masuk **Refuge → Beyond the beacon**. Lokasi pertama terbuka setelah Crown Apex terakhir. Bantuan antrean adaptif hanya terbuka melalui **rewarded ad yang selesai**, selama empat jam; antrean manual tetap gratis. Iklan memakai ID uji Android, belum produksi. Audit kesulitan, hasil simulasi dan batas verifikasi ada di [laporan 0.34](docs/qa/endgame-0.34-report.md). Katalog kini berisi 123 item, 42 enemy definitions (termasuk tujuh penjaga baru dan satu tipe Depths), 143 aktivitas, lima karakter; batas level tetap 100.
+Setelah beacon terbuka, masuk **Stronghold → Beyond the beacon**. Lokasi pertama terbuka setelah Crown Apex terakhir. Bantuan antrean adaptif hanya terbuka melalui **rewarded ad yang selesai**, selama empat jam; antrean manual tetap gratis. Iklan memakai ID uji Android, belum produksi. Audit kesulitan, hasil simulasi dan batas verifikasi ada di [laporan 0.34](docs/qa/endgame-0.34-report.md). Katalog kini berisi 123 item, 42 enemy definitions (termasuk tujuh penjaga baru dan satu tipe Depths), 143 aktivitas, lima karakter; batas level tetap 100.
 
 ## Baru di 0.33 — Concealed faces & five characters
 
@@ -154,7 +158,7 @@ Laporan lama tetap kompatibel dan hanya menampilkan rincian yang memang tersimpa
 
 ## Baru di 0.10 — Alur progres lebih jelas
 
-**Refuge → Progress & farming** menggantikan roadmap lama dengan tiga tab: **Next step**, **Farm**, dan **Upgrade**. Tujuan utama, saran persiapan, kegunaan bahan, cara menaikkan level, dan syarat membuka wilayah dijelaskan terpisah dengan tombol langsung ke aktivitas terkait.
+**Stronghold → Progress & farming** menggantikan roadmap lama dengan tiga tab: **Next step**, **Farm**, dan **Upgrade**. Tujuan utama, saran persiapan, kegunaan bahan, cara menaikkan level, dan syarat membuka wilayah dijelaskan terpisah dengan tombol langsung ke aktivitas terkait.
 
 Farming sekarang dijelaskan berdasarkan kebutuhan: makanan untuk hunt, ingot untuk equipment, XP untuk level dan talent, fragments untuk relic/rune, serta scraps dan gold untuk upgrade. Panduan upgrade mengurutkan equip gear → refine quality → pilih bonus → coba satu fight dan periksa hasil.
 
@@ -172,17 +176,17 @@ Intro dan teks perjalanan diperhalus dalam English. Angka mekanik dan petunjuk t
 
 Tiga tantangan opsional setelah tier kelima setiap wilayah: **The Thornbound Vigil**, **The Unbroken Hymn**, dan **Crown at Sundown**. Guardian memasuki fase kedua saat HP mencapai setengah; serangan khususnya menguat dan fase tetap aktif walau guardian menyembuhkan diri.
 
-Buka **Explore → Guardian trials** atau **Refuge → Journey → Guardian trials**. Pelajari dua fase, periksa perkiraan risiko build, lalu **Prepare one trial → Begin · 1 fight**. Kemenangan pertama memberi equipment Epic yang pasti, 120 bonus fragments, 15 scraps dan 20 grilled minnows. Kemenangan selanjutnya tetap menghasilkan fragments, gold, XP dan material. Hunt reports membedakan hasil aktual, dan kemenangan trial ikut menghitung field records.
+Buka **Explore → Guardian trials** atau **Stronghold → Journey → Guardian trials**. Pelajari dua fase, periksa perkiraan risiko build, lalu **Prepare one trial → Begin · 1 fight**. Kemenangan pertama memberi equipment Epic yang pasti, 120 bonus fragments, 15 scraps dan 20 grilled minnows. Kemenangan selanjutnya tetap menghasilkan fragments, gold, XP dan material. Hunt reports membedakan hasil aktual, dan kemenangan trial ikut menghitung field records.
 
 Catatan implementasi dan batas produksi: `docs/guardian-trials-0.8.md`. Pemeriksaan terbatas: `docs/qa/guardian-trials-0.8-report.md`.
 
 ## Baru di 0.7 — iterasi menyeluruh
 
-**Upgrade gear yang pasti.** Refuge → Armory → Ember Workshop memperbaiki satu equipment copper/iron melalui Fine, Rare, Epic, hingga Legendary. Biaya menggunakan gold, ingot dan scraps hasil bermain; syarat Smithing meningkat sampai level 20. Tidak ada kegagalan acak. Hanya satu copy yang ditingkatkan, sementara equipment terpasang dan referensi build mengikuti hasil upgrade.
+**Upgrade gear yang pasti.** Stronghold → Armory → Ember Workshop memperbaiki satu equipment copper/iron melalui Fine, Rare, Epic, hingga Legendary. Biaya menggunakan gold, ingot dan scraps hasil bermain; syarat Smithing meningkat sampai level 20. Tidak ada kegagalan acak. Hanya satu copy yang ditingkatkan, sementara equipment terpasang dan referensi build mengikuti hasil upgrade.
 
 **Loadout lengkap.** Tiga slot menyimpan equipment, fighting style, talent, relic, rune, food, potion dan ambang healing sekaligus. Ganti di luar combat; persediaan tetap harus disiapkan. Item yang dipakai loadout terlindungi dari salvage. Preset gear lama tetap didukung.
 
-**Hunt reports.** Explore → Review this journey atau Refuge → Journey → Hunt reports memperlihatkan 12 order berburu terakhir: kemenangan, durasi, loot beserta rarity, fragment, gold, XP, makanan dan potion terpakai. Selesai, retreat dan kalah memiliki hasil yang berbeda. Progres offline ikut tercatat; hasil sudah masuk ke tas, bukan hadiah untuk diklaim dua kali.
+**Hunt reports.** Explore → Review this journey atau Stronghold → Journey → Hunt reports memperlihatkan 12 order berburu terakhir: kemenangan, durasi, loot beserta rarity, fragment, gold, XP, makanan dan potion terpakai. Selesai, retreat dan kalah memiliki hasil yang berbeda. Progres offline ikut tercatat; hasil sudah masuk ke tas, bukan hadiah untuk diklaim dua kali.
 
 **Refuge dan pertarungan lebih hidup.** Tujuan utama dan ilustrasi kota kini mendahului tiga kelompok layanan: Journey, Armory dan Supplies. Tiga arena orisinal dilihat dari permukaan tanah. Portrait memiliki gerak serangan/impact, partikel dan peringatan pukulan guardian; pengaturan reduced motion tetap dihormati.
 
@@ -209,7 +213,7 @@ Review mendalam, temuan yang dibenahi, dan pekerjaan menuju kualitas produksi ad
 
 **Mulai dengan satu tujuan.** Refuge menampilkan **YOUR NEXT MOVE** di atas ilustrasi: apa yang perlu dikerjakan, alasannya, dan tombol tindakannya. Mulai dari 4 copper ore. Roadmap menjelaskan jalur senjata pertama → perlengkapan dan makanan → Bellkeeper → ekspedisi. Rekomendasi kemudian mengikuti kondisi antrean, talent, relic, gear, makanan dan Smithing.
 
-**Work orders untuk sesi panjang.** Setelah First Supplies, Refuge → Supplies → Work orders membuka empat jenis pesanan. Pilih 1/2/4 batch, tinjau hasil, XP dan estimasi waktu, lalu mulai. Satu batch Feed the Forge menghasilkan 500 copper ingots dari bahan yang dikumpulkan otomatis; empat batch bisa berjalan beberapa jam. Pesanan tidak memulai combat.
+**Work orders untuk sesi panjang.** Setelah First Supplies, Stronghold → Supplies → Work orders membuka empat jenis pesanan. Pilih 1/2/4 batch, tinjau hasil, XP dan estimasi waktu, lalu mulai. Satu batch Feed the Forge menghasilkan 500 copper ingots dari bahan yang dikumpulkan otomatis; empat batch bisa berjalan beberapa jam. Pesanan tidak memulai combat.
 
 **Grind dengan tujuan.** Setiap musuh memberikan fragment relic tertentu secara pasti. Tiga relic memiliki masing-masing 10 rank; pilih satu untuk bonus attack, armor atau pemulihan makanan. Biaya upgrade meningkat, sementara tier ekspedisi lebih tinggi menghasilkan lebih banyak fragment. Tiga jalur talent menyediakan 15 rank dengan batas alokasi 10 poin, satu poin per 250 melee XP, dan reset gratis di luar combat. Tier baru memberi tujuan, build alternatif memberi alasan untuk mencoba lagi.
 

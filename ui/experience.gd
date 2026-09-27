@@ -1,8 +1,9 @@
 extends RefCounted
 
 const U = preload("res://ui/style.gd")
+const Brand = preload("res://ui/brand.gd")
 const STORE_URL = "" # Set only after a real public listing exists.
-const VERSION = "0.34.0"
+const VERSION = "0.35.0"
 var app
 var front: Control
 var cinematic_page = 0
@@ -73,15 +74,16 @@ func title(parent, value, size=42):
 func splash():
 	app.mode = "boot"
 	var v = screen()
-	gap(v,160)
-	var icon = TextureRect.new()
-	icon.texture = load("res://assets/icon.svg")
-	icon.custom_minimum_size = Vector2(90,90)
-	icon.expand_mode = TextureRect.EXPAND_IGNORE_SIZE
-	icon.stretch_mode = TextureRect.STRETCH_KEEP_ASPECT_CENTERED
-	v.add_child(icon)
-	title(v,"ASHEN COVENANT",34)
-	v.add_child(U.para("Every ember begins a journey.",16,U.GOLD))
+	gap(v,90)
+	v.add_child(Brand.emblem(Vector2(0,220)))
+	title(v,Brand.SHORT,34)
+	v.get_child(v.get_child_count()-1).horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
+	var genre = U.label("IDLE RPG",16,U.GOLD)
+	genre.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
+	v.add_child(genre)
+	var tagline = U.para("Hunt. Forge. Rise.",16,U.TEXT)
+	tagline.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
+	v.add_child(tagline)
 	v.add_child(U.progress(1,1,U.GOLD,2))
 	app.get_tree().create_timer(1.6).timeout.connect(func():
 		if app.mode=="boot": menu())
@@ -90,11 +92,17 @@ func menu():
 	if app.mode=="play": app.persist()
 	app.mode = "menu"
 	var v = screen()
-	v.add_child(U.label("A DARK FANTASY IDLE RPG",10,U.GOLD))
-	gap(v,42)
-	title(v,"ASHEN\nCOVENANT",58)
-	v.add_child(U.para("Beyond the walls, the dead still stir.\nOne refuge still burns.",17,U.MUTED))
-	gap(v,24)
+	v.add_theme_constant_override("separation",10)
+	v.add_child(Brand.emblem(Vector2(0,144)))
+	title(v,"CINDER\nDOMINION",50)
+	v.get_child(v.get_child_count()-1).horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
+	var genre = U.label("DARK FANTASY · IDLE RPG",12,U.GOLD)
+	genre.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
+	v.add_child(genre)
+	var tagline = U.para("Hunt. Forge. Rise.",17,U.TEXT)
+	tagline.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
+	v.add_child(tagline)
+	gap(v,8)
 	if app.has_campaign:
 		var card = U.card(v,14,U.GOLD.darkened(.6))
 		card.add_child(U.label("YOUR JOURNEY",10,U.GOLD))
@@ -169,7 +177,7 @@ func intro(replay=false):
 func intro_scene():
 	var scenes = [
 		["I · THE LONG NIGHT","When the bells rang,\nthe fires went out.","No one remembers which bell rang first. By dawn, the roads were empty, and every hearth in the valley had gone cold.",7],
-		["II · THE LAST REFUGE","Cinderwatch\nstill stands.","At Cinderwatch, someone kept a fire alive. Now strangers share its warmth, mend the walls, and wait for the roads to open.",0],
+		["II · THE LAST STRONGHOLD","Cinderwatch\nstill stands.","At Cinderwatch, someone kept a fire alive. Now strangers share its warmth, mend the walls, and wait for the roads to open.",0],
 		["III · YOUR COVENANT","Take up the ember.","You came here looking for shelter. Tomorrow, you will take a blade beyond the walls. Somewhere in the dark, the Bellkeeper is still ringing.",0]
 	]
 	var scene = scenes[cinematic_page]
@@ -304,12 +312,12 @@ func handbook():
 		["04 · Fight automatically","Open Explore, choose an unlocked enemy and a number of fights. Each victory brings gold, loot and melee XP. Plan a longer hunt to estimate time and supplies, or try one fight first. Return after this fight finishes the current battle and cancels the rest of your queue. Selected cooked food heals you automatically while available."],
 		["05 · Plan your time","Queue holds up to 20 tasks. Only the first runs. Tasks wait when ingredients or levels are missing. Sources shows how to get materials; Queue lets you cancel blocked tasks."],
 		["06 · Return to your rewards","Your saved queue continues for up to 24 hours while away. You receive a report when you return. Leave a task running before you go; an empty queue earns no gathering or combat rewards."],
-		["07 · Build a stronger refuge","Refuge contracts reward milestones with gold, food and scraps. Claim completed contracts, then Rebuild Cinderwatch to improve production speed, armor and recovery. Hero and Explore let you choose Vanguard, Warden or Reaver before a hunt."],
+		["07 · Build your stronghold","Stronghold contracts reward milestones with gold, food and scraps. Claim completed contracts, then Rebuild Cinderwatch to improve production speed, armor and recovery. Hero and Explore let you choose Vanguard, Warden or Reaver before a hunt."],
 		["08 · Grow beyond Chapter I","After First Supplies, earn talent points from melee XP and awaken relics with guaranteed fragments. Unfinished bounties carry over without streak loss. After the Bellkeeper, the World map opens 15 expedition tiers with stronger foes, iron loot and targeted relic farms."],
-		["09 · Make a dependable upgrade","After First Supplies, visit Refuge → Armory → Ember Workshop. Spend ingots, scraps and gold to refine one copper or iron piece by one quality step. Refinement is guaranteed, up to Legendary. Higher qualities require more Smithing experience. Equipped slots and saved builds follow the improved piece."],
+		["09 · Make a dependable upgrade","After First Supplies, visit Stronghold → Armory → Ember Workshop. Spend ingots, scraps and gold to refine one copper or iron piece by one quality step. Refinement is guaranteed, up to Legendary. Higher qualities require more Smithing experience. Equipped slots and saved builds follow the improved piece."],
 		["10 · Keep more than one answer","In Hero, save a complete loadout with your gear, fighting style, talents, relic, rune, food, potion and healing threshold. Apply it outside combat. Loadouts do not create supplies: check your pack before a long hunt."],
 		["11 · Read the road","Hunt reports record completed, recalled and defeated hunting orders, including time away. Gold, loot and fragments are already delivered. Review food consumption, refine your gear or adjust your build before returning."],
-		["12 · Find your way around","Refuge: your objective, Journey, Armory and Supplies. Explore: enemies and combat. Skills: gathering and crafting. Bag: equipment and supplies. Hero: build choices and Settings. The Journey guide remains at the top of every screen."]
+		["12 · Find your way around","Stronghold: your objective, Journey, Armory and Supplies. Explore: enemies and combat. Skills: gathering and crafting. Bag: equipment and supplies. Hero: build choices and Settings. The Journey guide remains at the top of every screen."]
 	]:
 		v.add_child(U.para(section[0],20,U.GOLD))
 		v.add_child(U.para(section[1],16,U.TEXT))
@@ -334,9 +342,9 @@ func archives():
 			else: app.confirm_restore(state)))
 
 func about():
-	var v = app.modal("About Ashen Covenant")
+	var v = app.modal("About Cinder Dominion")
 	title(v,"Keep the last fire burning.",30)
-	v.add_child(U.para("Ashen Covenant is an independent dark fantasy idle RPG about gathering, crafting and preparing for the battles ahead.\n\nVersion "+VERSION+" · Adventure preview\nChapter I + 3 expedition regions · 15 expedition tiers + 3 guardian trials\n5 playable characters · class skills · customizable attributes\n\nFree to play. No purchases are active in this preview. Settings includes optional Android test ads. Cosmetics and content expansions are planned for future releases.",16,U.TEXT))
+	v.add_child(U.para("Cinder Dominion: Idle RPG is an independent dark fantasy idle RPG about gathering, crafting and preparing for the battles ahead.\n\nVersion "+VERSION+" · Adventure preview\nChapter I + 3 expedition regions · 15 expedition tiers + 3 guardian trials\n7 optional guardians + Hollow Depths\n5 playable characters · class skills · customizable attributes\n\nFree to play. No purchases are active in this preview. Settings includes optional Android test ads. Cosmetics and content expansions are planned for future releases.",16,U.TEXT))
 	v.add_child(U.para("Art generated for this project with OpenAI image generation. Original synthesized audio. Fonts: Manrope and Cormorant Garamond. Built with Godot.",14))
 	v.add_child(U.button("Credits & open-source licenses",licenses))
 	v.add_child(U.button("Replay cinematic intro",func(): intro(true)))
@@ -347,8 +355,8 @@ func licenses():
 		v.add_child(U.para(FileAccess.get_file_as_string(path),12))
 
 func share():
-	var v = app.modal("Share Ashen Covenant")
-	var message = "I'm playing Ashen Covenant — a dark fantasy idle RPG. Gather, forge and fight to rekindle the last beacon. Free to play."
+	var v = app.modal("Share Cinder Dominion")
+	var message = "I'm playing Cinder Dominion: Idle RPG. Hunt rare enemies, forge powerful gear and explore the dark. Free to play."
 	if STORE_URL!="": message += "\n"+STORE_URL
 	else: message += "\nCurrently in private preview; a public download link is not available yet."
 	v.add_child(U.para(message,17,U.TEXT))
@@ -369,14 +377,14 @@ func share_native(message: String):
 	intent.setAction("android.intent.action.SEND")
 	intent.setType("text/plain")
 	intent.putExtra("android.intent.extra.TEXT",message)
-	var chooser = intent_class.createChooser(intent,"Share Ashen Covenant")
+	var chooser = intent_class.createChooser(intent,"Share Cinder Dominion")
 	Engine.get_singleton("AndroidRuntime").getActivity().startActivity(chooser)
 	if wrapper.get_exception()!=null:
 		DisplayServer.clipboard_set(message)
 		app.toast("Sharing is unavailable here. The message was copied instead.")
 
 func rate():
-	var v = app.modal("Rate Ashen Covenant")
+	var v = app.modal("Rate Cinder Dominion")
 	if STORE_URL=="":
 		v.add_child(U.para("Thank you for playing.",26,U.GOLD))
 		v.add_child(U.para("This preview is not published on Google Play yet, so store ratings are not available. Once the public listing is live, this button will open the official page.",17,U.TEXT))

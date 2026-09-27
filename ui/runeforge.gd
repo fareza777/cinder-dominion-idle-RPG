@@ -85,7 +85,7 @@ func forge(selected: String = "thorn"):
 	if rank==0 and R.victories(m,d.region)<1: v.add_child(U.para("Discover this inscription by defeating any guardian in "+RealmChronicle.REGIONS[d.region].name+".",14,U.GOLD))
 	v.add_child(U.button("Field journal · hunts & supplies",func(): journal(d.region)))
 	v.add_child(U.button("Find "+RealmChronicle.RELICS[d.relic].name+" fragments",func(): preload("res://ui/chronicle.gd").new(app).farms(d.relic)))
-	v.add_child(U.para("Scraps come from expedition first clears, field records, refuge contracts and salvaging unprotected spare equipment in Bag.",12))
+	v.add_child(U.para("Scraps come from expedition first clears, field records, stronghold contracts and salvaging unprotected spare equipment in Bag.",12))
 	if rank<3:
 		if R.forge_reason(m,selected)!="": app.dynamic(app.dialog_footer,func(): return R.forge_reason(m,selected),12,U.GOLD)
 		var button = app.modal_action("Inscribe "+d.name if rank==0 else "Deepen inscription · rank "+str(rank+1),func():

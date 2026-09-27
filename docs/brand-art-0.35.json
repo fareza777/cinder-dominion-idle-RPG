@@ -1,0 +1,17 @@
+{
+  "tool": "Built-in image_gen",
+  "asset": "assets/art/cinder-dominion-emblem-0.35.png",
+  "steps": [
+    {
+      "prompt": "Create one premium dark fantasy mobile RPG app emblem, square 1024x1024 composition, no text or letters. A bold three-point blackened iron crown integrated into a broken circular forged-metal seal, holding a single brilliant molten amber ember at its center. Symbolic object only: no people, no figures, no faces, no eyes, no skulls, no animals, no religious symbols. Monumental simple silhouette recognizable at 48 pixels, tactile hand-forged iron, restrained antique gold edges, warm amber light spilling through one central fracture, elegant asymmetry, refined painterly realism rather than flat clipart. The entire emblem occupies the central 62 percent of the square, with generous breathing room safe for round Android icon masks. Dark near-black charcoal background, subtle smoke and fine sparks close to the emblem, edges fade to uniform near-black #0b1014. Highest attention to material craft, sharp readable edges and strong central contrast. No ornate rectangular border, no mockup, no UI, no typography, no watermark.",
+      "source": "C:/Users/FAJAR/.codex/generated_images/01a0d6c6-87cf-7541-95c2-3388b3b24491/exec-2ff8bd71-ff47-4ead-adff-5cb15646df03.png",
+      "role": "Initial opaque concept, superseded"
+    },
+    {
+      "prompt": "Edit this supplied emblem into a production-ready transparent PNG brand mark. Keep the exact black iron three-point crown, broken ring silhouette, molten amber core, metal texture and warm gold lighting. REMOVE the entire smoky square background and make the surrounding background genuinely transparent alpha, not black or a checkerboard drawing. Preserve the metal and internal central ember. Remove loose background smoke and stray floating particles. Center the intact emblem with generous transparent padding: its entire visible bounding box must fit inside the central 60 percent of the square canvas, both width and height, to survive Android adaptive icon masks. No new objects, no text, no faces, no eyes, no figures. One square transparent image.",
+      "source": "C:/Users/FAJAR/.codex/generated_images/01a0d6c6-87cf-7541-95c2-3388b3b24491/exec-f3fc9154-c030-48c4-b220-36853a58ca79.png",
+      "role": "Final transparent emblem"
+    }
+  ],
+  "review": "RGBA 1254x1254; alpha extrema 0..255. Final menu screenshot inspected: no square matte behind emblem. No faces, figures, eyes, nose or mouth. Android adaptive mask appearance still needs a device check."
+}

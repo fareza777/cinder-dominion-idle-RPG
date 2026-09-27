@@ -35,7 +35,7 @@ func open(uid: String):
 	changes.add_child(U.para("Your build with this item",21,U.TEXT))
 	if comparison.has("activity"):
 		changes.add_child(U.para("%s\n%.2fs → %.2fs per cycle" % [m.activity_name(comparison.activity),comparison.seconds_before,comparison.seconds_after],18,U.TEXT))
-		changes.add_child(U.para("Includes current mastery and refuge bonuses. Tool speed is fixed by tool type; rarity does not increase it.",13))
+		changes.add_child(U.para("Includes current mastery and stronghold bonuses. Tool speed is fixed by tool type; rarity does not increase it.",13))
 	else:
 		for stat in ["attack","armor"]:
 			var before = float(comparison.before[stat])

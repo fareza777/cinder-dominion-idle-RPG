@@ -1,6 +1,6 @@
 extends RefCounted
 const U = preload("res://ui/style.gd")
-const TRACKS = {"hearth":"Cinderwatch · Refuge","wilds":"Beyond the Walls · Battle","sanctum":"Sunken Bells · Sanctum","crown":"The Hollow Crown · Bosses"}
+const TRACKS = {"hearth":"Cinderwatch · Stronghold","wilds":"Beyond the Walls · Battle","sanctum":"Sunken Bells · Sanctum","crown":"The Hollow Crown · Bosses"}
 var app
 func _init(owner): app = owner
 func open():
