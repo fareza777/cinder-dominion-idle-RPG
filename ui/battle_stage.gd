@@ -24,11 +24,12 @@ var draw_clock = 0.0
 var cast_time = 0.0
 var cast_name = ""
 var poses: Array[Texture2D] = []
-var character_art: Texture2D
+const FX = preload("res://ui/battle_fx.gd")
+var class_effects: Array = []
+var effects_enabled = true
 
 func _ready():
-	if RealmCharacters.id(model)!="": character_art = RealmCharacters.portrait(model)
-	for index in range(16): poses.append(U.atlas_tile("res://assets/art/combat-poses-0.27.png",index,4,4))
+	poses = preload("res://ui/hero_combat.gd").frames(RealmCharacters.id(model))
 	custom_minimum_size.y = 280
 	mouse_filter = Control.MOUSE_FILTER_IGNORE
 	clip_contents = true
@@ -65,6 +66,8 @@ func _ready():
 func _process(delta: float):
 	if model==null: return
 	if not is_visible_in_tree(): return
+	for effect in class_effects: effect.life -= delta
+	class_effects = class_effects.filter(func(effect): return effect.life>0)
 	elapsed += delta
 	cast_time = maxf(0,cast_time-delta)
 	awakening = maxf(0,awakening-delta)
@@ -86,6 +89,10 @@ func _process(delta: float):
 	if serial!=int(model.battle_event.serial):
 		for event in model.combat_events:
 			if int(event.serial)>serial and int(model.s.time)-int(event.get("time",0))<1000:
+				var effect = FX.from_event(model,event)
+				if not effect.is_empty():
+					class_effects.append(effect)
+					if class_effects.size()>6: class_effects.pop_front()
 				if event.get("kind","")=="cast":
 					cast_time = .9
 					cast_name = str(event.text)
@@ -152,32 +159,28 @@ func _draw():
 		if fighting:
 			var until = float(int(f.player_at if side==0 else f.enemy_at)-int(model.s.time))/1000.0
 			windup = clampf(1.0-until/.5,0,1)
-		if model.s.settings.motion:
+		if side==0 and model.s.settings.motion:
 			r.position.y += sin(elapsed*1.4+side*2)*1.2-evade*3
 			r.position.x += direction*(swing*15-windup*4-evade*11)
-			if side==1: r.position.x += arrival*18
 			if hit: r.position.x -= direction*sin(clampf(impacts[target]/.4,0,1)*PI)*6
 			var center = r.get_center()
 			draw_set_transform(center,direction*(swing*.035-evade*.045),Vector2(1,1+sin(elapsed*1.4+side*2)*.006))
 			r.position -= center
 		if side==0 or fighting:
-			var pose_row = 0 if side==0 else {"wilds":1,"marsh":2,"crown":3}.get(enemy.get("region",""),-1)
-			if side==1 and enemy.get("apex",false): pose_row = -1
-			if side==0 and character_art!=null:
-				draw_texture_rect(character_art,r,false,Color(1,.72,.68) if hit else Color.WHITE)
-			elif pose_row>=0:
-				var frame = 3 if hit else (2 if attacks[target]>0 else (1 if windup>.4 else 0))
+			var pose_row = 0 if side==0 else -1
+			if pose_row>=0:
+				var frame = 3 if hit else ((2 if attacks[target]>.18 else 3) if attacks[target]>0 else (1 if windup>.4 else 0))
 				if not model.s.settings.motion: frame = 0
 				var pose_center = (left if side==0 else right).get_center()
 				if model.s.settings.motion: pose_center.x += direction*(swing*15-windup*4-evade*11)
 				draw_set_transform(pose_center,0,Vector2(1 if side==0 else -1,1))
-				var area = Rect2(-100,-65,200,133)
-				draw_texture_rect(poses[pose_row*4+frame],area,false,Color(1,.72,.68) if hit else Color.WHITE)
+				var area = Rect2(-85,-76,170,152)
+				preload("res://ui/hero_combat.gd").draw(self,RealmCharacters.id(model),frame,area,Color(1,.72,.68) if hit else Color.WHITE)
 				draw_set_transform(Vector2.ZERO)
 			else:
-				draw_rect(r.grow(2),U.GREEN if recovery[target]>.4 else (U.RED if hit else U.GOLD.darkened(.45)))
+				draw_rect(r.grow(2),U.GOLD.darkened(.45))
 				var face = enemy_face if enemy_face!=null else faces[int(enemy.portrait)]
-				draw_face(face,r,Color(1,.72,.68) if hit else Color.WHITE)
+				draw_face(face,r,Color.WHITE)
 		else:
 			draw_rect(r,U.INK)
 			caption(r.position+Vector2(0,80),"Awaiting hunt",U.MUTED,12,w)
@@ -185,12 +188,10 @@ func _draw():
 		r = left if side==0 else right
 		if recovery[target]>0:
 			var life = recovery[target]/.8
-			draw_arc(r.get_center(),30+(1-life)*38 if model.s.settings.motion else 48,0,TAU,32,Color(U.GREEN,life*.6),2.0,true)
-		if model.s.settings.motion and attacks[target]>0:
-			var center = (right if side==0 else left).get_center()
-			var progress = 1-attacks[target]/.45
-			var tint = U.GOLD if side==0 else U.RED
-			draw_arc(center,30+progress*12,-1.3+progress*1.7,.4+progress*1.7,18,Color(tint,(1-progress)*.85),2.0,true)
+			if model.s.settings.motion and effects_enabled:
+				for i in range(4):
+					var point = r.get_center()+Vector2(-18+i*12,30-(1-life)*52+i%2*7)
+					draw_circle(point,1.4,Color(U.GREEN,life*.6))
 		var health = float(model.s.hp)/100 if side==0 else (float(f.hp)/enemy.hp if fighting else 0.0)
 		bar(Rect2(r.position.x,207,w,6),health,U.GREEN if side==0 else U.RED)
 		var hp = "%d / 100 HP" % int(model.s.hp) if side==0 else ("%d / %d HP" % [maxi(0,int(f.hp)),int(enemy.hp)] if fighting else "Choose a target below")
@@ -199,25 +200,21 @@ func _draw():
 			var remaining = int(f.player_at if side==0 else f.enemy_at)-int(model.s.time)
 			var interval = 2000 if side==0 else int(enemy.interval)
 			bar(Rect2(r.position.x,241,w,3),1.0-float(remaining)/interval,U.GOLD)
-	caption(Vector2(16,29),"EMBERKEEPER",U.GOLD,11,w)
+	caption(Vector2(16,29),RealmCharacters.hero_name(model).to_upper(),U.GOLD,11,w)
 	caption(Vector2(right.position.x,29),model.local_name(enemy).split(" · ")[0].to_upper() if fighting else "THE OUTSKIRTS",U.GOLD,10,w)
 	caption(Vector2(size.x/2-20,127),"II" if fighting and RealmTrials.active_phase(model,enemy) else "VS",U.RED if fighting and RealmTrials.active_phase(model,enemy) else U.GOLD,22,40)
 	if awakening>0:
 		var strength = awakening/1.2
 		if model.s.settings.motion:
-			draw_arc(right.get_center(),35+(1-strength)*65,0,TAU,40,Color(U.RED,strength*.7),2.0,true)
+			for i in range(7):
+				var point = right.get_center()+Vector2(-34+i*11,45-(1-strength)*100+i%2*8)
+				draw_line(point,point+Vector2(2,-11),Color(U.RED,strength*.4),1.5,true)
 		caption(Vector2(0,190),"THE GUARDIAN AWAKENS",U.GOLD,12,size.x)
-	if model.s.settings.motion:
+	if model.s.settings.motion and effects_enabled:
 		for i in range(8 if model.s.settings.battery else 14):
 			var x = fmod(i*47.3+sin(elapsed*.4+i)*9,size.x)
 			var y = 198-fmod(elapsed*(7+i%4)+i*19.7,155)
 			draw_circle(Vector2(x,y),.7+i%2*.4,Color(U.GOLD,.18+.14*sin(elapsed+i)))
-		for target in impacts:
-			if impacts[target]>.18:
-				var center = (left if target=="hero" else right).get_center()
-				var alpha = impacts[target]/.4
-				draw_line(center+Vector2(-29,22),center+Vector2(28,-25),Color(U.GOLD,alpha*.75),2.0,true)
-				draw_line(center+Vector2(-18,28),center+Vector2(35,-12),Color(U.TEXT,alpha*.6),1.0,true)
 	if fighting and cast_time>0:
 		var strength = cast_time/.9
 		if model.s.settings.motion:
@@ -228,9 +225,13 @@ func _draw():
 						var x = left.position.x+12+i*23
 						draw_polyline(PackedVector2Array([Vector2(x,196),Vector2(x-8,176-strength*25),Vector2(x+4,150-strength*30)]),Color(U.GREEN,strength*.7),2.0,true)
 				"marsh":
-					for i in range(3): draw_arc(right.get_center(),25+i*13+(1-strength)*20,0,TAU,28,Color(.5,.8,.8,strength*.55),2.0,true)
+					for i in range(4):
+						var point = right.get_center()+Vector2(-30+i*20,30-(1-strength)*70)
+						draw_polyline(PackedVector2Array([point,point+Vector2(-6,-15),point+Vector2(3,-27)]),Color(.5,.8,.8,strength*.35),1.5,true)
 				_:
-					draw_arc(origin,18+(1-strength)*80,0,TAU,32,Color(U.GOLD,strength*.8),3.0,true)
+					for i in range(6):
+						var point = origin+Vector2(-28+i*11,-24+(1-strength)*65)
+						draw_line(point,point+Vector2(4,10),Color(U.GOLD,strength*.5),1.5,true)
 		caption(Vector2(0,190),cast_name.to_upper(),U.GOLD,12,size.x)
 	if fighting and enemy.boss and int(f.hits)%3==2:
 		var warning_alpha = .6+.2*sin(elapsed*4) if model.s.settings.motion else .7
@@ -241,6 +242,14 @@ func _draw():
 		var charges = int(f.get("swings",0))%4
 		caption(Vector2(0,268),"%s  %d / 4    ·    NEXT ATTACK %.1fs" % [{"balanced":"CLEAVE","guard":"WARD","reaver":"REND"}[model.progression().stance],charges,maxf(0,(int(f.player_at)-int(model.s.time))/1000.0)],U.GOLD,10,size.x)
 	else: caption(Vector2(0,268),"PREPARE  ·  HUNT  ·  BRING HOPE HOME",U.GOLD,10,size.x)
+	if effects_enabled:
+		for effect in class_effects: FX.draw(self,effect,left,right,bool(model.s.settings.motion))
+		if cast_time<=0 and awakening<=0:
+			for i in range(class_effects.size()-1,-1,-1):
+				var skill = str(class_effects[i].skill)
+				if skill!="":
+					caption(Vector2(0,190),FX.LABELS.get(skill,""),U.GOLD,12,size.x)
+					break
 	var lanes = {"hero":0,"enemy":0}
 	for i in range(floating.size()):
 		var item = floating[i]

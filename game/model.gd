@@ -16,8 +16,8 @@ var last_forged = ""
 func progression() -> Dictionary:
 	return RealmProgression.state(self)
 
-func combat_event(message: String, side: String, kind: String = "hit"):
-	battle_event = {"serial":int(battle_event.serial)+1,"text":message,"side":side,"time":int(s.time),"kind":kind}
+func combat_event(message: String, side: String, kind: String = "hit", skill: String = ""):
+	battle_event = {"serial":int(battle_event.serial)+1,"text":message,"side":side,"time":int(s.time),"kind":kind,"skill":skill}
 	combat_events.append(battle_event)
 	if combat_events.size()>8: combat_events.pop_front()
 
@@ -497,7 +497,9 @@ func resolve_combat():
 			if RealmRuneforge.active_rank(self,"thorn")>0: skill_name = "PIERCE "
 			elif RealmRuneforge.active_rank(self,"bell")>0: skill_name = "DIRGE "
 			last_hit = (skill_name if special else ("CRIT " if crit else ""))+str(damage)
-			combat_event(last_hit,"enemy")
+			var visual_skill = ("reaver_style" if progression().stance=="reaver" else progression().stance) if special else ""
+			if special and RealmCharacters.rank(self)>0 and (character in ["ranger","arcanist"] or (character=="reaver" and d.boss)): visual_skill = character
+			combat_event(last_hit,"enemy","hit",visual_skill)
 		else:
 			last_hit = "MISS"
 			combat_event("MISS","enemy")
@@ -518,7 +520,7 @@ func resolve_combat():
 			if restored>0: combat_event("+%d HP" % restored,"enemy")
 		if rng.randf()<.95:
 			s.hp -= int(move.damage)
-			combat_event("−%d HP" % int(move.damage),"hero")
+			combat_event("−%d HP" % int(move.damage),"hero","hit","warden" if int(f.hits)%3==0 and RealmCharacters.id(self)=="warden" and RealmCharacters.rank(self)>0 else "")
 		else: combat_event("MISS","hero")
 		if s.hp<=0:
 			RealmAutomation.stop(self,"Defeated. Review your build before restarting assistance.")
@@ -538,7 +540,7 @@ func resolve_combat():
 			RealmHunts.supplies(self,"meals",food)
 			var restored_food = mini(100-int(s.hp),RealmCombat.food_heal(self,food))
 			s.hp += restored_food
-			combat_event("+%d HP" % restored_food,"hero")
+			combat_event("+%d HP" % restored_food,"hero","hit","apothecary" if RealmCharacters.id(self)=="apothecary" and RealmCharacters.rank(self)>0 else "")
 
 func win(enemy: Dictionary):
 	var before_gains = s.gains.duplicate(true)

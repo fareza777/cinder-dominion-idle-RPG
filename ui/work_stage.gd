@@ -13,7 +13,6 @@ var clock = 0.0
 var running = false
 var combat = false
 var character_id = "unset"
-var character_art: Texture2D
 
 func _ready():
 	name = "WorkStage"
@@ -26,7 +25,6 @@ func _ready():
 
 func load_character():
 	character_id = RealmCharacters.id(model)
-	character_art = RealmCharacters.portrait(model)
 	frames.clear()
 	hero_poses.clear()
 	var path = "res://assets/art/work-poses-0.31.png" if character_id=="" else "res://assets/art/work-%s-0.32.png" % character_id
@@ -41,7 +39,7 @@ func load_character():
 		var row = int(i/4)
 		tile.region = Rect2((i%4)*256+2,edges[row]+2,252,edges[row+1]-edges[row]-4)
 		frames.append(tile)
-	for i in range(4): hero_poses.append(U.atlas_tile("res://assets/art/combat-poses-0.27.png",i,4,4))
+	hero_poses = preload("res://ui/hero_combat.gd").frames(character_id)
 
 func _process(delta):
 	if model==null: return
@@ -58,8 +56,7 @@ func _process(delta):
 	frame = 0
 	if running and model.s.settings.motion:
 		if combat:
-			var recent = not model.combat_events.is_empty() and int(model.s.time)-int(model.combat_events[-1].get("time",0))<450
-			frame = 2 if recent else 0
+			frame = preload("res://ui/hero_combat.gd").frame(model)
 		else:
 			# Simulation time freezes visual work when the app is paused.
 			var span = mini(2400,int(model.s.active.due-model.s.active.started))
@@ -75,8 +72,7 @@ func _draw():
 	if combat:
 		draw_rect(area,Color("152029"))
 		if enemy_art!=null: draw_texture_rect(enemy_art,Rect2(size.x*.52,2,size.x*.46,size.y-4),false,Color(.8,.8,.8))
-		if character_id=="": draw_texture_rect(hero_poses[frame],Rect2(-12,3,size.x*.88,size.y-6),false)
-		else: draw_texture_rect(character_art,Rect2(1,2,size.x*.5,size.y-4),false)
+		preload("res://ui/hero_combat.gd").draw(self,character_id,frame,Rect2(-6,3,size.x*.72,size.y-6))
 		if frame==2: draw_line(Vector2(size.x*.4,15),Vector2(size.x*.70,38),U.GOLD,2,true)
 	else:
 		var texture = frames[skill_index*4+frame]

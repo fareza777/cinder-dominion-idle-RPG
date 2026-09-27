@@ -17,3 +17,7 @@ Public title: Cinder Dominion: Idle RPG. Keep project.godot application/config/n
 ## Main-page design from 0.36
 
 Use RealmUI.scenic for art-led headers with text in container flow, RealmUI.section for quiet dividers, primary bronze buttons for immediate actions and secondary etched controls for tools. Keep the persistent Goals coach target. Inventory supply actions now live in pages.supply_details; hunt controls live in hunt_preparation and hunt_routes. Preserve source/potion/sale access when changing these views. New environment prompt and source: docs/page-art-0.36.json. UI screenshot bounds must compare logical Godot coordinates, not physical raster dimensions under canvas stretch.
+
+## Battle direction from 0.37
+
+User explicitly wants small full-body hero sprites with distinct attack poses, matching the earliest battle style, for all five classes. Do not substitute sliding portrait cards or the rejected articulated Warden puppet. Enemy art stays stationary; damage/skill overlays remain. Use restrained weapon trails, sparks and healing wisps, not oversized shield/crosshair/plus/magic-circle symbols. Runtime UV sprite mapping is in ui/hero_combat.gd; new skill metadata is transient combat-event data and must never alter balance or save schema.
