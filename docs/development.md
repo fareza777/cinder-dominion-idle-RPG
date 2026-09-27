@@ -13,3 +13,7 @@ Keep every depicted face concealed: opaque hood/veil or fully closed featureless
 ## Public identity from 0.35
 
 Public title: Cinder Dominion: Idle RPG. Keep project.godot application/config/name as Ashen Covenant: it is the legacy desktop user:// directory key. ui/brand.gd and the Android package label provide the visible title. Keep com.ashencovenant.prototype and signing identity stable for upgrades. Brand art must be a transparent emblem on UI, without a rectangular matte or a portrait substitute. Stronghold is the village tab; Town groups its services. Internal village/refuge IDs remain stable.
+
+## Main-page design from 0.36
+
+Use RealmUI.scenic for art-led headers with text in container flow, RealmUI.section for quiet dividers, primary bronze buttons for immediate actions and secondary etched controls for tools. Keep the persistent Goals coach target. Inventory supply actions now live in pages.supply_details; hunt controls live in hunt_preparation and hunt_routes. Preserve source/potion/sale access when changing these views. New environment prompt and source: docs/page-art-0.36.json. UI screenshot bounds must compare logical Godot coordinates, not physical raster dimensions under canvas stretch.

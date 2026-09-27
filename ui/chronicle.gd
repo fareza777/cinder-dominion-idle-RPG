@@ -17,7 +17,7 @@ func locked(v: Node) -> bool:
 
 func home(parent: Node):
 	var card = U.card(parent,16,U.GOLD.darkened(.35))
-	card.add_child(U.label("NEXT",10,U.GOLD))
+	U.section(card,"RECOMMENDED NEXT")
 	app.dynamic(card,func(): return C.focus(m).title,24,U.TEXT)
 	var action = U.button("Continue",act,true)
 	card.add_child(action)
@@ -39,7 +39,7 @@ func home(parent: Node):
 
 
 func services(parent: Node):
-	parent.add_child(U.label("TOWN",10,U.GOLD))
+	U.section(parent,"TOWN")
 	var row = U.row(7)
 	parent.add_child(row)
 	for entry in [["journey","Journey"],["armory","Armory"],["supplies","Supplies"]]:
@@ -66,8 +66,7 @@ func station(kind: String):
 		"supplies":
 			entries = [["Work orders","Plan gathering and crafting for your time away.",app.work_orders_dialog],["Food & survival","Choose cooked food and understand automatic healing.",app.experience.survival],["Merchant","Buy tools and vials with gold earned on the road.",app.merchant_dialog],["Stronghold contracts","Collect milestone supplies you have earned.",app.contracts_dialog],["Rebuild Cinderwatch","Improve the forge, gates and resting hearth.",app.refuge_dialog]]
 	for entry in entries:
-		var card = U.card(v,12)
-		card.add_child(U.button(entry[0]+"  →",entry[2]))
+		v.add_child(U.button(entry[0]+"  →",entry[2]))
 
 func act():
 	var focus = C.focus(m)

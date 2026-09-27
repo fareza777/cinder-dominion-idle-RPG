@@ -3,7 +3,7 @@ extends RefCounted
 const U = preload("res://ui/style.gd")
 const Brand = preload("res://ui/brand.gd")
 const STORE_URL = "" # Set only after a real public listing exists.
-const VERSION = "0.35.0"
+const VERSION = "0.36.0"
 var app
 var front: Control
 var cinematic_page = 0

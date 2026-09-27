@@ -31,7 +31,7 @@ static var frame_cache: Dictionary = {}
 
 static func box(color: Color = PANEL, border: Color = LINE, radius: int = 10, padding: int = 14) -> StyleBox:
 	# Tiny meters and transparent focus outlines keep crisp geometry.
-	if (radius>0 and radius<=3) or color.a<0.1:
+	if radius<=3 or color.a<0.1:
 		var flat = StyleBoxFlat.new()
 		flat.bg_color = color
 		flat.border_color = border
@@ -45,7 +45,7 @@ static func frame(color: Color, border: Color, kind: String, padding: int) -> St
 	var key = color.to_html()+border.to_html()+kind
 	if not frame_cache.has(key):
 		var svg = FileAccess.get_file_as_string("res://assets/ui/"+kind+"-frame.svg.txt")
-		var edge = border.lerp(Color("8c7050"),.4)
+		var edge = border.lerp(Color("8c7050"),.12)
 		var colors = {"BASE":color,"TOP":color.lightened(.055),"BOTTOM":color.darkened(.3),"EDGE":edge,"LIGHT":edge.lightened(.24),"DARK":edge.darkened(.45)}
 		for token in colors: svg = svg.replace("{"+token+"}","#"+colors[token].to_html(false))
 		var img = Image.new()
@@ -147,7 +147,7 @@ static func button(text: String, callback: Callable, primary: bool = false) -> B
 	b.add_theme_color_override("font_hover_color",GOLD)
 	b.add_theme_color_override("font_pressed_color",GOLD)
 	b.add_theme_color_override("font_disabled_color",Color("737e84"))
-	b.add_theme_stylebox_override("normal",box(Color("493620") if primary else Color("20282b"),GOLD if primary else LINE,6,12))
+	b.add_theme_stylebox_override("normal",frame(Color("493620"),GOLD,"button",12) if primary else frame(Color("182126"),LINE,"action",12))
 	b.add_theme_stylebox_override("hover",box(Color("60462a") if primary else Color("2c353a"),GOLD,6,12))
 	b.add_theme_stylebox_override("pressed",box(Color("302519") if primary else Color("111a21"),GOLD,6,12))
 	b.add_theme_stylebox_override("disabled",box(Color("182027"),LINE,6,10))
@@ -258,3 +258,58 @@ static func atlas_tile(path: String, index: int, cols: int, rows: int) -> AtlasT
 	var cell = Vector2(texture.get_width()/float(cols),texture.get_height()/float(rows))
 	atlas.region = Rect2(Vector2(index%cols,int(index/cols))*cell,cell)
 	return atlas
+
+static func scenic(parent: Node, texture: Texture2D, eyebrow: String, title: String, height: int = 184) -> PanelContainer:
+	var panel = PanelContainer.new()
+	panel.name = "ScenicHeader"
+	panel.custom_minimum_size.y = height
+	panel.clip_contents = true
+	panel.mouse_filter = Control.MOUSE_FILTER_IGNORE
+	panel.add_theme_stylebox_override("panel",box(Color(0,0,0,0),Color(0,0,0,0),0,16))
+	parent.add_child(panel)
+	var art = TextureRect.new()
+	art.texture = texture
+	art.expand_mode = TextureRect.EXPAND_IGNORE_SIZE
+	art.stretch_mode = TextureRect.STRETCH_KEEP_ASPECT_COVERED
+	art.mouse_filter = Control.MOUSE_FILTER_IGNORE
+	panel.add_child(art)
+	var gradient = Gradient.new()
+	gradient.offsets = PackedFloat32Array([0,.35,1])
+	gradient.colors = PackedColorArray([Color(INK,0),Color(INK,.3),Color(INK,.98)])
+	var texture_gradient = GradientTexture2D.new()
+	texture_gradient.gradient = gradient
+	texture_gradient.fill_from = Vector2(.5,0)
+	texture_gradient.fill_to = Vector2(.5,1)
+	var veil = TextureRect.new()
+	veil.texture = texture_gradient
+	veil.mouse_filter = Control.MOUSE_FILTER_IGNORE
+	panel.add_child(veil)
+	var words = column(3)
+	words.alignment = BoxContainer.ALIGNMENT_END
+	panel.add_child(words)
+	words.add_child(para(eyebrow,10,GOLD))
+	var heading = para(title,34,TEXT)
+	heading.add_theme_font_override("font",title_font)
+	words.add_child(heading)
+	return panel
+
+static func section(parent: Node, title: String):
+	var line = row(12)
+	parent.add_child(line)
+	line.add_child(label(title,11,GOLD))
+	var rule = HSeparator.new()
+	rule.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+	rule.size_flags_vertical = Control.SIZE_SHRINK_CENTER
+	var style = StyleBoxLine.new()
+	style.color = LINE
+	style.thickness = 1
+	rule.add_theme_stylebox_override("separator",style)
+	line.add_child(rule)
+
+static func navigation(active: bool) -> StyleBoxFlat:
+	var style = StyleBoxFlat.new()
+	style.bg_color = Color("172027") if active else Color("0e151a")
+	style.border_color = GOLD if active else Color("0e151a")
+	style.border_width_top = 2
+	style.set_content_margin_all(6)
+	return style

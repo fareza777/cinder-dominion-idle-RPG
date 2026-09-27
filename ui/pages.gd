@@ -21,42 +21,9 @@ func heading(parent: Node, overline: String, title: String, subtitle: String = "
 	if subtitle!="": v.add_child(U.para(subtitle,14))
 
 func village(parent: Node):
-	heading(parent,text("BAB I  /  SUAKA TERAKHIR","YOUR STRONGHOLD"),"Cinderwatch")
+	U.scenic(parent,page_art(0),"YOUR STRONGHOLD","Cinderwatch",210)
 	preload("res://ui/chronicle.gd").new(app).home(parent)
 	preload("res://ui/upgrade_goal.gd").new(app).home(parent)
-	var scene = Control.new()
-	scene.custom_minimum_size.y = 96
-	scene.clip_contents = true
-	parent.add_child(scene)
-	var art = TextureRect.new()
-	art.texture = load("res://assets/art/cinderwatch.png")
-	art.expand_mode = TextureRect.EXPAND_IGNORE_SIZE
-	art.stretch_mode = TextureRect.STRETCH_KEEP_ASPECT_COVERED
-	art.set_anchors_and_offsets_preset(Control.PRESET_FULL_RECT)
-	scene.add_child(art)
-	var gradient = Gradient.new()
-	gradient.set_color(0,Color(0,0,0,0))
-	gradient.set_color(1,Color("0d1318"))
-	var tex = GradientTexture2D.new()
-	tex.gradient = gradient
-	tex.fill_from = Vector2(.5,0)
-	tex.fill_to = Vector2(.5,1)
-	var veil = TextureRect.new()
-	veil.texture = tex
-	veil.set_anchors_and_offsets_preset(Control.PRESET_FULL_RECT)
-	veil.mouse_filter = Control.MOUSE_FILTER_IGNORE
-	scene.add_child(veil)
-	var particles = Control.new()
-	particles.set_script(load("res://ui/atmosphere.gd"))
-	particles.set_anchors_and_offsets_preset(Control.PRESET_FULL_RECT)
-	particles.motion = m.s.settings.motion
-	scene.add_child(particles)
-	var scene_text = U.column(4)
-	scene_text.set_anchors_and_offsets_preset(Control.PRESET_BOTTOM_WIDE)
-	scene_text.offset_top = -74
-	scene_text.offset_left = 16
-	scene_text.offset_right = -16
-	scene.add_child(scene_text)
 	preload("res://ui/chronicle.gd").new(app).services(parent)
 
 func explore(parent: Node):
@@ -65,7 +32,9 @@ func explore(parent: Node):
 	if current_enemy.has("secret_tile"): heading(parent,"OPTIONAL EXPEDITION",current_enemy.location,"")
 	elif current_enemy.get("trial",false): heading(parent,"GUARDIAN TRIAL",m.local_name(current_enemy),"")
 	elif region!="": heading(parent,"EXPEDITION IN PROGRESS",RealmChronicle.REGIONS[region].name,"")
-	else: heading(parent,"CHAPTER I · THE OUTSKIRTS","Cinderwatch Outskirts","")
+	else:
+		if m.s.fight.is_empty(): U.scenic(parent,page_art(1),"CHAPTER I · HUNTING GROUNDS","Cinderwatch Outskirts",160)
+		else: heading(parent,"CHAPTER I · THE OUTSKIRTS","Cinderwatch Outskirts","")
 	var battle = U.card(parent,12,U.GOLD.darkened(.55))
 	var battle_panel = battle.get_parent()
 	battle_panel.visible = not m.s.fight.is_empty() or m.last_reward!=""
@@ -104,22 +73,17 @@ func explore(parent: Node):
 	app.update_callbacks.append(func():
 		if is_instance_valid(retreat): retreat.visible = not m.s.fight.is_empty())
 	battle.add_child(U.button("Hunt reports",app.hunt_reports_dialog))
-	var prep = U.card(parent)
+	var prep = U.card(parent,14)
+	U.section(prep,"HUNT PREPARATION")
 	app.dynamic(prep,func(): return "%s · %d ATK · %d DEF" % [RealmProgression.STANCES[m.progression().stance].name,int(m.stats().attack),int(m.stats().armor)],16,U.GOLD)
 	app.dynamic(prep,func(): return "%s ×%d · heals %d HP at %d%% health" % [m.name_of(m.s.settings.food),m.count(m.s.settings.food),RealmCombat.food_heal(m,m.s.settings.food),int(m.s.settings.threshold*100)],13,U.GREEN)
-	var actions = U.row(6)
-	prep.add_child(actions)
-	actions.add_child(U.button("Fighting style",app.tactics_dialog))
-	actions.add_child(U.button("Equip best",func():
-		if app.send({"type":"equip_best"}): app.toast("Highest-stat equipment equipped. Review armor sets before your next hunt.")))
-	prep.add_child(U.button("Prepare 10 × "+m.name_of(m.s.settings.food),func(): app.planner_dialog("craft_"+str(m.s.settings.food),10)))
-	parent.add_child(U.button("Ascension · gear & apex hunts",func(): preload("res://ui/ascension.gd").new(app).open()))
-	parent.add_child(U.button("Hunt mastery",func(): preload("res://ui/hunt_mastery.gd").new(app).open()))
-	if m.s.beacon:
-		var routes = U.row(6)
-		parent.add_child(routes)
-		routes.add_child(U.button("World map",app.world_dialog,true))
-		routes.add_child(U.button("Trials",app.trials_dialog))
+	var preparation_actions = U.row(6)
+	prep.add_child(preparation_actions)
+	for entry in [["Prepare for a hunt",hunt_preparation],["More hunts",hunt_routes]]:
+		var action = U.button(entry[0],entry[1])
+		action.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+		preparation_actions.add_child(action)
+	U.section(parent,"DISCOVERED ENEMIES")
 	for id in m.data.enemies:
 		var d = m.data.enemies[id]
 		if d.has("region"): continue
@@ -128,12 +92,12 @@ func explore(parent: Node):
 		var card = U.card(parent,12,U.GOLD.darkened(.55) if d.boss else U.LINE)
 		var r = U.row(12)
 		card.add_child(r)
-		r.add_child(U.portrait(int(d.portrait),Vector2(66,80)))
+		r.add_child(U.enemy_portrait(d,Vector2(82,100)))
 		var v = U.column(4)
 		v.size_flags_horizontal = Control.SIZE_EXPAND_FILL
 		r.add_child(v)
 		v.add_child(U.para(m.local_name(d),19,U.GOLD if d.boss else U.TEXT))
-		v.add_child(U.label("%d HP  ·  %d ATK  ·  %d DEF" % [int(d.hp),int(d.attack),int(d.armor)],11,U.MUTED))
+		v.add_child(U.para("%d HP  ·  %d ATK  ·  %d DEF" % [int(d.hp),int(d.attack),int(d.armor)],11,U.MUTED))
 		app.dynamic(v,func(): return "%d %s  ·  +%d gold" % [int(m.s.kills.get(id,0)),text("dikalahkan","defeated"),RealmHuntMastery.gold(m,d)],11,U.MUTED)
 		var next_region = {"grave_thrall":"the next hunt","cinder_bandit":"the next hunt","chapel_guard":"the next hunt","ember_wraith":"the next hunt"}.get(id,"")
 		if next_region!="":
@@ -146,10 +110,10 @@ func explore(parent: Node):
 		if why!="": card.add_child(U.para(why,12,U.MUTED))
 		else:
 			app.dynamic(card,func(): return m.encounter_advice(id),12,U.MUTED)
-			card.add_child(U.button(text("Tantang boss" if d.boss else "Buru & kumpulkan loot","Challenge boss" if d.boss else "Hunt & gather loot"),func(): app.activity_dialog("hunt_"+id),d.boss))
+			card.add_child(U.button(text("Tantang boss" if d.boss else "Buru & kumpulkan loot","Challenge boss" if d.boss else "Hunt & gather loot"),func(): app.activity_dialog("hunt_"+id),true))
 
 func skills(parent: Node):
-	heading(parent,text("TUMBUH MELALUI LATIHAN","GROW THROUGH PRACTICE"),text("Keahlian","Skills"),text("Setiap bahan memiliki tujuan. Setiap pekerjaan meninggalkan jejak.",""))
+	U.scenic(parent,page_art(2),"GATHER · CRAFT · ADVANCE","Skills",156)
 	parent.add_child(U.button("Gear paths · level 25–100",func(): preload("res://ui/ascension.gd").new(app).open()))
 	preload("res://ui/training.gd").new(app).home(parent)
 	if app.skill=="":
@@ -163,8 +127,9 @@ func skills(parent: Node):
 			var c = U.card(grid,12)
 			c.get_parent().size_flags_horizontal = Control.SIZE_EXPAND_FILL
 			var icon_id = {"woodcutting":"ash_axe","mining":"copper_pick","fishing":"iron_rod","cooking":"cooked_meat","smithing":"copper_sword","alchemy":"healing_draught"}[id]
-			c.add_child(U.icon(icon_id,60))
+			c.add_child(U.icon(icon_id,72))
 			c.add_child(U.para(m.local_name(skill),18,U.TEXT))
+			c.add_child(U.para({"woodcutting":"Timber & logs","mining":"Ore & minerals","fishing":"Fresh supplies","cooking":"Food for hunts","smithing":"Weapons & armor","alchemy":"Combat potions"}[id],12))
 			app.dynamic(c,func(): return "LEVEL %d  /  100" % m.level(id),10,U.GOLD)
 			var bar = U.progress(0,1,U.GOLD)
 			c.add_child(bar)
@@ -213,7 +178,8 @@ func skills(parent: Node):
 			c.add_child(U.button(text("Atur aktivitas","Set activity"),func(): app.activity_dialog(aid),m.level(selected)>=int(a.level)))
 
 func inventory(parent: Node):
-	heading(parent,text("HASIL DARI SETIAP PERJALANAN","SPOILS OF EVERY JOURNEY"),text("Perbekalan","Inventory"),"Open equipment to compare stats and equip it. Cooked food can be selected for auto-heal. Sources tells you where to find more.")
+	U.scenic(parent,page_art(3),"EQUIPMENT · MATERIALS · SUPPLIES","Inventory",150)
+	parent.add_child(U.para("Select an item to equip it, use it or find its source.",13))
 	var filters = U.row(6)
 	parent.add_child(filters)
 	var picker = OptionButton.new()
@@ -292,46 +258,34 @@ func inventory(parent: Node):
 			pager.add_child(U.button("Next",func():
 				app.inventory_page = mini(last_page,app.inventory_page+1)
 				app.set_page("inventory")))
+		if not gear_list.is_empty(): U.section(parent,"EQUIPMENT")
+		var gear_grid = item_grid(parent)
 		for g in gear_list.slice(app.inventory_page*30,(app.inventory_page+1)*30):
 			shown += 1
-			var c = U.card(parent,12,U.QUALITY[int(g.q)].darkened(.6))
-			var r = U.row()
-			c.add_child(r)
-			r.add_child(U.icon(g.id,58))
-			var v = U.column(3)
-			v.size_flags_horizontal = Control.SIZE_EXPAND_FILL
-			r.add_child(v)
-			v.add_child(U.para(m.name_of(g.id),17,U.TEXT))
+			var c = U.card(gear_grid,10,U.QUALITY[int(g.q)].darkened(.65))
+			c.get_parent().size_flags_horizontal = Control.SIZE_EXPAND_FILL
+			c.add_child(U.icon(g.id,70))
+			c.add_child(U.para(m.name_of(g.id),16,U.TEXT))
 			var tags = m.data.rarities[int(g.q)]
-			if g.uid in m.s.equipped.values(): tags += text(" · Terpasang"," · Equipped")
-			if g.locked: tags += text(" · Terkunci"," · Locked")
-			v.add_child(U.para(tags+" · ×%d" % int(g.count),11,U.QUALITY[int(g.q)]))
-			r.add_child(U.button("›",func(): app.item_dialog(g.uid)))
+			if g.uid in m.s.equipped.values(): tags += " · Equipped"
+			if g.locked: tags += " · Locked"
+			c.add_child(U.para(tags+" · ×%d" % int(g.count),11,U.QUALITY[int(g.q)]))
+			c.add_child(U.spacer())
+			c.add_child(U.button("Inspect",func(): app.item_dialog(g.uid)))
+	var supply_grid = item_grid(parent)
 	for id in m.s.bag:
 		if m.count(id)<=0: continue
 		var d = m.data.items[id]
 		if app.filter!="all" and d.category!=app.filter: continue
 		if app.search_text!="" and not m.name_of(id).to_lower().contains(app.search_text.to_lower()): continue
 		shown += 1
-		var c = U.card(parent,12)
-		var r = U.row()
-		c.add_child(r)
-		r.add_child(U.icon(id,50))
-		var v = U.column(3)
-		v.size_flags_horizontal = Control.SIZE_EXPAND_FILL
-		r.add_child(v)
-		v.add_child(U.para(m.name_of(id),17,U.TEXT))
-		app.dynamic(v,func(): return "×%d" % m.count(id),14,U.GOLD)
-		var actions = U.row(5)
-		c.add_child(actions)
-		if d.category=="food": actions.add_child(U.button(text("Auto-heal","Auto-heal"),func():
-			app.send({"type":"food","id":id})
-			app.toast(text("Bekal auto-heal dipilih","Auto-heal food selected"))))
-		if d.category=="potion": actions.add_child(U.button(text("Gunakan otomatis","Use automatically"),func():
-			app.send({"type":"potion","id":id})
-			app.toast(text("Ramuan otomatis aktif","Automatic potion enabled"))))
-		actions.add_child(U.button(text("Sumber","Sources"),func(): app.sources_dialog(id)))
-		actions.add_child(U.button(text("Jual 1","Sell 1"),func(): app.send({"type":"sell","id":id,"amount":1})))
+		var c = U.card(supply_grid,10)
+		c.get_parent().size_flags_horizontal = Control.SIZE_EXPAND_FILL
+		c.add_child(U.icon(id,64))
+		c.add_child(U.para(m.name_of(id),16,U.TEXT))
+		app.dynamic(c,func(): return "×%d" % m.count(id),14,U.GOLD)
+		c.add_child(U.spacer())
+		c.add_child(U.button("Details",func(): supply_details(id)))
 	if shown==0: parent.add_child(U.para(text("Tidak ada item sesuai filter ini.","No items match this filter.")))
 	if not m.s.overflow.is_empty(): parent.add_child(U.button(text("Ambil item kotak hasil","Retrieve overflow items"),func(): app.send({"type":"overflow"})))
 	var salvage = []
@@ -341,8 +295,8 @@ func inventory(parent: Node):
 
 func character(parent: Node):
 	heading(parent,"EQUIPMENT & BUILD",RealmCharacters.hero_name(m))
-	parent.add_child(U.button("Attributes & class skill" if RealmCharacters.id(m)!="" else "Choose your character · keep progress",func(): preload("res://ui/character_stats.gd").new(app).open()))
 	preload("res://ui/hero_equipment.gd").new(app).home(parent)
+	parent.add_child(U.button("Attributes & class skill" if RealmCharacters.id(m)!="" else "Choose your character · keep progress",func(): preload("res://ui/character_stats.gd").new(app).open(),true))
 	var c = U.card(parent)
 	c.add_child(U.label("COMBAT SKILLS",11,U.GOLD))
 	for id in ["bladecraft","might","warding"]:
@@ -395,3 +349,56 @@ func character(parent: Node):
 			app.toast(text("Preset tersimpan","Preset saved"))))
 		if m.s.presets.has(name): r.add_child(U.button(text("Pakai","Use"),func(): app.send({"type":"preset_load","id":name})))
 	parent.add_child(U.button(text("Pengaturan & cadangan","Settings & backups"),app.settings_dialog))
+
+func page_art(index: int) -> Texture2D:
+	return U.atlas_tile("res://assets/art/page-environments-0.36.png",index,2,2)
+
+func item_grid(parent: Node) -> GridContainer:
+	var grid = GridContainer.new()
+	grid.columns = 2
+	grid.add_theme_constant_override("h_separation",10)
+	grid.add_theme_constant_override("v_separation",10)
+	parent.add_child(grid)
+	return grid
+
+func supply_details(id: String):
+	var d = m.data.items[id]
+	var v = app.modal(m.name_of(id))
+	v.add_child(U.icon(id,104))
+	app.dynamic(v,func(): return "%d in your bag" % m.count(id),20,U.GOLD)
+	if d.category=="food":
+		v.add_child(U.para("Restores %d HP when your health falls below the auto-heal threshold." % RealmCombat.food_heal(m,id),15))
+		v.add_child(U.button("Use for auto-heal",func():
+			app.send({"type":"food","id":id})
+			app.toast("Auto-heal food selected"),true))
+	if d.category=="potion":
+		v.add_child(U.button("Use automatically",func():
+			app.send({"type":"potion","id":id})
+			app.toast("Automatic potion enabled"),true))
+	v.add_child(U.button("Where to find it",func(): app.sources_dialog(id)))
+	var sell = U.button("Sell 1",func(): app.send({"type":"sell","id":id,"amount":1}))
+	v.add_child(sell)
+	var ref = weakref(sell)
+	app.dialog_callbacks.append(func():
+		var button = ref.get_ref()
+		if is_instance_valid(button): button.disabled = m.count(id)<=0)
+
+func hunt_preparation():
+	var prep = app.modal("Hunt preparation")
+	app.dynamic(prep,func(): return "%s · %d ATK · %d DEF" % [RealmProgression.STANCES[m.progression().stance].name,int(m.stats().attack),int(m.stats().armor)],19,U.GOLD)
+	app.dynamic(prep,func(): return "%s ×%d · heals %d HP at %d%% health" % [m.name_of(m.s.settings.food),m.count(m.s.settings.food),RealmCombat.food_heal(m,m.s.settings.food),int(m.s.settings.threshold*100)],15,U.GREEN)
+	prep.add_child(U.button("Prepare 10 × "+m.name_of(m.s.settings.food),func(): app.planner_dialog("craft_"+str(m.s.settings.food),10),true))
+	prep.add_child(U.button("Fighting style",app.tactics_dialog))
+	prep.add_child(U.button("Equip highest-stat gear",func():
+		if app.send({"type":"equip_best"}): app.toast("Highest-stat equipment equipped. Review armor sets before your next hunt.")))
+	prep.add_child(U.para("Auto-equip compares base stats. It may break an armor set.",12))
+
+func hunt_routes():
+	var parent = app.modal("Hunts & progression")
+	parent.add_child(U.button("Ascension · gear & apex hunts",func(): preload("res://ui/ascension.gd").new(app).open()))
+	parent.add_child(U.button("Hunt mastery",func(): preload("res://ui/hunt_mastery.gd").new(app).open()))
+	if m.s.beacon:
+		var routes = U.row(6)
+		parent.add_child(routes)
+		routes.add_child(U.button("World map",app.world_dialog,true))
+		routes.add_child(U.button("Trials",app.trials_dialog))

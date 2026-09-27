@@ -361,7 +361,7 @@ func build_shell():
 		b.custom_minimum_size.x = 0
 		b.size_flags_horizontal = Control.SIZE_EXPAND_FILL
 		b.add_theme_font_size_override("font_size",int(12*U.scale))
-		b.add_theme_stylebox_override("normal",U.box(Color("101a21") if key==page else Color("0e151a"),U.GOLD if key==page else Color("0e151a"),4,6))
+		b.add_theme_stylebox_override("normal",U.navigation(key==page))
 		nav.add_child(b)
 	hud = layout
 	banner_space = Control.new()
@@ -394,7 +394,7 @@ func set_page(next: String, retain_scroll: bool = false):
 		"character": pages.character(body)
 	var nav = hud.get_child(hud.get_child_count()-2).get_child(0)
 	for b in nav.get_children():
-		b.add_theme_stylebox_override("normal",U.box(Color("1c282f") if b.name==page else Color("0e151a"),U.GOLD if b.name==page else Color("0e151a"),4,6))
+		b.add_theme_stylebox_override("normal",U.navigation(b.name==page))
 		b.add_theme_color_override("font_color",U.GOLD if b.name==page else U.MUTED)
 	scroller.set_deferred("scroll_vertical",old_scroll if retain_scroll else 0)
 	refresh()
@@ -531,7 +531,8 @@ func modal(title: String, dim_background: bool = true) -> VBoxContainer:
 	p.add_child(root)
 	var header = U.row()
 	root.add_child(header)
-	var name_label = U.para(title,22,U.GOLD)
+	var name_label = U.para(title,27,U.TEXT)
+	name_label.add_theme_font_override("font",U.title_font)
 	header.add_child(name_label)
 	header.add_child(U.button("×",dismiss))
 	var scroll = ScrollContainer.new()

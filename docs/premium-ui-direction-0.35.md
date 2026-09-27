@@ -47,3 +47,8 @@ Tinjau setiap tahap di 360×800 dan 480×960, termasuk teks besar. Satu screensh
 ## Yang sudah diterapkan dalam 0.35
 
 Nama publik Cinder Dominion: Idle RPG, emblem baru untuk identitas pembuka/header/aplikasi, Stronghold menggantikan label Refuge dan Town menggantikan Refuge Services. Copy navigasi, bantuan, About/Share/Rate ikut diselaraskan. Rekomendasi tata ulang halaman di atas adalah langkah berikutnya, bukan klaim bahwa seluruh halaman sudah didesain ulang.
+
+
+## Delivery update — 0.36
+
+Main-page implementation now covers scenic headers for Stronghold/Explore/Skills/Bag, inventory grids and item details, equipment-first Hero, compact hunt preparation/routes and shared visual styling. See docs/qa/premium-pages-0.36-report.md for verified scope. This does not complete every suggestion above: dedicated redesigns for major rewards, deeper progression dialogs and broader animation work remain future iterations.
