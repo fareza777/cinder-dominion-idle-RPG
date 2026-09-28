@@ -84,21 +84,23 @@ func stats() -> Dictionary:
 	st.attack = maxi(1,int(st.attack*float(style.attack)))
 	st.armor = maxi(0,int(st.armor)+int(style.armor)+int(progression().upgrades.ward))
 	RealmCharacters.apply_stats(self,st)
+	if RealmAfflictions.has(self,"hero","weaken"): st.attack = maxi(1,int(st.attack*.85))
+	if RealmAfflictions.has(self,"hero","armor_break"): st.armor = int(st.armor*.8)
 	return st
 
 func protected(uid: String) -> bool:
 	var g = gear(uid)
 	if g.is_empty(): return true
-	if g.locked or g.favorite or uid in s.equipped.values(): return true
+	if g.locked or g.favorite or uid in s.equipped.values() or s.get("card_sockets",{}).has(uid): return true
 	for slots in s.presets.values():
 		if uid in slots.values(): return true
 	for build in RealmLoadouts.state(self).values():
 		if uid in build.gear.values(): return true
 	return false
 
-func add_gear(id: String, quality: int) -> String:
+func add_gear(id: String, quality: int, unique: bool = false) -> String:
 	for g in s.gear:
-		if data.items[id].slot != "ring" and g.id == id and int(g.q) == quality:
+		if not unique and not s.get("card_sockets",{}).has(g.uid) and data.items[id].slot != "ring" and g.id == id and int(g.q) == quality:
 			g.count += 1
 			return g.uid
 	var uid = "eq_%d" % int(s.next_uid)
@@ -298,6 +300,13 @@ func command(cmd: Dictionary) -> bool:
 				s.gear.erase(g)
 			gain("scrap",amount)
 			note("Salvaged into %d metal scraps" % amount)
+		"card_insert","card_remove":
+			var why = RealmCards.command(self,cmd)
+			if why!="": return fail(why)
+		"stamina_resume":
+			RealmStamina.state(self).paused = false
+			start_next()
+			if RealmStamina.state(self).paused: return fail(error)
 		"merchant_buy":
 			var why = RealmMerchant.buy(self,cmd)
 			if why!="": return fail(why)
@@ -317,7 +326,7 @@ func command(cmd: Dictionary) -> bool:
 			if count(id)<qty: return fail("Not enough items")
 			if id.begins_with("socket_") and id.trim_prefix("socket_") in RealmPaths.sockets(self) and count(id)-qty<1: return fail("Remove this socket relic from your build before selling it.")
 			spend(id,qty)
-			s.gold += qty
+			s.gold += qty*(RealmCards.sell_price(id) if data.items[id].category=="card" else 1)
 		"food":
 			if not data.items.has(id) or data.items[id].category!="food": return fail("Choose a cooked food item")
 			s.settings.food = id
@@ -354,6 +363,7 @@ func fail(message: String) -> bool:
 	return false
 
 func refund_active():
+	RealmStamina.finish(self)
 	RealmHunts.finish(self,"Recalled")
 	if not s.active.is_empty():
 		for id in s.active.reserved:
@@ -405,8 +415,10 @@ func start_next():
 		var a = data.activities[step.id]
 		if a.kind=="combat":
 			var enemy = RealmEndgame.enemy(self,data.enemies[a.enemy])
+			if not RealmStamina.start(self,enemy): return
 			RealmHunts.begin(self,a.enemy)
 			s.fight = {"enemy":a.enemy,"hp":enemy.hp,"player_at":int(s.time)+2000,"enemy_at":int(s.time)+int(enemy.interval),"hits":0,"buff_until":0,"buff":"attack","potion_at":0,"spawn_at":0}
+			if s.tutorial: s.fight.stamina_started = int(s.time)
 		else:
 			for id in a.inputs: spend(id,int(a.inputs[id]))
 			s.active = {"id":step.id,"started":s.time,"due":int(s.time)+duration(a),"reserved":a.inputs.duplicate(true)}
@@ -429,9 +441,13 @@ func advance(ms: int, budget_usec: int = 0) -> int:
 		if not s.fight.is_empty():
 			due = mini(int(s.fight.player_at),int(s.fight.enemy_at))
 			if s.fight.buff_until>s.time: due = mini(due,int(s.fight.buff_until))
+			if s.fight.has("effects"): due = mini(due,int(s.fight.effects.next))
+			if s.fight.has("stamina_started"): due = mini(due,int(s.fight.stamina_started)+RealmStamina.DEADLINE)
 		else:
 			if s.hp<100: due = mini(due,maxi(int(s.regen_at),int(s.time)))
+			if RealmStamina.state(self).value<RealmStamina.cap(self): due = mini(due,int(s.time)+RealmStamina.REGEN-int(RealmStamina.state(self).rest))
 		if due>target: break
+		RealmStamina.advance(self,due-int(s.time))
 		s.time = due
 		if not s.fight.is_empty(): resolve_combat()
 		else:
@@ -440,6 +456,7 @@ func advance(ms: int, budget_usec: int = 0) -> int:
 				s.regen_at = int(s.time)+1000
 			if not s.active.is_empty() and s.active.due<=s.time: finish_production()
 		start_next()
+	RealmStamina.advance(self,target-int(s.time))
 	s.time = target
 	s.rng = str(rng.state)
 	return int(s.time)-initial_time
@@ -473,6 +490,19 @@ func hit_damage(atk: int, armor: int) -> int:
 func resolve_combat():
 	var f = s.fight
 	var d = RealmEndgame.enemy(self,data.enemies[f.enemy])
+	if f.has("stamina_started") and s.time>=int(f.stamina_started)+RealmStamina.DEADLINE:
+		refund_active()
+		s.queue.clear()
+		RealmAutomation.stop(self,"Hunt timed out. Improve your build.")
+		last_reward = "HUNT ENDED · Ten-minute limit reached. Improve your damage before trying again."
+		return
+	RealmAfflictions.tick(self)
+	if s.hp<=0: defeat(d); return
+	if f.hp<=0: win(d); return
+	if RealmAfflictions.has(self,"hero","freeze") or RealmAfflictions.has(self,"hero","stun"):
+		if f.player_at<=s.time: f.player_at = int(s.time)+500
+	if RealmAfflictions.has(self,"enemy","freeze") or RealmAfflictions.has(self,"enemy","stun"):
+		if f.enemy_at<=s.time: f.enemy_at = int(s.time)+500
 	if f.buff_until>0 and f.buff_until<=s.time: f.buff_until = 0
 	var pot = str(s.settings.potion)
 	if pot!="" and count(pot)>0 and f.potion_at<=s.time:
@@ -487,7 +517,7 @@ func resolve_combat():
 				f.buff_until = int(s.time)+60000
 	var st = stats()
 	if f.player_at<=s.time:
-		f.player_at = int(s.time)+2000
+		f.player_at = int(s.time)+RealmAfflictions.delay(self,"hero",2000)
 		f.swings = int(f.get("swings",0))+1
 		if rng.randf()<st.accuracy:
 			var damage = RealmCombat.player_damage(self,d,int(f.swings))
@@ -495,7 +525,9 @@ func resolve_combat():
 			if special and progression().stance=="guard": s.hp = mini(100,int(s.hp)+8)
 			var crit = rng.randf()<.05
 			if crit: damage = int(damage*1.5)
+			damage = RealmAfflictions.absorb(self,"enemy",damage)
 			f.hp -= damage
+			RealmAfflictions.proc(self,d,"enemy",special)
 			var skill_name = {"balanced":"CLEAVE ","guard":"WARD ","reaver":"REND "}[progression().stance]
 			var character = RealmCharacters.id(self)
 			if RealmCharacters.rank(self)>0 and (character in ["ranger","arcanist"] or (character=="reaver" and d.boss)): skill_name = RealmCharacters.ALL[character].skill.to_upper()+" "
@@ -515,7 +547,7 @@ func resolve_combat():
 		f.phase = 2
 		combat_event("PHASE II","enemy")
 	if f.enemy_at<=s.time:
-		f.enemy_at = int(s.time)+int(d.interval)
+		f.enemy_at = int(s.time)+RealmAfflictions.delay(self,"enemy",int(d.interval))
 		f.hits += 1
 		var move = RealmCombat.move(self,d,int(f.hits),int(st.armor),int(f.get("phase",1))==2)
 		if int(f.hits)%3==0 and d.boss: combat_event(move.label,"hero","cast")
@@ -524,20 +556,13 @@ func resolve_combat():
 			f.hp = mini(int(d.hp),int(f.hp)+int(move.heal))
 			if restored>0: combat_event("+%d HP" % restored,"enemy")
 		if rng.randf()<.95:
+			move.damage = RealmAfflictions.absorb(self,"hero",int(move.damage))
 			s.hp -= int(move.damage)
+			RealmAfflictions.proc(self,d,"hero",int(f.hits)%3==0)
 			combat_event("−%d HP" % int(move.damage),"hero","hit","warden" if int(f.hits)%3==0 and RealmCharacters.id(self)=="warden" and RealmCharacters.rank(self)>0 else "")
 		else: combat_event("MISS","hero")
 		if s.hp<=0:
-			RealmAutomation.stop(self,"Defeated. Review your build before restarting assistance.")
-			RealmEndgame.defeat(self)
-			s.hp = 0
-			RealmHunts.finish(self,"Defeated")
-			last_reward = "DEFEAT · No items lost. Rest, cook food, or upgrade equipment before returning."
-			if d.get("depth",false): last_reward = "DEFEAT · Unbanked shards lost. Banked rewards and equipment are safe."
-			note("Defeated by %s. Equipment is safe. Recover and prepare food before trying again." % local_name(d))
-			s.fight = {}
-			s.queue.clear()
-			s.regen_at = int(s.time)+1000
+			defeat(d)
 			return
 		var food = str(s.settings.food)
 		if s.hp<=100*float(s.settings.threshold) and count(food)>0:
@@ -545,9 +570,26 @@ func resolve_combat():
 			RealmHunts.supplies(self,"meals",food)
 			var restored_food = mini(100-int(s.hp),RealmCombat.food_heal(self,food))
 			s.hp += restored_food
+			if RealmCharacters.id(self)=="apothecary" and RealmCharacters.rank(self)>=2: RealmAfflictions.apply(self,"hero","regeneration",1)
 			combat_event("+%d HP" % restored_food,"hero","hit","apothecary" if RealmCharacters.id(self)=="apothecary" and RealmCharacters.rank(self)>0 else "")
 
+func defeat(d: Dictionary):
+	RealmStamina.finish(self)
+	RealmAutomation.stop(self,"Defeated. Review your build before restarting assistance.")
+	RealmEndgame.defeat(self)
+	s.hp = 0
+	RealmHunts.finish(self,"Defeated")
+	last_reward = "DEFEAT · No items lost. Rest, cook food, or upgrade equipment before returning."
+	if d.get("depth",false): last_reward = "DEFEAT · Unbanked shards lost. Banked rewards and equipment are safe."
+	note("Defeated by %s. Equipment is safe. Recover and prepare food before trying again." % local_name(d))
+	s.fight = {}
+	s.queue.clear()
+	s.regen_at = int(s.time)+1000
+	return
+
+
 func win(enemy: Dictionary):
+	RealmStamina.finish(self)
 	var before_gains = s.gains.duplicate(true)
 	var before_gold = int(s.gold)
 	var id = enemy.id
@@ -610,6 +652,13 @@ func win(enemy: Dictionary):
 		gain("copper_sword",1,3)
 		RealmHunts.equipment(self,"copper_sword",3)
 		note("The bells fall silent. Cinderwatch burns bright again.")
+	var card_drop = RealmCards.drop(self,id)
+	if card_drop!="": last_reward += " · CARD FOUND: "+name_of(card_drop)
+	if data.items[enemy.drop].category=="material" and not enemy.get("secret",false) and not enemy.get("depth",false):
+		var credit = int(s.get("card_material_credit",0))+roundi(enemy.qty*RealmCards.bonus(self,"material")*10000)
+		var bonus_count = int(credit/10000)
+		s.card_material_credit = credit%10000
+		if bonus_count>0: gain(enemy.drop,bonus_count)
 	s.queue[0].done += 1
 	s.queue[0].output += int(enemy.qty)
 	s.fight = {}
@@ -628,7 +677,7 @@ func check_quest():
 		s.tutorial = true
 		s.gold += 30
 		gain("cooked_minnow",10)
-		note("First Supplies complete · +30 gold · +10 grilled minnows")
+		note("First Supplies complete · +30 gold · +10 grilled minnows. Hunts now use stamina; recover while gathering or crafting. Open Stamina & rest in Explore.")
 
 func activity_name(id: String) -> String:
 	var a = data.activities[id]

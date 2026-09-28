@@ -137,7 +137,7 @@ static func next_expedition(m) -> String:
 
 static func focus(m) -> Dictionary:
 	if not m.s.queue.is_empty():
-		if m.s.active.is_empty() and m.s.fight.is_empty(): return {"title":"Your queue is blocked","why":m.requirement(m.s.queue[0].id),"kind":"queue","id":"","amount":1}
+		if m.s.active.is_empty() and m.s.fight.is_empty(): return {"title":"Your queue is blocked","why":"Rest, then resume hunting in Explore or Queue." if RealmStamina.state(m).paused else m.requirement(m.s.queue[0].id),"kind":"queue","id":"","amount":1}
 		return {"title":"Your task is running","why":"Your orders continue while you are away, for up to 24 hours. Review the queue to see what will be ready when you return.","kind":"queue","id":"","amount":1}
 	var o = m.objective()
 	if not m.s.tutorial: return {"title":o.title,"why":o.detail,"kind":"story","id":"","amount":1}

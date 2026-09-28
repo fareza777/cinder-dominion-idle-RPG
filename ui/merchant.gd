@@ -33,6 +33,9 @@ func open():
 		text.add_child(U.para(m.name_of(offer.id),20,U.TEXT))
 		var gear = m.data.items[offer.id].category=="equipment"
 		text.add_child(U.para((m.data.rarities[int(offer.quality)]+" · " if gear else "")+"%d in bundle" % int(offer.qty),13,U.GOLD))
+		if m.data.items[offer.id].category=="card":
+			card.add_child(U.para(RealmCards.description(offer.id),14))
+			card.add_child(U.button("Inspect card",func(): preload("res://ui/cards.gd").new(app).detail(offer.id)))
 		if gear:
 			var item = m.data.items[offer.id]
 			card.add_child(U.para("Gear bonus: +%.1f ATK · +%.1f DEF" % [float(item.get("attack",0))*RealmModel.QUALITY[int(offer.quality)],float(item.get("armor",0))*RealmModel.QUALITY[int(offer.quality)]],13))

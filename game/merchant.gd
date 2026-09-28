@@ -20,6 +20,12 @@ static func pool(t: int) -> Array:
 		out.append({"id":metal+"_ingot","qty":8,"price":t*400,"quality":1})
 		for family in ["necklace","belt","ring"]:
 			out.append({"id":metal+"_"+family,"qty":1,"price":[0,1200,4800,12000][t],"quality":3})
+	if t>0:
+		for enemy in ["ash_rat","hollow_hound","grave_thrall","cinder_bandit","chapel_guard","ember_wraith","bellkeeper"]:
+			out.append({"id":"card_"+enemy,"qty":1,"price":100000,"quality":1})
+	if t>1:
+		for enemy in ["wilds_1","marsh_1","crown_1"]:
+			out.append({"id":"card_"+enemy,"qty":1,"price":250000,"quality":1})
 	return out
 
 static func sync(m, now: int) -> Dictionary:
@@ -33,7 +39,8 @@ static func sync(m, now: int) -> Dictionary:
 		stock.until = stock.seen+INTERVAL
 		var random = RandomNumberGenerator.new()
 		random.seed = int(stock.seen)+int(stock.revision)*7919
-		var choices = pool(int(stock.tier))
+		var all_choices = pool(int(stock.tier))
+		var choices = all_choices.filter(func(o): return not str(o.id).begins_with("card_"))
 		stock.offers = []
 		for i in range(3):
 			var index = random.randi_range(0,choices.size()-1)
@@ -41,6 +48,11 @@ static func sync(m, now: int) -> Dictionary:
 			offer.bought = false
 			stock.offers.append(offer)
 			choices.remove_at(index)
+		var cards = all_choices.filter(func(o): return str(o.id).begins_with("card_"))
+		if not cards.is_empty() and random.randf()<.05:
+			var offer = cards[random.randi_range(0,cards.size()-1)].duplicate()
+			offer.bought = false
+			stock.offers[2] = offer
 	return stock
 
 static func valid(stock) -> bool:

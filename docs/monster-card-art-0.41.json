@@ -1,0 +1,28 @@
+{
+  "tool": "Built-in image_gen",
+  "asset": "assets/art/monster-cards-0.41.png",
+  "dimensions": [
+    1106,
+    1422
+  ],
+  "entries": 42,
+  "direction": "Front-facing, no eyes/nose/mouth; opaque veils/helmets/empty hoods. User correction supersedes original rear-facing prompt.",
+  "generations": [
+    {
+      "file": "C:/Users/FAJAR/.codex/generated_images/01a0d6c6-87cf-7541-95c2-3388b3b24491/exec-154817f4-6999-4df1-924e-926610cd30ff.png",
+      "prompt": "Create ONE production game texture atlas: precisely 7 columns by 6 rows, 42 equal portrait rectangular illustrations, tightly aligned regular grid edge-to-edge, overall canvas aspect ratio 7:9. Each cell is a separate premium painted dark fantasy monster-card illustration, no text, no numbers, no borders, no letters, no UI. Restrained oil painting, charcoal shadows, tarnished bronze, dim embers, exquisite material detail, atmospheric backgrounds. CRITICAL every creature/human face must be completely obscured by opaque hoods, veils, armor, shadow or turned entirely away: absolutely no eyes, noses, mouths or readable facial anatomy, even animals and statues. Composition centered safely inside each cell, each silhouette clear small. Exact reading order left-to-right, top-to-bottom: row1 shadow rat under rubble facing away; hooded spectral hound from behind; veiled grave thrall; hooded ember bandit; sealed-helmet chapel guard; faceless ember wraith; hooded bellkeeper holding a broken bell. Row2 five increasingly formidable thornbound armored sentinels (ranks1-5, each distinct thorn armor and forest environment), then drowned veiled oracle tier1 and tier2. Row3 drowned veiled oracle tiers3,4,5; crowned bellkeepers tiers1,2,3,4, all completely sealed or shadowed faces. Row4 crowned bellkeeper tier5; Thornbound Vigil ancient knight; Unbroken Hymn faceless oracle; Crown at Sundown armored king; hooded briar marksman; mossback colossus seen from behind; faceless emberwood tree elder. Row5 chainbound diver in opaque diving helmet; lantern widow in opaque black veil; leviathan submerged with its head entirely hidden by dark water; hooded ash executioner; bishop of the last bell wearing opaque veil; cinder sovereign in completely sealed crown helmet; drowned castellan in sealed rusted armor. Row6 astral engine nonliving mechanical orrery; hollow forgemaster sealed armored silhouette; silent monarch empty black hood; thorn colossus sealed rocky armor; glass sentinel abstract faceless glass armor; unlit sovereign empty black hood and blackened crown; hollow sentinel anonymous sealed armor within a chasm. No complete face anywhere. Exactly42 equally sized paintings in a mathematically regular7x6 grid; do not merge adjacent cells.",
+      "selected": false
+    },
+    {
+      "file": "C:/Users/FAJAR/.codex/generated_images/01a0d6c6-87cf-7541-95c2-3388b3b24491/exec-1a3ee8d9-8fa6-4d9d-96d6-047afc8ecf07.png",
+      "prompt": "Edit this 7-column 6-row monster card atlas preserving EXACTLY42 equal cells, grid order, distinct subjects, rich painted dark fantasy style and full image aspect ratio. CHANGE ALL FIGURES to FRONT-FACING, looking toward viewer with frontal chest/body. This is essential: no backs toward the viewer, no rear-facing hooded people or armor, no sideways monster heads. Rat and hound face forward too. Completely remove ALL facial anatomy on EVERY creature and humanoid: NO eyes, NO eye sockets, NO noses, NO snouts, NO mouths, NO fangs. Replace faces with featureless smooth closed helmet plates, opaque veil cloth, or deep entirely blank black void beneath forward-facing hoods. Rat and hound have recognizable ears/fur/body and forward-facing featureless shadow head, without eyes/nose/mouth. Front-facing leviathan emerges from water, its head a featureless sealed dark silhouette without any facial anatomy. Colossi frontal faceless featureless armor. Glass sentinel front-facing with featureless smooth glass head. Preserve beautiful detailed clothing/armor, subdued bronze/ember palettes, scenery, nonliving astral engine. No text, no symbols, no letters, no UI frames, no cell count changes. Front-facing everywhere, faces entirely blank or fully covered.",
+      "selected": false
+    },
+    {
+      "file": "C:/Users/FAJAR/.codex/generated_images/01a0d6c6-87cf-7541-95c2-3388b3b24491/exec-398a8295-75a6-4c43-a9dc-390c90cb3109.png",
+      "prompt": "Edit only the FIRST TWO CELLS at the upper left of this 7x6 atlas. Keep all other 40 cells and exact grid completely unchanged. The frontal rat and frontal hound MUST have their entire face covered with a clearly visible opaque featureless dark cloth veil, from forehead all the way to below the chin, covering eyes, nose and mouth completely. Absolutely NO eyes, NO glowing points, NO nose, NO mouth, NO snout outline or whiskers showing through. The cloth veil is visibly cloth, with loose folds and no underlying face anatomy. Keep their ears and body/fur recognizable and FRONT-FACING. Do not turn either animal away. Everything else unchanged.",
+      "selected": true
+    }
+  ],
+  "integration": "No raster postprocessing. Runtime AtlasTexture regions use observed row boundaries and inset margins to exclude adjacent cells."
+}

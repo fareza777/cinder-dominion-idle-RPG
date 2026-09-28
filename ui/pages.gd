@@ -27,6 +27,7 @@ func village(parent: Node):
 	preload("res://ui/chronicle.gd").new(app).services(parent)
 
 func explore(parent: Node):
+	preload("res://ui/stamina.gd").new(app).panel(parent,true)
 	var region = m.data.enemies.get(m.s.fight.get("enemy",""),{}).get("region","")
 	var current_enemy = m.data.enemies.get(m.s.fight.get("enemy",""),{})
 	if current_enemy.has("secret_tile"): heading(parent,"OPTIONAL EXPEDITION",current_enemy.location,"")
@@ -44,6 +45,8 @@ func explore(parent: Node):
 	stage.set_script(preload("res://ui/battle_stage.gd"))
 	stage.model = m
 	battle.add_child(stage)
+	app.dynamic(battle,func(): return "Hero: "+RealmAfflictions.summary(m,"hero") if RealmAfflictions.summary(m,"hero")!="" else "",12,U.GOLD)
+	app.dynamic(battle,func(): return "Enemy: "+RealmAfflictions.summary(m,"enemy") if RealmAfflictions.summary(m,"enemy")!="" else "",12,U.TEXT)
 	stage.visible = not m.s.fight.is_empty()
 	app.update_callbacks.append(func():
 		if is_instance_valid(stage): stage.visible = not m.s.fight.is_empty())
@@ -183,8 +186,8 @@ func inventory(parent: Node):
 	var filters = U.row(6)
 	parent.add_child(filters)
 	var picker = OptionButton.new()
-	var kinds = ["all","equipment","material","food","potion"]
-	var names = [text("Semua","All"),text("Perlengkapan","Equipment"),text("Bahan","Materials"),text("Makanan","Food"),text("Ramuan","Potions")]
+	var kinds = ["all","equipment","material","food","potion","card"]
+	var names = [text("Semua","All"),text("Perlengkapan","Equipment"),text("Bahan","Materials"),text("Makanan","Food"),text("Ramuan","Potions"),"Cards"]
 	for n in names: picker.add_item(n)
 	picker.selected = maxi(0,kinds.find(app.filter))
 	picker.custom_minimum_size.y = 48
@@ -294,6 +297,7 @@ func inventory(parent: Node):
 	if not salvage.is_empty(): parent.add_child(U.button(text("Tinjau peleburan item umum…","Review common item salvage…"),func(): app.salvage_dialog(salvage)))
 
 func character(parent: Node):
+	parent.add_child(U.button("Monster Cards",func(): preload("res://ui/cards.gd").new(app).collection()))
 	heading(parent,"EQUIPMENT & BUILD",RealmCharacters.hero_name(m))
 	preload("res://ui/hero_equipment.gd").new(app).home(parent)
 	parent.add_child(U.button("Attributes & class skill" if RealmCharacters.id(m)!="" else "Choose your character · keep progress",func(): preload("res://ui/character_stats.gd").new(app).open(),true))
@@ -362,6 +366,9 @@ func item_grid(parent: Node) -> GridContainer:
 	return grid
 
 func supply_details(id: String):
+	if m.data.items[id].category=="card":
+		preload("res://ui/cards.gd").new(app).detail(id)
+		return
 	var d = m.data.items[id]
 	var v = app.modal(m.name_of(id))
 	v.add_child(U.icon(id,104))

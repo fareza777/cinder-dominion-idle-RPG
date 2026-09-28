@@ -63,6 +63,14 @@ static func portrait_for(character: String) -> Texture2D:
 	return preload("res://ui/style.gd").atlas_tile("res://assets/art/heroes-new-0.33.png" if added else "res://assets/art/heroes-0.32.png",ALL[character].tile,2 if added else 3,1)
 
 static func skill_description(character: String, skill_rank: int) -> String:
+	var text = base_skill_description(character,skill_rank)
+	if character not in ALL: return text
+	var effect = {"warden":"Stun","ranger":"Bleed","arcanist":"Burn","reaver":"Armor Break","apothecary":"Poison"}[character]
+	text += " From Bladecraft Lv.25, every fourth attack that hits also applies "+effect+"."
+	if character=="apothecary": text += " Meals also grant Regeneration from Lv.25."
+	return text
+
+static func base_skill_description(character: String, skill_rank: int) -> String:
 	var step = maxi(0,skill_rank-1)
 	match character:
 		"warden": return "Every third incoming attack deals %d%% less damage." % (25+5*step)

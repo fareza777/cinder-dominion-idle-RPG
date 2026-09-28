@@ -3,7 +3,7 @@ extends RefCounted
 const U = preload("res://ui/style.gd")
 const Brand = preload("res://ui/brand.gd")
 const STORE_URL = "" # Set only after a real public listing exists.
-const VERSION = "0.40.0"
+const VERSION = "0.41.0"
 var app
 var front: Control
 var cinematic_page = 0
@@ -317,7 +317,10 @@ func handbook():
 		["09 · Make a dependable upgrade","After First Supplies, visit Stronghold → Armory → Ember Workshop. Spend ingots, scraps and gold to refine one copper or iron piece by one quality step. Refinement is guaranteed, up to Legendary. Higher qualities require more Smithing experience. Equipped slots and saved builds follow the improved piece."],
 		["10 · Keep more than one answer","In Hero, save a complete loadout with your gear, fighting style, talents, relic, rune, food, potion and healing threshold. Apply it outside combat. Loadouts do not create supplies: check your pack before a long hunt."],
 		["11 · Read the road","Hunt reports record completed, recalled and defeated hunting orders, including time away. Gold, loot and fragments are already delivered. Review food consumption, refine your gear or adjust your build before returning."],
-		["12 · Find your way around","Stronghold: your objective, Journey, Armory and Supplies. Explore: enemies and combat. Skills: gathering and crafting. Bag: equipment and supplies. Hero: build choices and Settings. The Journey guide remains at the top of every screen."]
+		["12 · Hunt, rest and return","After First Supplies, hunts consume stamina. Each Bladecraft level adds capacity. Recovery continues during gathering, crafting and time away. When hunting pauses, open Stamina & rest in Explore and resume when ready."],
+		["13 · Collect monster cards","Each enemy has a rare card. Open Hero → Monster Cards to see discovered cards, odds and effects. Attach one per combat item; duplicate cards do not stack. A crafted Card Extractor removes a card safely."],
+		["14 · Prepare for combat effects","From Bladecraft Lv.25, your class can apply a combat effect. Stronger enemies also inflict debuffs. Review the enemy before hunting; cards, gear and food help counter the threat."],
+		["15 · Find your way around","Stronghold: your objective, Journey, Armory and Supplies. Explore: enemies and combat. Skills: gathering and crafting. Bag: equipment and supplies. Hero: build choices and Settings. The Journey guide remains at the top of every screen."]
 	]:
 		v.add_child(U.para(section[0],20,U.GOLD))
 		v.add_child(U.para(section[1],16,U.TEXT))

@@ -93,6 +93,10 @@ func _process(delta: float):
 				if not effect.is_empty():
 					class_effects.append(effect)
 					if class_effects.size()>6: class_effects.pop_front()
+				if event.get("kind","")=="status":
+					floating.append({"text":event.text,"side":event.side,"life":.7})
+					if floating.size()>4: floating.pop_front()
+					continue
 				if event.get("kind","")=="cast":
 					cast_time = .9
 					cast_name = str(event.text)
@@ -192,6 +196,8 @@ func _draw():
 				for i in range(4):
 					var point = r.get_center()+Vector2(-18+i*12,30-(1-life)*52+i%2*7)
 					draw_circle(point,1.4,Color(U.GREEN,life*.6))
+		if fighting and effects_enabled and model.s.settings.motion:
+			preload("res://ui/status_fx.gd").draw(self,model,target,r,elapsed)
 		var health = float(model.s.hp)/100 if side==0 else (float(f.hp)/enemy.hp if fighting else 0.0)
 		bar(Rect2(r.position.x,207,w,6),health,U.GREEN if side==0 else U.RED)
 		var hp = "%d / 100 HP" % int(model.s.hp) if side==0 else ("%d / %d HP" % [maxi(0,int(f.hp)),int(enemy.hp)] if fighting else "Choose a target below")

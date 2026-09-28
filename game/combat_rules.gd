@@ -4,7 +4,8 @@ extends RefCounted
 static func food_heal(m, id: String) -> int:
 	var legacy = RealmChronicle.state(m)
 	var remedy = 6+3*(RealmCharacters.rank(m)-1) if RealmCharacters.id(m)=="apothecary" and RealmCharacters.rank(m)>0 else 0
-	return maxi(1,int(m.data.items[id].get("heal",0))+(RealmLegacyGrowth.relic_base(int(legacy.relics.heart),3) if legacy.relic=="heart" else 0)+(8 if RealmGearSets.active(m,"dawnsteel") else 0)+remedy+RealmPaths.food_bonus(m)+int(RealmLegacyGrowth.rank(m,"recovery")/2)+int(RealmLegacyGrowth.ascended(m,"heart")/5))
+	var base = maxi(1,int(m.data.items[id].get("heal",0))+(RealmLegacyGrowth.relic_base(int(legacy.relics.heart),3) if legacy.relic=="heart" else 0)+(8 if RealmGearSets.active(m,"dawnsteel") else 0)+remedy+RealmPaths.food_bonus(m)+int(RealmLegacyGrowth.rank(m,"recovery")/2)+int(RealmLegacyGrowth.ascended(m,"heart")/5))
+	return maxi(1,int(base*(1.0+RealmCards.bonus(m,"healing"))*(.65 if RealmAfflictions.has(m,"hero","wound") else 1.0)))
 
 static func move(m, enemy: Dictionary, strike: int, armor: int, second_phase: bool = false) -> Dictionary:
 	var third = strike%3==0
@@ -44,11 +45,16 @@ static func move(m, enemy: Dictionary, strike: int, armor: int, second_phase: bo
 		damage = maxi(1,ceili(damage*(.75-.05*(RealmCharacters.rank(m)-1))))
 	damage = RealmPaths.incoming(m,strike,damage)
 	damage = RealmEndgame.move(m,enemy,strike,damage,second_phase)
-	return {"damage":RealmLegacyGrowth.incoming(m,enemy,strike,damage),"heal":heal,"label":label}
+	if RealmAfflictions.has(m,"enemy","weaken"): damage = maxi(1,int(damage*.85))
+	if RealmAfflictions.has(m,"enemy","wound"): heal = int(heal*.65)
+	damage = maxi(1,ceili(RealmLegacyGrowth.incoming(m,enemy,strike,damage)*(1.0-RealmCards.bonus(m,"defense"))))
+	if third: damage = maxi(1,ceili(damage*(1.0-RealmCards.resistance(m,str(enemy.get("status",""))))))
+	return {"damage":damage,"heal":heal,"label":label}
 
 static func player_damage(m, enemy: Dictionary, swing: int) -> int:
 	var special = swing%4==0
-	var armor = int(enemy.armor)
+	var armor = int(enemy.armor*(1.0-RealmCards.bonus(m,"pierce")))
+	if RealmAfflictions.has(m,"enemy","armor_break"): armor = int(armor*.8)
 	if RealmPaths.active(m)=="Fracture": armor = int(armor*.8)
 	if RealmPaths.has_item(m,"relic_5"): armor = int(armor*.9)
 	if special and "fracture" in RealmPaths.sockets(m): armor = int(armor*.85)
@@ -70,7 +76,9 @@ static func player_damage(m, enemy: Dictionary, swing: int) -> int:
 		if RealmCharacters.id(m)=="reaver" and enemy.boss: damage = maxi(1,int(damage*(1.25+.1*(RealmCharacters.rank(m)-1))))
 		damage = maxi(1,int(damage*(1+.03*RealmCharacters.allocated(m,"focus"))))
 	damage = RealmPaths.outgoing(m,enemy,swing,damage)
-	return RealmLegacyGrowth.outgoing(m,enemy,swing,maxi(1,int(damage*(1-float(enemy.get("resist",0))))))
+	damage = RealmLegacyGrowth.outgoing(m,enemy,swing,maxi(1,int(damage*(1-float(enemy.get("resist",0))))))
+	var card_bonus = RealmCards.bonus(m,"attack")+(RealmCards.bonus(m,"boss") if enemy.boss else 0.0)+(RealmCards.bonus(m,"special") if special else 0.0)
+	return maxi(1,int(damage*(1.0+minf(.40,card_bonus))))
 
 static func mechanic(enemy: Dictionary) -> String:
 	if enemy.get("secret",false) or enemy.get("depth",false):

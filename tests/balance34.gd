@@ -3,8 +3,8 @@ extends SceneTree
 class AuditModel extends RealmModel:
 	var lowest_before_meal = 100
 	var peak_hit = 0
-	func combat_event(message: String, side: String, kind: String = "hit"):
-		super.combat_event(message,side,kind)
+	func combat_event(message: String, side: String, kind: String = "hit", skill: String = ""):
+		super.combat_event(message,side,kind,skill)
 		if side=="hero" and message.begins_with("−"):
 			lowest_before_meal = mini(lowest_before_meal,maxi(0,int(s.hp)))
 			peak_hit = maxi(peak_hit,int(message.trim_prefix("−").get_slice(" ",0)))

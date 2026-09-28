@@ -1,0 +1,353 @@
+{
+  "card_ash_rat": {
+    "enemy": "ash_rat",
+    "tile": 0,
+    "rarity": "Rare",
+    "chance": 0.0002,
+    "detail": "+3% ordinary hunt material yield.",
+    "material": 0.03
+  },
+  "card_hollow_hound": {
+    "enemy": "hollow_hound",
+    "tile": 1,
+    "rarity": "Rare",
+    "chance": 0.0002,
+    "detail": "+2.5% attack damage. Every fourth attack, if it hits, applies Bleed.",
+    "attack": 0.025,
+    "proc": "bleed"
+  },
+  "card_grave_thrall": {
+    "enemy": "grave_thrall",
+    "tile": 2,
+    "rarity": "Rare",
+    "chance": 0.0002,
+    "detail": "Bleed lasts 25% less time on you. +1% damage reduction.",
+    "resist": "bleed",
+    "defense": 0.01
+  },
+  "card_cinder_bandit": {
+    "enemy": "cinder_bandit",
+    "tile": 3,
+    "rarity": "Rare",
+    "chance": 0.0002,
+    "detail": "+5% battle gold.",
+    "gold": 0.05
+  },
+  "card_chapel_guard": {
+    "enemy": "chapel_guard",
+    "tile": 4,
+    "rarity": "Rare",
+    "chance": 0.0002,
+    "detail": "Every fourth attack, if it hits, grants Barrier.",
+    "boon": "barrier"
+  },
+  "card_ember_wraith": {
+    "enemy": "ember_wraith",
+    "tile": 5,
+    "rarity": "Rare",
+    "chance": 0.0002,
+    "detail": "Every fourth attack, if it hits, applies Burn.",
+    "proc": "burn"
+  },
+  "card_bellkeeper": {
+    "enemy": "bellkeeper",
+    "tile": 6,
+    "rarity": "Rare",
+    "chance": 0.0002,
+    "detail": "Stun lasts 25% less time on you.",
+    "resist": "stun"
+  },
+  "card_wilds_1": {
+    "enemy": "wilds_1",
+    "tile": 7,
+    "rarity": "Epic",
+    "chance": 0.0001,
+    "detail": "+2% armor penetration.",
+    "pierce": 0.02
+  },
+  "card_wilds_2": {
+    "enemy": "wilds_2",
+    "tile": 8,
+    "rarity": "Epic",
+    "chance": 0.0001,
+    "detail": "Every fourth attack, if it hits, applies Bleed.",
+    "proc": "bleed"
+  },
+  "card_wilds_3": {
+    "enemy": "wilds_3",
+    "tile": 9,
+    "rarity": "Epic",
+    "chance": 0.0001,
+    "detail": "+2.5% boss damage.",
+    "boss": 0.025
+  },
+  "card_wilds_4": {
+    "enemy": "wilds_4",
+    "tile": 10,
+    "rarity": "Epic",
+    "chance": 0.0001,
+    "detail": "+2.5% damage reduction.",
+    "defense": 0.025
+  },
+  "card_wilds_5": {
+    "enemy": "wilds_5",
+    "tile": 11,
+    "rarity": "Epic",
+    "chance": 0.0001,
+    "detail": "+4% armor penetration.",
+    "pierce": 0.04
+  },
+  "card_marsh_1": {
+    "enemy": "marsh_1",
+    "tile": 12,
+    "rarity": "Epic",
+    "chance": 0.0001,
+    "detail": "Poison lasts 25% less time on you.",
+    "resist": "poison"
+  },
+  "card_marsh_2": {
+    "enemy": "marsh_2",
+    "tile": 13,
+    "rarity": "Epic",
+    "chance": 0.0001,
+    "detail": "Every fourth attack, if it hits, applies Chill.",
+    "proc": "chill"
+  },
+  "card_marsh_3": {
+    "enemy": "marsh_3",
+    "tile": 14,
+    "rarity": "Epic",
+    "chance": 0.0001,
+    "detail": "Every fourth attack, if it hits, applies Wound.",
+    "proc": "wound"
+  },
+  "card_marsh_4": {
+    "enemy": "marsh_4",
+    "tile": 15,
+    "rarity": "Epic",
+    "chance": 0.0001,
+    "detail": "+6% meal healing.",
+    "healing": 0.06
+  },
+  "card_marsh_5": {
+    "enemy": "marsh_5",
+    "tile": 16,
+    "rarity": "Epic",
+    "chance": 0.0001,
+    "detail": "Every fourth attack, if it hits, grants Barrier. +2% meal healing.",
+    "boon": "barrier",
+    "healing": 0.02
+  },
+  "card_crown_1": {
+    "enemy": "crown_1",
+    "tile": 17,
+    "rarity": "Epic",
+    "chance": 0.0001,
+    "detail": "Burn lasts 25% less time on you.",
+    "resist": "burn"
+  },
+  "card_crown_2": {
+    "enemy": "crown_2",
+    "tile": 18,
+    "rarity": "Epic",
+    "chance": 0.0001,
+    "detail": "+3% damage reduction.",
+    "defense": 0.03
+  },
+  "card_crown_3": {
+    "enemy": "crown_3",
+    "tile": 19,
+    "rarity": "Epic",
+    "chance": 0.0001,
+    "detail": "Every fourth attack, if it hits, applies Shock.",
+    "proc": "shock"
+  },
+  "card_crown_4": {
+    "enemy": "crown_4",
+    "tile": 20,
+    "rarity": "Epic",
+    "chance": 0.0001,
+    "detail": "Every fourth attack, if it hits, applies Weaken.",
+    "proc": "weaken"
+  },
+  "card_crown_5": {
+    "enemy": "crown_5",
+    "tile": 21,
+    "rarity": "Epic",
+    "chance": 0.0001,
+    "detail": "+4% special-attack damage.",
+    "special": 0.04
+  },
+  "card_trial_wilds": {
+    "enemy": "trial_wilds",
+    "tile": 22,
+    "rarity": "Legendary",
+    "chance": 5e-05,
+    "detail": "Every fourth attack, if it hits, applies Bleed. +3% special-attack damage.",
+    "proc": "bleed",
+    "special": 0.03
+  },
+  "card_trial_marsh": {
+    "enemy": "trial_marsh",
+    "tile": 23,
+    "rarity": "Legendary",
+    "chance": 5e-05,
+    "detail": "Every fourth attack, if it hits, cleanses one debuff.",
+    "boon": "cleanse"
+  },
+  "card_trial_crown": {
+    "enemy": "trial_crown",
+    "tile": 24,
+    "rarity": "Legendary",
+    "chance": 5e-05,
+    "detail": "+4% damage reduction. -2% attack damage.",
+    "defense": 0.04,
+    "attack": -0.02
+  },
+  "card_apex_wilds_1": {
+    "enemy": "apex_wilds_1",
+    "tile": 25,
+    "rarity": "Legendary",
+    "chance": 5e-05,
+    "detail": "+4.5% special-attack damage.",
+    "special": 0.045
+  },
+  "card_apex_wilds_2": {
+    "enemy": "apex_wilds_2",
+    "tile": 26,
+    "rarity": "Legendary",
+    "chance": 5e-05,
+    "detail": "+6% damage reduction. -3% attack damage.",
+    "defense": 0.06,
+    "attack": -0.03
+  },
+  "card_apex_wilds_3": {
+    "enemy": "apex_wilds_3",
+    "tile": 27,
+    "rarity": "Legendary",
+    "chance": 5e-05,
+    "detail": "Every fourth attack, if it hits, applies Burn. +2.5% attack damage.",
+    "proc": "burn",
+    "attack": 0.025
+  },
+  "card_apex_marsh_1": {
+    "enemy": "apex_marsh_1",
+    "tile": 28,
+    "rarity": "Legendary",
+    "chance": 5e-05,
+    "detail": "Slow lasts 25% less time on you. +2% damage reduction.",
+    "resist": "slow",
+    "defense": 0.02
+  },
+  "card_apex_marsh_2": {
+    "enemy": "apex_marsh_2",
+    "tile": 29,
+    "rarity": "Legendary",
+    "chance": 5e-05,
+    "detail": "Every fourth attack, if it hits, applies Poison.",
+    "proc": "poison"
+  },
+  "card_apex_marsh_3": {
+    "enemy": "apex_marsh_3",
+    "tile": 30,
+    "rarity": "Legendary",
+    "chance": 5e-05,
+    "detail": "Every fourth attack, if it hits, grants Barrier. -3% meal healing.",
+    "boon": "barrier",
+    "healing": -0.03
+  },
+  "card_apex_crown_1": {
+    "enemy": "apex_crown_1",
+    "tile": 31,
+    "rarity": "Legendary",
+    "chance": 5e-05,
+    "detail": "+5% boss damage.",
+    "boss": 0.05
+  },
+  "card_apex_crown_2": {
+    "enemy": "apex_crown_2",
+    "tile": 32,
+    "rarity": "Legendary",
+    "chance": 5e-05,
+    "detail": "Every fourth attack, if it hits, cleanses one debuff. +1% damage reduction.",
+    "boon": "cleanse",
+    "defense": 0.01
+  },
+  "card_apex_crown_3": {
+    "enemy": "apex_crown_3",
+    "tile": 33,
+    "rarity": "Legendary",
+    "chance": 5e-05,
+    "detail": "Every fourth attack, if it hits, applies Shock. +2.5% special-attack damage.",
+    "proc": "shock",
+    "special": 0.025
+  },
+  "card_secret_0": {
+    "enemy": "secret_0",
+    "tile": 34,
+    "rarity": "Mythic",
+    "chance": 2e-05,
+    "detail": "+4.5% damage reduction.",
+    "defense": 0.045
+  },
+  "card_secret_1": {
+    "enemy": "secret_1",
+    "tile": 35,
+    "rarity": "Mythic",
+    "chance": 2e-05,
+    "detail": "+6% special-attack damage.",
+    "special": 0.06
+  },
+  "card_secret_2": {
+    "enemy": "secret_2",
+    "tile": 36,
+    "rarity": "Mythic",
+    "chance": 2e-05,
+    "detail": "Every fourth attack, if it hits, applies Armor Break.",
+    "proc": "armor_break"
+  },
+  "card_secret_3": {
+    "enemy": "secret_3",
+    "tile": 37,
+    "rarity": "Mythic",
+    "chance": 2e-05,
+    "detail": "Every fourth attack, if it hits, applies Stun.",
+    "proc": "stun"
+  },
+  "card_secret_4": {
+    "enemy": "secret_4",
+    "tile": 38,
+    "rarity": "Mythic",
+    "chance": 2e-05,
+    "detail": "+4% damage reduction. Every fourth attack, if it hits, applies Weaken.",
+    "defense": 0.04,
+    "proc": "weaken"
+  },
+  "card_secret_5": {
+    "enemy": "secret_5",
+    "tile": 39,
+    "rarity": "Mythic",
+    "chance": 2e-05,
+    "detail": "+7% attack damage. -4% damage reduction.",
+    "attack": 0.07,
+    "defense": -0.04
+  },
+  "card_secret_6": {
+    "enemy": "secret_6",
+    "tile": 40,
+    "rarity": "Mythic",
+    "chance": 2e-05,
+    "detail": "+7% boss damage. -3% meal healing.",
+    "boss": 0.07,
+    "healing": -0.03
+  },
+  "card_hollow_depth": {
+    "enemy": "hollow_depth",
+    "tile": 41,
+    "rarity": "Mythic",
+    "chance": 2e-05,
+    "detail": "+5% damage reduction. Wound lasts 25% less time on you.",
+    "defense": 0.05,
+    "resist": "wound"
+  }
+}

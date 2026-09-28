@@ -36,3 +36,11 @@ RealmLegacyGrowth owns point milestones, advanced talent gates, relic ascension 
 ## Merchant stock from 0.40
 
 RealmMerchant.sync observes wall milliseconds monotonically and refreshes persisted three-offer stock at expiry. Never consume model combat RNG for stock selection. UI persists stock immediately on opening; purchase passes current observation time and displayed revision to prevent buying a replaced offer. Keep offer table compatibility in mind when changing prices: current save validation matches serialized offers to pool(tier). Future price changes need migration/versioning of merchant stock. All gear sales use model.protected and require a separate confirmation UI.
+
+## Hunting systems from 0.41
+
+RealmCards maps gear UIDs to consumed cards. Socketed gear must remain count one and protected; refinement/tempering transfers the socket to a unique resulting UID. Duplicate active card IDs count once. Use separate card_rng; never consume combat RNG for card rolls. data/cards.json covers all enemy IDs. New fields are optional for old saves.
+
+RealmStamina reserves encounter cost and refunds unused time on every ending path. Old in-flight saves without stamina_started incur no retroactive charge. Recovery only occurs outside combat, through simulation time. Paused manual hunts require explicit resume; only existing valid rewarded assistance may automate that action. Keep rest deadlines in advance() so offline chunking remains equivalent.
+
+RealmAfflictions stores finite effects inside fight. Include tick deadlines in advance(); resolve deaths before attack actions. Shared hard-control immunity prevents alternating Freeze/Stun locks. Status events are not attack poses. Forecasts omit timed procs and must retain that visible limitation. All new card art must face forward with facial anatomy completely hidden, following the user's latest correction. Runtime crop boundaries follow the generated grid, not assumed equal cells.

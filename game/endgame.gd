@@ -129,7 +129,11 @@ static func command(m, cmd) -> String:
 			var favorite = g.favorite
 			if g.count==1: m.s.gear.erase(g)
 			else: g.count -= 1
-			var uid = m.add_gear(item,quality)
+			var uid = m.add_gear(item,quality,m.s.get("card_sockets",{}).has(old_uid))
+			if m.s.get("card_sockets",{}).has(old_uid):
+				var card = m.s.card_sockets[old_uid]
+				m.s.card_sockets.erase(old_uid)
+				m.s.card_sockets[uid] = card
 			m.gear(uid).locked = m.gear(uid).locked or locked
 			m.gear(uid).favorite = m.gear(uid).favorite or favorite
 			var references = [m.s.equipped]+m.s.presets.values()

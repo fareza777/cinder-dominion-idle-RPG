@@ -226,6 +226,18 @@ static func icon(id: String, dimension: int = 52) -> TextureRect:
 	t.stretch_mode = TextureRect.STRETCH_KEEP_ASPECT_CENTERED
 	t.mouse_filter = Control.MOUSE_FILTER_IGNORE
 	var data = item_catalog.get(id,{})
+	if data.has("card_tile"):
+		var tile = int(data.card_tile)
+		var xs = [0,156,310,465,619,775,938,1106]
+		var ys = [0,218,431,662,898,1140,1422]
+		var col = tile%7
+		var row = int(tile/7)
+		var texture = AtlasTexture.new()
+		texture.atlas = load("res://assets/art/monster-cards-0.41.png")
+		texture.filter_clip = true
+		texture.region = Rect2(xs[col]+12,ys[row]+5,xs[col+1]-xs[col]-24,ys[row+1]-ys[row]-10)
+		t.texture = texture
+		return t
 	if data.get("slot","") in ["ring","necklace","belt"]:
 		t.texture = load("res://assets/ui/accessory-"+str(data.slot)+".svg")
 		return t

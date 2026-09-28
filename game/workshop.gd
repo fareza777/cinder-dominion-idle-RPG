@@ -53,7 +53,11 @@ static func command(m, uid: String) -> String:
 	m.spend(c.metal,int(c.ingots))
 	if g.count==1: m.s.gear.erase(g)
 	else: g.count -= 1
-	var new_uid = m.add_gear(item_id,quality)
+	var new_uid = m.add_gear(item_id,quality,m.s.get("card_sockets",{}).has(uid))
+	if m.s.get("card_sockets",{}).has(uid):
+		var card = m.s.card_sockets[uid]
+		m.s.card_sockets.erase(uid)
+		m.s.card_sockets[new_uid] = card
 	var upgraded = m.gear(new_uid)
 	upgraded.locked = upgraded.locked or locked
 	upgraded.favorite = upgraded.favorite or favorite

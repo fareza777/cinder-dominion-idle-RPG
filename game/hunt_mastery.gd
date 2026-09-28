@@ -19,7 +19,7 @@ static func fragments(m, enemy: Dictionary, wins: int = -1) -> int:
 
 static func gold(m, enemy: Dictionary, wins: int = -1) -> int:
 	var r = rank(m,enemy.id) if wins<0 else rank_for(wins)
-	return int((int(enemy.gold)+int(RealmChronicle.state(m).talents.fortune)*2+r)*(1.0+RealmLegacyGrowth.rank(m,"bounty")*.01))
+	return int((int(enemy.gold)+int(RealmChronicle.state(m).talents.fortune)*2+r)*(1.0+RealmLegacyGrowth.rank(m,"bounty")*.01+RealmCards.bonus(m,"gold")))
 
 # Reward rates change after each milestone victory, starting on the following fight.
 # Split at the four thresholds rather than iterating over a possibly large order.

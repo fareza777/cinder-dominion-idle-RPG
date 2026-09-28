@@ -638,6 +638,12 @@ func activity_dialog(id: String, recommended: int = 0):
 		encounter.add_child(introduction)
 		introduction.add_child(U.para("%d HP · %d ATK · %d DEF" % [int(e.hp),int(e.attack),int(e.armor)],13,U.GOLD))
 		v.add_child(U.para(model.encounter_advice(a.enemy),14,U.GOLD))
+		var stamina_cost = RealmStamina.cost(model.data.enemies[a.enemy])
+		v.add_child(U.para("Stamina: reserve %d; entry %d + 1 per %ds. Unused reserve returns after battle." % [stamina_cost.reserve,stamina_cost.entry,int(stamina_cost.interval/1000)],13))
+		var card = RealmCards.definitions()["card_"+a.enemy]
+		v.add_child(U.para("%s card · %.3f%% per victory" % [card.rarity,float(card.chance)*100],13,U.GOLD))
+		if model.data.enemies[a.enemy].has("status"): v.add_child(U.para("Special damage: "+RealmAfflictions.element(model.data.enemies[a.enemy])+" · applies "+str(model.data.enemies[a.enemy].status).replace("_"," ").capitalize()+". Bosses resist Freeze and Stun.",13))
+		v.add_child(U.para("Forecast excludes timed status and card proc damage; allow extra food.",12))
 		v.add_child(U.button("Mastery · "+RealmHuntMastery.NAMES[RealmHuntMastery.rank(model,a.enemy)],func(): preload("res://ui/hunt_mastery.gd").new(self).detail(a.enemy)))
 		v.add_child(U.para(RealmCombat.mechanic(e),14,U.TEXT))
 		if e.get("trial",false): v.add_child(U.para("PHASE II · "+RealmTrials.phase_text(e),14,U.RED))

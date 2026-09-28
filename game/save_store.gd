@@ -41,6 +41,10 @@ func valid(s, data: Dictionary) -> bool:
 		if not counter(g.q) or g.q>7 or not counter(g.count) or g.count<1: return false
 		if not g.uid is String or uids.has(g.uid) or not g.locked is bool or not g.favorite is bool: return false
 		uids[g.uid] = g
+	if not RealmCards.valid(s,uids) or not RealmStamina.valid(s) or not RealmAfflictions.valid(s.fight,int(s.time)): return false
+	if s.fight.has("stamina_started") and (not s.has("stamina") or not RealmSave.counter(s.fight.stamina_started) or s.fight.stamina_started>s.time): return false
+	for uid in s.get("card_sockets",{}):
+		if data.items[uids[uid].id].slot in ["axe","pick","rod"]: return false
 	if not RealmEquipmentSlots.valid(s.equipped,uids,data): return false
 	for slots in s.presets.values():
 		if not slots is Dictionary: return false

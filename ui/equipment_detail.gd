@@ -47,7 +47,7 @@ func open(uid: String, requested_slot: String = ""):
 			var before = float(comparison.before[stat])
 			var after = float(comparison.after[stat])
 			changes.add_child(U.para("%s   %.0f → %.0f   (%+.0f)" % [stat.capitalize(),before,after,after-before],18,U.GREEN if after>before else (U.RED if after<before else U.MUTED)))
-		changes.add_child(U.para("Total stats with your current style, talents and relic. Small equipment gains may round to the same combat value.",13))
+		changes.add_child(U.para("Total stats with your current style, talents and relic. Card damage percentages apply during combat and are not added to these ATK/DEF totals.",13))
 		changes.add_child(U.para("Armor sets\nBefore: %s\nAfter: %s" % [comparison.sets_before,comparison.sets_after],14,U.GOLD))
 	var metal = RealmGearSets.metal(item.id)
 	if metal!="" and data.slot in RealmGearSets.SLOTS:
@@ -57,6 +57,7 @@ func open(uid: String, requested_slot: String = ""):
 		v.add_child(U.button("View armor sets",func(): preload("res://ui/gear_sets.gd").new(app).open()))
 	if not m.s.fight.is_empty(): changes.add_child(U.para("Finish or leave combat before changing equipment. Temporary potion buffs are included in this preview.",13,U.GOLD))
 	if RealmWorkshop.eligible(m,item): v.add_child(U.button("Preview a quality upgrade",func(): preload("res://ui/armory.gd").new(app).workshop(uid)))
+	if RealmCards.fits(m,uid): v.add_child(U.button("Monster card · "+("Attached" if m.s.get("card_sockets",{}).has(uid) else "Empty socket"),func(): preload("res://ui/cards.gd").new(app).socket(uid)))
 	var protection = U.card(v,12)
 	protection.add_child(U.para("Keep or salvage",17,U.TEXT))
 	protection.add_child(U.para("Equipped, locked, favorite and saved-loadout items are protected from salvage.",13))
