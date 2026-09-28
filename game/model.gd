@@ -79,8 +79,8 @@ func stats() -> Dictionary:
 	var legacy = RealmChronicle.state(self)
 	st.attack += int(legacy.talents.power)
 	st.armor += int(legacy.talents.guard)
-	if legacy.relic=="fang": st.attack += int(legacy.relics.fang)*2
-	if legacy.relic=="ward": st.armor += int(legacy.relics.ward)*2
+	if legacy.relic=="fang": st.attack += RealmLegacyGrowth.relic_base(int(legacy.relics.fang),2)
+	if legacy.relic=="ward": st.armor += RealmLegacyGrowth.relic_base(int(legacy.relics.ward),2)
 	st.attack = maxi(1,int(st.attack*float(style.attack)))
 	st.armor = maxi(0,int(st.armor)+int(style.armor)+int(progression().upgrades.ward))
 	RealmCharacters.apply_stats(self,st)
@@ -550,6 +550,8 @@ func win(enemy: Dictionary):
 	var fragment_id = RealmChronicle.fragments_for(enemy)
 	var fragments = RealmHuntMastery.fragments(self,enemy)
 	legacy.fragments[fragment_id] += fragments
+	var essence_amount = RealmLegacyGrowth.essence(enemy)
+	if essence_amount>0: gain("essence_"+fragment_id,essence_amount)
 	var reward_gold = RealmHuntMastery.gold(self,enemy)
 	if RealmEndgame.route(self) in ["safe","mastery"]: reward_gold = int(reward_gold*.8)
 	elif RealmEndgame.route(self)=="elite": reward_gold = int(reward_gold*1.25)
@@ -562,6 +564,7 @@ func win(enemy: Dictionary):
 		last_reward = "VICTORY · +%d gold · +%d XP · %s ×%d · +2 Dread Seals" % [reward_gold,xp,name_of(enemy.drop),3 if s.kills.get(id,0)==0 else 1]
 		if s.kills.get(id,0)==0: last_reward += " · Blueprint learned"
 	if enemy.get("depth",false): last_reward = "DEPTH CLEARED · +%d gold · +%d XP · %d shards waiting to be banked" % [reward_gold,xp,RealmEndgame.state(self).depth.stash]
+	if essence_amount>0: last_reward += " · +%d %s Essence" % [essence_amount,RealmChronicle.RELICS[fragment_id].name]
 	if enemy.get("trial",false) and int(s.kills.get(id,0))==0:
 		gain("scrap",15)
 		gain("cooked_minnow",20)

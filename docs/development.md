@@ -26,3 +26,8 @@ User explicitly wants small full-body hero sprites with distinct attack poses, m
 ## Equipment positions from 0.38
 
 Use RealmEquipmentSlots.accepts/target/place/valid for equipment position mapping. Ring item family maps to ring_left or ring_right; never write an equipped.ring field. New rings do not stack, so each hand owns a distinct UID. When moving a UID remove its prior position, including in previews. Accessory recipes unlock at Smithing 30/60/90; armor sets still count only their five armor positions. Keep saved loadout/preset references when refining.
+
+
+## Legacy progression from 0.39
+
+RealmLegacyGrowth owns point milestones, advanced talent gates, relic ascension costs and bounded combat bonuses. New talent keys are optional on legacy saves; use get(key,0). Keep the three old fields required. Chronicle validation now needs kills along with XP. Relic rank base stat bonuses cap at ten; use relic_base, never multiply all 40 ranks by the old stat increment. Offline return talent deltas use earned(before), not the historical ten-point formula. Essence sources follow fragments_for(enemy), and the final ascension also spends a guardian core.

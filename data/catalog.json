@@ -1316,6 +1316,30 @@
       "attack": 3,
       "armor": 0,
       "icon": "ring"
+    },
+    "essence_fang": {
+      "id": "essence_fang",
+      "name": "Ashfang Essence",
+      "en": "Ashfang Essence",
+      "category": "material",
+      "sell": 0,
+      "icon_alias": "grave_moss"
+    },
+    "essence_ward": {
+      "id": "essence_ward",
+      "name": "Hollow Aegis Essence",
+      "en": "Hollow Aegis Essence",
+      "category": "material",
+      "sell": 0,
+      "icon_alias": "grave_moss"
+    },
+    "essence_heart": {
+      "id": "essence_heart",
+      "name": "Emberheart Essence",
+      "en": "Emberheart Essence",
+      "category": "material",
+      "sell": 0,
+      "icon_alias": "grave_moss"
     }
   },
   "skills": {

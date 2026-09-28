@@ -166,3 +166,8 @@ User rejected an articulated Warden/Ash Rat experiment, clarified that heroes sh
 ## 0.38 Accessory equipment foundation
 
 First implementation stage of the approved long-term hunting design: necklace, belt and separate left/right ring positions; nine Smithing recipes at levels 30/60/90; original vector icons; ten-slot hero layout; bag filters and hand-specific comparisons. Distinct ring UIDs, shared slot compatibility, equip-best, save/preset/loadout validation and workshop refinement preserve ownership. Existing saves remain compatible without a rewrite. 83 essential checks and focused ownership/crafting/refinement checks passed; four phone captures including narrow 130% text. Full campaign accessory balance, physical Android testing and remaining stamina/card/merchant/talent/relic/status stages are outstanding. See docs/qa/accessories-0.38-report.md.
+
+
+## 0.39 Late-game talents and relic ascension
+
+60 earnable talent points gated by Bladecraft and boss milestones; six advanced shared talents, 75 total possible allocations and free resets. Relics grow to rank 40 with bounded specialist bonuses, three new essence materials from stronger enemies, ascension level/boss gates and guardian cores for the last ten ranks. Legacy allocations, base bonuses, save identity and loadouts retained. 83 essential checks, focused gate/cost/save/offline combat checks and four phone captures passed. Full pacing balance, physical Android verification, selectable relic traits/class keystones, cards, stamina, statuses and rotating NPC merchant remain outstanding. See docs/qa/legacy-growth-0.39-report.md.

@@ -95,27 +95,28 @@ func talents():
 	var v = app.modal("Talents · shape your build")
 	if locked(v): return
 	var state = C.state(m)
-	app.dynamic(v,func(): return "%d points available · %d / 10 earned" % [C.points_free(m),C.points_earned(m)],18,U.GOLD)
-	var xp = int(m.s.xp.bladecraft+m.s.xp.might+m.s.xp.warding)
-	v.add_child(U.para("250 melee XP = 1 point · 10 points maximum",14))
-	if C.points_earned(m)<10:
-		v.add_child(U.progress(xp%250,250,U.GOLD,6))
-		app.dynamic(v,func(): return "%d XP until the next point" % (250-int(m.s.xp.bladecraft+m.s.xp.might+m.s.xp.warding)%250),13,U.GREEN)
+	v.add_child(U.para("%d points available · %d / 60 earned" % [C.points_free(m),C.points_earned(m)],18,U.GOLD))
+	v.add_child(U.para(RealmLegacyGrowth.next_point(m),14))
+	v.add_child(U.para("Keep your early talents. Advanced ranks unlock at Bladecraft Lv.25, 50, 75 and 100 with boss victories. Reset freely outside combat.",13))
 	for id in C.TALENTS:
 		var d = C.TALENTS[id]
+		var rank = int(state.talents.get(id,0))
+		var maximum = RealmLegacyGrowth.limit(id)
 		var card = U.card(v,14)
-		card.add_child(U.label(d.name,25,U.TEXT,true))
+		card.add_child(U.para(d.name,23,U.TEXT))
 		card.add_child(U.para(d.detail,14))
-		card.add_child(U.progress(state.talents[id],5,U.GOLD,5))
-		card.add_child(U.label("RANK %d / 5" % int(state.talents[id]),11,U.GOLD))
+		card.add_child(U.progress(rank,maximum,U.GOLD,5))
+		card.add_child(U.label("RANK %d / %d" % [rank,maximum],11,U.GOLD))
+		var why = RealmLegacyGrowth.talent_reason(m,id)
+		if why!="": card.add_child(U.para(why,13))
 		var button = U.button("Spend 1 point",func():
 			if app.send({"type":"talent","id":id}): talents(),true)
-		button.disabled = C.points_free(m)<1 or state.talents[id]>=5 or not m.s.fight.is_empty()
+		button.disabled = why!="" or not m.s.fight.is_empty()
 		card.add_child(button)
 		var ref = weakref(button)
 		app.dialog_callbacks.append(func():
 			var b = ref.get_ref()
-			if is_instance_valid(b): b.disabled = C.points_free(m)<1 or state.talents[id]>=5 or not m.s.fight.is_empty())
+			if is_instance_valid(b): b.disabled = RealmLegacyGrowth.talent_reason(m,id)!="" or not m.s.fight.is_empty())
 	v.add_child(U.button("Reset talents · free",func():
 		if app.send({"type":"talent_reset"}): talents()))
 	if not m.s.fight.is_empty(): v.add_child(U.para("Retreat before changing talents.",13,U.RED))
@@ -123,7 +124,8 @@ func talents():
 func relics():
 	var v = app.modal("Relics of the valley")
 	if locked(v): return
-	v.add_child(U.para("1 relic equipped · 10 ranks each",15))
+	v.add_child(U.para("One active relic · four ascensions · 40 ranks each",15))
+	v.add_child(U.para("Ranks 1–10 keep their original bonuses. Later ranks add smaller specialist effects and require essence from stronger hunts.",13))
 	var state = C.state(m)
 	for id in C.RELICS:
 		var d = C.RELICS[id]
@@ -131,32 +133,32 @@ func relics():
 		var card = U.card(v,15,Color(d.color).darkened(.4))
 		var row = U.row(12)
 		card.add_child(row)
-		row.add_child(U.icon(d.icon,68))
+		row.add_child(U.icon(d.icon,60))
 		var details = U.column(4)
 		row.add_child(details)
 		details.size_flags_horizontal = Control.SIZE_EXPAND_FILL
-		details.add_child(U.para(d.name,25,Color(d.color)))
-		details.add_child(U.para("RANK %d / 10%s" % [rank," · EQUIPPED" if state.relic==id else ""],11,U.GOLD))
-		card.add_child(U.para(d.detail,14,U.TEXT))
-		var unit = 3 if id=="heart" else 2
-		var benefit = "food healing" if id=="heart" else ("attack" if id=="fang" else "armor")
-		card.add_child(U.para("While equipped: +%d %s%s" % [rank*unit,benefit," → +%d at the next rank" % ((rank+1)*unit) if rank<10 else " · maximum rank"],14,U.GOLD))
-		card.add_child(U.para("TARGET FARM\n"+d.source,13))
-		app.dynamic(card,func(): return "%d fragments owned" % int(state.fragments[id]),14,Color(d.color))
-		if rank<10:
+		details.add_child(U.para(d.name,24,Color(d.color)))
+		details.add_child(U.para("RANK %d / 40%s" % [rank," · EQUIPPED" if state.relic==id else ""],12,U.GOLD))
+		card.add_child(U.para(RealmLegacyGrowth.relic_effect(id,rank),14,U.TEXT))
+		if rank<40:
+			card.add_child(U.para("Next: "+RealmLegacyGrowth.relic_effect(id,rank+1),13,U.GOLD))
 			var cost = C.relic_cost(rank)
-			card.add_child(U.progress(state.fragments[id],cost,Color(d.color),5))
-			var button = U.button(("Awaken" if rank==0 else "Upgrade")+" · %d fragments" % cost,func():
+			card.add_child(U.para("Fragments: %d / %d" % [state.fragments[id],cost],14))
+			if rank>=10: card.add_child(U.para("Essence: %d / %d" % [m.count("essence_"+id),RealmLegacyGrowth.essence_cost(rank)],14))
+			if rank>=30: card.add_child(U.para("%s: %d / 1" % [m.name_of(RealmLegacyGrowth.CORES[id]),m.count(RealmLegacyGrowth.CORES[id])],14))
+			var why = RealmLegacyGrowth.relic_reason(m,id)
+			if why!="": card.add_child(U.para(why,13))
+			var button = U.button("Awaken" if rank==0 else "Upgrade to rank %d" % (rank+1),func():
 				if app.send({"type":"relic_upgrade","id":id}): relics(),true)
-			button.disabled = state.fragments[id]<cost or not m.s.fight.is_empty()
+			button.disabled = why!="" or not m.s.fight.is_empty()
 			card.add_child(button)
 			var ref = weakref(button)
 			app.dialog_callbacks.append(func():
 				var b = ref.get_ref()
-				if is_instance_valid(b): b.disabled = state.fragments[id]<cost or not m.s.fight.is_empty())
+				if is_instance_valid(b): b.disabled = RealmLegacyGrowth.relic_reason(m,id)!="" or not m.s.fight.is_empty())
 		if rank>0 and state.relic!=id: card.add_child(U.button("Equip "+d.name,func():
 			if app.send({"type":"relic_equip","id":id}): relics()))
-		card.add_child(U.button("Find a hunting ground",func(): farms(id)))
+		card.add_child(U.button("Find fragments & essence",func(): farms(id)))
 
 func farms(relic: String):
 	preload("res://ui/relic_farm.gd").new(app).open(relic)

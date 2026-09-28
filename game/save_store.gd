@@ -101,7 +101,7 @@ func valid(s, data: Dictionary) -> bool:
 			if not counter(p.upgrades.get(id,-1)) or p.upgrades[id]>3: return false
 	if s.fight.has("phase") and (not counter(s.fight.phase) or s.fight.phase<1 or s.fight.phase>2): return false
 	if s.fight.has("swings") and not counter(s.fight.swings): return false
-	if s.has("chronicle") and not RealmChronicle.valid(s.chronicle,s.xp): return false
+	if s.has("chronicle") and not RealmChronicle.valid(s.chronicle,s.xp,s.kills): return false
 	if s.has("runeforge") and not RealmRuneforge.valid(s.runeforge): return false
 	var cfg = s.settings
 	for key in ["locale","font","motion","battery","music","sfx","food","threshold","potion","potion_policy"]:
@@ -217,7 +217,7 @@ func resume_report(model: RealmModel, before: Dictionary, now: int, away: int, e
 		if model.level(skill)>old_level: report.levels[skill] = {"before":old_level,"after":model.level(skill)}
 	for enemy in model.s.kills: report.kills += int(model.s.kills[enemy])-int(before.kills.get(enemy,0))
 	report.fragments = {}
-	report.talent_points = RealmChronicle.points_earned(model)-mini(10,int((before.xp.bladecraft+before.xp.might+before.xp.warding)/250))
+	report.talent_points = RealmChronicle.points_earned(model)-RealmLegacyGrowth.earned(before)
 	var previous_fragments = before.get("chronicle",{}).get("fragments",{})
 	for id in RealmChronicle.RELICS:
 		var amount = int(RealmChronicle.state(model).fragments[id])-int(previous_fragments.get(id,0))

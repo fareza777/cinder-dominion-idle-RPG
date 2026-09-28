@@ -9,7 +9,7 @@ func check(ok: bool, label: String):
 
 func _init():
 	var m = RealmModel.new()
-	check(m.data.items.size()==132,"132 item definitions")
+	check(m.data.items.size()==135,"135 item definitions")
 	m.command({"type":"queue","id":"mine_copper","target":4})
 	m.advance(12000)
 	check(m.count("copper_ore")==4,"gather four ore")
@@ -396,7 +396,7 @@ func _init():
 	check(relic_goal.missing==39 and relic_goal.wins==5 and relic_goal.batch==5, "relic targets round up partial fragment wins")
 	var long_relic_goal = RealmRelicGoal.plan(9,0,1)
 	check(long_relic_goal.wins==500 and long_relic_goal.batch==100, "relic farming keeps the full goal separate from the queue batch limit")
-	check(RealmRelicGoal.plan(0,5,1).state=="ready" and RealmRelicGoal.plan(0,5,1).wins==0 and RealmRelicGoal.plan(10,0,1).state=="maximum" and RealmRelicGoal.plan(10,0,1).batch==0, "ready and maximum relics do not invent another upgrade hunt")
+	check(RealmRelicGoal.plan(0,5,1).state=="ready" and RealmRelicGoal.plan(0,5,1).wins==0 and RealmRelicGoal.plan(40,0,1).state=="maximum" and RealmRelicGoal.plan(40,0,1).batch==0, "ready and maximum relics do not invent another upgrade hunt")
 	var mastery_m = RealmModel.new()
 	mastery_m.s.kills.ash_rat = 24
 	var rat_enemy = mastery_m.data.enemies.ash_rat

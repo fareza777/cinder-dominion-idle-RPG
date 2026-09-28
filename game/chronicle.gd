@@ -4,11 +4,17 @@ extends RefCounted
 const TALENTS = {
 	"power":{"name":"Blade of Dawn","detail":"+1 attack per rank. Finish fights sooner."},
 	"guard":{"name":"Last Bastion","detail":"+1 armor per rank. Spend less food on long hunts."},
-	"fortune":{"name":"Wayfarer's Fortune","detail":"+2 gold per victory per rank. Fund stronghold upgrades."}}
+	"fortune":{"name":"Wayfarer's Fortune","detail":"+2 gold per victory per rank. Fund stronghold upgrades."},
+	"technique":{"name": "Measured Strike", "detail": "Special attacks deal 0.5% more damage per rank."},
+	"hunter":{"name": "Giant's Bane", "detail": "Deal 0.5% more damage to bosses per rank."},
+	"endurance":{"name": "Hold Fast", "detail": "Take 0.4% less boss damage per rank."},
+	"recovery":{"name": "Field Medicine", "detail": "Meals restore 1 extra HP for every 2 ranks."},
+	"resolve":{"name": "Steady Guard", "detail": "Every third incoming strike deals 0.5% less damage per rank."},
+	"bounty":{"name": "Seasoned Hunter", "detail": "Earn 1% more battle gold per rank. Does not affect rare drops."}}
 const RELICS = {
-	"fang":{"name":"Ashfang","detail":"+2 attack per rank while equipped.","source":"Ash Rats, Hollow Hounds, Cinder Bandits; Ashen Wilds","enemy":"ash_rat","icon":"copper_sword","color":"d9b477"},
-	"ward":{"name":"Hollow Aegis","detail":"+2 armor per rank while equipped.","source":"Grave Thralls, Chapel Guards, Bellkeeper; Obsidian Crown","enemy":"grave_thrall","icon":"iron_shield","color":"91b5db"},
-	"heart":{"name":"Emberheart","detail":"Cooked food restores +3 HP per rank while equipped.","source":"Ember Wraiths; Drowned Sanctum","enemy":"ember_wraith","icon":"fury_draught","color":"dd938d"}}
+	"fang":{"name":"Ashfang","detail":"+2 attack per rank through rank 10. Ascension improves special attacks.","source":"Ash Rats, Hollow Hounds, Cinder Bandits; Ashen Wilds","enemy":"ash_rat","icon":"copper_sword","color":"d9b477"},
+	"ward":{"name":"Hollow Aegis","detail":"+2 armor per rank through rank 10. Ascension reduces boss damage.","source":"Grave Thralls, Chapel Guards, Bellkeeper; Obsidian Crown","enemy":"grave_thrall","icon":"iron_shield","color":"91b5db"},
+	"heart":{"name":"Emberheart","detail":"Meals restore +3 HP per rank through rank 10, then +1 HP every 5 ranks.","source":"Ember Wraiths; Drowned Sanctum","enemy":"ember_wraith","icon":"fury_draught","color":"dd938d"}}
 const REGIONS = {
 	"wilds":{"name":"Ashen Wilds","detail":"The old watch still walks beneath the dead canopy. Defeat its sentinel for Ashfang fragments.","color":"b7bf91","relic":"fang"},
 	"marsh":{"name":"Drowned Sanctum","detail":"The cloisters sank, but their oracle never left. Seek Emberheart fragments in the ruins.","color":"83bcb8","relic":"heart"},
@@ -24,7 +30,7 @@ static func state(m) -> Dictionary:
 	return m.s.chronicle
 
 static func points_earned(m) -> int:
-	return mini(10,int((m.s.xp.bladecraft+m.s.xp.might+m.s.xp.warding)/250))
+	return RealmLegacyGrowth.earned(m.s)
 
 static func points_free(m) -> int:
 	var spent = 0
@@ -87,8 +93,9 @@ static func command(m, cmd: Dictionary) -> String:
 	match str(cmd.type):
 		"talent":
 			if not m.s.fight.is_empty(): return "Retreat before changing your build."
-			if not TALENTS.has(id) or c.talents[id]>=5 or points_free(m)<1: return "Earn 250 melee XP for each talent point, up to 10 points. Each path has 5 ranks."
-			c.talents[id] += 1
+			var why = RealmLegacyGrowth.talent_reason(m,id)
+			if why!="": return why
+			c.talents[id] = int(c.talents.get(id,0))+1
 		"talent_reset":
 			if not m.s.fight.is_empty(): return "Retreat before resetting talents."
 			for key in TALENTS: c.talents[key] = 0
@@ -96,10 +103,13 @@ static func command(m, cmd: Dictionary) -> String:
 			if not m.s.fight.is_empty(): return "Retreat before upgrading your relic."
 			if not RELICS.has(id): return "Unknown relic"
 			var rank = int(c.relics[id])
-			if rank>=10: return "Relic fully awakened"
+			var why = RealmLegacyGrowth.relic_reason(m,id)
+			if why!="": return why
 			var cost = relic_cost(rank)
 			if c.fragments[id]<cost: return "Collect %d more fragments from the listed hunts." % (cost-int(c.fragments[id]))
 			c.fragments[id] -= cost
+			if rank>=10: m.spend("essence_"+id,RealmLegacyGrowth.essence_cost(rank))
+			if rank>=30: m.spend(RealmLegacyGrowth.CORES[id],1)
 			c.relics[id] += 1
 			if c.relic=="": c.relic = id
 			m.note("%s awakened to rank %d" % [RELICS[id].name,rank+1])
@@ -152,17 +162,27 @@ static func focus(m) -> Dictionary:
 static func number(v, maximum: int = 1000000000000) -> bool:
 	return typeof(v) in [TYPE_INT,TYPE_FLOAT] and is_finite(float(v)) and v>=0 and v<=maximum and floor(float(v))==float(v)
 
-static func valid(c, xp: Dictionary) -> bool:
+static func valid(c, xp: Dictionary, kills: Dictionary = {}) -> bool:
 	if not c is Dictionary: return false
 	for field in ["talents","relics","fragments","daily"]:
 		if not c.get(field) is Dictionary: return false
+	for key in c.talents:
+		if key not in TALENTS: return false
+	for key in ["power","guard","fortune"]:
+		if not c.talents.has(key): return false
 	var spent = 0
 	for id in TALENTS:
-		if not number(c.talents.get(id,-1),5): return false
-		spent += int(c.talents[id])
-	if spent>mini(10,int((xp.bladecraft+xp.might+xp.warding)/250)): return false
+		if not number(c.talents.get(id,0),RealmLegacyGrowth.limit(id)): return false
+		if not RealmLegacyGrowth.rank_gate(id,int(c.talents.get(id,0)),xp,kills): return false
+		spent += int(c.talents.get(id,0))
+	if spent>RealmLegacyGrowth.earned({"xp":xp,"kills":kills}): return false
 	for id in RELICS:
-		if not number(c.relics.get(id,-1),10) or not number(c.fragments.get(id,-1)): return false
+		if not number(c.relics.get(id,-1),40) or not number(c.fragments.get(id,-1)): return false
+		var r = int(c.relics[id])
+		if r>10:
+			var stage = mini(2,int((r-1)/10)-1)
+			var enemy = [RealmLegacyGrowth.REGIONS[id]+"_5","trial_"+RealmLegacyGrowth.REGIONS[id],RealmLegacyGrowth.GUARDIANS[id]][stage]
+			if RealmLegacyGrowth.level(xp)<[50,75,100][stage] or int(kills.get(enemy,0))<1: return false
 	if c.get("relic",null) not in ["","fang","ward","heart"]: return false
 	if c.relic!="" and c.relics[c.relic]<1: return false
 	if not number(c.get("day_seen",-1)): return false

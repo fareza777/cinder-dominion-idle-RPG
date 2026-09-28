@@ -22,11 +22,15 @@ static func valid(build, data: Dictionary, items: Dictionary) -> bool:
 		if id not in RealmPaths.SOCKETS or id in seen: return false
 		seen.append(id)
 	if seen.size()>3: return false
+	for key in build.talents:
+		if key not in RealmChronicle.TALENTS: return false
+	for key in ["power","guard","fortune"]:
+		if not build.talents.has(key): return false
 	var total = 0
 	for id in RealmChronicle.TALENTS:
-		if not RealmChronicle.number(build.talents.get(id,-1),5): return false
-		total += int(build.talents[id])
-	if total>10: return false
+		if not RealmChronicle.number(build.talents.get(id,0),RealmLegacyGrowth.limit(id)): return false
+		total += int(build.talents.get(id,0))
+	if total>60: return false
 	if not RealmEquipmentSlots.valid(build.gear,items,data): return false
 	for field in ["food","potion"]:
 		var id = build.get(field,null)
@@ -52,6 +56,8 @@ static func command(m, cmd: Dictionary) -> String:
 	var talent_total = 0
 	for rank in build.talents.values(): talent_total += int(rank)
 	if talent_total>RealmChronicle.points_earned(m): return "Earn more talent points before applying this build."
+	for talent in build.talents:
+		if not RealmLegacyGrowth.rank_gate(talent,int(build.talents[talent]),m.s.xp,m.s.kills): return "Unlock this talent tier before applying this build."
 	if build.relic!="" and RealmChronicle.state(m).relics[build.relic]<1: return "Awaken this build's relic first."
 	if build.rune!="" and RealmRuneforge.state(m).ranks[build.rune]<1: return "Inscribe this build's rune first."
 	if build.get("path",-1)!=-1 and (m.level("bladecraft")<25 or RealmCharacters.id(m)==""): return "Unlock your specialization first."

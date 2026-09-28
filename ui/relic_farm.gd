@@ -15,17 +15,20 @@ func open(relic: String):
 	var owned = int(state.fragments[relic])
 	var goal = RealmRelicGoal.plan(rank,owned,1)
 	var v = app.modal(d.name+" farming")
-	v.add_child(U.para("Rank %d / 10 · %d fragments owned" % [rank,owned],18,U.GOLD))
+	v.add_child(U.para("Rank %d / 40 · %d fragments owned" % [rank,owned],18,U.GOLD))
+	var gate = RealmLegacyGrowth.relic_reason(m,relic)
+	if gate!="": v.add_child(U.para(gate,14,U.GOLD))
+	if rank>=10 and rank<40: v.add_child(U.para("Essence: %d / %d. Seek Tier 3–5, Trial, Apex or guardian hunts below." % [m.count("essence_"+relic),RealmLegacyGrowth.essence_cost(rank)],14))
 	if goal.state=="ready":
-		v.add_child(U.para("You have enough to upgrade.",25,U.TEXT))
+		v.add_child(U.para("Fragment cost covered.",25,U.TEXT))
 		v.add_child(U.para("Cost: %d fragments · shared with rune upgrades." % RealmChronicle.relic_cost(rank),15))
 		if not m.s.fight.is_empty(): v.add_child(U.para("Finish or leave combat before upgrading.",14,U.GOLD))
 		var upgrade = app.modal_action("Upgrade · %d fragments" % RealmChronicle.relic_cost(rank),func():
 			if app.send({"type":"relic_upgrade","id":relic}): open(relic))
-		upgrade.disabled = not m.s.fight.is_empty() or not m.s.tutorial
+		upgrade.disabled = not m.s.fight.is_empty() or not m.s.tutorial or RealmLegacyGrowth.relic_reason(m,relic)!=""
 	elif goal.state=="maximum":
 		v.add_child(U.para("This relic is at maximum rank.",25,U.TEXT))
-		v.add_child(U.para("Rank 10 / 10 · Fragments also upgrade runes.",15))
+		v.add_child(U.para("Rank 40 / 40 · Fragments also upgrade runes.",15))
 		v.add_child(U.button("Review rune upgrades",app.runeforge_dialog))
 	else:
 		v.add_child(U.para("%d fragments to the next rank" % int(goal.missing),25,U.TEXT))
@@ -49,6 +52,8 @@ func open(relic: String):
 		row.add_child(heading)
 		heading.add_child(U.para(m.local_name(enemy),21,U.TEXT))
 		heading.add_child(U.para("%d %s per win · %s" % [int(choice.fragments),"fragment" if int(choice.fragments)==1 else "fragments",estimate.rating],14,U.GOLD))
+		var essence = RealmLegacyGrowth.essence(enemy)
+		if essence>0: card.add_child(U.para("+%d %s Essence per victory" % [essence,d.name],14,U.GOLD))
 		if enemy.has("region"): card.add_child(U.para(RealmCombat.mechanic(enemy),12))
 		if plan.state=="farm":
 			card.add_child(U.para("%d %s needed in total" % [int(plan.wins),"win" if int(plan.wins)==1 else "wins"],16,U.TEXT))
