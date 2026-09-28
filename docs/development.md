@@ -31,3 +31,8 @@ Use RealmEquipmentSlots.accepts/target/place/valid for equipment position mappin
 ## Legacy progression from 0.39
 
 RealmLegacyGrowth owns point milestones, advanced talent gates, relic ascension costs and bounded combat bonuses. New talent keys are optional on legacy saves; use get(key,0). Keep the three old fields required. Chronicle validation now needs kills along with XP. Relic rank base stat bonuses cap at ten; use relic_base, never multiply all 40 ranks by the old stat increment. Offline return talent deltas use earned(before), not the historical ten-point formula. Essence sources follow fragments_for(enemy), and the final ascension also spends a guardian core.
+
+
+## Merchant stock from 0.40
+
+RealmMerchant.sync observes wall milliseconds monotonically and refreshes persisted three-offer stock at expiry. Never consume model combat RNG for stock selection. UI persists stock immediately on opening; purchase passes current observation time and displayed revision to prevent buying a replaced offer. Keep offer table compatibility in mind when changing prices: current save validation matches serialized offers to pool(tier). Future price changes need migration/versioning of merchant stock. All gear sales use model.protected and require a separate confirmation UI.

@@ -1,16 +1,20 @@
-# Cinder Dominion: Idle RPG — Adventure preview 0.39
+# Cinder Dominion: Idle RPG — Adventure preview 0.40
 
 Idle RPG dark fantasy untuk Android. Gratis; iklan uji Android tersedia secara opsional di Settings dan bantuan antrean. Build ini untuk dimainkan dan dievaluasi, belum versi rilis publik.
 
 ## Mulai bermain
 
-1. Pasang `build/android/cinder-dominion-0.39.apk` di Android 64-bit. APK memakai identitas aplikasi yang sama dengan 0.1–0.38 sehingga bisa dipasang sebagai pembaruan.
+1. Pasang `build/android/cinder-dominion-0.40.apk` di Android 64-bit. APK memakai identitas aplikasi yang sama dengan 0.1–0.39 sehingga bisa dipasang sebagai pembaruan.
 2. Seluruh antarmuka dan narasi game memakai **English**. Splash mengantar ke menu utama. Pilih **New game** untuk memilih Warden, Ranger, Arcanist, Reaver atau Apothecary dan memasukkan nama, lalu pilih **Show me the way** untuk panduan dengan sorotan emas. Intro opsional tersedia di About. **Continue journey** melanjutkan progres yang sudah ada.
 3. Tekan **Goals** di bagian atas layar. Layar menampilkan target, angka progres, checklist dan tombol tugas. Tekan tindakannya, lalu **Begin · 4 cycles** (jumlahnya mengikuti tujuan) untuk memulai jumlah siklus yang tepat.
 4. Tugas awal: 4 copper ore → 2 copper ingots → 1 ash log → Copper Sword → Equip item → 3 Ash Rats. Panduan lalu mengantar lewat musuh berikutnya hingga Bellkeeper, tanpa melompat langsung ke boss.
 5. Pantau activity bar. **Queue** menampilkan tugas berjalan/menunggu, progres target, dan alasan terhambat. **Sources/Find** membantu mencari bahan yang kurang. Satu aktivitas berjalan pada satu waktu.
 6. Buka **Food & survival guide** untuk belajar memancing, memasak, memilih makanan dan menyiapkan auto-heal. Perlengkapan hasil crafting harus dipasang dari **Bag**.
 7. Progres tersimpan otomatis dan berlanjut maksimal 24 jam saat kembali. Menu **☰** tersedia dari dalam permainan. New Game meminta konfirmasi dan menyimpan cadangan terpisah; **Settings → Restore a previous journey** memulihkannya.
+
+## Baru di 0.40 — Rotating NPC merchant
+
+Tiga penawaran tiap delapan jam, kemungkinan aksesori Rare sesuai progres, serta jual equipment cadangan dengan konfirmasi dan perlindungan loadout. Tetap offline. Lihat [laporan 0.40](docs/qa/merchant-0.40-report.md). Kartu, stamina dan status effect belum diterapkan.
 
 ## Baru di 0.39 — Late-game progression
 

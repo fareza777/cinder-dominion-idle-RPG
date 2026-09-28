@@ -298,6 +298,12 @@ func command(cmd: Dictionary) -> bool:
 				s.gear.erase(g)
 			gain("scrap",amount)
 			note("Salvaged into %d metal scraps" % amount)
+		"merchant_buy":
+			var why = RealmMerchant.buy(self,cmd)
+			if why!="": return fail(why)
+		"merchant_sell":
+			var why = RealmMerchant.sell(self,id)
+			if why!="": return fail(why)
 		"buy":
 			if not data.merchant.has(id): return fail("This item is not sold here")
 			var qty = clampi(int(cmd.get("amount",1)),1,100)

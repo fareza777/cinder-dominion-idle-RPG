@@ -1,6 +1,6 @@
 # Hunting, equipment and long-term progression
 
-Status: approved direction. Accessory foundation implemented in 0.38; shared late talents and fixed relic ascension implemented in 0.39. Class keystones, selectable traits and other systems below remain proposed. All numbers below are initial tuning targets, not measured campaign balance. See docs/qa/accessories-0.38-report.md for the implemented scope. User confirmed an offline NPC economy; no player-to-player market.
+Status: approved direction. Accessory foundation implemented in 0.38; shared late talents and fixed relic ascension implemented in 0.39. Gold-based rotating NPC merchant implemented in 0.40. Class keystones, selectable traits, cards, trade seals, stamina and statuses remain proposed. All numbers below are initial tuning targets, not measured campaign balance. See docs/qa/accessories-0.38-report.md for the implemented scope. User confirmed an offline NPC economy; no player-to-player market.
 
 ## Goal and current constraints
 

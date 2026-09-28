@@ -171,3 +171,8 @@ First implementation stage of the approved long-term hunting design: necklace, b
 ## 0.39 Late-game talents and relic ascension
 
 60 earnable talent points gated by Bladecraft and boss milestones; six advanced shared talents, 75 total possible allocations and free resets. Relics grow to rank 40 with bounded specialist bonuses, three new essence materials from stronger enemies, ascension level/boss gates and guardian cores for the last ten ranks. Legacy allocations, base bonuses, save identity and loadouts retained. 83 essential checks, focused gate/cost/save/offline combat checks and four phone captures passed. Full pacing balance, physical Android verification, selectable relic traits/class keystones, cards, stamina, statuses and rotating NPC merchant remain outstanding. See docs/qa/legacy-growth-0.39-report.md.
+
+
+## 0.40 Offline rotating merchant
+
+Three persisted offers per eight-hour observation window, progress-gated stock through Smithing and regional bosses, Rare accessory possibilities, fixed supplies and protected equipment sales with explicit confirmation. Snapshot revision prevents stale purchases; independent stock RNG preserves combat randomness. Gold-only current economy; cards and trade seals deferred. 83 essential checks plus focused stock/save/clock/protection checks and actual UI signal activation passed. Three phone captures including narrow 130% text. No physical Android verification or full price/pacing study; local clock/save manipulation is not claimed secure. See docs/qa/merchant-0.40-report.md.

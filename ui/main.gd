@@ -720,18 +720,7 @@ func queue_dialog():
 	preload("res://ui/queue_review.gd").new(self).open()
 
 func merchant_dialog():
-	var v = modal(tr2("Pedagang Cinderwatch","Cinderwatch merchant"))
-	v.add_child(U.para(tr2("Perbekalan dibeli dengan gold hasil petualangan.","Supplies are bought with gold earned on your journey.")))
-	for id in model.data.merchant:
-		var c = U.card(v)
-		var r = U.row()
-		c.add_child(r)
-		r.add_child(U.icon(id,56))
-		r.add_child(U.para(model.name_of(id),17,U.TEXT))
-		var qty = 10 if id=="empty_vial" else 1
-		c.add_child(U.button(tr2("Beli","Buy")+" %d · %d gold" % [qty,int(model.data.merchant[id])*qty],func():
-			send({"type":"buy","id":id,"amount":qty})
-			merchant_dialog(),true))
+	preload("res://ui/merchant.gd").new(self).open()
 
 func item_dialog(uid: String):
 	preload("res://ui/equipment_detail.gd").new(self).open(uid)

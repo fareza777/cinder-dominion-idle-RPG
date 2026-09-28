@@ -45,6 +45,7 @@ func valid(s, data: Dictionary) -> bool:
 	for slots in s.presets.values():
 		if not slots is Dictionary: return false
 		if not RealmEquipmentSlots.valid(slots,uids,data): return false
+	if s.has("merchant_stock") and not RealmMerchant.valid(s.merchant_stock): return false
 	if s.has("loadouts"):
 		if not s.loadouts is Dictionary or s.loadouts.size()>3: return false
 		for id in s.loadouts:
