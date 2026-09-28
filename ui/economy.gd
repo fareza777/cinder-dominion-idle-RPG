@@ -6,16 +6,20 @@ func _init(owner): app = owner; m = owner.model
 
 func open():
 	var v = app.modal("Wallet")
-	app.dynamic(v,func(): return RealmEconomy.money(int(m.s.gold)),24,U.GOLD)
-	v.add_child(U.para("S · Silver    G · Gold    P · Platinum",13,U.TEXT))
-	var path = "res://assets/art/currency-0.43.png"
-	if ResourceLoader.exists(path):
-		var art = TextureRect.new()
-		art.texture = load(path)
-		art.custom_minimum_size = Vector2(0,96)
-		art.expand_mode = TextureRect.EXPAND_IGNORE_SIZE
-		art.stretch_mode = TextureRect.STRETCH_KEEP_ASPECT_CENTERED
-		v.add_child(art)
+	for index in [2,1,0]:
+		var row = U.row(14)
+		v.add_child(row)
+		var icon = TextureRect.new()
+		icon.texture = preload("res://ui/currency.gd").texture(index)
+		icon.custom_minimum_size = Vector2(52,52)
+		icon.expand_mode = TextureRect.EXPAND_IGNORE_SIZE
+		icon.stretch_mode = TextureRect.STRETCH_KEEP_ASPECT_CENTERED
+		row.add_child(icon)
+		var words = U.column(2)
+		words.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+		row.add_child(words)
+		words.add_child(U.para(preload("res://ui/currency.gd").NAMES[index],14,U.GOLD))
+		app.dynamic(words,func(): return preload("res://ui/currency.gd").grouped(preload("res://ui/currency.gd").amounts(int(m.s.gold))[index]),22,U.TEXT)
 	v.add_child(U.para("1,000 Silver = 1 Gold\n1,000 Gold = 1 Platinum",17,U.GOLD))
 	v.add_child(U.para("Coins convert automatically.",14))
 	var level = m.level("bladecraft")

@@ -16,7 +16,7 @@ var inventory_page = 0
 var body: VBoxContainer
 var scroller: ScrollContainer
 var hp_label: Label
-var gold_label: Label
+var wallet: VBoxContainer
 var activity_label: Label
 var activity_sub: Label
 var activity_progress: ProgressBar
@@ -288,14 +288,18 @@ func build_shell():
 	var title = U.column(0)
 	hr.add_child(title)
 	title.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+	title.size_flags_vertical = Control.SIZE_SHRINK_CENTER
 	title.add_child(U.para(Brand.SHORT,15,U.TEXT))
 	title.add_child(U.label("IDLE RPG",10,U.GOLD))
-	hr.add_child(U.button("☰",func(): experience.menu()))
+	var menu_button = U.button("☰",func(): experience.menu())
+	menu_button.size_flags_vertical = Control.SIZE_SHRINK_CENTER
+	hr.add_child(menu_button)
 	var counters = U.column(2)
 	hr.add_child(counters)
-	gold_label = U.label("",12,U.GOLD)
+	wallet = preload("res://ui/currency.gd").new()
+	wallet.setup(func(): preload("res://ui/economy.gd").new(self).open())
 	hp_label = U.label("",12,U.MUTED)
-	counters.add_child(gold_label)
+	counters.add_child(wallet)
 	counters.add_child(hp_label)
 	var journey_bar = PanelContainer.new()
 	journey_bar.add_theme_stylebox_override("panel",U.box(Color("202a2c"),U.LINE,0,12))
@@ -411,9 +415,9 @@ func dynamic(parent: Node, fn: Callable, size: int = 15, color: Color = U.TEXT) 
 	return l
 
 func refresh():
-	if not is_instance_valid(gold_label): return
+	if not is_instance_valid(wallet): return
 	if model.s.tutorial and RealmChronicle.state(model).daily.day<0: RealmChronicle.sync_day(model,now_ms())
-	gold_label.text = RealmEconomy.money(int(model.s.gold)).replace(" ","\n")
+	wallet.update_amount(int(model.s.gold))
 	hp_label.text = "%d / 100 HP" % int(model.s.hp)
 	var objective = model.objective()
 	if is_instance_valid(objective_label): objective_label.text = "%s · %d/%d" % [objective.title,mini(int(objective.current),int(objective.goal)),int(objective.goal)]

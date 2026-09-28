@@ -200,3 +200,10 @@ Expanded 42 to 60 enemy definitions across three sequential frontier regions, wi
 Removed visible card/material probability numbers and verbose drop explanations at the user's request, including older expedition/relic chance copy. Runtime odds and content data remain unchanged. Hunt preparation now leads with portrait, forecast, rewards and food; optional enemy/loot details retain mechanics, sources, first-clear rewards and forecast limitations. Crafting mastery is collapsible, duplicate missing-material actions removed, stale toast overlays hidden on modal open. Shorter card/masterwork/wallet/merchant copy, grammar and repeated phrase fixes, refreshed About counts. Bestiary is eight entries per page and includes frontier filters. Existing art is reused in compact masterwork rows.
 
 Focused UI actions and six narrow 130% captures passed; Begin actually started combat, details expanded/collapsed, bestiary paging and frontier filtering worked. Existing shutdown warnings persist. No gameplay balance/save change or physical Android playtest. Versioned APK and recommendations documented in docs/qa/readability-0.44-report.md. Applied redesign-existing-projects skill within the existing Godot UI stack.
+
+
+## 0.45 Recognizable header currency
+
+Replaced the tiny S/G/P header text with cropped existing coin art and individual denomination amounts. Silver wheat coin, gold crown coin and octagonal platinum gem coin remain visually distinct. Nonzero denominations display highest first; an empty wallet shows zero Silver. Coin buttons open a wallet with larger matching icons, full English names and grouped exact balances. Very large header amounts use K; full amounts remain in wallet/tooltips. Menu/title alignment stays centered as rows grow. No economy/save/art-generation change.
+
+Focused zero/early/mixed/large-balance visibility and wallet-action checks plus five 360x720 views at 130% text passed. Existing shutdown warnings remain; no physical Android verification. APK and verification recorded in docs/qa/currency-icons-0.45-report.md.
