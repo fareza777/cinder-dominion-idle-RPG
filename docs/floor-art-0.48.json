@@ -1,0 +1,7 @@
+{
+  "generator": "builtin image_gen",
+  "prompt": "Original dark fantasy mobile RPG background texture, portrait 9:16 composition. Top-down view of an ancient fortress floor made of large irregular charcoal slate flagstones, extremely subtle worn edges, fine hairline cracks, traces of ash. Restrained warm amber light grazes the outer edges, muted cool iron blue shadows. Middle 70 percent quiet, softly textured, low contrast dark stone for legible interface panels above it. Rich physically believable stone texture with understated cinematic painterly realism. No focal object, no perspective horizon, no walls, no people, no animals, no faces, no statues, no skulls, no weapons, no symbols, no text, no UI, no border, no bright lava cracks, no dramatic fire. Edge detail slightly stronger than center, sophisticated dark tonal variation, not pitch black. A single uninterrupted background image, no grid of samples.",
+  "source": "C:/Users/FAJAR/.codex/generated_images/01a0d6c6-87cf-7541-95c2-3388b3b24491/exec-1a2d2e12-7e20-4916-a990-3be72d412435.png",
+  "destination": "assets/art/fortress-floor-0.48.png",
+  "usage": "Static full-rect KEEP_ASPECT_COVERED background at 55% opacity over INK. Mouse input ignored. Source raster unchanged. Visual trial; Android package remains 0.47."
+}

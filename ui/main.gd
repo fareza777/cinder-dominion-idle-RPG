@@ -271,6 +271,16 @@ func build_shell():
 	bg.color = U.INK
 	bg.set_anchors_and_offsets_preset(Control.PRESET_FULL_RECT)
 	add_child(bg)
+	var floor_art = TextureRect.new()
+	floor_art.name = "FortressFloor"
+	floor_art.texture = load("res://assets/art/fortress-floor-0.48.png")
+	floor_art.expand_mode = TextureRect.EXPAND_IGNORE_SIZE
+	floor_art.stretch_mode = TextureRect.STRETCH_KEEP_ASPECT_COVERED
+	floor_art.texture_filter = CanvasItem.TEXTURE_FILTER_LINEAR
+	floor_art.modulate = Color(1,1,1,.55)
+	floor_art.mouse_filter = Control.MOUSE_FILTER_IGNORE
+	floor_art.set_anchors_and_offsets_preset(Control.PRESET_FULL_RECT)
+	add_child(floor_art)
 	var margin = MarginContainer.new()
 	margin.set_anchors_and_offsets_preset(Control.PRESET_FULL_RECT)
 	if OS.get_name()=="Android":
