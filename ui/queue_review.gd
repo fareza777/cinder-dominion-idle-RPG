@@ -10,7 +10,6 @@ func _init(owner):
 
 func open():
 	var v = app.modal("Task queue")
-	preload("res://ui/stamina.gd").new(app).panel(v)
 	if m.s.queue.is_empty():
 		v.add_child(U.para("Choose what to work on next.",25,U.TEXT))
 		v.add_child(U.para("Queue gathering, crafting or a hunt. One task runs at a time, including up to 24 hours while you are away.",15))
@@ -30,7 +29,7 @@ func open():
 	if blocked:
 		var warning = U.card(v,14,U.RED.darkened(.4))
 		warning.add_child(U.para("This queue is waiting",20,U.GOLD))
-		app.dynamic(warning,func(): return RealmStamina.readiness(m) if RealmStamina.state(m).paused else (m.requirement(m.s.queue[0].id) if not m.s.queue.is_empty() else "Choose your next task."),15,U.TEXT)
+		app.dynamic(warning,func(): return (m.requirement(m.s.queue[0].id) if not m.s.queue.is_empty() else "Choose your next task."),15,U.TEXT)
 		var activity = m.data.activities[m.s.queue[0].id]
 		if activity.kind!="combat" and not activity.inputs.is_empty(): warning.add_child(U.button("Prepare missing materials",prepare,true))
 		if activity.kind!="combat" and m.level(activity.skill)<int(activity.level): warning.add_child(U.para("Train %s to level %d first. Cancel this task or complete another training plan before queuing it again." % [m.local_name(m.data.skills[activity.skill]),int(activity.level)],13))

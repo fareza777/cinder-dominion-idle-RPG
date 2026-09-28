@@ -24,6 +24,7 @@ static func apply(m, side: String, id: String, power: int = 1):
 		effects["immune_"+side] = int(m.s.time)+duration+6000
 	if side=="hero" and RealmCards.resistance(m,id)>0:
 		duration = int(duration*(1.0-RealmCards.resistance(m,id)))
+	if side=="hero" and id=="shock" and RealmPaths.has_item(m,"heirloom_helm"): duration = int(duration*.5)
 	var previous = effects[side].get(id,{})
 	var stacks = mini(3,int(previous.get("stacks",0))+1) if id in ["burn","poison","bleed","chill"] else 1
 	effects[side][id] = {"until":int(m.s.time)+duration,"power":clampi(power,1,12),"stacks":stacks}
@@ -43,6 +44,7 @@ static func tick(m):
 			if int(e.until)<=m.s.time: effects[side].erase(id); continue
 			if id in ["burn","poison","bleed"]:
 				var damage = int(e.power)*int(e.stacks)
+				if side=="hero" and RealmPaths.has_item(m,"heirloom_cuirass"): damage = maxi(1,ceili(damage*.75))
 				if side=="hero": m.s.hp = maxi(0,int(m.s.hp)-damage)
 				else: m.s.fight.hp = maxi(0,int(m.s.fight.hp)-damage)
 				m.combat_event("%s %d" % [id.capitalize(),damage],side,"status")

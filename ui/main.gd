@@ -293,7 +293,7 @@ func build_shell():
 	hr.add_child(U.button("☰",func(): experience.menu()))
 	var counters = U.column(2)
 	hr.add_child(counters)
-	gold_label = U.label("",16,U.GOLD)
+	gold_label = U.label("",12,U.GOLD)
 	hp_label = U.label("",12,U.MUTED)
 	counters.add_child(gold_label)
 	counters.add_child(hp_label)
@@ -405,7 +405,7 @@ func dynamic(parent: Node, fn: Callable, size: int = 15, color: Color = U.TEXT) 
 	var target = weakref(l)
 	var callback = func():
 		var live = target.get_ref()
-		if is_instance_valid(live): live.text = str(fn.call())
+		if is_instance_valid(live): live.text = RealmEconomy.text_value(str(fn.call()))
 	if is_instance_valid(dialog) and dialog.is_ancestor_of(parent): dialog_callbacks.append(callback)
 	else: update_callbacks.append(callback)
 	return l
@@ -413,7 +413,7 @@ func dynamic(parent: Node, fn: Callable, size: int = 15, color: Color = U.TEXT) 
 func refresh():
 	if not is_instance_valid(gold_label): return
 	if model.s.tutorial and RealmChronicle.state(model).daily.day<0: RealmChronicle.sync_day(model,now_ms())
-	gold_label.text = "◈ %s" % int(model.s.gold)
+	gold_label.text = RealmEconomy.money(int(model.s.gold)).replace(" ","\n")
 	hp_label.text = "%d / 100 HP" % int(model.s.hp)
 	var objective = model.objective()
 	if is_instance_valid(objective_label): objective_label.text = "%s · %d/%d" % [objective.title,mini(int(objective.current),int(objective.goal)),int(objective.goal)]
@@ -630,6 +630,7 @@ func activity_dialog(id: String, recommended: int = 0):
 	else:
 		v.add_child(U.button("Plan a longer hunt",func(): hunt_plan_dialog(a.enemy)))
 		var e = RealmEndgame.enemy(model,model.data.enemies[a.enemy])
+		if e.has("rare_material"): v.add_child(U.para(RealmLegacyFinds.description(model,e),14,U.GOLD))
 		var encounter = U.row(16)
 		v.add_child(encounter)
 		encounter.add_child(U.enemy_portrait(e,Vector2(76,100)))
@@ -638,8 +639,6 @@ func activity_dialog(id: String, recommended: int = 0):
 		encounter.add_child(introduction)
 		introduction.add_child(U.para("%d HP · %d ATK · %d DEF" % [int(e.hp),int(e.attack),int(e.armor)],13,U.GOLD))
 		v.add_child(U.para(model.encounter_advice(a.enemy),14,U.GOLD))
-		var stamina_cost = RealmStamina.cost(model.data.enemies[a.enemy])
-		v.add_child(U.para("Stamina: reserve %d; entry %d + 1 per %ds. Unused reserve returns after battle." % [stamina_cost.reserve,stamina_cost.entry,int(stamina_cost.interval/1000)],13))
 		var card = RealmCards.definitions()["card_"+a.enemy]
 		v.add_child(U.para("%s card · %.3f%% per victory" % [card.rarity,float(card.chance)*100],13,U.GOLD))
 		if model.data.enemies[a.enemy].has("status"): v.add_child(U.para("Special damage: "+RealmAfflictions.element(model.data.enemies[a.enemy])+" · applies "+str(model.data.enemies[a.enemy].status).replace("_"," ").capitalize()+". Bosses resist Freeze and Stun.",13))
@@ -654,7 +653,8 @@ func activity_dialog(id: String, recommended: int = 0):
 		if e.has("region") and int(model.s.kills.get(e.id,0))==0:
 			if e.get("trial",false): v.add_child(U.para("First clear: Epic %s · 120 bonus fragments · 15 scraps · 20 grilled minnows." % model.name_of(e.trial_reward),13,U.GOLD))
 			else: v.add_child(U.para("First clear: +10 meals and %d scraps.%s" % [5+int(e.tier)," Tier 5 also grants a Rare Iron Sword." if int(e.tier)==5 else ""],13,U.GOLD))
-		v.add_child(U.para("+%d gold · +%d melee XP · %s ×%d / win" % [RealmHuntMastery.gold(model,e),int(e.xp),model.name_of(e.drop),int(e.qty)],14,U.GOLD))
+		v.add_child(U.para(RealmEconomy.experience_note(model,e),14,U.TEXT))
+		v.add_child(U.para("+%d gold · +%d melee XP · %s ×%d / win" % [RealmHuntMastery.battle_gold(model,e),RealmEconomy.hunt_xp(model,e),model.name_of(e.drop),int(e.qty)],14,U.GOLD))
 		v.add_child(U.para("Food: %s ×%d · heal at %d%% HP" % [model.name_of(model.s.settings.food),model.count(model.s.settings.food),int(model.s.settings.threshold*100)],14,U.GREEN if model.count(model.s.settings.food)>0 else U.RED))
 	if a.kind!="combat":
 		var cost_tip = "No material cost." if a.inputs.is_empty() else "Cost per cycle shown above."
@@ -717,6 +717,9 @@ func enqueue_activity(id: String, target: int, kind: String = "cycles", skip: bo
 
 func sources_dialog(id: String):
 	var v = modal(tr2("Sumber: ","Sources: ")+model.name_of(id))
+	if id.begins_with("keepsake_"):
+		for enemy in model.data.enemies.values():
+			if enemy.get("rare_material","")==id: v.add_child(U.para(RealmLegacyFinds.description(model,enemy)+". No guaranteed drop count.",15,U.GOLD))
 	for aid in model.sources(id):
 		var a = model.data.activities[aid]
 		v.add_child(U.button(model.activity_name(aid)+" · "+model.local_name(model.data.skills[a.skill]),func(): activity_dialog(aid)))

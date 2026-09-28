@@ -18,7 +18,7 @@ static func plan(m) -> Dictionary:
 		failure.error = "This task already has the materials for its next cycle."
 		return failure
 	var remaining = int(step.target)-int(step.output if step.kind=="output" else step.done)
-	if step.kind=="level": remaining = ceili(float(maxi(0,25*(int(step.target)-1)*(int(step.target)-1)-int(m.s.xp[activity.skill])))/maxi(1,int(activity.xp)))
+	if step.kind=="level": remaining = ceili(float(maxi(0,RealmEconomy.threshold(int(step.target),activity.skill)-int(m.s.xp[activity.skill])))/maxi(1,int(activity.xp)))
 	var cycles = clampi(remaining,1,100)
 	var copy = RealmModel.new()
 	copy.s = m.s.duplicate(true)

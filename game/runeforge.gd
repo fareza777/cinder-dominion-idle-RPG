@@ -42,7 +42,7 @@ static func forge_reason(m, id: String) -> String:
 	if rank>=3: return "This rune is fully inscribed."
 	if victories(m,RUNES[id].region)<1: return "Defeat a guardian in "+RealmChronicle.REGIONS[RUNES[id].region].name+" to discover this inscription."
 	var c = cost(rank)
-	if RealmChronicle.state(m).fragments[RUNES[id].relic]<c.fragments or m.count("scrap")<c.scrap or m.s.gold<c.gold: return "Gather the missing fragments, scraps and gold shown below."
+	if RealmChronicle.state(m).fragments[RUNES[id].relic]<c.fragments or m.count("scrap")<c.scrap or m.s.gold<c.gold: return "Gather the missing fragments, scraps and coins shown below."
 	return ""
 
 static func reward(index: int) -> Dictionary:

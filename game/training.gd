@@ -20,7 +20,7 @@ static func plan(source, skill: String, target: int, minutes: int) -> Dictionary
 	if m.level(skill)>=target: return {"error":"Target reached. Choose your next upgrade or a higher level.","complete":true}
 	if not m.s.queue.is_empty(): return {"error":"Finish your current work before starting another training plan."}
 	var milestone = target
-	var missing = 25*(milestone-1)*(milestone-1)-int(m.s.xp[skill])
+	var missing = RealmEconomy.threshold(milestone,skill)-int(m.s.xp[skill])
 	var best = {"error":"No training recipe can be supplied yet. Gather materials or train the required gathering skills first."}
 	var best_rate = -1.0
 	for id in m.data.activities:
@@ -48,5 +48,5 @@ static func plan(source, skill: String, target: int, minutes: int) -> Dictionary
 			best = candidate
 			best.activity = id
 			best.milestone = milestone
-			best.level_after = mini(100,1+int(sqrt(float(m.s.xp[skill]+candidate.xp)/25.0)))
+			best.level_after = RealmEconomy.level(m.s.xp[skill]+candidate.xp,skill)
 	return best

@@ -12,7 +12,13 @@ func open():
 	var stock = RealmMerchant.sync(m,app.now_ms())
 	app.persist()
 	var v = app.modal("Cinderwatch merchant")
-	app.dynamic(v,func(): return "%d gold" % int(m.s.gold),21,U.GOLD)
+	app.dynamic(v,func(): return RealmEconomy.money(int(m.s.gold)),21,U.GOLD)
+	v.add_child(U.button("Wallet & progression",func(): preload("res://ui/economy.gd").new(app).open()))
+	var supplies = RealmMerchant.provisions(m)
+	if not supplies.is_empty():
+		v.add_child(U.para("Regional supplies · always available",17,U.GOLD))
+		v.add_child(U.button("Buy %d %s · %s" % [supplies.qty,m.name_of(supplies.id),RealmEconomy.money(supplies.price)],func():
+			if app.send({"type":"merchant_provisions"}): open()))
 	v.add_child(U.para("Limited stock",25,U.TEXT))
 	app.dynamic(v,func():
 		var left = maxi(0,int(stock.until)-maxi(int(stock.seen),app.now_ms()))
@@ -54,6 +60,7 @@ func open():
 		app.set_page("inventory")))
 	v.add_child(U.para("Everyday supplies",25,U.TEXT))
 	for id in m.data.merchant:
+		if id=="masterwork_commission" and int(m.s.kills.get("secret_2",0))<1: continue
 		var qty = 10 if id=="empty_vial" else 1
 		v.add_child(U.button("%s ×%d · %d gold" % [m.name_of(id),qty,int(m.data.merchant[id])*qty],func():
 			app.send({"type":"buy","id":id,"amount":qty})

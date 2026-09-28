@@ -12,7 +12,7 @@ func collection(page: int = 0):
 	var known = []
 	for id in RealmCards.definitions():
 		if int(m.s.kills.get(RealmCards.definitions()[id].enemy,0))>0 or m.count(id)>0 or id in m.s.get("card_sockets",{}).values(): known.append(id)
-	v.add_child(U.para("%d / 42 discovered · one card per equipment piece" % known.size(),14,U.GOLD))
+	v.add_child(U.para("%d / %d discovered · one card per equipment piece" % [known.size(),RealmCards.definitions().size()],14,U.GOLD))
 	var pages = maxi(1,ceili(known.size()/7.0))
 	page = clampi(page,0,pages-1)
 	for id in known.slice(page*7,(page+1)*7):
@@ -32,7 +32,9 @@ func detail(id: String, uid: String = ""):
 	var v = app.modal(m.name_of(id))
 	v.add_child(U.icon(id,200))
 	v.add_child(U.para(d.rarity+" · %.3f%% per victory" % (float(d.chance)*100),18,U.GOLD))
+	v.add_child(U.para(d.get("role","Build choice"),18,U.GOLD))
 	v.add_child(U.para(d.detail,17,U.TEXT))
+	v.add_child(U.para(d.get("build_hint",""),14))
 	v.add_child(U.para("%d in bag · one active copy of this card per hero" % m.count(id),13))
 	if uid!="":
 		v.add_child(U.para("Attach to "+m.name_of(m.gear(uid).id)+". Removal needs a crafted Card Extractor.",14))
@@ -94,8 +96,8 @@ func sell(id: String):
 		if app.send({"type":"sell","id":id,"amount":1}): collection())
 
 func help():
-	var v = app.modal("Hunting, cards & rest")
-	for line in ["1. Pick an enemy and prepare food. Check its stamina reserve and debuffs before starting.","2. Hunt for materials and experience. Card odds are shown per victory; there is no guaranteed drop after a fixed number of kills.","3. Attach a card to a combat item from Hero or the card collection. Each item holds one; duplicates of the same card only apply once per hero.","4. Refine equipment to carry its card forward. Use a Card Extractor to move a card safely.","5. When stamina runs low, hunting pauses. Gather, cook or craft while resting. Tap Resume hunting when ready; recovery alone does not restart manual hunts.","6. Buy occasional Rare or Epic cards from the merchant, or sell spare copies. Legendary and Mythic cards come from hunts."]:
+	var v = app.modal("Hunting & cards")
+	for line in ["1. Pick an enemy and prepare food. Check its rewards, debuffs and recommended food before starting.","2. Hunt for materials and experience. Card odds are shown per victory; there is no guaranteed drop after a fixed number of kills.","3. Attach a card to a combat item from Hero or the card collection. Each item holds one; duplicates of the same card only apply once per hero.","4. Refine equipment to carry its card forward. Use a Card Extractor to move a card safely.","5. Move to stronger enemies for better XP, coins and materials. Return to earlier hunts when you need their cards or specific drops.","6. Buy occasional Rare or Epic cards from the merchant, or sell spare copies. Legendary and Mythic cards come from hunts."]:
 		v.add_child(U.para(line,16))
 	v.add_child(U.button("Combat effects explained",effects))
 

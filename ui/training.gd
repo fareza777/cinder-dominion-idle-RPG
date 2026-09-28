@@ -46,7 +46,7 @@ func open(skill: String, target: int, minutes: int = 60):
 		v.add_child(U.para("Includes missing materials. One recipe runs toward your target within this time limit, up to 1,000 cycles. Review your goal afterward to use newly unlocked recipes.",14))
 		if plan.level_after<target: v.add_child(U.para("This batch does not finish Lv.%d. Your goal stays saved for the next visit." % target,14,U.GOLD))
 		for step in plan.steps: v.add_child(U.para("%s ×%d" % [m.activity_name(step.id),step.target],14))
-		v.add_child(U.para("Times use current bonuses. Mastery can shorten the work; no gold is spent.",12))
+		v.add_child(U.para("Times use current bonuses. Mastery can shorten the work; no coins is spent.",12))
 		app.modal_action("Start training batch",func():
 			if app.send({"type":"training","id":skill,"target":target,"minutes":minutes}):
 				app.dismiss()

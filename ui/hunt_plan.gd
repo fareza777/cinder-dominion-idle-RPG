@@ -33,7 +33,7 @@ func show_plan(id: String, minutes: int = 15):
 	checks.add_child(U.para("%s Food · %d / ~%d" % ["✓" if m.count(m.s.settings.food)>=meals else "!",m.count(m.s.settings.food),meals],14,U.GREEN if m.count(m.s.settings.food)>=meals else U.GOLD))
 	checks.add_child(U.para("Forecast, not a guarantee. Random hits and healing timing can change the result.",12))
 	plan.add_child(U.para("If every fight is won",12,U.GOLD))
-	plan.add_child(U.para("%d gold · %d melee XP\n%d %s fragments\n%s ×%d" % [rewards.gold,count*int(e.xp),rewards.fragments,RealmChronicle.RELICS[RealmChronicle.fragments_for(e)].name,m.name_of(e.drop),count*int(e.qty)],15,U.GREEN))
+	plan.add_child(U.para("%d gold · %d melee XP\n%d %s fragments\n%s ×%d" % [rewards.gold,count*RealmEconomy.hunt_xp(m,e),rewards.fragments,RealmChronicle.RELICS[RealmChronicle.fragments_for(e)].name,m.name_of(e.drop),count*int(e.qty)],15,U.GREEN))
 	v.add_child(U.para("Rewards include mastery milestones. Time and food use your current build. Random loot and first-clear bonuses excluded.",13))
 	if f.stalled: v.add_child(U.para("This enemy may recover faster than you can deal damage. Strengthen your weapon or change your build before a long hunt.",15,U.RED))
 	elif f.risk or meals>m.count(m.s.settings.food): v.add_child(U.para("Your supplies or defenses may not hold for the whole journey. A single fight will give you a better starting point; check its Hunt report before committing to more.",15,U.GOLD))

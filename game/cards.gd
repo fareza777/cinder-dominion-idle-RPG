@@ -22,6 +22,12 @@ static func bonus(m, key: String) -> float:
 	for id in active(m): result += float(definitions()[id].get(key,0))
 	return minf(.30,result)
 
+static func conditional_damage(m) -> float:
+	var result = 0.0
+	for effect in ["burn","bleed","poison","chill"]:
+		if RealmAfflictions.has(m,"enemy",effect): result += bonus(m,"vs_"+effect)
+	return minf(.15,result)
+
 static func resistance(m, effect: String) -> float:
 	var value = 0.0
 	for id in active(m):

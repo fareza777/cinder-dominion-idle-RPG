@@ -19,7 +19,11 @@ static func fragments(m, enemy: Dictionary, wins: int = -1) -> int:
 
 static func gold(m, enemy: Dictionary, wins: int = -1) -> int:
 	var r = rank(m,enemy.id) if wins<0 else rank_for(wins)
-	return int((int(enemy.gold)+int(RealmChronicle.state(m).talents.fortune)*2+r)*(1.0+RealmLegacyGrowth.rank(m,"bounty")*.01+RealmCards.bonus(m,"gold")))
+	return int(int(enemy.gold)*(1.0+int(RealmChronicle.state(m).talents.fortune)*.02+r*.02+RealmLegacyGrowth.rank(m,"bounty")*.01+RealmCards.bonus(m,"gold")))
+
+static func battle_gold(m, enemy: Dictionary, wins: int = -1) -> int:
+	var multiplier = .8 if RealmEndgame.route(m) in ["safe","mastery"] else (1.25 if RealmEndgame.route(m)=="elite" else 1.0)
+	return int(gold(m,enemy,wins)*multiplier)
 
 # Reward rates change after each milestone victory, starting on the following fight.
 # Split at the four thresholds rather than iterating over a possibly large order.
@@ -30,7 +34,7 @@ static func rewards(m, enemy: Dictionary, count: int) -> Dictionary:
 	while left>0:
 		var r = rank_for(wins)
 		var batch = left if r==4 else mini(left,TARGETS[r]-wins)
-		result.gold += batch*gold(m,enemy,wins)
+		result.gold += batch*battle_gold(m,enemy,wins)
 		result.fragments += batch*fragments(m,enemy,wins)
 		wins += batch
 		left -= batch
@@ -38,7 +42,7 @@ static func rewards(m, enemy: Dictionary, count: int) -> Dictionary:
 
 static func summary(m, id: String) -> String:
 	var r = rank(m,id)
-	return "%s · +%d ATK · +%d gold · +%d fragments" % [NAMES[r],r,r,int(r/2)]
+	return "%s · +%d ATK · +%d%% coins · +%d fragments" % [NAMES[r],r,r*2,int(r/2)]
 
 static func wins_for_fragments(m, enemy: Dictionary, missing: int) -> int:
 	var low = 0

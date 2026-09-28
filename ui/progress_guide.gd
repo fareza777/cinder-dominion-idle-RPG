@@ -55,7 +55,7 @@ func farming(v):
 			var relic = RealmChronicle.RELICS[id]
 			var card = section(v,relic.name,relic.detail)
 			card.add_child(U.button("Farm fragments",func(): preload("res://ui/chronicle.gd").new(app).farms(id)))
-	var scrap = section(v,"Scraps & gold","")
+	var scrap = section(v,"Scraps & coins","")
 	scrap.add_child(U.button("Contracts",app.contracts_dialog))
 	if m.s.beacon: scrap.add_child(U.button("Field rewards",app.journal_dialog))
 

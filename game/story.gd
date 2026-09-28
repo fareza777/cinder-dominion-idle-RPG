@@ -8,7 +8,12 @@ const CHAPTERS = [
 	{"title":"The watch is over","gate":"Clear Ashen Wilds tier 5","art":1,"body":"The sentinel steps aside. Behind him, roots have split the stones of an old supply road. Wheel tracks are still visible beneath the moss.\n\nYou mark the way back to Cinderwatch. The next travelers will not have to fight for every mile.","next":"The Thornbound Vigil is available in Guardian Trials. Its first clear gives Epic Iron Gauntlets and bonus fragments."},
 	{"title":"A voice beneath the water","gate":"Clear Drowned Sanctum tier 5","art":1,"body":"The oracle falls silent. In the empty cloister, her last words sound less like a warning than a request.\n\nYou leave a light on the steps above the water. By the time you reach the bridge, you can no longer hear the hymn.","next":"The Unbroken Hymn is available in Guardian Trials. Use enough damage to overcome healing; Stillwater can help."},
 	{"title":"The last bell","gate":"Clear Obsidian Crown tier 5","art":2,"body":"The keeper's hammer strikes the floor. Dust falls from the arch above his throne. Beyond it, daylight reaches the lower steps for the first time in years.\n\nYou set down your weapon and listen. No other bell answers.","next":"Crown at Sundown is available in Guardian Trials. Prepare for stronger special attacks in its second phase."},
-	{"title":"The roads remain open","gate":"Complete all three Guardian Trials","art":2,"body":"A wagon reaches Cinderwatch before sunset. It carries grain, tools, and a family who thought the refuge was only a rumor.\n\nAt the forge, the blacksmith makes room for another apprentice. Tomorrow there will be more work. Tonight, everyone eats.","next":"All main challenges are cleared. Finish field records, upgrade relics and runes, or refine equipment toward Legendary."}
+	{"title":"The roads remain open","gate":"Complete all three Guardian Trials","art":2,"body":"A wagon reaches Cinderwatch before sunset. It carries grain, tools, and a family who thought the refuge was only a rumor.\n\nAt the forge, the blacksmith makes room for another apprentice. Tomorrow there will be more work. Tonight, everyone eats.","next":"The first journey is complete. Pursue Apex hunts and the seven optional guardians; the Sovereign guards the road to new regions."}
+,
+	{"title":"A road beyond the stars","gate":"Defeat the Unlit Sovereign","art":2,"frontier_tile":5,"body":"Beyond the fallen throne, an old stair climbs toward the observatory. Its lamps are still burning. Someone has kept the road open.","next":"Open Beyond the Sovereign in Explore. Clear the Pale Observatory's six encounters and claim its three objective rewards."},
+	{"title":"The city beneath the stones","gate":"Defeat the Eclipse Regent","art":1,"frontier_tile":11,"body":"The observatory's lens turns toward a city buried under iron. Chains move below its gates. The path leads down.","next":"Enter the Iron Sepulcher. Counter its debuffs and collect materials for the next masterworks."},
+	{"title":"Where the fire began","gate":"Defeat the Burial King","art":2,"frontier_tile":17,"body":"The last chain breaks. Heat rises through the empty throne room, revealing a passage into the Ember Rift.","next":"Prepare for the Ember Rift's six encounters. The First Ember waits at the end of the road."},
+	{"title":"A light worth keeping","gate":"Defeat the First Ember","art":0,"frontier_tile":17,"body":"The fire settles into a small, steady light. You carry it back along the roads you opened. Cinderwatch will have another dawn.","next":"Claim your frontier rewards. Complete masterworks, seek rare cards or test your build deeper in the Hollow Depths."}
 ]
 
 static func unlocked(m, index: int) -> bool:
@@ -20,6 +25,10 @@ static func unlocked(m, index: int) -> bool:
 		4: return int(m.s.kills.get("marsh_5",0))>0
 		5: return int(m.s.kills.get("crown_5",0))>0
 		6: return RealmTrials.cleared(m)==3
+		7: return int(m.s.kills.get("secret_6",0))>0
+		8: return int(m.s.kills.get("frontier_0_5",0))>0
+		9: return int(m.s.kills.get("frontier_1_5",0))>0
+		10: return int(m.s.kills.get("frontier_2_5",0))>0
 	return false
 
 static func count(m) -> int:

@@ -3,7 +3,7 @@ extends RefCounted
 const U = preload("res://ui/style.gd")
 const Brand = preload("res://ui/brand.gd")
 const STORE_URL = "" # Set only after a real public listing exists.
-const VERSION = "0.42.0"
+const VERSION = "0.43.0"
 var app
 var front: Control
 var cinematic_page = 0
@@ -126,7 +126,7 @@ func new_game():
 		return
 	var v = app.modal("Begin a new journey?")
 	v.add_child(U.para("This replaces your current journey. A separate backup of the current progress will be saved on this device before starting.",17,U.TEXT))
-	v.add_child(U.para("Equipment, skill levels, gold and quest progress start over. Display and audio preferences are kept.",14))
+	v.add_child(U.para("Equipment, skill levels, coins and quest progress start over. Display and audio preferences are kept.",14))
 	v.add_child(U.button("Keep my current journey",app.dismiss,true))
 	v.add_child(U.button("Back up progress & start new",begin_new_game))
 
@@ -309,15 +309,15 @@ func handbook():
 		["01 · Follow the Journey","Your goal is to restore the beacon by defeating the Bellkeeper. The Journey guide breaks this into 12 objectives and remains available at the top of every game screen."],
 		["02 · Gather and craft","Open Skills. Gather ore, wood and fish; smelt ore, forge equipment and cook food. Use Plan materials & craft automatically to preview and queue a complete supply chain, including missing raw materials."],
 		["03 · Equip your upgrades","Crafted gear goes to Bag. Open an item and choose Equip item. Crafting alone does not improve your stats. Lock or favorite items you want to keep."],
-		["04 · Fight automatically","Open Explore, choose an unlocked enemy and a number of fights. Each victory brings gold, loot and melee XP. Plan a longer hunt to estimate time and supplies, or try one fight first. Return after this fight finishes the current battle and cancels the rest of your queue. Selected cooked food heals you automatically while available."],
+		["04 · Fight automatically","Open Explore, choose an unlocked enemy and a number of fights. Each victory brings coins, loot and melee XP. Plan a longer hunt to estimate time and supplies, or try one fight first. Return after this fight finishes the current battle and cancels the rest of your queue. Selected cooked food heals you automatically while available."],
 		["05 · Plan your time","Queue holds up to 20 tasks. Only the first runs. Tasks wait when ingredients or levels are missing. Sources shows how to get materials; Queue lets you cancel blocked tasks."],
 		["06 · Return to your rewards","Your saved queue continues for up to 24 hours while away. You receive a report when you return. Leave a task running before you go; an empty queue earns no gathering or combat rewards."],
-		["07 · Build your stronghold","Stronghold contracts reward milestones with gold, food and scraps. Claim completed contracts, then Rebuild Cinderwatch to improve production speed, armor and recovery. Hero and Explore let you choose Vanguard, Warden or Reaver before a hunt."],
+		["07 · Build your stronghold","Stronghold contracts reward milestones with coins, food and scraps. Claim completed contracts, then Rebuild Cinderwatch to improve production speed, armor and recovery. Hero and Explore let you choose Vanguard, Warden or Reaver before a hunt."],
 		["08 · Grow beyond Chapter I","After First Supplies, earn talent points from melee XP and awaken relics with guaranteed fragments. Unfinished bounties carry over without streak loss. After the Bellkeeper, the World map opens 15 expedition tiers with stronger foes, iron loot and targeted relic farms."],
-		["09 · Make a dependable upgrade","After First Supplies, visit Stronghold → Armory → Ember Workshop. Spend ingots, scraps and gold to refine one copper or iron piece by one quality step. Refinement is guaranteed, up to Legendary. Higher qualities require more Smithing experience. Equipped slots and saved builds follow the improved piece."],
+		["09 · Make a dependable upgrade","After First Supplies, visit Stronghold → Armory → Ember Workshop. Spend ingots, scraps and coins to refine one copper or iron piece by one quality step. Refinement is guaranteed, up to Legendary. Higher qualities require more Smithing experience. Equipped slots and saved builds follow the improved piece."],
 		["10 · Keep more than one answer","In Hero, save a complete loadout with your gear, fighting style, talents, relic, rune, food, potion and healing threshold. Apply it outside combat. Loadouts do not create supplies: check your pack before a long hunt."],
 		["11 · Read the road","Hunt reports record completed, recalled and defeated hunting orders, including time away. Gold, loot and fragments are already delivered. Review food consumption, refine your gear or adjust your build before returning."],
-		["12 · Hunt, rest and return","After First Supplies, hunts consume stamina. Each Bladecraft level adds capacity. Recovery continues during gathering, crafting and time away. When hunting pauses, open Stamina & rest in Explore and resume when ready."],
+		["12 · Find your next challenge","Food, equipment and enemy strength determine how far you can go. Early enemies remain useful for their cards and materials; stronger hunts offer better XP and coins."],
 		["13 · Collect monster cards","Each enemy has a rare card. Open Hero → Monster Cards to see discovered cards, odds and effects. Attach one per combat item; duplicate cards do not stack. A crafted Card Extractor removes a card safely."],
 		["14 · Prepare for combat effects","From Bladecraft Lv.25, your class can apply a combat effect. Stronger enemies also inflict debuffs. Review the enemy before hunting; cards, gear and food help counter the threat."],
 		["15 · Find your way around","Stronghold: your objective, Journey, Armory and Supplies. Explore: enemies and combat. Skills: gathering and crafting. Bag: equipment and supplies. Hero: build choices and Settings. The Journey guide remains at the top of every screen."]

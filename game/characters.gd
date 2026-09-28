@@ -30,7 +30,7 @@ static func valid(hero, xp: Dictionary) -> bool:
 		var v = hero.attributes.get(key,-1)
 		if not RealmSave.counter(v) or v>22: return false
 		total += int(v)
-	var level = mini(100,1+int(sqrt(float(xp.bladecraft)/25.0)))
+	var level = RealmEconomy.level(xp.bladecraft)
 	return total<=3+int((level-1)/5)
 static func command(m, cmd: Dictionary) -> String:
 	if cmd.type=="hero_create":

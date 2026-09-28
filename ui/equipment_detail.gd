@@ -30,7 +30,8 @@ func open(uid: String, requested_slot: String = ""):
 	title.add_child(U.para("Equipped" if comparison.equipped else ("Worn on other hand — equipping moves this ring" if uid in m.s.equipped.values() else "In your bag"),13,U.GOLD))
 	if data.has("unique_effect"):
 		hero.add_child(U.para("Unique effect · "+data.unique_effect,15,U.GOLD))
-		hero.add_child(U.button("Relic forge & tempering",func(): preload("res://ui/endgame.gd").new(app).forge()))
+		if item.id in RealmLegacyFinds.GEAR: hero.add_child(U.button("Masterwork blueprints",func(): preload("res://ui/masterworks.gd").new(app).open()))
+		else: hero.add_child(U.button("Relic forge & tempering",func(): preload("res://ui/endgame.gd").new(app).forge()))
 	if data.slot=="ring":
 		v.add_child(U.para("Each ring occupies one hand. Choose which ring to replace.",13))
 		for hand in ["ring_left","ring_right"]:

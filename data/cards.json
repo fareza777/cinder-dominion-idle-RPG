@@ -5,7 +5,9 @@
     "rarity": "Rare",
     "chance": 0.0002,
     "detail": "+3% ordinary hunt material yield.",
-    "material": 0.03
+    "material": 0.03,
+    "role": "Farming",
+    "build_hint": "For material and coin farming. Does not increase card or rare-material drop odds."
   },
   "card_hollow_hound": {
     "enemy": "hollow_hound",
@@ -14,32 +16,40 @@
     "chance": 0.0002,
     "detail": "+2.5% attack damage. Every fourth attack, if it hits, applies Bleed.",
     "attack": 0.025,
-    "proc": "bleed"
+    "proc": "bleed",
+    "role": "Status combinations",
+    "build_hint": "Combine an effect source with a card that benefits from that effect. Boss control is brief."
   },
   "card_grave_thrall": {
     "enemy": "grave_thrall",
     "tile": 2,
     "rarity": "Rare",
     "chance": 0.0002,
-    "detail": "Bleed lasts 25% less time on you. +1% damage reduction.",
+    "detail": "Take 1% less direct damage. Bleed lasts 25% less time on you; matching enemy special strikes deal 25% less damage.",
     "resist": "bleed",
-    "defense": 0.01
+    "defense": 0.01,
+    "role": "Defense",
+    "build_hint": "Choose this when the enemy uses the matching effect or its attacks drain your food."
   },
   "card_cinder_bandit": {
     "enemy": "cinder_bandit",
     "tile": 3,
     "rarity": "Rare",
     "chance": 0.0002,
-    "detail": "+5% battle gold.",
-    "gold": 0.05
+    "detail": "+5% battle coins.",
+    "gold": 0.05,
+    "role": "Farming",
+    "build_hint": "For material and coin farming. Does not increase card or rare-material drop odds."
   },
   "card_chapel_guard": {
     "enemy": "chapel_guard",
     "tile": 4,
     "rarity": "Rare",
     "chance": 0.0002,
-    "detail": "Every fourth attack, if it hits, grants Barrier.",
-    "boon": "barrier"
+    "detail": "Every fourth attack, if it hits, grants a Barrier.",
+    "boon": "barrier",
+    "role": "Survival",
+    "build_hint": "For longer hunts. Combine with suitable food and defensive equipment."
   },
   "card_ember_wraith": {
     "enemy": "ember_wraith",
@@ -47,23 +57,31 @@
     "rarity": "Rare",
     "chance": 0.0002,
     "detail": "Every fourth attack, if it hits, applies Burn.",
-    "proc": "burn"
+    "proc": "burn",
+    "role": "Status combinations",
+    "build_hint": "Combine an effect source with a card that benefits from that effect. Boss control is brief."
   },
   "card_bellkeeper": {
     "enemy": "bellkeeper",
     "tile": 6,
     "rarity": "Rare",
     "chance": 0.0002,
-    "detail": "Stun lasts 25% less time on you.",
-    "resist": "stun"
+    "detail": "+2% special-attack damage. Stun lasts 25% less time on you; matching enemy special strikes deal 25% less damage.",
+    "resist": "stun",
+    "special": 0.02,
+    "role": "Defense",
+    "build_hint": "Choose this when the enemy uses the matching effect or its attacks drain your food."
   },
   "card_wilds_1": {
     "enemy": "wilds_1",
     "tile": 7,
     "rarity": "Epic",
     "chance": 0.0001,
-    "detail": "+2% armor penetration.",
-    "pierce": 0.02
+    "detail": "+2% armor penetration. +4% damage against enemies affected by Bleed.",
+    "pierce": 0.02,
+    "vs_bleed": 0.04,
+    "role": "Status combinations",
+    "build_hint": "Combine an effect source with a card that benefits from that effect. Boss control is brief."
   },
   "card_wilds_2": {
     "enemy": "wilds_2",
@@ -71,23 +89,30 @@
     "rarity": "Epic",
     "chance": 0.0001,
     "detail": "Every fourth attack, if it hits, applies Bleed.",
-    "proc": "bleed"
+    "proc": "bleed",
+    "role": "Status combinations",
+    "build_hint": "Combine an effect source with a card that benefits from that effect. Boss control is brief."
   },
   "card_wilds_3": {
     "enemy": "wilds_3",
     "tile": 9,
     "rarity": "Epic",
     "chance": 0.0001,
-    "detail": "+2.5% boss damage.",
-    "boss": 0.025
+    "detail": "+2.5% boss damage. +4% damage against enemies affected by Poison.",
+    "boss": 0.025,
+    "vs_poison": 0.04,
+    "role": "Status combinations",
+    "build_hint": "Combine an effect source with a card that benefits from that effect. Boss control is brief."
   },
   "card_wilds_4": {
     "enemy": "wilds_4",
     "tile": 10,
     "rarity": "Epic",
     "chance": 0.0001,
-    "detail": "+2.5% damage reduction.",
-    "defense": 0.025
+    "detail": "Take 2.5% less direct damage.",
+    "defense": 0.025,
+    "role": "Defense",
+    "build_hint": "Choose this when the enemy uses the matching effect or its attacks drain your food."
   },
   "card_wilds_5": {
     "enemy": "wilds_5",
@@ -95,15 +120,20 @@
     "rarity": "Epic",
     "chance": 0.0001,
     "detail": "+4% armor penetration.",
-    "pierce": 0.04
+    "pierce": 0.04,
+    "role": "Damage",
+    "build_hint": "For damage checks and heavily armored targets. Keep enough defense to survive."
   },
   "card_marsh_1": {
     "enemy": "marsh_1",
     "tile": 12,
     "rarity": "Epic",
     "chance": 0.0001,
-    "detail": "Poison lasts 25% less time on you.",
-    "resist": "poison"
+    "detail": "+4% damage against enemies affected by Burn. Poison lasts 25% less time on you; matching enemy special strikes deal 25% less damage.",
+    "resist": "poison",
+    "vs_burn": 0.04,
+    "role": "Defense",
+    "build_hint": "Choose this when the enemy uses the matching effect or its attacks drain your food."
   },
   "card_marsh_2": {
     "enemy": "marsh_2",
@@ -111,7 +141,9 @@
     "rarity": "Epic",
     "chance": 0.0001,
     "detail": "Every fourth attack, if it hits, applies Chill.",
-    "proc": "chill"
+    "proc": "chill",
+    "role": "Status combinations",
+    "build_hint": "Combine an effect source with a card that benefits from that effect. Boss control is brief."
   },
   "card_marsh_3": {
     "enemy": "marsh_3",
@@ -119,7 +151,9 @@
     "rarity": "Epic",
     "chance": 0.0001,
     "detail": "Every fourth attack, if it hits, applies Wound.",
-    "proc": "wound"
+    "proc": "wound",
+    "role": "Status combinations",
+    "build_hint": "Combine an effect source with a card that benefits from that effect. Boss control is brief."
   },
   "card_marsh_4": {
     "enemy": "marsh_4",
@@ -127,32 +161,41 @@
     "rarity": "Epic",
     "chance": 0.0001,
     "detail": "+6% meal healing.",
-    "healing": 0.06
+    "healing": 0.06,
+    "role": "Survival",
+    "build_hint": "For longer hunts. Combine with suitable food and defensive equipment."
   },
   "card_marsh_5": {
     "enemy": "marsh_5",
     "tile": 16,
     "rarity": "Epic",
     "chance": 0.0001,
-    "detail": "Every fourth attack, if it hits, grants Barrier. +2% meal healing.",
+    "detail": "+2% meal healing. Every fourth attack, if it hits, grants a Barrier.",
     "boon": "barrier",
-    "healing": 0.02
+    "healing": 0.02,
+    "role": "Survival",
+    "build_hint": "For longer hunts. Combine with suitable food and defensive equipment."
   },
   "card_crown_1": {
     "enemy": "crown_1",
     "tile": 17,
     "rarity": "Epic",
     "chance": 0.0001,
-    "detail": "Burn lasts 25% less time on you.",
-    "resist": "burn"
+    "detail": "+4% damage against enemies affected by Chill. Burn lasts 25% less time on you; matching enemy special strikes deal 25% less damage.",
+    "resist": "burn",
+    "vs_chill": 0.04,
+    "role": "Defense",
+    "build_hint": "Choose this when the enemy uses the matching effect or its attacks drain your food."
   },
   "card_crown_2": {
     "enemy": "crown_2",
     "tile": 18,
     "rarity": "Epic",
     "chance": 0.0001,
-    "detail": "+3% damage reduction.",
-    "defense": 0.03
+    "detail": "Take 3% less direct damage.",
+    "defense": 0.03,
+    "role": "Defense",
+    "build_hint": "Choose this when the enemy uses the matching effect or its attacks drain your food."
   },
   "card_crown_3": {
     "enemy": "crown_3",
@@ -160,7 +203,9 @@
     "rarity": "Epic",
     "chance": 0.0001,
     "detail": "Every fourth attack, if it hits, applies Shock.",
-    "proc": "shock"
+    "proc": "shock",
+    "role": "Status combinations",
+    "build_hint": "Combine an effect source with a card that benefits from that effect. Boss control is brief."
   },
   "card_crown_4": {
     "enemy": "crown_4",
@@ -168,7 +213,9 @@
     "rarity": "Epic",
     "chance": 0.0001,
     "detail": "Every fourth attack, if it hits, applies Weaken.",
-    "proc": "weaken"
+    "proc": "weaken",
+    "role": "Status combinations",
+    "build_hint": "Combine an effect source with a card that benefits from that effect. Boss control is brief."
   },
   "card_crown_5": {
     "enemy": "crown_5",
@@ -176,33 +223,41 @@
     "rarity": "Epic",
     "chance": 0.0001,
     "detail": "+4% special-attack damage.",
-    "special": 0.04
+    "special": 0.04,
+    "role": "Damage",
+    "build_hint": "For damage checks and heavily armored targets. Keep enough defense to survive."
   },
   "card_trial_wilds": {
     "enemy": "trial_wilds",
     "tile": 22,
     "rarity": "Legendary",
     "chance": 5e-05,
-    "detail": "Every fourth attack, if it hits, applies Bleed. +3% special-attack damage.",
+    "detail": "+3% special-attack damage. Every fourth attack, if it hits, applies Bleed.",
     "proc": "bleed",
-    "special": 0.03
+    "special": 0.03,
+    "role": "Status combinations",
+    "build_hint": "Combine an effect source with a card that benefits from that effect. Boss control is brief."
   },
   "card_trial_marsh": {
     "enemy": "trial_marsh",
     "tile": 23,
     "rarity": "Legendary",
     "chance": 5e-05,
-    "detail": "Every fourth attack, if it hits, cleanses one debuff.",
-    "boon": "cleanse"
+    "detail": "Every fourth attack, if it hits, cleanses one harmful effect.",
+    "boon": "cleanse",
+    "role": "Survival",
+    "build_hint": "For longer hunts. Combine with suitable food and defensive equipment."
   },
   "card_trial_crown": {
     "enemy": "trial_crown",
     "tile": 24,
     "rarity": "Legendary",
     "chance": 5e-05,
-    "detail": "+4% damage reduction. -2% attack damage.",
+    "detail": "-2% attack damage. Take 4% less direct damage.",
     "defense": 0.04,
-    "attack": -0.02
+    "attack": -0.02,
+    "role": "Defense",
+    "build_hint": "Choose this when the enemy uses the matching effect or its attacks drain your food."
   },
   "card_apex_wilds_1": {
     "enemy": "apex_wilds_1",
@@ -210,34 +265,42 @@
     "rarity": "Legendary",
     "chance": 5e-05,
     "detail": "+4.5% special-attack damage.",
-    "special": 0.045
+    "special": 0.045,
+    "role": "Damage",
+    "build_hint": "For damage checks and heavily armored targets. Keep enough defense to survive."
   },
   "card_apex_wilds_2": {
     "enemy": "apex_wilds_2",
     "tile": 26,
     "rarity": "Legendary",
     "chance": 5e-05,
-    "detail": "+6% damage reduction. -3% attack damage.",
+    "detail": "-3% attack damage. Take 6% less direct damage.",
     "defense": 0.06,
-    "attack": -0.03
+    "attack": -0.03,
+    "role": "Defense",
+    "build_hint": "Choose this when the enemy uses the matching effect or its attacks drain your food."
   },
   "card_apex_wilds_3": {
     "enemy": "apex_wilds_3",
     "tile": 27,
     "rarity": "Legendary",
     "chance": 5e-05,
-    "detail": "Every fourth attack, if it hits, applies Burn. +2.5% attack damage.",
+    "detail": "+2.5% attack damage. Every fourth attack, if it hits, applies Burn.",
     "proc": "burn",
-    "attack": 0.025
+    "attack": 0.025,
+    "role": "Status combinations",
+    "build_hint": "Combine an effect source with a card that benefits from that effect. Boss control is brief."
   },
   "card_apex_marsh_1": {
     "enemy": "apex_marsh_1",
     "tile": 28,
     "rarity": "Legendary",
     "chance": 5e-05,
-    "detail": "Slow lasts 25% less time on you. +2% damage reduction.",
+    "detail": "Take 2% less direct damage. Slow lasts 25% less time on you; matching enemy special strikes deal 25% less damage.",
     "resist": "slow",
-    "defense": 0.02
+    "defense": 0.02,
+    "role": "Defense",
+    "build_hint": "Choose this when the enemy uses the matching effect or its attacks drain your food."
   },
   "card_apex_marsh_2": {
     "enemy": "apex_marsh_2",
@@ -245,16 +308,20 @@
     "rarity": "Legendary",
     "chance": 5e-05,
     "detail": "Every fourth attack, if it hits, applies Poison.",
-    "proc": "poison"
+    "proc": "poison",
+    "role": "Status combinations",
+    "build_hint": "Combine an effect source with a card that benefits from that effect. Boss control is brief."
   },
   "card_apex_marsh_3": {
     "enemy": "apex_marsh_3",
     "tile": 30,
     "rarity": "Legendary",
     "chance": 5e-05,
-    "detail": "Every fourth attack, if it hits, grants Barrier. -3% meal healing.",
+    "detail": "-3% meal healing. Every fourth attack, if it hits, grants a Barrier.",
     "boon": "barrier",
-    "healing": -0.03
+    "healing": -0.03,
+    "role": "Survival",
+    "build_hint": "For longer hunts. Combine with suitable food and defensive equipment."
   },
   "card_apex_crown_1": {
     "enemy": "apex_crown_1",
@@ -262,33 +329,41 @@
     "rarity": "Legendary",
     "chance": 5e-05,
     "detail": "+5% boss damage.",
-    "boss": 0.05
+    "boss": 0.05,
+    "role": "Damage",
+    "build_hint": "For damage checks and heavily armored targets. Keep enough defense to survive."
   },
   "card_apex_crown_2": {
     "enemy": "apex_crown_2",
     "tile": 32,
     "rarity": "Legendary",
     "chance": 5e-05,
-    "detail": "Every fourth attack, if it hits, cleanses one debuff. +1% damage reduction.",
+    "detail": "Take 1% less direct damage. Every fourth attack, if it hits, cleanses one harmful effect.",
     "boon": "cleanse",
-    "defense": 0.01
+    "defense": 0.01,
+    "role": "Survival",
+    "build_hint": "For longer hunts. Combine with suitable food and defensive equipment."
   },
   "card_apex_crown_3": {
     "enemy": "apex_crown_3",
     "tile": 33,
     "rarity": "Legendary",
     "chance": 5e-05,
-    "detail": "Every fourth attack, if it hits, applies Shock. +2.5% special-attack damage.",
+    "detail": "+2.5% special-attack damage. Every fourth attack, if it hits, applies Shock.",
     "proc": "shock",
-    "special": 0.025
+    "special": 0.025,
+    "role": "Status combinations",
+    "build_hint": "Combine an effect source with a card that benefits from that effect. Boss control is brief."
   },
   "card_secret_0": {
     "enemy": "secret_0",
     "tile": 34,
     "rarity": "Mythic",
     "chance": 2e-05,
-    "detail": "+4.5% damage reduction.",
-    "defense": 0.045
+    "detail": "Take 4.5% less direct damage.",
+    "defense": 0.045,
+    "role": "Defense",
+    "build_hint": "Choose this when the enemy uses the matching effect or its attacks drain your food."
   },
   "card_secret_1": {
     "enemy": "secret_1",
@@ -296,7 +371,9 @@
     "rarity": "Mythic",
     "chance": 2e-05,
     "detail": "+6% special-attack damage.",
-    "special": 0.06
+    "special": 0.06,
+    "role": "Damage",
+    "build_hint": "For damage checks and heavily armored targets. Keep enough defense to survive."
   },
   "card_secret_2": {
     "enemy": "secret_2",
@@ -304,7 +381,9 @@
     "rarity": "Mythic",
     "chance": 2e-05,
     "detail": "Every fourth attack, if it hits, applies Armor Break.",
-    "proc": "armor_break"
+    "proc": "armor_break",
+    "role": "Status combinations",
+    "build_hint": "Combine an effect source with a card that benefits from that effect. Boss control is brief."
   },
   "card_secret_3": {
     "enemy": "secret_3",
@@ -312,25 +391,31 @@
     "rarity": "Mythic",
     "chance": 2e-05,
     "detail": "Every fourth attack, if it hits, applies Stun.",
-    "proc": "stun"
+    "proc": "stun",
+    "role": "Status combinations",
+    "build_hint": "Combine an effect source with a card that benefits from that effect. Boss control is brief."
   },
   "card_secret_4": {
     "enemy": "secret_4",
     "tile": 38,
     "rarity": "Mythic",
     "chance": 2e-05,
-    "detail": "+4% damage reduction. Every fourth attack, if it hits, applies Weaken.",
+    "detail": "Take 4% less direct damage. Every fourth attack, if it hits, applies Weaken.",
     "defense": 0.04,
-    "proc": "weaken"
+    "proc": "weaken",
+    "role": "Defense",
+    "build_hint": "Choose this when the enemy uses the matching effect or its attacks drain your food."
   },
   "card_secret_5": {
     "enemy": "secret_5",
     "tile": 39,
     "rarity": "Mythic",
     "chance": 2e-05,
-    "detail": "+7% attack damage. -4% damage reduction.",
+    "detail": "+7% attack damage. Take 4% more direct damage.",
     "attack": 0.07,
-    "defense": -0.04
+    "defense": -0.04,
+    "role": "Damage",
+    "build_hint": "For damage checks and heavily armored targets. Keep enough defense to survive."
   },
   "card_secret_6": {
     "enemy": "secret_6",
@@ -339,15 +424,217 @@
     "chance": 2e-05,
     "detail": "+7% boss damage. -3% meal healing.",
     "boss": 0.07,
-    "healing": -0.03
+    "healing": -0.03,
+    "role": "Damage",
+    "build_hint": "For damage checks and heavily armored targets. Keep enough defense to survive."
   },
   "card_hollow_depth": {
     "enemy": "hollow_depth",
     "tile": 41,
     "rarity": "Mythic",
     "chance": 2e-05,
-    "detail": "+5% damage reduction. Wound lasts 25% less time on you.",
+    "detail": "Take 5% less direct damage. Wound lasts 25% less time on you; matching enemy special strikes deal 25% less damage.",
     "defense": 0.05,
-    "resist": "wound"
+    "resist": "wound",
+    "role": "Defense",
+    "build_hint": "Choose this when the enemy uses the matching effect or its attacks drain your food."
+  },
+  "card_frontier_0_0": {
+    "enemy": "frontier_0_0",
+    "tile": 42,
+    "rarity": "Mythic",
+    "chance": 2e-05,
+    "detail": "+2.5% meal healing. Chill lasts 25% less time on you; matching enemy special strikes deal 25% less damage.",
+    "role": "Survival",
+    "build_hint": "For longer hunts. Combine with suitable food and defensive equipment.",
+    "resist": "chill",
+    "healing": 0.025
+  },
+  "card_frontier_0_1": {
+    "enemy": "frontier_0_1",
+    "tile": 43,
+    "rarity": "Mythic",
+    "chance": 2e-05,
+    "detail": "Take 2.5% less direct damage. +2.5% armor penetration.",
+    "role": "Defense",
+    "build_hint": "Choose this when the enemy uses the matching effect or its attacks drain your food.",
+    "defense": 0.025,
+    "pierce": 0.025
+  },
+  "card_frontier_0_2": {
+    "enemy": "frontier_0_2",
+    "tile": 44,
+    "rarity": "Mythic",
+    "chance": 2e-05,
+    "detail": "+3% special-attack damage. Every fourth attack, if it hits, applies Shock.",
+    "role": "Status combinations",
+    "build_hint": "Combine an effect source with a card that benefits from that effect. Boss control is brief.",
+    "proc": "shock",
+    "special": 0.03
+  },
+  "card_frontier_0_3": {
+    "enemy": "frontier_0_3",
+    "tile": 45,
+    "rarity": "Mythic",
+    "chance": 2e-05,
+    "detail": "+3% meal healing. Every fourth attack, if it hits, cleanses one harmful effect.",
+    "role": "Survival",
+    "build_hint": "For longer hunts. Combine with suitable food and defensive equipment.",
+    "boon": "cleanse",
+    "healing": 0.03
+  },
+  "card_frontier_0_4": {
+    "enemy": "frontier_0_4",
+    "tile": 46,
+    "rarity": "Mythic",
+    "chance": 2e-05,
+    "detail": "Take 2% more direct damage. +6% armor penetration.",
+    "role": "Damage",
+    "build_hint": "For damage checks and heavily armored targets. Keep enough defense to survive.",
+    "pierce": 0.06,
+    "defense": -0.02
+  },
+  "card_frontier_0_5": {
+    "enemy": "frontier_0_5",
+    "tile": 47,
+    "rarity": "Mythic",
+    "chance": 2e-05,
+    "detail": "+2% boss damage. +8% damage against enemies affected by Chill.",
+    "role": "Status combinations",
+    "build_hint": "Combine an effect source with a card that benefits from that effect. Boss control is brief.",
+    "vs_chill": 0.08,
+    "boss": 0.02
+  },
+  "card_frontier_1_0": {
+    "enemy": "frontier_1_0",
+    "tile": 48,
+    "rarity": "Mythic",
+    "chance": 2e-05,
+    "detail": "Take 2.5% less direct damage. Armor Break lasts 25% less time on you; matching enemy special strikes deal 25% less damage.",
+    "role": "Defense",
+    "build_hint": "Choose this when the enemy uses the matching effect or its attacks drain your food.",
+    "resist": "armor_break",
+    "defense": 0.025
+  },
+  "card_frontier_1_1": {
+    "enemy": "frontier_1_1",
+    "tile": 49,
+    "rarity": "Mythic",
+    "chance": 2e-05,
+    "detail": "+4% battle coins. +6% ordinary hunt material yield.",
+    "role": "Farming",
+    "build_hint": "For material and coin farming. Does not increase card or rare-material drop odds.",
+    "material": 0.06,
+    "gold": 0.04
+  },
+  "card_frontier_1_2": {
+    "enemy": "frontier_1_2",
+    "tile": 50,
+    "rarity": "Mythic",
+    "chance": 2e-05,
+    "detail": "+2% meal healing. Every fourth attack, if it hits, applies Weaken.",
+    "role": "Survival",
+    "build_hint": "For longer hunts. Combine with suitable food and defensive equipment.",
+    "proc": "weaken",
+    "healing": 0.02
+  },
+  "card_frontier_1_3": {
+    "enemy": "frontier_1_3",
+    "tile": 51,
+    "rarity": "Mythic",
+    "chance": 2e-05,
+    "detail": "+2.5% special-attack damage. +8% damage against enemies affected by Burn.",
+    "role": "Status combinations",
+    "build_hint": "Combine an effect source with a card that benefits from that effect. Boss control is brief.",
+    "vs_burn": 0.08,
+    "special": 0.025
+  },
+  "card_frontier_1_4": {
+    "enemy": "frontier_1_4",
+    "tile": 52,
+    "rarity": "Mythic",
+    "chance": 2e-05,
+    "detail": "+3% armor penetration. Every fourth attack, if it hits, applies Slow.",
+    "role": "Status combinations",
+    "build_hint": "Combine an effect source with a card that benefits from that effect. Boss control is brief.",
+    "proc": "slow",
+    "pierce": 0.03
+  },
+  "card_frontier_1_5": {
+    "enemy": "frontier_1_5",
+    "tile": 53,
+    "rarity": "Mythic",
+    "chance": 2e-05,
+    "detail": "-1.5% attack damage. +7.5% boss damage.",
+    "role": "Damage",
+    "build_hint": "For damage checks and heavily armored targets. Keep enough defense to survive.",
+    "boss": 0.075,
+    "attack": -0.015
+  },
+  "card_frontier_2_0": {
+    "enemy": "frontier_2_0",
+    "tile": 54,
+    "rarity": "Mythic",
+    "chance": 2e-05,
+    "detail": "+5% battle coins. Burn lasts 25% less time on you; matching enemy special strikes deal 25% less damage.",
+    "role": "Farming",
+    "build_hint": "For material and coin farming. Does not increase card or rare-material drop odds.",
+    "resist": "burn",
+    "gold": 0.05
+  },
+  "card_frontier_2_1": {
+    "enemy": "frontier_2_1",
+    "tile": 55,
+    "rarity": "Mythic",
+    "chance": 2e-05,
+    "detail": "+5% damage against enemies affected by Bleed. Every fourth attack, if it hits, applies Bleed.",
+    "role": "Status combinations",
+    "build_hint": "Combine an effect source with a card that benefits from that effect. Boss control is brief.",
+    "proc": "bleed",
+    "vs_bleed": 0.05
+  },
+  "card_frontier_2_2": {
+    "enemy": "frontier_2_2",
+    "tile": 56,
+    "rarity": "Mythic",
+    "chance": 2e-05,
+    "detail": "-2% attack damage. Take 5.5% less direct damage.",
+    "role": "Defense",
+    "build_hint": "Choose this when the enemy uses the matching effect or its attacks drain your food.",
+    "defense": 0.055,
+    "attack": -0.02
+  },
+  "card_frontier_2_3": {
+    "enemy": "frontier_2_3",
+    "tile": 57,
+    "rarity": "Mythic",
+    "chance": 2e-05,
+    "detail": "+4% damage against enemies affected by Burn. Every fourth attack, if it hits, applies Burn.",
+    "role": "Status combinations",
+    "build_hint": "Combine an effect source with a card that benefits from that effect. Boss control is brief.",
+    "proc": "burn",
+    "vs_burn": 0.04
+  },
+  "card_frontier_2_4": {
+    "enemy": "frontier_2_4",
+    "tile": 58,
+    "rarity": "Mythic",
+    "chance": 2e-05,
+    "detail": "+8.5% special-attack damage. -2.5% meal healing.",
+    "role": "Damage",
+    "build_hint": "For damage checks and heavily armored targets. Keep enough defense to survive.",
+    "special": 0.085,
+    "healing": -0.025
+  },
+  "card_frontier_2_5": {
+    "enemy": "frontier_2_5",
+    "tile": 59,
+    "rarity": "Mythic",
+    "chance": 2e-05,
+    "detail": "Take 4% more direct damage. +9% boss damage.",
+    "role": "Damage",
+    "build_hint": "For damage checks and heavily armored targets. Keep enough defense to survive.",
+    "boss": 0.09,
+    "defense": -0.04
   }
 }

@@ -1347,7 +1347,8 @@
       "en": "Ash Rat Card",
       "category": "card",
       "sell": 1,
-      "card_tile": 0
+      "card_tile": 0,
+      "description": "+3% ordinary hunt material yield."
     },
     "card_hollow_hound": {
       "id": "card_hollow_hound",
@@ -1355,7 +1356,8 @@
       "en": "Hollow Hound Card",
       "category": "card",
       "sell": 1,
-      "card_tile": 1
+      "card_tile": 1,
+      "description": "+2.5% attack damage. Every fourth attack, if it hits, applies Bleed."
     },
     "card_grave_thrall": {
       "id": "card_grave_thrall",
@@ -1363,7 +1365,8 @@
       "en": "Grave Thrall Card",
       "category": "card",
       "sell": 1,
-      "card_tile": 2
+      "card_tile": 2,
+      "description": "Take 1% less direct damage. Bleed lasts 25% less time on you; matching enemy special strikes deal 25% less damage."
     },
     "card_cinder_bandit": {
       "id": "card_cinder_bandit",
@@ -1371,7 +1374,8 @@
       "en": "Cinder Bandit Card",
       "category": "card",
       "sell": 1,
-      "card_tile": 3
+      "card_tile": 3,
+      "description": "+5% battle coins."
     },
     "card_chapel_guard": {
       "id": "card_chapel_guard",
@@ -1379,7 +1383,8 @@
       "en": "Chapel Guard Card",
       "category": "card",
       "sell": 1,
-      "card_tile": 4
+      "card_tile": 4,
+      "description": "Every fourth attack, if it hits, grants a Barrier."
     },
     "card_ember_wraith": {
       "id": "card_ember_wraith",
@@ -1387,7 +1392,8 @@
       "en": "Ember Wraith Card",
       "category": "card",
       "sell": 1,
-      "card_tile": 5
+      "card_tile": 5,
+      "description": "Every fourth attack, if it hits, applies Burn."
     },
     "card_bellkeeper": {
       "id": "card_bellkeeper",
@@ -1395,7 +1401,8 @@
       "en": "The Bellkeeper Card",
       "category": "card",
       "sell": 1,
-      "card_tile": 6
+      "card_tile": 6,
+      "description": "+2% special-attack damage. Stun lasts 25% less time on you; matching enemy special strikes deal 25% less damage."
     },
     "card_wilds_1": {
       "id": "card_wilds_1",
@@ -1403,7 +1410,8 @@
       "en": "Thornbound Sentinel · Tier 1 Card",
       "category": "card",
       "sell": 1,
-      "card_tile": 7
+      "card_tile": 7,
+      "description": "+2% armor penetration. +4% damage against enemies affected by Bleed."
     },
     "card_wilds_2": {
       "id": "card_wilds_2",
@@ -1411,7 +1419,8 @@
       "en": "Thornbound Sentinel · Tier 2 Card",
       "category": "card",
       "sell": 1,
-      "card_tile": 8
+      "card_tile": 8,
+      "description": "Every fourth attack, if it hits, applies Bleed."
     },
     "card_wilds_3": {
       "id": "card_wilds_3",
@@ -1419,7 +1428,8 @@
       "en": "Thornbound Sentinel · Tier 3 Card",
       "category": "card",
       "sell": 1,
-      "card_tile": 9
+      "card_tile": 9,
+      "description": "+2.5% boss damage. +4% damage against enemies affected by Poison."
     },
     "card_wilds_4": {
       "id": "card_wilds_4",
@@ -1427,7 +1437,8 @@
       "en": "Thornbound Sentinel · Tier 4 Card",
       "category": "card",
       "sell": 1,
-      "card_tile": 10
+      "card_tile": 10,
+      "description": "Take 2.5% less direct damage."
     },
     "card_wilds_5": {
       "id": "card_wilds_5",
@@ -1435,7 +1446,8 @@
       "en": "Thornbound Sentinel · Tier 5 Card",
       "category": "card",
       "sell": 1,
-      "card_tile": 11
+      "card_tile": 11,
+      "description": "+4% armor penetration."
     },
     "card_marsh_1": {
       "id": "card_marsh_1",
@@ -1443,7 +1455,8 @@
       "en": "Drowned Oracle · Tier 1 Card",
       "category": "card",
       "sell": 1,
-      "card_tile": 12
+      "card_tile": 12,
+      "description": "+4% damage against enemies affected by Burn. Poison lasts 25% less time on you; matching enemy special strikes deal 25% less damage."
     },
     "card_marsh_2": {
       "id": "card_marsh_2",
@@ -1451,7 +1464,8 @@
       "en": "Drowned Oracle · Tier 2 Card",
       "category": "card",
       "sell": 1,
-      "card_tile": 13
+      "card_tile": 13,
+      "description": "Every fourth attack, if it hits, applies Chill."
     },
     "card_marsh_3": {
       "id": "card_marsh_3",
@@ -1459,7 +1473,8 @@
       "en": "Drowned Oracle · Tier 3 Card",
       "category": "card",
       "sell": 1,
-      "card_tile": 14
+      "card_tile": 14,
+      "description": "Every fourth attack, if it hits, applies Wound."
     },
     "card_marsh_4": {
       "id": "card_marsh_4",
@@ -1467,7 +1482,8 @@
       "en": "Drowned Oracle · Tier 4 Card",
       "category": "card",
       "sell": 1,
-      "card_tile": 15
+      "card_tile": 15,
+      "description": "+6% meal healing."
     },
     "card_marsh_5": {
       "id": "card_marsh_5",
@@ -1475,7 +1491,8 @@
       "en": "Drowned Oracle · Tier 5 Card",
       "category": "card",
       "sell": 1,
-      "card_tile": 16
+      "card_tile": 16,
+      "description": "+2% meal healing. Every fourth attack, if it hits, grants a Barrier."
     },
     "card_crown_1": {
       "id": "card_crown_1",
@@ -1483,7 +1500,8 @@
       "en": "Crowned Bellkeeper · Tier 1 Card",
       "category": "card",
       "sell": 1,
-      "card_tile": 17
+      "card_tile": 17,
+      "description": "+4% damage against enemies affected by Chill. Burn lasts 25% less time on you; matching enemy special strikes deal 25% less damage."
     },
     "card_crown_2": {
       "id": "card_crown_2",
@@ -1491,7 +1509,8 @@
       "en": "Crowned Bellkeeper · Tier 2 Card",
       "category": "card",
       "sell": 1,
-      "card_tile": 18
+      "card_tile": 18,
+      "description": "Take 3% less direct damage."
     },
     "card_crown_3": {
       "id": "card_crown_3",
@@ -1499,7 +1518,8 @@
       "en": "Crowned Bellkeeper · Tier 3 Card",
       "category": "card",
       "sell": 1,
-      "card_tile": 19
+      "card_tile": 19,
+      "description": "Every fourth attack, if it hits, applies Shock."
     },
     "card_crown_4": {
       "id": "card_crown_4",
@@ -1507,7 +1527,8 @@
       "en": "Crowned Bellkeeper · Tier 4 Card",
       "category": "card",
       "sell": 1,
-      "card_tile": 20
+      "card_tile": 20,
+      "description": "Every fourth attack, if it hits, applies Weaken."
     },
     "card_crown_5": {
       "id": "card_crown_5",
@@ -1515,7 +1536,8 @@
       "en": "Crowned Bellkeeper · Tier 5 Card",
       "category": "card",
       "sell": 1,
-      "card_tile": 21
+      "card_tile": 21,
+      "description": "+4% special-attack damage."
     },
     "card_trial_wilds": {
       "id": "card_trial_wilds",
@@ -1523,7 +1545,8 @@
       "en": "The Thornbound Vigil Card",
       "category": "card",
       "sell": 1,
-      "card_tile": 22
+      "card_tile": 22,
+      "description": "+3% special-attack damage. Every fourth attack, if it hits, applies Bleed."
     },
     "card_trial_marsh": {
       "id": "card_trial_marsh",
@@ -1531,7 +1554,8 @@
       "en": "The Unbroken Hymn Card",
       "category": "card",
       "sell": 1,
-      "card_tile": 23
+      "card_tile": 23,
+      "description": "Every fourth attack, if it hits, cleanses one harmful effect."
     },
     "card_trial_crown": {
       "id": "card_trial_crown",
@@ -1539,7 +1563,8 @@
       "en": "Crown at Sundown Card",
       "category": "card",
       "sell": 1,
-      "card_tile": 24
+      "card_tile": 24,
+      "description": "-2% attack damage. Take 4% less direct damage."
     },
     "card_apex_wilds_1": {
       "id": "card_apex_wilds_1",
@@ -1547,7 +1572,8 @@
       "en": "The Briar Marksman Card",
       "category": "card",
       "sell": 1,
-      "card_tile": 25
+      "card_tile": 25,
+      "description": "+4.5% special-attack damage."
     },
     "card_apex_wilds_2": {
       "id": "card_apex_wilds_2",
@@ -1555,7 +1581,8 @@
       "en": "Mossback Colossus Card",
       "category": "card",
       "sell": 1,
-      "card_tile": 26
+      "card_tile": 26,
+      "description": "-3% attack damage. Take 6% less direct damage."
     },
     "card_apex_wilds_3": {
       "id": "card_apex_wilds_3",
@@ -1563,7 +1590,8 @@
       "en": "The Emberwood Elder Card",
       "category": "card",
       "sell": 1,
-      "card_tile": 27
+      "card_tile": 27,
+      "description": "+2.5% attack damage. Every fourth attack, if it hits, applies Burn."
     },
     "card_apex_marsh_1": {
       "id": "card_apex_marsh_1",
@@ -1571,7 +1599,8 @@
       "en": "The Chainbound Diver Card",
       "category": "card",
       "sell": 1,
-      "card_tile": 28
+      "card_tile": 28,
+      "description": "Take 2% less direct damage. Slow lasts 25% less time on you; matching enemy special strikes deal 25% less damage."
     },
     "card_apex_marsh_2": {
       "id": "card_apex_marsh_2",
@@ -1579,7 +1608,8 @@
       "en": "The Lantern Widow Card",
       "category": "card",
       "sell": 1,
-      "card_tile": 29
+      "card_tile": 29,
+      "description": "Every fourth attack, if it hits, applies Poison."
     },
     "card_apex_marsh_3": {
       "id": "card_apex_marsh_3",
@@ -1587,7 +1617,8 @@
       "en": "Leviathan of the Choir Card",
       "category": "card",
       "sell": 1,
-      "card_tile": 30
+      "card_tile": 30,
+      "description": "-3% meal healing. Every fourth attack, if it hits, grants a Barrier."
     },
     "card_apex_crown_1": {
       "id": "card_apex_crown_1",
@@ -1595,7 +1626,8 @@
       "en": "The Ash Executioner Card",
       "category": "card",
       "sell": 1,
-      "card_tile": 31
+      "card_tile": 31,
+      "description": "+5% boss damage."
     },
     "card_apex_crown_2": {
       "id": "card_apex_crown_2",
@@ -1603,7 +1635,8 @@
       "en": "Bishop of the Last Bell Card",
       "category": "card",
       "sell": 1,
-      "card_tile": 32
+      "card_tile": 32,
+      "description": "Take 1% less direct damage. Every fourth attack, if it hits, cleanses one harmful effect."
     },
     "card_apex_crown_3": {
       "id": "card_apex_crown_3",
@@ -1611,7 +1644,8 @@
       "en": "The Cinder Sovereign Card",
       "category": "card",
       "sell": 1,
-      "card_tile": 33
+      "card_tile": 33,
+      "description": "+2.5% special-attack damage. Every fourth attack, if it hits, applies Shock."
     },
     "card_secret_0": {
       "id": "card_secret_0",
@@ -1619,7 +1653,8 @@
       "en": "The Drowned Castellan Card",
       "category": "card",
       "sell": 1,
-      "card_tile": 34
+      "card_tile": 34,
+      "description": "Take 4.5% less direct damage."
     },
     "card_secret_1": {
       "id": "card_secret_1",
@@ -1627,7 +1662,8 @@
       "en": "The Astral Engine Card",
       "category": "card",
       "sell": 1,
-      "card_tile": 35
+      "card_tile": 35,
+      "description": "+6% special-attack damage."
     },
     "card_secret_2": {
       "id": "card_secret_2",
@@ -1635,7 +1671,8 @@
       "en": "The Hollow Forgemaster Card",
       "category": "card",
       "sell": 1,
-      "card_tile": 36
+      "card_tile": 36,
+      "description": "Every fourth attack, if it hits, applies Armor Break."
     },
     "card_secret_3": {
       "id": "card_secret_3",
@@ -1643,7 +1680,8 @@
       "en": "The Silent Monarch Card",
       "category": "card",
       "sell": 1,
-      "card_tile": 37
+      "card_tile": 37,
+      "description": "Every fourth attack, if it hits, applies Stun."
     },
     "card_secret_4": {
       "id": "card_secret_4",
@@ -1651,7 +1689,8 @@
       "en": "The Thorn Colossus Card",
       "category": "card",
       "sell": 1,
-      "card_tile": 38
+      "card_tile": 38,
+      "description": "Take 4% less direct damage. Every fourth attack, if it hits, applies Weaken."
     },
     "card_secret_5": {
       "id": "card_secret_5",
@@ -1659,7 +1698,8 @@
       "en": "The Glass Sentinel Card",
       "category": "card",
       "sell": 1,
-      "card_tile": 39
+      "card_tile": 39,
+      "description": "+7% attack damage. Take 4% more direct damage."
     },
     "card_secret_6": {
       "id": "card_secret_6",
@@ -1667,7 +1707,8 @@
       "en": "The Unlit Sovereign Card",
       "category": "card",
       "sell": 1,
-      "card_tile": 40
+      "card_tile": 40,
+      "description": "+7% boss damage. -3% meal healing."
     },
     "card_hollow_depth": {
       "id": "card_hollow_depth",
@@ -1675,7 +1716,8 @@
       "en": "Hollow Sentinel Card",
       "category": "card",
       "sell": 1,
-      "card_tile": 41
+      "card_tile": 41,
+      "description": "Take 5% less direct damage. Wound lasts 25% less time on you; matching enemy special strikes deal 25% less damage."
     },
     "card_extractor": {
       "id": "card_extractor",
@@ -1684,6 +1726,846 @@
       "category": "material",
       "sell": 5,
       "icon_alias": "empty_vial"
+    },
+    "keepsake_fang": {
+      "id": "keepsake_fang",
+      "name": "Ashen Fang",
+      "en": "Ashen Fang",
+      "category": "material",
+      "sell": 1,
+      "material_tile": 0,
+      "icon_alias": "scrap"
+    },
+    "keepsake_claw": {
+      "id": "keepsake_claw",
+      "name": "Obsidian Claw",
+      "en": "Obsidian Claw",
+      "category": "material",
+      "sell": 1,
+      "material_tile": 1,
+      "icon_alias": "scrap"
+    },
+    "keepsake_nail": {
+      "id": "keepsake_nail",
+      "name": "Burial Nail",
+      "en": "Burial Nail",
+      "category": "material",
+      "sell": 1,
+      "material_tile": 2,
+      "icon_alias": "scrap"
+    },
+    "keepsake_seal": {
+      "id": "keepsake_seal",
+      "name": "Ember Seal",
+      "en": "Ember Seal",
+      "category": "material",
+      "sell": 1,
+      "material_tile": 3,
+      "icon_alias": "scrap"
+    },
+    "keepsake_chain": {
+      "id": "keepsake_chain",
+      "name": "Oathchain Fragment",
+      "en": "Oathchain Fragment",
+      "category": "material",
+      "sell": 1,
+      "material_tile": 4,
+      "icon_alias": "scrap"
+    },
+    "keepsake_ember": {
+      "id": "keepsake_ember",
+      "name": "Caged Ember",
+      "en": "Caged Ember",
+      "category": "material",
+      "sell": 1,
+      "material_tile": 5,
+      "icon_alias": "scrap"
+    },
+    "keepsake_clapper": {
+      "id": "keepsake_clapper",
+      "name": "Silver Clapper",
+      "en": "Silver Clapper",
+      "category": "material",
+      "sell": 1,
+      "material_tile": 6,
+      "icon_alias": "scrap"
+    },
+    "masterwork_commission": {
+      "id": "masterwork_commission",
+      "name": "Masterwork Commission",
+      "en": "Masterwork Commission",
+      "category": "material",
+      "sell": 1,
+      "masterwork_tile": 7
+    },
+    "heirloom_blade": {
+      "id": "heirloom_blade",
+      "name": "Ashwake",
+      "en": "Ashwake",
+      "category": "equipment",
+      "sell": 1,
+      "slot": "weapon",
+      "attack": 54,
+      "armor": 0,
+      "unique_effect": "Attacks against bosses ignore 10% of enemy armor.",
+      "icon_alias": "iron_sword",
+      "legacy_tile": 7
+    },
+    "heirloom_aegis": {
+      "id": "heirloom_aegis",
+      "name": "Oathkeeper",
+      "en": "Oathkeeper",
+      "category": "equipment",
+      "sell": 1,
+      "slot": "shield",
+      "attack": 0,
+      "armor": 36,
+      "unique_effect": "Take 10% less damage from every third boss strike.",
+      "icon_alias": "iron_sword",
+      "legacy_tile": 8
+    },
+    "heirloom_pendant": {
+      "id": "heirloom_pendant",
+      "name": "Lastlight",
+      "en": "Lastlight",
+      "category": "equipment",
+      "sell": 1,
+      "slot": "necklace",
+      "attack": 5,
+      "armor": 3,
+      "unique_effect": "Meals restore 10% more HP.",
+      "icon_alias": "iron_sword",
+      "legacy_tile": 9
+    },
+    "keepsake_frontier_0_0": {
+      "id": "keepsake_frontier_0_0",
+      "name": "Starless Lampstone",
+      "en": "Starless Lampstone",
+      "category": "material",
+      "sell": 1,
+      "frontier_material_tile": 0,
+      "icon_alias": "scrap"
+    },
+    "card_frontier_0_0": {
+      "id": "card_frontier_0_0",
+      "name": "Starless Pilgrim Card",
+      "en": "Starless Pilgrim Card",
+      "category": "card",
+      "sell": 1,
+      "frontier_card_tile": 0,
+      "description": "+2.5% meal healing. Chill lasts 25% less time on you; matching enemy special strikes deal 25% less damage."
+    },
+    "keepsake_frontier_0_1": {
+      "id": "keepsake_frontier_0_1",
+      "name": "Silver Spearhead",
+      "en": "Silver Spearhead",
+      "category": "material",
+      "sell": 1,
+      "frontier_material_tile": 1,
+      "icon_alias": "scrap"
+    },
+    "card_frontier_0_1": {
+      "id": "card_frontier_0_1",
+      "name": "Observatory Sentry Card",
+      "en": "Observatory Sentry Card",
+      "category": "card",
+      "sell": 1,
+      "frontier_card_tile": 1,
+      "description": "Take 2.5% less direct damage. +2.5% armor penetration."
+    },
+    "keepsake_frontier_0_2": {
+      "id": "keepsake_frontier_0_2",
+      "name": "Orbital Gear",
+      "en": "Orbital Gear",
+      "category": "material",
+      "sell": 1,
+      "frontier_material_tile": 2,
+      "icon_alias": "scrap"
+    },
+    "card_frontier_0_2": {
+      "id": "card_frontier_0_2",
+      "name": "Orbit Weaver Card",
+      "en": "Orbit Weaver Card",
+      "category": "card",
+      "sell": 1,
+      "frontier_card_tile": 2,
+      "description": "+3% special-attack damage. Every fourth attack, if it hits, applies Shock."
+    },
+    "keepsake_frontier_0_3": {
+      "id": "keepsake_frontier_0_3",
+      "name": "Pale Scrollcase",
+      "en": "Pale Scrollcase",
+      "category": "material",
+      "sell": 1,
+      "frontier_material_tile": 3,
+      "icon_alias": "scrap"
+    },
+    "card_frontier_0_3": {
+      "id": "card_frontier_0_3",
+      "name": "Pale Archivist Card",
+      "en": "Pale Archivist Card",
+      "category": "card",
+      "sell": 1,
+      "frontier_card_tile": 3,
+      "description": "+3% meal healing. Every fourth attack, if it hits, cleanses one harmful effect."
+    },
+    "keepsake_frontier_0_4": {
+      "id": "keepsake_frontier_0_4",
+      "name": "Mirror Shard",
+      "en": "Mirror Shard",
+      "category": "material",
+      "sell": 1,
+      "frontier_material_tile": 4,
+      "icon_alias": "scrap"
+    },
+    "card_frontier_0_4": {
+      "id": "card_frontier_0_4",
+      "name": "Mirror Knight Card",
+      "en": "Mirror Knight Card",
+      "category": "card",
+      "sell": 1,
+      "frontier_card_tile": 4,
+      "description": "Take 2% more direct damage. +6% armor penetration."
+    },
+    "keepsake_frontier_0_5": {
+      "id": "keepsake_frontier_0_5",
+      "name": "Eclipse Crown Fragment",
+      "en": "Eclipse Crown Fragment",
+      "category": "material",
+      "sell": 1,
+      "frontier_material_tile": 5,
+      "icon_alias": "scrap"
+    },
+    "card_frontier_0_5": {
+      "id": "card_frontier_0_5",
+      "name": "Eclipse Regent Card",
+      "en": "Eclipse Regent Card",
+      "category": "card",
+      "sell": 1,
+      "frontier_card_tile": 5,
+      "description": "+2% boss damage. +8% damage against enemies affected by Chill."
+    },
+    "keepsake_frontier_1_0": {
+      "id": "keepsake_frontier_1_0",
+      "name": "Rustbound Shackle",
+      "en": "Rustbound Shackle",
+      "category": "material",
+      "sell": 1,
+      "frontier_material_tile": 6,
+      "icon_alias": "scrap"
+    },
+    "card_frontier_1_0": {
+      "id": "card_frontier_1_0",
+      "name": "Rustbound Porter Card",
+      "en": "Rustbound Porter Card",
+      "category": "card",
+      "sell": 1,
+      "frontier_card_tile": 6,
+      "description": "Take 2.5% less direct damage. Armor Break lasts 25% less time on you; matching enemy special strikes deal 25% less damage."
+    },
+    "keepsake_frontier_1_1": {
+      "id": "keepsake_frontier_1_1",
+      "name": "Grave Compass",
+      "en": "Grave Compass",
+      "category": "material",
+      "sell": 1,
+      "frontier_material_tile": 7,
+      "icon_alias": "scrap"
+    },
+    "card_frontier_1_1": {
+      "id": "card_frontier_1_1",
+      "name": "Grave Surveyor Card",
+      "en": "Grave Surveyor Card",
+      "category": "card",
+      "sell": 1,
+      "frontier_card_tile": 7,
+      "description": "+4% battle coins. +6% ordinary hunt material yield."
+    },
+    "keepsake_frontier_1_2": {
+      "id": "keepsake_frontier_1_2",
+      "name": "Iron Tongue",
+      "en": "Iron Tongue",
+      "category": "material",
+      "sell": 1,
+      "frontier_material_tile": 8,
+      "icon_alias": "scrap"
+    },
+    "card_frontier_1_2": {
+      "id": "card_frontier_1_2",
+      "name": "Iron Cantor Card",
+      "en": "Iron Cantor Card",
+      "category": "card",
+      "sell": 1,
+      "frontier_card_tile": 8,
+      "description": "+2% meal healing. Every fourth attack, if it hits, applies Weaken."
+    },
+    "keepsake_frontier_1_3": {
+      "id": "keepsake_frontier_1_3",
+      "name": "Furnace Heart",
+      "en": "Furnace Heart",
+      "category": "material",
+      "sell": 1,
+      "frontier_material_tile": 9,
+      "icon_alias": "scrap"
+    },
+    "card_frontier_1_3": {
+      "id": "card_frontier_1_3",
+      "name": "Furnace Sentinel Card",
+      "en": "Furnace Sentinel Card",
+      "category": "card",
+      "sell": 1,
+      "frontier_card_tile": 9,
+      "description": "+2.5% special-attack damage. +8% damage against enemies affected by Burn."
+    },
+    "keepsake_frontier_1_4": {
+      "id": "keepsake_frontier_1_4",
+      "name": "Chain Rosette",
+      "en": "Chain Rosette",
+      "category": "material",
+      "sell": 1,
+      "frontier_material_tile": 10,
+      "icon_alias": "scrap"
+    },
+    "card_frontier_1_4": {
+      "id": "card_frontier_1_4",
+      "name": "Chain Matron Card",
+      "en": "Chain Matron Card",
+      "category": "card",
+      "sell": 1,
+      "frontier_card_tile": 10,
+      "description": "+3% armor penetration. Every fourth attack, if it hits, applies Slow."
+    },
+    "keepsake_frontier_1_5": {
+      "id": "keepsake_frontier_1_5",
+      "name": "Burial Signet",
+      "en": "Burial Signet",
+      "category": "material",
+      "sell": 1,
+      "frontier_material_tile": 11,
+      "icon_alias": "scrap"
+    },
+    "card_frontier_1_5": {
+      "id": "card_frontier_1_5",
+      "name": "Burial King Card",
+      "en": "Burial King Card",
+      "category": "card",
+      "sell": 1,
+      "frontier_card_tile": 11,
+      "description": "-1.5% attack damage. +7.5% boss damage."
+    },
+    "keepsake_frontier_2_0": {
+      "id": "keepsake_frontier_2_0",
+      "name": "Ashglass Bead",
+      "en": "Ashglass Bead",
+      "category": "material",
+      "sell": 1,
+      "frontier_material_tile": 12,
+      "icon_alias": "scrap"
+    },
+    "card_frontier_2_0": {
+      "id": "card_frontier_2_0",
+      "name": "Ash Pilgrim Card",
+      "en": "Ash Pilgrim Card",
+      "category": "card",
+      "sell": 1,
+      "frontier_card_tile": 12,
+      "description": "+5% battle coins. Burn lasts 25% less time on you; matching enemy special strikes deal 25% less damage."
+    },
+    "keepsake_frontier_2_1": {
+      "id": "keepsake_frontier_2_1",
+      "name": "Cinder Arrow Crystal",
+      "en": "Cinder Arrow Crystal",
+      "category": "material",
+      "sell": 1,
+      "frontier_material_tile": 13,
+      "icon_alias": "scrap"
+    },
+    "card_frontier_2_1": {
+      "id": "card_frontier_2_1",
+      "name": "Cinder Ranger Card",
+      "en": "Cinder Ranger Card",
+      "category": "card",
+      "sell": 1,
+      "frontier_card_tile": 13,
+      "description": "+5% damage against enemies affected by Bleed. Every fourth attack, if it hits, applies Bleed."
+    },
+    "keepsake_frontier_2_2": {
+      "id": "keepsake_frontier_2_2",
+      "name": "Obsidian Wardplate",
+      "en": "Obsidian Wardplate",
+      "category": "material",
+      "sell": 1,
+      "frontier_material_tile": 14,
+      "icon_alias": "scrap"
+    },
+    "card_frontier_2_2": {
+      "id": "card_frontier_2_2",
+      "name": "Obsidian Warden Card",
+      "en": "Obsidian Warden Card",
+      "category": "card",
+      "sell": 1,
+      "frontier_card_tile": 14,
+      "description": "-2% attack damage. Take 5.5% less direct damage."
+    },
+    "keepsake_frontier_2_3": {
+      "id": "keepsake_frontier_2_3",
+      "name": "Oracular Ember",
+      "en": "Oracular Ember",
+      "category": "material",
+      "sell": 1,
+      "frontier_material_tile": 15,
+      "icon_alias": "scrap"
+    },
+    "card_frontier_2_3": {
+      "id": "card_frontier_2_3",
+      "name": "Ember Oracle Card",
+      "en": "Ember Oracle Card",
+      "category": "card",
+      "sell": 1,
+      "frontier_card_tile": 15,
+      "description": "+4% damage against enemies affected by Burn. Every fourth attack, if it hits, applies Burn."
+    },
+    "keepsake_frontier_2_4": {
+      "id": "keepsake_frontier_2_4",
+      "name": "Molten Steel Tear",
+      "en": "Molten Steel Tear",
+      "category": "material",
+      "sell": 1,
+      "frontier_material_tile": 16,
+      "icon_alias": "scrap"
+    },
+    "card_frontier_2_4": {
+      "id": "card_frontier_2_4",
+      "name": "Molten Knight Card",
+      "en": "Molten Knight Card",
+      "category": "card",
+      "sell": 1,
+      "frontier_card_tile": 16,
+      "description": "+8.5% special-attack damage. -2.5% meal healing."
+    },
+    "keepsake_frontier_2_5": {
+      "id": "keepsake_frontier_2_5",
+      "name": "First Ember Diamond",
+      "en": "First Ember Diamond",
+      "category": "material",
+      "sell": 1,
+      "frontier_material_tile": 17,
+      "icon_alias": "scrap"
+    },
+    "card_frontier_2_5": {
+      "id": "card_frontier_2_5",
+      "name": "The First Ember Card",
+      "en": "The First Ember Card",
+      "category": "card",
+      "sell": 1,
+      "frontier_card_tile": 17,
+      "description": "Take 4% more direct damage. +9% boss damage."
+    },
+    "keepsake_wilds_1": {
+      "id": "keepsake_wilds_1",
+      "name": "Thornwood Splinter",
+      "en": "Thornwood Splinter",
+      "category": "material",
+      "sell": 1,
+      "material_tile": 7,
+      "icon_alias": "scrap"
+    },
+    "keepsake_wilds_2": {
+      "id": "keepsake_wilds_2",
+      "name": "Amber Sap",
+      "en": "Amber Sap",
+      "category": "material",
+      "sell": 1,
+      "material_tile": 8,
+      "icon_alias": "scrap"
+    },
+    "keepsake_wilds_3": {
+      "id": "keepsake_wilds_3",
+      "name": "Ironwood Heart",
+      "en": "Ironwood Heart",
+      "category": "material",
+      "sell": 1,
+      "material_tile": 9,
+      "icon_alias": "scrap"
+    },
+    "keepsake_wilds_4": {
+      "id": "keepsake_wilds_4",
+      "name": "Thistle Crown",
+      "en": "Thistle Crown",
+      "category": "material",
+      "sell": 1,
+      "material_tile": 10,
+      "icon_alias": "scrap"
+    },
+    "keepsake_wilds_5": {
+      "id": "keepsake_wilds_5",
+      "name": "Petrified Briar Seed",
+      "en": "Petrified Briar Seed",
+      "category": "material",
+      "sell": 1,
+      "material_tile": 11,
+      "icon_alias": "scrap"
+    },
+    "keepsake_marsh_1": {
+      "id": "keepsake_marsh_1",
+      "name": "Drowned Pearl",
+      "en": "Drowned Pearl",
+      "category": "material",
+      "sell": 1,
+      "material_tile": 12,
+      "icon_alias": "scrap"
+    },
+    "keepsake_marsh_2": {
+      "id": "keepsake_marsh_2",
+      "name": "Corroded Locket",
+      "en": "Corroded Locket",
+      "category": "material",
+      "sell": 1,
+      "material_tile": 13,
+      "icon_alias": "scrap"
+    },
+    "keepsake_marsh_3": {
+      "id": "keepsake_marsh_3",
+      "name": "Spectral Salt",
+      "en": "Spectral Salt",
+      "category": "material",
+      "sell": 1,
+      "material_tile": 14,
+      "icon_alias": "scrap"
+    },
+    "keepsake_marsh_4": {
+      "id": "keepsake_marsh_4",
+      "name": "Abyssal Glass",
+      "en": "Abyssal Glass",
+      "category": "material",
+      "sell": 1,
+      "material_tile": 15,
+      "icon_alias": "scrap"
+    },
+    "keepsake_marsh_5": {
+      "id": "keepsake_marsh_5",
+      "name": "Tideworn Silver",
+      "en": "Tideworn Silver",
+      "category": "material",
+      "sell": 1,
+      "material_tile": 16,
+      "icon_alias": "scrap"
+    },
+    "keepsake_crown_1": {
+      "id": "keepsake_crown_1",
+      "name": "Black Crown Shard",
+      "en": "Black Crown Shard",
+      "category": "material",
+      "sell": 1,
+      "material_tile": 17,
+      "icon_alias": "scrap"
+    },
+    "keepsake_crown_2": {
+      "id": "keepsake_crown_2",
+      "name": "Smoked Lens",
+      "en": "Smoked Lens",
+      "category": "material",
+      "sell": 1,
+      "material_tile": 18,
+      "icon_alias": "scrap"
+    },
+    "keepsake_crown_3": {
+      "id": "keepsake_crown_3",
+      "name": "Royal Ash Shard",
+      "en": "Royal Ash Shard",
+      "category": "material",
+      "sell": 1,
+      "material_tile": 19,
+      "icon_alias": "scrap"
+    },
+    "keepsake_crown_4": {
+      "id": "keepsake_crown_4",
+      "name": "Coronet Hook",
+      "en": "Coronet Hook",
+      "category": "material",
+      "sell": 1,
+      "material_tile": 20,
+      "icon_alias": "scrap"
+    },
+    "keepsake_crown_5": {
+      "id": "keepsake_crown_5",
+      "name": "Sovereign Jewel",
+      "en": "Sovereign Jewel",
+      "category": "material",
+      "sell": 1,
+      "material_tile": 21,
+      "icon_alias": "scrap"
+    },
+    "keepsake_trial_wilds": {
+      "id": "keepsake_trial_wilds",
+      "name": "Vigil Medallion",
+      "en": "Vigil Medallion",
+      "category": "material",
+      "sell": 1,
+      "material_tile": 22,
+      "icon_alias": "scrap"
+    },
+    "keepsake_trial_marsh": {
+      "id": "keepsake_trial_marsh",
+      "name": "Hymn Fork",
+      "en": "Hymn Fork",
+      "category": "material",
+      "sell": 1,
+      "material_tile": 23,
+      "icon_alias": "scrap"
+    },
+    "keepsake_trial_crown": {
+      "id": "keepsake_trial_crown",
+      "name": "Sunset Diamond",
+      "en": "Sunset Diamond",
+      "category": "material",
+      "sell": 1,
+      "material_tile": 24,
+      "icon_alias": "scrap"
+    },
+    "keepsake_apex_wilds_1": {
+      "id": "keepsake_apex_wilds_1",
+      "name": "Barbed Arrowhead",
+      "en": "Barbed Arrowhead",
+      "category": "material",
+      "sell": 1,
+      "material_tile": 25,
+      "icon_alias": "scrap"
+    },
+    "keepsake_apex_wilds_2": {
+      "id": "keepsake_apex_wilds_2",
+      "name": "Mossback Geode",
+      "en": "Mossback Geode",
+      "category": "material",
+      "sell": 1,
+      "material_tile": 26,
+      "icon_alias": "scrap"
+    },
+    "keepsake_apex_wilds_3": {
+      "id": "keepsake_apex_wilds_3",
+      "name": "Emberwood Resin",
+      "en": "Emberwood Resin",
+      "category": "material",
+      "sell": 1,
+      "material_tile": 27,
+      "icon_alias": "scrap"
+    },
+    "keepsake_apex_marsh_1": {
+      "id": "keepsake_apex_marsh_1",
+      "name": "Abyssal Chain",
+      "en": "Abyssal Chain",
+      "category": "material",
+      "sell": 1,
+      "material_tile": 28,
+      "icon_alias": "scrap"
+    },
+    "keepsake_apex_marsh_2": {
+      "id": "keepsake_apex_marsh_2",
+      "name": "Lantern Wick",
+      "en": "Lantern Wick",
+      "category": "material",
+      "sell": 1,
+      "material_tile": 29,
+      "icon_alias": "scrap"
+    },
+    "keepsake_apex_marsh_3": {
+      "id": "keepsake_apex_marsh_3",
+      "name": "Leviathan Scale",
+      "en": "Leviathan Scale",
+      "category": "material",
+      "sell": 1,
+      "material_tile": 30,
+      "icon_alias": "scrap"
+    },
+    "keepsake_apex_crown_1": {
+      "id": "keepsake_apex_crown_1",
+      "name": "Executioner Fragment",
+      "en": "Executioner Fragment",
+      "category": "material",
+      "sell": 1,
+      "material_tile": 31,
+      "icon_alias": "scrap"
+    },
+    "keepsake_apex_crown_2": {
+      "id": "keepsake_apex_crown_2",
+      "name": "Bishop Seal",
+      "en": "Bishop Seal",
+      "category": "material",
+      "sell": 1,
+      "material_tile": 32,
+      "icon_alias": "scrap"
+    },
+    "keepsake_apex_crown_3": {
+      "id": "keepsake_apex_crown_3",
+      "name": "Sovereign Ingot",
+      "en": "Sovereign Ingot",
+      "category": "material",
+      "sell": 1,
+      "material_tile": 33,
+      "icon_alias": "scrap"
+    },
+    "keepsake_secret_0": {
+      "id": "keepsake_secret_0",
+      "name": "Castellan Key",
+      "en": "Castellan Key",
+      "category": "material",
+      "sell": 1,
+      "material_tile": 34,
+      "icon_alias": "scrap"
+    },
+    "keepsake_secret_1": {
+      "id": "keepsake_secret_1",
+      "name": "Astral Gear",
+      "en": "Astral Gear",
+      "category": "material",
+      "sell": 1,
+      "material_tile": 35,
+      "icon_alias": "scrap"
+    },
+    "keepsake_secret_2": {
+      "id": "keepsake_secret_2",
+      "name": "Crucible Shard",
+      "en": "Crucible Shard",
+      "category": "material",
+      "sell": 1,
+      "material_tile": 36,
+      "icon_alias": "scrap"
+    },
+    "keepsake_secret_3": {
+      "id": "keepsake_secret_3",
+      "name": "Silent Signet",
+      "en": "Silent Signet",
+      "category": "material",
+      "sell": 1,
+      "material_tile": 37,
+      "icon_alias": "scrap"
+    },
+    "keepsake_secret_4": {
+      "id": "keepsake_secret_4",
+      "name": "Stone Seed",
+      "en": "Stone Seed",
+      "category": "material",
+      "sell": 1,
+      "material_tile": 38,
+      "icon_alias": "scrap"
+    },
+    "keepsake_secret_5": {
+      "id": "keepsake_secret_5",
+      "name": "Sentinel Prism",
+      "en": "Sentinel Prism",
+      "category": "material",
+      "sell": 1,
+      "material_tile": 39,
+      "icon_alias": "scrap"
+    },
+    "keepsake_secret_6": {
+      "id": "keepsake_secret_6",
+      "name": "Eclipse Gem",
+      "en": "Eclipse Gem",
+      "category": "material",
+      "sell": 1,
+      "material_tile": 40,
+      "icon_alias": "scrap"
+    },
+    "keepsake_hollow_depth": {
+      "id": "keepsake_hollow_depth",
+      "name": "Void Crystal",
+      "en": "Void Crystal",
+      "category": "material",
+      "sell": 1,
+      "material_tile": 41,
+      "icon_alias": "scrap"
+    },
+    "heirloom_helm": {
+      "id": "heirloom_helm",
+      "name": "Starless Visage",
+      "en": "Starless Visage",
+      "category": "equipment",
+      "sell": 1,
+      "slot": "head",
+      "attack": 0,
+      "armor": 26,
+      "unique_effect": "Shock lasts 50% less time on you.",
+      "icon_alias": "iron_sword",
+      "masterwork_tile": 0
+    },
+    "heirloom_cuirass": {
+      "id": "heirloom_cuirass",
+      "name": "Cinderbound Mantle",
+      "en": "Cinderbound Mantle",
+      "category": "equipment",
+      "sell": 1,
+      "slot": "body",
+      "attack": 0,
+      "armor": 38,
+      "unique_effect": "Take 25% less Burn, Poison and Bleed damage, rounded up.",
+      "icon_alias": "iron_sword",
+      "masterwork_tile": 1
+    },
+    "heirloom_gauntlets": {
+      "id": "heirloom_gauntlets",
+      "name": "Grasp of Ruin",
+      "en": "Grasp of Ruin",
+      "category": "equipment",
+      "sell": 1,
+      "slot": "hands",
+      "attack": 9,
+      "armor": 15,
+      "unique_effect": "Deal 8% more special-attack damage.",
+      "icon_alias": "iron_sword",
+      "masterwork_tile": 2
+    },
+    "heirloom_boots": {
+      "id": "heirloom_boots",
+      "name": "Gravetread",
+      "en": "Gravetread",
+      "category": "equipment",
+      "sell": 1,
+      "slot": "feet",
+      "attack": 0,
+      "armor": 25,
+      "unique_effect": "Take 15% less damage from the first three enemy strikes.",
+      "icon_alias": "iron_sword",
+      "masterwork_tile": 3
+    },
+    "heirloom_belt": {
+      "id": "heirloom_belt",
+      "name": "Keeper of the Last Light",
+      "en": "Keeper of the Last Light",
+      "category": "equipment",
+      "sell": 1,
+      "slot": "belt",
+      "attack": 2,
+      "armor": 8,
+      "unique_effect": "Meals restore 15% more HP while your health is at 40 or below.",
+      "icon_alias": "iron_sword",
+      "masterwork_tile": 4
+    },
+    "heirloom_ember_ring": {
+      "id": "heirloom_ember_ring",
+      "name": "Ember Oath",
+      "en": "Ember Oath",
+      "category": "equipment",
+      "sell": 1,
+      "slot": "ring",
+      "attack": 7,
+      "armor": 0,
+      "unique_effect": "Deal 8% more boss damage, but take 5% more direct damage.",
+      "icon_alias": "iron_sword",
+      "masterwork_tile": 5
+    },
+    "heirloom_glass_ring": {
+      "id": "heirloom_glass_ring",
+      "name": "Pale Covenant",
+      "en": "Pale Covenant",
+      "category": "equipment",
+      "sell": 1,
+      "slot": "ring",
+      "attack": 3,
+      "armor": 4,
+      "unique_effect": "Deal 6% more damage to Chilled or Weakened enemies.",
+      "icon_alias": "iron_sword",
+      "masterwork_tile": 6
     }
   },
   "skills": {
@@ -2166,7 +3048,7 @@
       "output": "grave_moss",
       "inputs": {},
       "duration": 2,
-      "xp": 55
+      "xp": 75
     },
     "hunt_wilds_2": {
       "id": "hunt_wilds_2",
@@ -2177,7 +3059,7 @@
       "output": "grave_moss",
       "inputs": {},
       "duration": 2,
-      "xp": 70
+      "xp": 105
     },
     "hunt_wilds_3": {
       "id": "hunt_wilds_3",
@@ -2188,7 +3070,7 @@
       "output": "grave_moss",
       "inputs": {},
       "duration": 2,
-      "xp": 85
+      "xp": 135
     },
     "hunt_wilds_4": {
       "id": "hunt_wilds_4",
@@ -2199,7 +3081,7 @@
       "output": "grave_moss",
       "inputs": {},
       "duration": 2,
-      "xp": 100
+      "xp": 165
     },
     "hunt_wilds_5": {
       "id": "hunt_wilds_5",
@@ -2210,7 +3092,7 @@
       "output": "grave_moss",
       "inputs": {},
       "duration": 2,
-      "xp": 115
+      "xp": 195
     },
     "hunt_marsh_1": {
       "id": "hunt_marsh_1",
@@ -2221,7 +3103,7 @@
       "output": "emberleaf",
       "inputs": {},
       "duration": 2,
-      "xp": 80
+      "xp": 150
     },
     "hunt_marsh_2": {
       "id": "hunt_marsh_2",
@@ -2232,7 +3114,7 @@
       "output": "emberleaf",
       "inputs": {},
       "duration": 2,
-      "xp": 95
+      "xp": 210
     },
     "hunt_marsh_3": {
       "id": "hunt_marsh_3",
@@ -2243,7 +3125,7 @@
       "output": "emberleaf",
       "inputs": {},
       "duration": 2,
-      "xp": 110
+      "xp": 270
     },
     "hunt_marsh_4": {
       "id": "hunt_marsh_4",
@@ -2254,7 +3136,7 @@
       "output": "emberleaf",
       "inputs": {},
       "duration": 2,
-      "xp": 125
+      "xp": 330
     },
     "hunt_marsh_5": {
       "id": "hunt_marsh_5",
@@ -2265,7 +3147,7 @@
       "output": "emberleaf",
       "inputs": {},
       "duration": 2,
-      "xp": 140
+      "xp": 390
     },
     "hunt_crown_1": {
       "id": "hunt_crown_1",
@@ -2276,7 +3158,7 @@
       "output": "iron_ingot",
       "inputs": {},
       "duration": 2,
-      "xp": 105
+      "xp": 300
     },
     "hunt_crown_2": {
       "id": "hunt_crown_2",
@@ -2287,7 +3169,7 @@
       "output": "iron_ingot",
       "inputs": {},
       "duration": 2,
-      "xp": 120
+      "xp": 420
     },
     "hunt_crown_3": {
       "id": "hunt_crown_3",
@@ -2298,7 +3180,7 @@
       "output": "iron_ingot",
       "inputs": {},
       "duration": 2,
-      "xp": 135
+      "xp": 540
     },
     "hunt_crown_4": {
       "id": "hunt_crown_4",
@@ -2309,7 +3191,7 @@
       "output": "iron_ingot",
       "inputs": {},
       "duration": 2,
-      "xp": 150
+      "xp": 660
     },
     "hunt_crown_5": {
       "id": "hunt_crown_5",
@@ -2320,7 +3202,7 @@
       "output": "iron_ingot",
       "inputs": {},
       "duration": 2,
-      "xp": 165
+      "xp": 780
     },
     "hunt_trial_wilds": {
       "id": "hunt_trial_wilds",
@@ -2331,7 +3213,7 @@
       "output": "grave_moss",
       "inputs": {},
       "duration": 2,
-      "xp": 150
+      "xp": 225
     },
     "hunt_trial_marsh": {
       "id": "hunt_trial_marsh",
@@ -2342,7 +3224,7 @@
       "output": "emberleaf",
       "inputs": {},
       "duration": 2,
-      "xp": 200
+      "xp": 450
     },
     "hunt_trial_crown": {
       "id": "hunt_trial_crown",
@@ -2353,7 +3235,7 @@
       "output": "iron_ingot",
       "inputs": {},
       "duration": 2,
-      "xp": 250
+      "xp": 900
     },
     "mine_steel": {
       "id": "mine_steel",
@@ -3112,7 +3994,7 @@
       "output": "moonsteel_ore",
       "inputs": {},
       "duration": 2,
-      "xp": 450
+      "xp": 900
     },
     "hunt_apex_wilds_2": {
       "id": "hunt_apex_wilds_2",
@@ -3123,7 +4005,7 @@
       "output": "dusksteel_ore",
       "inputs": {},
       "duration": 2,
-      "xp": 600
+      "xp": 1500
     },
     "hunt_apex_wilds_3": {
       "id": "hunt_apex_wilds_3",
@@ -3134,7 +4016,7 @@
       "output": "dawnsteel_ore",
       "inputs": {},
       "duration": 2,
-      "xp": 750
+      "xp": 2100
     },
     "hunt_apex_marsh_1": {
       "id": "hunt_apex_marsh_1",
@@ -3145,7 +4027,7 @@
       "output": "moonsteel_ore",
       "inputs": {},
       "duration": 2,
-      "xp": 450
+      "xp": 1200
     },
     "hunt_apex_marsh_2": {
       "id": "hunt_apex_marsh_2",
@@ -3156,7 +4038,7 @@
       "output": "dusksteel_ore",
       "inputs": {},
       "duration": 2,
-      "xp": 600
+      "xp": 1800
     },
     "hunt_apex_marsh_3": {
       "id": "hunt_apex_marsh_3",
@@ -3167,7 +4049,7 @@
       "output": "dawnsteel_ore",
       "inputs": {},
       "duration": 2,
-      "xp": 750
+      "xp": 2400
     },
     "hunt_apex_crown_1": {
       "id": "hunt_apex_crown_1",
@@ -3178,7 +4060,7 @@
       "output": "moonsteel_ore",
       "inputs": {},
       "duration": 2,
-      "xp": 450
+      "xp": 1500
     },
     "hunt_apex_crown_2": {
       "id": "hunt_apex_crown_2",
@@ -3189,7 +4071,7 @@
       "output": "dusksteel_ore",
       "inputs": {},
       "duration": 2,
-      "xp": 600
+      "xp": 2100
     },
     "hunt_apex_crown_3": {
       "id": "hunt_apex_crown_3",
@@ -3200,7 +4082,7 @@
       "output": "dawnsteel_ore",
       "inputs": {},
       "duration": 2,
-      "xp": 750
+      "xp": 2700
     },
     "craft_blank_0": {
       "id": "craft_blank_0",
@@ -3242,7 +4124,7 @@
       "output": "core_0",
       "level": 1,
       "inputs": {},
-      "xp": 0,
+      "xp": 3000,
       "duration": 3,
       "side": ""
     },
@@ -3286,7 +4168,7 @@
       "output": "core_1",
       "level": 1,
       "inputs": {},
-      "xp": 0,
+      "xp": 3500,
       "duration": 3,
       "side": ""
     },
@@ -3330,7 +4212,7 @@
       "output": "core_2",
       "level": 1,
       "inputs": {},
-      "xp": 0,
+      "xp": 4000,
       "duration": 3,
       "side": ""
     },
@@ -3374,7 +4256,7 @@
       "output": "core_3",
       "level": 1,
       "inputs": {},
-      "xp": 0,
+      "xp": 4500,
       "duration": 3,
       "side": ""
     },
@@ -3418,7 +4300,7 @@
       "output": "core_4",
       "level": 1,
       "inputs": {},
-      "xp": 0,
+      "xp": 5000,
       "duration": 3,
       "side": ""
     },
@@ -3462,7 +4344,7 @@
       "output": "core_5",
       "level": 1,
       "inputs": {},
-      "xp": 0,
+      "xp": 5500,
       "duration": 3,
       "side": ""
     },
@@ -3506,7 +4388,7 @@
       "output": "core_6",
       "level": 1,
       "inputs": {},
-      "xp": 0,
+      "xp": 6000,
       "duration": 3,
       "side": ""
     },
@@ -3574,7 +4456,7 @@
       "output": "depth_shard",
       "level": 1,
       "inputs": {},
-      "xp": 0,
+      "xp": 6500,
       "duration": 3,
       "side": ""
     },
@@ -3708,6 +4590,452 @@
       "duration": 30,
       "xp": 40,
       "side": ""
+    },
+    "craft_heirloom_blade": {
+      "id": "craft_heirloom_blade",
+      "kind": "craft",
+      "skill": "smithing",
+      "output": "heirloom_blade",
+      "level": 90,
+      "inputs": {
+        "keepsake_fang": 1,
+        "keepsake_claw": 1,
+        "keepsake_seal": 1,
+        "keepsake_trial_crown": 1,
+        "keepsake_secret_0": 1,
+        "dawnsteel_ingot": 30,
+        "masterwork_commission": 1,
+        "core_2": 3
+      },
+      "xp": 3000,
+      "duration": 60,
+      "side": "",
+      "blueprint": "secret_2",
+      "fixed_quality": 5
+    },
+    "craft_heirloom_aegis": {
+      "id": "craft_heirloom_aegis",
+      "kind": "craft",
+      "skill": "smithing",
+      "output": "heirloom_aegis",
+      "level": 92,
+      "inputs": {
+        "keepsake_nail": 1,
+        "keepsake_chain": 1,
+        "keepsake_crown_2": 1,
+        "keepsake_apex_marsh_1": 1,
+        "keepsake_secret_4": 1,
+        "dawnsteel_ingot": 35,
+        "masterwork_commission": 1,
+        "core_2": 3
+      },
+      "xp": 3500,
+      "duration": 60,
+      "side": "",
+      "blueprint": "secret_4",
+      "fixed_quality": 5
+    },
+    "craft_heirloom_pendant": {
+      "id": "craft_heirloom_pendant",
+      "kind": "craft",
+      "skill": "smithing",
+      "output": "heirloom_pendant",
+      "level": 94,
+      "inputs": {
+        "keepsake_ember": 1,
+        "keepsake_clapper": 1,
+        "keepsake_marsh_3": 1,
+        "keepsake_apex_crown_1": 1,
+        "keepsake_secret_5": 1,
+        "dawnsteel_ingot": 40,
+        "masterwork_commission": 1,
+        "core_3": 3
+      },
+      "xp": 4000,
+      "duration": 60,
+      "side": "",
+      "blueprint": "secret_5",
+      "fixed_quality": 5
+    },
+    "hunt_frontier_0_0": {
+      "id": "hunt_frontier_0_0",
+      "kind": "combat",
+      "skill": "bladecraft",
+      "output": "depth_shard",
+      "enemy": "frontier_0_0",
+      "level": 1,
+      "inputs": {},
+      "xp": 6500,
+      "duration": 0,
+      "side": ""
+    },
+    "hunt_frontier_0_1": {
+      "id": "hunt_frontier_0_1",
+      "kind": "combat",
+      "skill": "bladecraft",
+      "output": "depth_shard",
+      "enemy": "frontier_0_1",
+      "level": 1,
+      "inputs": {},
+      "xp": 6900,
+      "duration": 0,
+      "side": ""
+    },
+    "hunt_frontier_0_2": {
+      "id": "hunt_frontier_0_2",
+      "kind": "combat",
+      "skill": "bladecraft",
+      "output": "depth_shard",
+      "enemy": "frontier_0_2",
+      "level": 1,
+      "inputs": {},
+      "xp": 7300,
+      "duration": 0,
+      "side": ""
+    },
+    "hunt_frontier_0_3": {
+      "id": "hunt_frontier_0_3",
+      "kind": "combat",
+      "skill": "bladecraft",
+      "output": "depth_shard",
+      "enemy": "frontier_0_3",
+      "level": 1,
+      "inputs": {},
+      "xp": 7700,
+      "duration": 0,
+      "side": ""
+    },
+    "hunt_frontier_0_4": {
+      "id": "hunt_frontier_0_4",
+      "kind": "combat",
+      "skill": "bladecraft",
+      "output": "depth_shard",
+      "enemy": "frontier_0_4",
+      "level": 1,
+      "inputs": {},
+      "xp": 8100,
+      "duration": 0,
+      "side": ""
+    },
+    "hunt_frontier_0_5": {
+      "id": "hunt_frontier_0_5",
+      "kind": "combat",
+      "skill": "bladecraft",
+      "output": "depth_shard",
+      "enemy": "frontier_0_5",
+      "level": 1,
+      "inputs": {},
+      "xp": 8500,
+      "duration": 0,
+      "side": ""
+    },
+    "hunt_frontier_1_0": {
+      "id": "hunt_frontier_1_0",
+      "kind": "combat",
+      "skill": "bladecraft",
+      "output": "depth_shard",
+      "enemy": "frontier_1_0",
+      "level": 1,
+      "inputs": {},
+      "xp": 8900,
+      "duration": 0,
+      "side": ""
+    },
+    "hunt_frontier_1_1": {
+      "id": "hunt_frontier_1_1",
+      "kind": "combat",
+      "skill": "bladecraft",
+      "output": "depth_shard",
+      "enemy": "frontier_1_1",
+      "level": 1,
+      "inputs": {},
+      "xp": 9300,
+      "duration": 0,
+      "side": ""
+    },
+    "hunt_frontier_1_2": {
+      "id": "hunt_frontier_1_2",
+      "kind": "combat",
+      "skill": "bladecraft",
+      "output": "depth_shard",
+      "enemy": "frontier_1_2",
+      "level": 1,
+      "inputs": {},
+      "xp": 9700,
+      "duration": 0,
+      "side": ""
+    },
+    "hunt_frontier_1_3": {
+      "id": "hunt_frontier_1_3",
+      "kind": "combat",
+      "skill": "bladecraft",
+      "output": "depth_shard",
+      "enemy": "frontier_1_3",
+      "level": 1,
+      "inputs": {},
+      "xp": 10100,
+      "duration": 0,
+      "side": ""
+    },
+    "hunt_frontier_1_4": {
+      "id": "hunt_frontier_1_4",
+      "kind": "combat",
+      "skill": "bladecraft",
+      "output": "depth_shard",
+      "enemy": "frontier_1_4",
+      "level": 1,
+      "inputs": {},
+      "xp": 10500,
+      "duration": 0,
+      "side": ""
+    },
+    "hunt_frontier_1_5": {
+      "id": "hunt_frontier_1_5",
+      "kind": "combat",
+      "skill": "bladecraft",
+      "output": "depth_shard",
+      "enemy": "frontier_1_5",
+      "level": 1,
+      "inputs": {},
+      "xp": 10900,
+      "duration": 0,
+      "side": ""
+    },
+    "hunt_frontier_2_0": {
+      "id": "hunt_frontier_2_0",
+      "kind": "combat",
+      "skill": "bladecraft",
+      "output": "depth_shard",
+      "enemy": "frontier_2_0",
+      "level": 1,
+      "inputs": {},
+      "xp": 11300,
+      "duration": 0,
+      "side": ""
+    },
+    "hunt_frontier_2_1": {
+      "id": "hunt_frontier_2_1",
+      "kind": "combat",
+      "skill": "bladecraft",
+      "output": "depth_shard",
+      "enemy": "frontier_2_1",
+      "level": 1,
+      "inputs": {},
+      "xp": 11700,
+      "duration": 0,
+      "side": ""
+    },
+    "hunt_frontier_2_2": {
+      "id": "hunt_frontier_2_2",
+      "kind": "combat",
+      "skill": "bladecraft",
+      "output": "depth_shard",
+      "enemy": "frontier_2_2",
+      "level": 1,
+      "inputs": {},
+      "xp": 12100,
+      "duration": 0,
+      "side": ""
+    },
+    "hunt_frontier_2_3": {
+      "id": "hunt_frontier_2_3",
+      "kind": "combat",
+      "skill": "bladecraft",
+      "output": "depth_shard",
+      "enemy": "frontier_2_3",
+      "level": 1,
+      "inputs": {},
+      "xp": 12500,
+      "duration": 0,
+      "side": ""
+    },
+    "hunt_frontier_2_4": {
+      "id": "hunt_frontier_2_4",
+      "kind": "combat",
+      "skill": "bladecraft",
+      "output": "depth_shard",
+      "enemy": "frontier_2_4",
+      "level": 1,
+      "inputs": {},
+      "xp": 12900,
+      "duration": 0,
+      "side": ""
+    },
+    "hunt_frontier_2_5": {
+      "id": "hunt_frontier_2_5",
+      "kind": "combat",
+      "skill": "bladecraft",
+      "output": "depth_shard",
+      "enemy": "frontier_2_5",
+      "level": 1,
+      "inputs": {},
+      "xp": 13300,
+      "duration": 0,
+      "side": ""
+    },
+    "craft_heirloom_helm": {
+      "id": "craft_heirloom_helm",
+      "kind": "craft",
+      "skill": "smithing",
+      "output": "heirloom_helm",
+      "level": 96,
+      "inputs": {
+        "keepsake_wilds_1": 1,
+        "keepsake_marsh_4": 1,
+        "keepsake_trial_marsh": 1,
+        "keepsake_apex_crown_3": 1,
+        "dawnsteel_ingot": 45,
+        "masterwork_commission": 2,
+        "core_3": 3
+      },
+      "xp": 4500,
+      "duration": 60,
+      "side": "",
+      "blueprint": "secret_6",
+      "fixed_quality": 5
+    },
+    "craft_heirloom_cuirass": {
+      "id": "craft_heirloom_cuirass",
+      "kind": "craft",
+      "skill": "smithing",
+      "output": "heirloom_cuirass",
+      "level": 98,
+      "inputs": {
+        "keepsake_wilds_2": 1,
+        "keepsake_marsh_5": 1,
+        "keepsake_apex_wilds_1": 1,
+        "keepsake_secret_1": 1,
+        "keepsake_frontier_0_0": 1,
+        "keepsake_frontier_0_1": 1,
+        "keepsake_frontier_0_2": 1,
+        "dawnsteel_ingot": 50,
+        "masterwork_commission": 2,
+        "core_4": 3
+      },
+      "xp": 5000,
+      "duration": 60,
+      "side": "",
+      "blueprint": "frontier_0_2",
+      "fixed_quality": 5
+    },
+    "craft_heirloom_gauntlets": {
+      "id": "craft_heirloom_gauntlets",
+      "kind": "craft",
+      "skill": "smithing",
+      "output": "heirloom_gauntlets",
+      "level": 100,
+      "inputs": {
+        "keepsake_wilds_3": 1,
+        "keepsake_crown_1": 1,
+        "keepsake_apex_wilds_2": 1,
+        "keepsake_secret_2": 1,
+        "keepsake_frontier_0_3": 1,
+        "keepsake_frontier_0_4": 1,
+        "keepsake_frontier_0_5": 1,
+        "dawnsteel_ingot": 55,
+        "masterwork_commission": 2,
+        "core_4": 3
+      },
+      "xp": 5500,
+      "duration": 60,
+      "side": "",
+      "blueprint": "frontier_0_5",
+      "fixed_quality": 5
+    },
+    "craft_heirloom_boots": {
+      "id": "craft_heirloom_boots",
+      "kind": "craft",
+      "skill": "smithing",
+      "output": "heirloom_boots",
+      "level": 100,
+      "inputs": {
+        "keepsake_wilds_4": 1,
+        "keepsake_crown_3": 1,
+        "keepsake_apex_wilds_3": 1,
+        "keepsake_secret_3": 1,
+        "keepsake_frontier_1_0": 1,
+        "keepsake_frontier_1_1": 1,
+        "keepsake_frontier_1_2": 1,
+        "dawnsteel_ingot": 60,
+        "masterwork_commission": 3,
+        "core_5": 3
+      },
+      "xp": 6000,
+      "duration": 60,
+      "side": "",
+      "blueprint": "frontier_1_2",
+      "fixed_quality": 5
+    },
+    "craft_heirloom_belt": {
+      "id": "craft_heirloom_belt",
+      "kind": "craft",
+      "skill": "smithing",
+      "output": "heirloom_belt",
+      "level": 100,
+      "inputs": {
+        "keepsake_wilds_5": 1,
+        "keepsake_crown_4": 1,
+        "keepsake_apex_marsh_2": 1,
+        "keepsake_secret_6": 1,
+        "keepsake_frontier_1_3": 1,
+        "keepsake_frontier_1_4": 1,
+        "keepsake_frontier_1_5": 1,
+        "dawnsteel_ingot": 65,
+        "masterwork_commission": 3,
+        "core_5": 3
+      },
+      "xp": 6500,
+      "duration": 60,
+      "side": "",
+      "blueprint": "frontier_1_5",
+      "fixed_quality": 5
+    },
+    "craft_heirloom_ember_ring": {
+      "id": "craft_heirloom_ember_ring",
+      "kind": "craft",
+      "skill": "smithing",
+      "output": "heirloom_ember_ring",
+      "level": 100,
+      "inputs": {
+        "keepsake_marsh_1": 1,
+        "keepsake_crown_5": 1,
+        "keepsake_apex_marsh_3": 1,
+        "keepsake_hollow_depth": 1,
+        "keepsake_frontier_2_0": 1,
+        "keepsake_frontier_2_1": 1,
+        "keepsake_frontier_2_2": 1,
+        "dawnsteel_ingot": 70,
+        "masterwork_commission": 3,
+        "core_6": 3
+      },
+      "xp": 7000,
+      "duration": 60,
+      "side": "",
+      "blueprint": "frontier_2_2",
+      "fixed_quality": 5
+    },
+    "craft_heirloom_glass_ring": {
+      "id": "craft_heirloom_glass_ring",
+      "kind": "craft",
+      "skill": "smithing",
+      "output": "heirloom_glass_ring",
+      "level": 100,
+      "inputs": {
+        "keepsake_marsh_2": 1,
+        "keepsake_trial_wilds": 1,
+        "keepsake_apex_crown_2": 1,
+        "keepsake_frontier_2_3": 1,
+        "keepsake_frontier_2_4": 1,
+        "keepsake_frontier_2_5": 1,
+        "dawnsteel_ingot": 75,
+        "masterwork_commission": 4,
+        "core_6": 3
+      },
+      "xp": 7500,
+      "duration": 60,
+      "side": "",
+      "blueprint": "frontier_2_5",
+      "fixed_quality": 5
     }
   },
   "enemies": {
@@ -3719,7 +5047,7 @@
       "attack": 2,
       "armor": 0,
       "interval": 2500,
-      "gold": 3,
+      "gold": 5,
       "xp": 6,
       "drop": "raw_meat",
       "qty": 1,
@@ -3727,7 +5055,9 @@
       "portrait": 1,
       "lore": "Wild scavengers feed on what remains of Cinderwatch.",
       "lore_en": "Wild scavengers feed on what remains of Cinderwatch.",
-      "boss": false
+      "boss": false,
+      "rare_material": "keepsake_fang",
+      "rare_chance": 0.0001
     },
     "hollow_hound": {
       "id": "hollow_hound",
@@ -3737,7 +5067,7 @@
       "attack": 4,
       "armor": 0,
       "interval": 2200,
-      "gold": 5,
+      "gold": 9,
       "xp": 10,
       "drop": "raw_meat",
       "qty": 1,
@@ -3746,7 +5076,9 @@
       "lore": "Its teeth are sharp. Hunger is all that remains.",
       "lore_en": "Its teeth are sharp. Hunger is all that remains.",
       "boss": false,
-      "status": "bleed"
+      "status": "bleed",
+      "rare_material": "keepsake_claw",
+      "rare_chance": 0.0001
     },
     "grave_thrall": {
       "id": "grave_thrall",
@@ -3756,7 +5088,7 @@
       "attack": 5,
       "armor": 1,
       "interval": 2800,
-      "gold": 7,
+      "gold": 15,
       "xp": 14,
       "drop": "grave_moss",
       "qty": 1,
@@ -3765,7 +5097,9 @@
       "lore": "The old chapel bell wakes those buried beneath it.",
       "lore_en": "The old chapel bell wakes those buried beneath it.",
       "boss": false,
-      "status": "poison"
+      "status": "poison",
+      "rare_material": "keepsake_nail",
+      "rare_chance": 0.0001
     },
     "cinder_bandit": {
       "id": "cinder_bandit",
@@ -3775,7 +5109,7 @@
       "attack": 6,
       "armor": 2,
       "interval": 2400,
-      "gold": 9,
+      "gold": 24,
       "xp": 18,
       "drop": "copper_ore",
       "qty": 2,
@@ -3784,7 +5118,9 @@
       "lore": "They take anything the ash has spared.",
       "lore_en": "They take anything the ash has spared.",
       "boss": false,
-      "status": "weaken"
+      "status": "weaken",
+      "rare_material": "keepsake_seal",
+      "rare_chance": 0.0001
     },
     "chapel_guard": {
       "id": "chapel_guard",
@@ -3794,7 +5130,7 @@
       "attack": 7,
       "armor": 4,
       "interval": 3000,
-      "gold": 12,
+      "gold": 38,
       "xp": 24,
       "drop": "scrap",
       "qty": 2,
@@ -3803,7 +5139,9 @@
       "lore": "Empty armor, still bound to a forgotten duty.",
       "lore_en": "Empty armor, still bound to a forgotten duty.",
       "boss": false,
-      "status": "armor_break"
+      "status": "armor_break",
+      "rare_material": "keepsake_chain",
+      "rare_chance": 0.0001
     },
     "ember_wraith": {
       "id": "ember_wraith",
@@ -3813,7 +5151,7 @@
       "attack": 8,
       "armor": 1,
       "interval": 2000,
-      "gold": 14,
+      "gold": 50,
       "xp": 26,
       "drop": "emberleaf",
       "qty": 2,
@@ -3822,7 +5160,9 @@
       "lore": "A restless shape flickers between ash and fire.",
       "lore_en": "A restless shape flickers between ash and fire.",
       "boss": false,
-      "status": "burn"
+      "status": "burn",
+      "rare_material": "keepsake_ember",
+      "rare_chance": 0.0001
     },
     "bellkeeper": {
       "id": "bellkeeper",
@@ -3832,7 +5172,7 @@
       "attack": 12,
       "armor": 5,
       "interval": 3000,
-      "gold": 80,
+      "gold": 180,
       "xp": 100,
       "drop": "iron_ingot",
       "qty": 3,
@@ -3841,7 +5181,9 @@
       "lore": "Every third toll brings a devastating strike.",
       "lore_en": "Every third toll brings a devastating strike.",
       "boss": true,
-      "status": "shock"
+      "status": "shock",
+      "rare_material": "keepsake_clapper",
+      "rare_chance": 0.0001
     },
     "wilds_1": {
       "id": "wilds_1",
@@ -3851,8 +5193,8 @@
       "attack": 9,
       "armor": 3,
       "interval": 2800,
-      "gold": 33,
-      "xp": 55,
+      "gold": 150,
+      "xp": 75,
       "drop": "grave_moss",
       "qty": 3,
       "unlock": "beacon",
@@ -3864,7 +5206,9 @@
       "tier": 1,
       "relic": "fang",
       "fragments": 8,
-      "status": "shock"
+      "status": "shock",
+      "rare_material": "keepsake_wilds_1",
+      "rare_chance": 0.0003
     },
     "wilds_2": {
       "id": "wilds_2",
@@ -3874,8 +5218,8 @@
       "attack": 10,
       "armor": 4,
       "interval": 2800,
-      "gold": 41,
-      "xp": 70,
+      "gold": 210,
+      "xp": 105,
       "drop": "grave_moss",
       "qty": 4,
       "unlock": "wilds_1",
@@ -3887,7 +5231,9 @@
       "tier": 2,
       "relic": "fang",
       "fragments": 16,
-      "status": "burn"
+      "status": "burn",
+      "rare_material": "keepsake_wilds_2",
+      "rare_chance": 0.0003
     },
     "wilds_3": {
       "id": "wilds_3",
@@ -3897,8 +5243,8 @@
       "attack": 12,
       "armor": 5,
       "interval": 2800,
-      "gold": 49,
-      "xp": 85,
+      "gold": 270,
+      "xp": 135,
       "drop": "grave_moss",
       "qty": 5,
       "unlock": "wilds_2",
@@ -3910,7 +5256,9 @@
       "tier": 3,
       "relic": "fang",
       "fragments": 24,
-      "status": "poison"
+      "status": "poison",
+      "rare_material": "keepsake_wilds_3",
+      "rare_chance": 0.0003
     },
     "wilds_4": {
       "id": "wilds_4",
@@ -3920,8 +5268,8 @@
       "attack": 14,
       "armor": 6,
       "interval": 2800,
-      "gold": 57,
-      "xp": 100,
+      "gold": 330,
+      "xp": 165,
       "drop": "grave_moss",
       "qty": 6,
       "unlock": "wilds_3",
@@ -3933,7 +5281,9 @@
       "tier": 4,
       "relic": "fang",
       "fragments": 32,
-      "status": "chill"
+      "status": "chill",
+      "rare_material": "keepsake_wilds_4",
+      "rare_chance": 0.0003
     },
     "wilds_5": {
       "id": "wilds_5",
@@ -3943,8 +5293,8 @@
       "attack": 16,
       "armor": 7,
       "interval": 2800,
-      "gold": 65,
-      "xp": 115,
+      "gold": 390,
+      "xp": 195,
       "drop": "grave_moss",
       "qty": 7,
       "unlock": "wilds_4",
@@ -3956,7 +5306,9 @@
       "tier": 5,
       "relic": "fang",
       "fragments": 40,
-      "status": "slow"
+      "status": "slow",
+      "rare_material": "keepsake_wilds_5",
+      "rare_chance": 0.0003
     },
     "marsh_1": {
       "id": "marsh_1",
@@ -3966,8 +5318,8 @@
       "attack": 13,
       "armor": 5,
       "interval": 2800,
-      "gold": 53,
-      "xp": 80,
+      "gold": 600,
+      "xp": 150,
       "drop": "emberleaf",
       "qty": 3,
       "unlock": "wilds_5",
@@ -3979,7 +5331,9 @@
       "tier": 1,
       "relic": "heart",
       "fragments": 12,
-      "status": "armor_break"
+      "status": "armor_break",
+      "rare_material": "keepsake_marsh_1",
+      "rare_chance": 0.0003
     },
     "marsh_2": {
       "id": "marsh_2",
@@ -3989,8 +5343,8 @@
       "attack": 15,
       "armor": 6,
       "interval": 2800,
-      "gold": 61,
-      "xp": 95,
+      "gold": 840,
+      "xp": 210,
       "drop": "emberleaf",
       "qty": 4,
       "unlock": "marsh_1",
@@ -4002,7 +5356,9 @@
       "tier": 2,
       "relic": "heart",
       "fragments": 24,
-      "status": "weaken"
+      "status": "weaken",
+      "rare_material": "keepsake_marsh_2",
+      "rare_chance": 0.0003
     },
     "marsh_3": {
       "id": "marsh_3",
@@ -4012,8 +5368,8 @@
       "attack": 18,
       "armor": 7,
       "interval": 2800,
-      "gold": 69,
-      "xp": 110,
+      "gold": 1080,
+      "xp": 270,
       "drop": "emberleaf",
       "qty": 5,
       "unlock": "marsh_2",
@@ -4025,7 +5381,9 @@
       "tier": 3,
       "relic": "heart",
       "fragments": 36,
-      "status": "wound"
+      "status": "wound",
+      "rare_material": "keepsake_marsh_3",
+      "rare_chance": 0.0003
     },
     "marsh_4": {
       "id": "marsh_4",
@@ -4035,8 +5393,8 @@
       "attack": 21,
       "armor": 8,
       "interval": 2800,
-      "gold": 77,
-      "xp": 125,
+      "gold": 1320,
+      "xp": 330,
       "drop": "emberleaf",
       "qty": 6,
       "unlock": "marsh_3",
@@ -4048,7 +5406,9 @@
       "tier": 4,
       "relic": "heart",
       "fragments": 48,
-      "status": "shock"
+      "status": "shock",
+      "rare_material": "keepsake_marsh_4",
+      "rare_chance": 0.0003
     },
     "marsh_5": {
       "id": "marsh_5",
@@ -4058,8 +5418,8 @@
       "attack": 24,
       "armor": 9,
       "interval": 2800,
-      "gold": 85,
-      "xp": 140,
+      "gold": 1560,
+      "xp": 390,
       "drop": "emberleaf",
       "qty": 7,
       "unlock": "marsh_4",
@@ -4071,7 +5431,9 @@
       "tier": 5,
       "relic": "heart",
       "fragments": 60,
-      "status": "burn"
+      "status": "burn",
+      "rare_material": "keepsake_marsh_5",
+      "rare_chance": 0.0003
     },
     "crown_1": {
       "id": "crown_1",
@@ -4081,8 +5443,8 @@
       "attack": 17,
       "armor": 7,
       "interval": 2800,
-      "gold": 73,
-      "xp": 105,
+      "gold": 1800,
+      "xp": 300,
       "drop": "iron_ingot",
       "qty": 3,
       "unlock": "marsh_5",
@@ -4094,7 +5456,9 @@
       "tier": 1,
       "relic": "ward",
       "fragments": 16,
-      "status": "poison"
+      "status": "poison",
+      "rare_material": "keepsake_crown_1",
+      "rare_chance": 0.0003
     },
     "crown_2": {
       "id": "crown_2",
@@ -4104,8 +5468,8 @@
       "attack": 20,
       "armor": 8,
       "interval": 2800,
-      "gold": 81,
-      "xp": 120,
+      "gold": 2520,
+      "xp": 420,
       "drop": "iron_ingot",
       "qty": 4,
       "unlock": "crown_1",
@@ -4117,7 +5481,9 @@
       "tier": 2,
       "relic": "ward",
       "fragments": 32,
-      "status": "chill"
+      "status": "chill",
+      "rare_material": "keepsake_crown_2",
+      "rare_chance": 0.0003
     },
     "crown_3": {
       "id": "crown_3",
@@ -4127,8 +5493,8 @@
       "attack": 24,
       "armor": 9,
       "interval": 2800,
-      "gold": 89,
-      "xp": 135,
+      "gold": 3240,
+      "xp": 540,
       "drop": "iron_ingot",
       "qty": 5,
       "unlock": "crown_2",
@@ -4140,7 +5506,9 @@
       "tier": 3,
       "relic": "ward",
       "fragments": 48,
-      "status": "slow"
+      "status": "slow",
+      "rare_material": "keepsake_crown_3",
+      "rare_chance": 0.0003
     },
     "crown_4": {
       "id": "crown_4",
@@ -4150,8 +5518,8 @@
       "attack": 28,
       "armor": 10,
       "interval": 2800,
-      "gold": 97,
-      "xp": 150,
+      "gold": 3960,
+      "xp": 660,
       "drop": "iron_ingot",
       "qty": 6,
       "unlock": "crown_3",
@@ -4163,7 +5531,9 @@
       "tier": 4,
       "relic": "ward",
       "fragments": 64,
-      "status": "armor_break"
+      "status": "armor_break",
+      "rare_material": "keepsake_crown_4",
+      "rare_chance": 0.0003
     },
     "crown_5": {
       "id": "crown_5",
@@ -4173,8 +5543,8 @@
       "attack": 31,
       "armor": 11,
       "interval": 2800,
-      "gold": 105,
-      "xp": 165,
+      "gold": 4680,
+      "xp": 780,
       "drop": "iron_ingot",
       "qty": 7,
       "unlock": "crown_4",
@@ -4186,7 +5556,9 @@
       "tier": 5,
       "relic": "ward",
       "fragments": 80,
-      "status": "weaken"
+      "status": "weaken",
+      "rare_material": "keepsake_crown_5",
+      "rare_chance": 0.0003
     },
     "trial_wilds": {
       "id": "trial_wilds",
@@ -4196,8 +5568,8 @@
       "attack": 20,
       "armor": 10,
       "interval": 3000,
-      "gold": 100,
-      "xp": 150,
+      "gold": 450,
+      "xp": 225,
       "drop": "grave_moss",
       "qty": 8,
       "unlock": "wilds_5",
@@ -4211,7 +5583,9 @@
       "fragments": 48,
       "trial": true,
       "trial_reward": "iron_gloves",
-      "status": "wound"
+      "status": "wound",
+      "rare_material": "keepsake_trial_wilds",
+      "rare_chance": 0.0008
     },
     "trial_marsh": {
       "id": "trial_marsh",
@@ -4221,8 +5595,8 @@
       "attack": 24,
       "armor": 12,
       "interval": 3000,
-      "gold": 150,
-      "xp": 200,
+      "gold": 1800,
+      "xp": 450,
       "drop": "emberleaf",
       "qty": 8,
       "unlock": "marsh_5",
@@ -4236,7 +5610,9 @@
       "fragments": 64,
       "trial": true,
       "trial_reward": "iron_chest",
-      "status": "shock"
+      "status": "shock",
+      "rare_material": "keepsake_trial_marsh",
+      "rare_chance": 0.0008
     },
     "trial_crown": {
       "id": "trial_crown",
@@ -4246,8 +5622,8 @@
       "attack": 32,
       "armor": 16,
       "interval": 3000,
-      "gold": 220,
-      "xp": 250,
+      "gold": 5400,
+      "xp": 900,
       "drop": "iron_ingot",
       "qty": 8,
       "unlock": "crown_5",
@@ -4261,7 +5637,9 @@
       "fragments": 96,
       "trial": true,
       "trial_reward": "iron_shield",
-      "status": "burn"
+      "status": "burn",
+      "rare_material": "keepsake_trial_crown",
+      "rare_chance": 0.0008
     },
     "apex_wilds_1": {
       "id": "apex_wilds_1",
@@ -4271,8 +5649,8 @@
       "attack": 28,
       "armor": 10,
       "interval": 3000,
-      "gold": 280,
-      "xp": 450,
+      "gold": 3500,
+      "xp": 900,
       "drop": "moonsteel_ore",
       "qty": 3,
       "unlock": "trial_wilds",
@@ -4293,7 +5671,9 @@
       "special_armor": 0.3,
       "special_heal": 0,
       "place_tile": 0,
-      "status": "poison"
+      "status": "poison",
+      "rare_material": "keepsake_apex_wilds_1",
+      "rare_chance": 0.0015
     },
     "apex_wilds_2": {
       "id": "apex_wilds_2",
@@ -4303,8 +5683,8 @@
       "attack": 42,
       "armor": 17,
       "interval": 3000,
-      "gold": 380,
-      "xp": 600,
+      "gold": 6000,
+      "xp": 1500,
       "drop": "dusksteel_ore",
       "qty": 4,
       "unlock": "apex_wilds_1",
@@ -4325,7 +5705,9 @@
       "special_armor": 1,
       "special_heal": 0,
       "place_tile": 0,
-      "status": "chill"
+      "status": "chill",
+      "rare_material": "keepsake_apex_wilds_2",
+      "rare_chance": 0.0015
     },
     "apex_wilds_3": {
       "id": "apex_wilds_3",
@@ -4335,8 +5717,8 @@
       "attack": 62,
       "armor": 24,
       "interval": 3000,
-      "gold": 480,
-      "xp": 750,
+      "gold": 8500,
+      "xp": 2100,
       "drop": "dawnsteel_ore",
       "qty": 5,
       "unlock": "apex_wilds_2",
@@ -4357,7 +5739,9 @@
       "special_armor": 1,
       "special_heal": 0.025,
       "place_tile": 0,
-      "status": "slow"
+      "status": "slow",
+      "rare_material": "keepsake_apex_wilds_3",
+      "rare_chance": 0.0015
     },
     "apex_marsh_1": {
       "id": "apex_marsh_1",
@@ -4367,8 +5751,8 @@
       "attack": 35,
       "armor": 13,
       "interval": 3000,
-      "gold": 340,
-      "xp": 450,
+      "gold": 7000,
+      "xp": 1200,
       "drop": "moonsteel_ore",
       "qty": 3,
       "unlock": "trial_marsh",
@@ -4389,7 +5773,9 @@
       "special_armor": 0.5,
       "special_heal": 0,
       "place_tile": 1,
-      "status": "armor_break"
+      "status": "armor_break",
+      "rare_material": "keepsake_apex_marsh_1",
+      "rare_chance": 0.0015
     },
     "apex_marsh_2": {
       "id": "apex_marsh_2",
@@ -4399,8 +5785,8 @@
       "attack": 49,
       "armor": 20,
       "interval": 3000,
-      "gold": 440,
-      "xp": 600,
+      "gold": 12000,
+      "xp": 1800,
       "drop": "dusksteel_ore",
       "qty": 4,
       "unlock": "apex_marsh_1",
@@ -4421,7 +5807,9 @@
       "special_armor": 1,
       "special_heal": 0.035,
       "place_tile": 1,
-      "status": "weaken"
+      "status": "weaken",
+      "rare_material": "keepsake_apex_marsh_2",
+      "rare_chance": 0.0015
     },
     "apex_marsh_3": {
       "id": "apex_marsh_3",
@@ -4431,8 +5819,8 @@
       "attack": 69,
       "armor": 27,
       "interval": 3000,
-      "gold": 540,
-      "xp": 750,
+      "gold": 17000,
+      "xp": 2400,
       "drop": "dawnsteel_ore",
       "qty": 5,
       "unlock": "apex_marsh_2",
@@ -4453,7 +5841,9 @@
       "special_armor": 1,
       "special_heal": 0,
       "place_tile": 1,
-      "status": "wound"
+      "status": "wound",
+      "rare_material": "keepsake_apex_marsh_3",
+      "rare_chance": 0.0015
     },
     "apex_crown_1": {
       "id": "apex_crown_1",
@@ -4463,8 +5853,8 @@
       "attack": 42,
       "armor": 16,
       "interval": 3000,
-      "gold": 400,
-      "xp": 450,
+      "gold": 10500,
+      "xp": 1500,
       "drop": "moonsteel_ore",
       "qty": 3,
       "unlock": "trial_crown",
@@ -4485,7 +5875,9 @@
       "special_armor": 1,
       "special_heal": 0,
       "place_tile": 2,
-      "status": "shock"
+      "status": "shock",
+      "rare_material": "keepsake_apex_crown_1",
+      "rare_chance": 0.0015
     },
     "apex_crown_2": {
       "id": "apex_crown_2",
@@ -4495,8 +5887,8 @@
       "attack": 56,
       "armor": 23,
       "interval": 3000,
-      "gold": 500,
-      "xp": 600,
+      "gold": 18000,
+      "xp": 2100,
       "drop": "dusksteel_ore",
       "qty": 4,
       "unlock": "apex_crown_1",
@@ -4517,7 +5909,9 @@
       "special_armor": 0.8,
       "special_heal": 0.02,
       "place_tile": 2,
-      "status": "burn"
+      "status": "burn",
+      "rare_material": "keepsake_apex_crown_2",
+      "rare_chance": 0.0015
     },
     "apex_crown_3": {
       "id": "apex_crown_3",
@@ -4527,8 +5921,8 @@
       "attack": 76,
       "armor": 30,
       "interval": 3000,
-      "gold": 600,
-      "xp": 750,
+      "gold": 25500,
+      "xp": 2700,
       "drop": "dawnsteel_ore",
       "qty": 5,
       "unlock": "apex_crown_2",
@@ -4549,7 +5943,9 @@
       "special_armor": 1,
       "special_heal": 0,
       "place_tile": 3,
-      "status": "poison"
+      "status": "poison",
+      "rare_material": "keepsake_apex_crown_3",
+      "rare_chance": 0.0015
     },
     "secret_0": {
       "id": "secret_0",
@@ -4559,8 +5955,8 @@
       "attack": 110,
       "armor": 45,
       "interval": 3000,
-      "gold": 650,
-      "xp": 850,
+      "gold": 24000,
+      "xp": 3000,
       "drop": "core_0",
       "qty": 1,
       "unlock": "apex_crown_3",
@@ -4580,7 +5976,9 @@
       "special_armor": 0.8,
       "special_heal": 0.003,
       "resist": 0.06,
-      "status": "chill"
+      "status": "chill",
+      "rare_material": "keepsake_secret_0",
+      "rare_chance": 0.003
     },
     "secret_1": {
       "id": "secret_1",
@@ -4590,8 +5988,8 @@
       "attack": 123,
       "armor": 50,
       "interval": 3000,
-      "gold": 750,
-      "xp": 950,
+      "gold": 32000,
+      "xp": 3500,
       "drop": "core_1",
       "qty": 1,
       "unlock": "secret_0",
@@ -4611,7 +6009,9 @@
       "special_armor": 0.7,
       "special_heal": 0,
       "resist": 0.08499999999999999,
-      "status": "slow"
+      "status": "slow",
+      "rare_material": "keepsake_secret_1",
+      "rare_chance": 0.003
     },
     "secret_2": {
       "id": "secret_2",
@@ -4621,8 +6021,8 @@
       "attack": 136,
       "armor": 55,
       "interval": 3000,
-      "gold": 850,
-      "xp": 1050,
+      "gold": 40000,
+      "xp": 4000,
       "drop": "core_2",
       "qty": 1,
       "unlock": "secret_1",
@@ -4642,7 +6042,9 @@
       "special_armor": 0.85,
       "special_heal": 0,
       "resist": 0.11,
-      "status": "armor_break"
+      "status": "armor_break",
+      "rare_material": "keepsake_secret_2",
+      "rare_chance": 0.003
     },
     "secret_3": {
       "id": "secret_3",
@@ -4652,8 +6054,8 @@
       "attack": 149,
       "armor": 60,
       "interval": 3000,
-      "gold": 950,
-      "xp": 1150,
+      "gold": 48000,
+      "xp": 4500,
       "drop": "core_3",
       "qty": 1,
       "unlock": "secret_2",
@@ -4673,7 +6075,9 @@
       "special_armor": 0.75,
       "special_heal": 0.003,
       "resist": 0.135,
-      "status": "stun"
+      "status": "stun",
+      "rare_material": "keepsake_secret_3",
+      "rare_chance": 0.003
     },
     "secret_4": {
       "id": "secret_4",
@@ -4683,8 +6087,8 @@
       "attack": 162,
       "armor": 65,
       "interval": 3000,
-      "gold": 1050,
-      "xp": 1250,
+      "gold": 56000,
+      "xp": 5000,
       "drop": "core_4",
       "qty": 1,
       "unlock": "secret_3",
@@ -4704,7 +6108,9 @@
       "special_armor": 0.65,
       "special_heal": 0.003,
       "resist": 0.16,
-      "status": "wound"
+      "status": "wound",
+      "rare_material": "keepsake_secret_4",
+      "rare_chance": 0.003
     },
     "secret_5": {
       "id": "secret_5",
@@ -4714,8 +6120,8 @@
       "attack": 175,
       "armor": 70,
       "interval": 3000,
-      "gold": 1150,
-      "xp": 1350,
+      "gold": 64000,
+      "xp": 5500,
       "drop": "core_5",
       "qty": 1,
       "unlock": "secret_4",
@@ -4735,7 +6141,9 @@
       "special_armor": 0.7,
       "special_heal": 0,
       "resist": 0.185,
-      "status": "shock"
+      "status": "shock",
+      "rare_material": "keepsake_secret_5",
+      "rare_chance": 0.003
     },
     "secret_6": {
       "id": "secret_6",
@@ -4745,8 +6153,8 @@
       "attack": 188,
       "armor": 75,
       "interval": 3000,
-      "gold": 1250,
-      "xp": 1450,
+      "gold": 72000,
+      "xp": 6000,
       "drop": "core_6",
       "qty": 1,
       "unlock": "secret_5",
@@ -4766,7 +6174,9 @@
       "special_armor": 0.8,
       "special_heal": 0,
       "resist": 0.21000000000000002,
-      "status": "burn"
+      "status": "burn",
+      "rare_material": "keepsake_secret_6",
+      "rare_chance": 0.003
     },
     "hollow_depth": {
       "id": "hollow_depth",
@@ -4776,8 +6186,8 @@
       "attack": 125,
       "armor": 55,
       "interval": 3000,
-      "gold": 650,
-      "xp": 850,
+      "gold": 80000,
+      "xp": 6500,
       "drop": "depth_shard",
       "qty": 1,
       "unlock": "secret_2",
@@ -4798,14 +6208,557 @@
       "special_heal": 0,
       "resist": 0.1,
       "depth": true,
-      "status": "poison"
+      "status": "poison",
+      "rare_material": "keepsake_hollow_depth",
+      "rare_chance": 0.002
+    },
+    "frontier_0_0": {
+      "id": "frontier_0_0",
+      "name": "Starless Pilgrim",
+      "en": "Starless Pilgrim",
+      "hp": 15000,
+      "attack": 175,
+      "armor": 50,
+      "gold": 80000,
+      "xp": 6500,
+      "boss": true,
+      "interval": 3800,
+      "unlock": "secret_6",
+      "drop": "depth_shard",
+      "qty": 3,
+      "portrait": 0,
+      "frontier": 0,
+      "frontier_tile": 0,
+      "relic": "fang",
+      "fragments": 18,
+      "loot_metal": "dawnsteel_",
+      "special_name": "Starless touch",
+      "special_attack": 1.4,
+      "special_armor": 0.65,
+      "special_heal": 0,
+      "pressure": 4,
+      "resist": 0.1,
+      "status": "chill",
+      "rare_material": "keepsake_frontier_0_0",
+      "rare_chance": 0.003
+    },
+    "frontier_0_1": {
+      "id": "frontier_0_1",
+      "name": "Observatory Sentry",
+      "en": "Observatory Sentry",
+      "hp": 15650,
+      "attack": 178,
+      "armor": 52,
+      "gold": 90000,
+      "xp": 6900,
+      "boss": true,
+      "interval": 3800,
+      "unlock": "frontier_0_0",
+      "drop": "depth_shard",
+      "qty": 3,
+      "portrait": 0,
+      "frontier": 0,
+      "frontier_tile": 1,
+      "relic": "fang",
+      "fragments": 18,
+      "loot_metal": "dawnsteel_",
+      "special_name": "Silver thrust",
+      "special_attack": 1.4,
+      "special_armor": 0.65,
+      "special_heal": 0,
+      "pressure": 4,
+      "resist": 0.1,
+      "status": "slow",
+      "rare_material": "keepsake_frontier_0_1",
+      "rare_chance": 0.003
+    },
+    "frontier_0_2": {
+      "id": "frontier_0_2",
+      "name": "Orbit Weaver",
+      "en": "Orbit Weaver",
+      "hp": 16300,
+      "attack": 181,
+      "armor": 54,
+      "gold": 100000,
+      "xp": 7300,
+      "boss": true,
+      "interval": 3800,
+      "unlock": "frontier_0_1",
+      "drop": "depth_shard",
+      "qty": 3,
+      "portrait": 0,
+      "frontier": 0,
+      "frontier_tile": 2,
+      "relic": "fang",
+      "fragments": 18,
+      "loot_metal": "dawnsteel_",
+      "special_name": "Orbit crash",
+      "special_attack": 1.4,
+      "special_armor": 0.65,
+      "special_heal": 0,
+      "pressure": 4,
+      "resist": 0.1,
+      "status": "shock",
+      "rare_material": "keepsake_frontier_0_2",
+      "rare_chance": 0.003
+    },
+    "frontier_0_3": {
+      "id": "frontier_0_3",
+      "name": "Pale Archivist",
+      "en": "Pale Archivist",
+      "hp": 16950,
+      "attack": 184,
+      "armor": 56,
+      "gold": 110000,
+      "xp": 7700,
+      "boss": true,
+      "interval": 3800,
+      "unlock": "frontier_0_2",
+      "drop": "depth_shard",
+      "qty": 3,
+      "portrait": 0,
+      "frontier": 0,
+      "frontier_tile": 3,
+      "relic": "fang",
+      "fragments": 19,
+      "loot_metal": "dawnsteel_",
+      "special_name": "Pale decree",
+      "special_attack": 1.4,
+      "special_armor": 0.65,
+      "special_heal": 0,
+      "pressure": 4,
+      "resist": 0.1,
+      "status": "wound",
+      "rare_material": "keepsake_frontier_0_3",
+      "rare_chance": 0.003
+    },
+    "frontier_0_4": {
+      "id": "frontier_0_4",
+      "name": "Mirror Knight",
+      "en": "Mirror Knight",
+      "hp": 17600,
+      "attack": 187,
+      "armor": 58,
+      "gold": 120000,
+      "xp": 8100,
+      "boss": true,
+      "interval": 3800,
+      "unlock": "frontier_0_3",
+      "drop": "depth_shard",
+      "qty": 3,
+      "portrait": 0,
+      "frontier": 0,
+      "frontier_tile": 4,
+      "relic": "fang",
+      "fragments": 19,
+      "loot_metal": "dawnsteel_",
+      "special_name": "Mirror cleave",
+      "special_attack": 1.4,
+      "special_armor": 0.65,
+      "special_heal": 0,
+      "pressure": 4,
+      "resist": 0.1,
+      "status": "weaken",
+      "rare_material": "keepsake_frontier_0_4",
+      "rare_chance": 0.003
+    },
+    "frontier_0_5": {
+      "id": "frontier_0_5",
+      "name": "Eclipse Regent",
+      "en": "Eclipse Regent",
+      "hp": 18250,
+      "attack": 190,
+      "armor": 60,
+      "gold": 130000,
+      "xp": 8500,
+      "boss": true,
+      "interval": 3800,
+      "unlock": "frontier_0_4",
+      "drop": "depth_shard",
+      "qty": 3,
+      "portrait": 0,
+      "frontier": 0,
+      "frontier_tile": 5,
+      "relic": "fang",
+      "fragments": 19,
+      "loot_metal": "dawnsteel_",
+      "special_name": "Eclipse fall",
+      "special_attack": 1.4,
+      "special_armor": 0.65,
+      "special_heal": 0,
+      "pressure": 4,
+      "resist": 0.1,
+      "status": "chill",
+      "rare_material": "keepsake_frontier_0_5",
+      "rare_chance": 0.003
+    },
+    "frontier_1_0": {
+      "id": "frontier_1_0",
+      "name": "Rustbound Porter",
+      "en": "Rustbound Porter",
+      "hp": 18900,
+      "attack": 193,
+      "armor": 62,
+      "gold": 140000,
+      "xp": 8900,
+      "boss": true,
+      "interval": 3700,
+      "unlock": "frontier_0_5",
+      "drop": "depth_shard",
+      "qty": 4,
+      "portrait": 0,
+      "frontier": 1,
+      "frontier_tile": 6,
+      "relic": "ward",
+      "fragments": 20,
+      "loot_metal": "dawnsteel_",
+      "special_name": "Iron weight",
+      "special_attack": 1.5,
+      "special_armor": 0.65,
+      "special_heal": 0,
+      "pressure": 6,
+      "resist": 0.13,
+      "status": "armor_break",
+      "rare_material": "keepsake_frontier_1_0",
+      "rare_chance": 0.003
+    },
+    "frontier_1_1": {
+      "id": "frontier_1_1",
+      "name": "Grave Surveyor",
+      "en": "Grave Surveyor",
+      "hp": 19550,
+      "attack": 196,
+      "armor": 64,
+      "gold": 150000,
+      "xp": 9300,
+      "boss": true,
+      "interval": 3700,
+      "unlock": "frontier_1_0",
+      "drop": "depth_shard",
+      "qty": 4,
+      "portrait": 0,
+      "frontier": 1,
+      "frontier_tile": 7,
+      "relic": "ward",
+      "fragments": 20,
+      "loot_metal": "dawnsteel_",
+      "special_name": "Grave measure",
+      "special_attack": 1.5,
+      "special_armor": 0.65,
+      "special_heal": 0,
+      "pressure": 6,
+      "resist": 0.13,
+      "status": "bleed",
+      "rare_material": "keepsake_frontier_1_1",
+      "rare_chance": 0.003
+    },
+    "frontier_1_2": {
+      "id": "frontier_1_2",
+      "name": "Iron Cantor",
+      "en": "Iron Cantor",
+      "hp": 20200,
+      "attack": 199,
+      "armor": 66,
+      "gold": 160000,
+      "xp": 9700,
+      "boss": true,
+      "interval": 3700,
+      "unlock": "frontier_1_1",
+      "drop": "depth_shard",
+      "qty": 4,
+      "portrait": 0,
+      "frontier": 1,
+      "frontier_tile": 8,
+      "relic": "ward",
+      "fragments": 20,
+      "loot_metal": "dawnsteel_",
+      "special_name": "Mourning toll",
+      "special_attack": 1.5,
+      "special_armor": 0.65,
+      "special_heal": 0,
+      "pressure": 6,
+      "resist": 0.13,
+      "status": "poison",
+      "rare_material": "keepsake_frontier_1_2",
+      "rare_chance": 0.003
+    },
+    "frontier_1_3": {
+      "id": "frontier_1_3",
+      "name": "Furnace Sentinel",
+      "en": "Furnace Sentinel",
+      "hp": 20850,
+      "attack": 202,
+      "armor": 68,
+      "gold": 170000,
+      "xp": 10100,
+      "boss": true,
+      "interval": 3700,
+      "unlock": "frontier_1_2",
+      "drop": "depth_shard",
+      "qty": 4,
+      "portrait": 0,
+      "frontier": 1,
+      "frontier_tile": 9,
+      "relic": "ward",
+      "fragments": 21,
+      "loot_metal": "dawnsteel_",
+      "special_name": "Furnace crush",
+      "special_attack": 1.5,
+      "special_armor": 0.65,
+      "special_heal": 0,
+      "pressure": 6,
+      "resist": 0.13,
+      "status": "shock",
+      "rare_material": "keepsake_frontier_1_3",
+      "rare_chance": 0.003
+    },
+    "frontier_1_4": {
+      "id": "frontier_1_4",
+      "name": "Chain Matron",
+      "en": "Chain Matron",
+      "hp": 21500,
+      "attack": 205,
+      "armor": 70,
+      "gold": 180000,
+      "xp": 10500,
+      "boss": true,
+      "interval": 3700,
+      "unlock": "frontier_1_3",
+      "drop": "depth_shard",
+      "qty": 4,
+      "portrait": 0,
+      "frontier": 1,
+      "frontier_tile": 10,
+      "relic": "ward",
+      "fragments": 21,
+      "loot_metal": "dawnsteel_",
+      "special_name": "Binding chain",
+      "special_attack": 1.5,
+      "special_armor": 0.65,
+      "special_heal": 0,
+      "pressure": 6,
+      "resist": 0.13,
+      "status": "slow",
+      "rare_material": "keepsake_frontier_1_4",
+      "rare_chance": 0.003
+    },
+    "frontier_1_5": {
+      "id": "frontier_1_5",
+      "name": "Burial King",
+      "en": "Burial King",
+      "hp": 22150,
+      "attack": 208,
+      "armor": 72,
+      "gold": 190000,
+      "xp": 10900,
+      "boss": true,
+      "interval": 3700,
+      "unlock": "frontier_1_4",
+      "drop": "depth_shard",
+      "qty": 4,
+      "portrait": 0,
+      "frontier": 1,
+      "frontier_tile": 11,
+      "relic": "ward",
+      "fragments": 21,
+      "loot_metal": "dawnsteel_",
+      "special_name": "Burial decree",
+      "special_attack": 1.5,
+      "special_armor": 0.65,
+      "special_heal": 0,
+      "pressure": 6,
+      "resist": 0.13,
+      "status": "armor_break",
+      "rare_material": "keepsake_frontier_1_5",
+      "rare_chance": 0.003
+    },
+    "frontier_2_0": {
+      "id": "frontier_2_0",
+      "name": "Ash Pilgrim",
+      "en": "Ash Pilgrim",
+      "hp": 22800,
+      "attack": 211,
+      "armor": 74,
+      "gold": 200000,
+      "xp": 11300,
+      "boss": true,
+      "interval": 3600,
+      "unlock": "frontier_1_5",
+      "drop": "depth_shard",
+      "qty": 5,
+      "portrait": 0,
+      "frontier": 2,
+      "frontier_tile": 12,
+      "relic": "heart",
+      "fragments": 22,
+      "loot_metal": "dawnsteel_",
+      "special_name": "Ashfall",
+      "special_attack": 1.5999999999999999,
+      "special_armor": 0.65,
+      "special_heal": 0,
+      "pressure": 8,
+      "resist": 0.16,
+      "status": "burn",
+      "rare_material": "keepsake_frontier_2_0",
+      "rare_chance": 0.003
+    },
+    "frontier_2_1": {
+      "id": "frontier_2_1",
+      "name": "Cinder Ranger",
+      "en": "Cinder Ranger",
+      "hp": 23450,
+      "attack": 214,
+      "armor": 76,
+      "gold": 210000,
+      "xp": 11700,
+      "boss": true,
+      "interval": 3600,
+      "unlock": "frontier_2_0",
+      "drop": "depth_shard",
+      "qty": 5,
+      "portrait": 0,
+      "frontier": 2,
+      "frontier_tile": 13,
+      "relic": "heart",
+      "fragments": 22,
+      "loot_metal": "dawnsteel_",
+      "special_name": "Cinder volley",
+      "special_attack": 1.5999999999999999,
+      "special_armor": 0.65,
+      "special_heal": 0,
+      "pressure": 8,
+      "resist": 0.16,
+      "status": "bleed",
+      "rare_material": "keepsake_frontier_2_1",
+      "rare_chance": 0.003
+    },
+    "frontier_2_2": {
+      "id": "frontier_2_2",
+      "name": "Obsidian Warden",
+      "en": "Obsidian Warden",
+      "hp": 24100,
+      "attack": 217,
+      "armor": 78,
+      "gold": 220000,
+      "xp": 12100,
+      "boss": true,
+      "interval": 3600,
+      "unlock": "frontier_2_1",
+      "drop": "depth_shard",
+      "qty": 5,
+      "portrait": 0,
+      "frontier": 2,
+      "frontier_tile": 14,
+      "relic": "heart",
+      "fragments": 22,
+      "loot_metal": "dawnsteel_",
+      "special_name": "Obsidian cleave",
+      "special_attack": 1.5999999999999999,
+      "special_armor": 0.65,
+      "special_heal": 0,
+      "pressure": 8,
+      "resist": 0.16,
+      "status": "wound",
+      "rare_material": "keepsake_frontier_2_2",
+      "rare_chance": 0.003
+    },
+    "frontier_2_3": {
+      "id": "frontier_2_3",
+      "name": "Ember Oracle",
+      "en": "Ember Oracle",
+      "hp": 24750,
+      "attack": 220,
+      "armor": 80,
+      "gold": 230000,
+      "xp": 12500,
+      "boss": true,
+      "interval": 3600,
+      "unlock": "frontier_2_2",
+      "drop": "depth_shard",
+      "qty": 5,
+      "portrait": 0,
+      "frontier": 2,
+      "frontier_tile": 15,
+      "relic": "heart",
+      "fragments": 23,
+      "loot_metal": "dawnsteel_",
+      "special_name": "Ember curse",
+      "special_attack": 1.5999999999999999,
+      "special_armor": 0.65,
+      "special_heal": 0,
+      "pressure": 8,
+      "resist": 0.16,
+      "status": "weaken",
+      "rare_material": "keepsake_frontier_2_3",
+      "rare_chance": 0.003
+    },
+    "frontier_2_4": {
+      "id": "frontier_2_4",
+      "name": "Molten Knight",
+      "en": "Molten Knight",
+      "hp": 25400,
+      "attack": 223,
+      "armor": 82,
+      "gold": 240000,
+      "xp": 12900,
+      "boss": true,
+      "interval": 3600,
+      "unlock": "frontier_2_3",
+      "drop": "depth_shard",
+      "qty": 5,
+      "portrait": 0,
+      "frontier": 2,
+      "frontier_tile": 16,
+      "relic": "heart",
+      "fragments": 23,
+      "loot_metal": "dawnsteel_",
+      "special_name": "Molten edge",
+      "special_attack": 1.5999999999999999,
+      "special_armor": 0.65,
+      "special_heal": 0,
+      "pressure": 8,
+      "resist": 0.16,
+      "status": "shock",
+      "rare_material": "keepsake_frontier_2_4",
+      "rare_chance": 0.003
+    },
+    "frontier_2_5": {
+      "id": "frontier_2_5",
+      "name": "The First Ember",
+      "en": "The First Ember",
+      "hp": 26050,
+      "attack": 226,
+      "armor": 84,
+      "gold": 250000,
+      "xp": 13300,
+      "boss": true,
+      "interval": 3600,
+      "unlock": "frontier_2_4",
+      "drop": "depth_shard",
+      "qty": 5,
+      "portrait": 0,
+      "frontier": 2,
+      "frontier_tile": 17,
+      "relic": "heart",
+      "fragments": 23,
+      "loot_metal": "dawnsteel_",
+      "special_name": "First flame",
+      "special_attack": 1.5999999999999999,
+      "special_armor": 0.65,
+      "special_heal": 0,
+      "pressure": 8,
+      "resist": 0.16,
+      "status": "burn",
+      "rare_material": "keepsake_frontier_2_5",
+      "rare_chance": 0.003
     }
   },
   "merchant": {
     "empty_vial": 2,
     "ash_axe": 30,
     "copper_pick": 40,
-    "iron_rod": 60
+    "iron_rod": 60,
+    "masterwork_commission": 1000000
   },
   "rarities": [
     "Worn",

@@ -10,6 +10,8 @@ static func counter(v) -> bool:
 
 func valid(s, data: Dictionary) -> bool:
 	if not s is Dictionary: return false
+	if s.has("economy_revision") and (not counter(s.economy_revision) or s.economy_revision!=1): return false
+	if s.has("legacy_rng") and (not s.legacy_rng is String or not s.legacy_rng.is_valid_int()): return false
 	var fields = ["version","revision","time","wall","rng","gold","bag","gear","overflow","equipped","next_uid","xp","mastery","queue","active","fight","hp","regen_at","kills","gains","spent","tutorial","beacon","presets","log","processed","settings","report"]
 	for key in fields:
 		if not s.has(key): return false
@@ -41,8 +43,7 @@ func valid(s, data: Dictionary) -> bool:
 		if not counter(g.q) or g.q>7 or not counter(g.count) or g.count<1: return false
 		if not g.uid is String or uids.has(g.uid) or not g.locked is bool or not g.favorite is bool: return false
 		uids[g.uid] = g
-	if not RealmCards.valid(s,uids) or not RealmStamina.valid(s) or not RealmAfflictions.valid(s.fight,int(s.time)): return false
-	if s.fight.has("stamina_started") and (not s.has("stamina") or not RealmSave.counter(s.fight.stamina_started) or s.fight.stamina_started>s.time): return false
+	if not RealmCards.valid(s,uids) or not RealmAfflictions.valid(s.fight,int(s.time)): return false
 	for uid in s.get("card_sockets",{}):
 		if data.items[uids[uid].id].slot in ["axe","pick","rod"]: return false
 	if not RealmEquipmentSlots.valid(s.equipped,uids,data): return false
@@ -56,6 +57,7 @@ func valid(s, data: Dictionary) -> bool:
 			if id not in RealmLoadouts.NAMES or not RealmLoadouts.valid(s.loadouts[id],data,uids): return false
 	if s.has("hero") and not RealmCharacters.valid(s.hero,s.xp): return false
 	if not RealmPaths.valid(s): return false
+	if not RealmFrontiers.valid(s): return false
 	if s.has("endgame") and not RealmEndgame.valid(s.endgame,data): return false
 	if s.has("assistant_queue") and not RealmAutomation.valid(s.assistant_queue,data): return false
 	if s.has("hunts") and not RealmHunts.valid(s.hunts,data): return false
@@ -83,7 +85,7 @@ func valid(s, data: Dictionary) -> bool:
 		if s.upgrade_goal!="" and (not data.items.has(s.upgrade_goal) or data.items[s.upgrade_goal].category!="equipment" or not data.activities.has("craft_"+s.upgrade_goal)): return false
 	if s.has("doctrine"):
 		if not s.doctrine is String or not RealmDoctrines.ALL.has(s.doctrine): return false
-		if s.doctrine!="none" and float(s.xp.bladecraft)<14400: return false
+		if s.doctrine!="none" and RealmEconomy.level(s.xp.bladecraft)<25: return false
 	if s.has("training_goal"):
 		var goal = s.training_goal
 		if not goal is Dictionary or goal.get("skill","") not in RealmTraining.SKILLS: return false
@@ -131,6 +133,11 @@ func decode(text: String, data: Dictionary) -> Dictionary:
 	if not doc is Dictionary or not doc.get("payload") is String: return {}
 	if doc.get("checksum","")!=doc.payload.sha256_text(): return {}
 	var state = JSON.parse_string(doc.payload)
+	if not state is Dictionary or not state.get("xp") is Dictionary: return {}
+	for skill in RealmEconomy.COMBAT:
+		if not counter(state.xp.get(skill,-1)): return {}
+	if not counter(state.get("economy_revision",0)) or state.get("economy_revision",0)>1: return {}
+	RealmEconomy.migrate(state)
 	return state if valid(state,data) else {}
 
 func generations(directory: String) -> Array:
@@ -218,7 +225,7 @@ func resume_report(model: RealmModel, before: Dictionary, now: int, away: int, e
 		if amount>0: report.spent[id] = amount
 	for skill in model.s.xp:
 		report.xp += int(model.s.xp[skill])-int(before.xp[skill])
-		var old_level = mini(100,1+int(sqrt(float(before.xp[skill])/25.0)))
+		var old_level = RealmEconomy.level(before.xp[skill],skill)
 		if model.level(skill)>old_level: report.levels[skill] = {"before":old_level,"after":model.level(skill)}
 	for enemy in model.s.kills: report.kills += int(model.s.kills[enemy])-int(before.kills.get(enemy,0))
 	report.fragments = {}

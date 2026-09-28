@@ -95,7 +95,7 @@ static func apply_theme(theme: Theme):
 
 static func label(text: String, size: int = 16, color: Color = TEXT, serif: bool = false) -> Label:
 	var l = Label.new()
-	l.text = text
+	l.text = RealmEconomy.text_value(text)
 	l.add_theme_font_override("font",title_font if serif else body_font)
 	l.add_theme_font_size_override("font_size",int(size*scale))
 	l.add_theme_color_override("font_color",color)
@@ -137,7 +137,7 @@ static func card(parent: Node, padding: int = 16, border: Color = LINE) -> VBoxC
 static func button(text: String, callback: Callable, primary: bool = false) -> Button:
 	var b = Button.new()
 	b.mouse_filter = Control.MOUSE_FILTER_PASS
-	b.text = text
+	b.text = RealmEconomy.text_value(text)
 	b.autowrap_mode = TextServer.AUTOWRAP_WORD
 	b.custom_minimum_size.y = 48
 	b.custom_minimum_size.x = clampf(body_font.get_string_size(text,HORIZONTAL_ALIGNMENT_LEFT,-1,int(15*scale)).x+40,52,156)
@@ -193,6 +193,7 @@ static func portrait(index: int, dimensions: Vector2) -> TextureRect:
 	return t
 
 static func enemy_texture(enemy: Dictionary) -> Texture2D:
+	if enemy.has("frontier_tile"): return frontier_texture(int(enemy.frontier_tile))
 	if enemy.has("secret_tile"): return atlas_tile("res://assets/art/superbosses-0.34.png",int(enemy.secret_tile),3,3)
 	if enemy.has("art_tile"): return atlas_tile("res://assets/art/ascension-enemies-0.25.png",int(enemy.art_tile),3,3)
 	if enemy.has("region") and ResourceLoader.exists("res://assets/art/expedition-guardians.png"):
@@ -219,6 +220,15 @@ static func enemy_portrait(enemy: Dictionary, dimensions: Vector2) -> TextureRec
 	t.texture = enemy_texture(enemy)
 	return t
 
+static func frontier_texture(tile: int) -> Texture2D:
+	var texture = AtlasTexture.new()
+	texture.atlas = load("res://assets/art/frontier-enemies-0.43.png")
+	var ys = [0,341,654,1024]
+	var row = int(tile/6)
+	texture.region = Rect2(tile%6*256+4,ys[row]+4,248,ys[row+1]-ys[row]-8)
+	texture.filter_clip = true
+	return texture
+
 static func icon(id: String, dimension: int = 52) -> TextureRect:
 	var t = TextureRect.new()
 	t.custom_minimum_size = Vector2(dimension,dimension)
@@ -226,6 +236,14 @@ static func icon(id: String, dimension: int = 52) -> TextureRect:
 	t.stretch_mode = TextureRect.STRETCH_KEEP_ASPECT_CENTERED
 	t.mouse_filter = Control.MOUSE_FILTER_IGNORE
 	var data = item_catalog.get(id,{})
+	if data.has("frontier_card_tile"):
+		t.texture = frontier_texture(int(data.frontier_card_tile))
+		return t
+	for spec in [["material_tile","rare-materials-0.43",7,6],["legacy_tile","legacy-masterworks-0.43",5,2],["masterwork_tile","masterworks-0.43",4,2],["frontier_material_tile","frontier-materials-0.43",6,3],["frontier_card_tile","frontier-enemies-0.43",6,3]]:
+		if data.has(spec[0]):
+			var path = "res://assets/art/"+spec[1]+".png"
+			if ResourceLoader.exists(path): t.texture = atlas_tile(path,int(data[spec[0]]),spec[2],spec[3])
+			return t
 	if data.has("card_tile"):
 		var tile = int(data.card_tile)
 		var xs = [0,156,310,465,619,775,938,1106]

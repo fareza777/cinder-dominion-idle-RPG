@@ -30,10 +30,7 @@ static func victory(m, enemy: Dictionary, before_gains: Dictionary, before_gold:
 	if s.active.is_empty(): return
 	s.active.wins += 1
 	s.active.gold += int(m.s.gold)-before_gold
-	var xp = int(enemy.xp)
-	if RealmEndgame.route(m)=="safe": xp = int(xp*.8)
-	elif RealmEndgame.route(m)=="mastery": xp = int(xp*1.2)
-	elif RealmEndgame.route(m)=="elite": xp = int(xp*1.25)
+	var xp = RealmEconomy.hunt_xp(m,enemy)
 	s.active.xp += xp
 	s.active.fragments += fragments
 	for id in m.s.gains:

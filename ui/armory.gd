@@ -12,7 +12,7 @@ func workshop(uid: String = "", target: String = ""):
 	var v = app.modal("The Ember Workshop")
 	if not m.s.tutorial:
 		v.add_child(U.para("Upgrade equipment quality",27,U.TEXT))
-		v.add_child(U.para("Finish First Supplies to unlock refinement. Then turn forged metal equipment into dependable upgrades with ingots, scraps and earned gold. No failed rolls; no lost levels.",15))
+		v.add_child(U.para("Finish First Supplies to unlock refinement. Then turn forged metal equipment into dependable upgrades with ingots, scraps and earned coins. No failed rolls; no lost levels.",15))
 		app.modal_action("Finish First Supplies",app.guide_dialog)
 		return
 	var g = m.gear(uid)
@@ -61,7 +61,7 @@ Requires Smithing Lv.%d" % [int(price.gold),int(price.ingots),m.name_of(price.me
 	preload("res://ui/upgrade_preview.gd").new(app).show_preview(v,uid,target,func(enemy): workshop(uid,enemy))
 	var materials = U.card(v,14)
 	materials.add_child(U.label("UPGRADE COST · OWNED / NEEDED",10,U.GOLD))
-	app.dynamic(materials,func(): return "Gold  %d / %d" % [int(m.s.gold),int(price.gold)],16)
+	app.dynamic(materials,func(): return "Coins  %s / %s" % [RealmEconomy.money(int(m.s.gold)),RealmEconomy.money(int(price.gold))],16)
 	app.dynamic(materials,func(): return "%s  %d / %d" % [m.name_of(price.metal),m.count(price.metal),int(price.ingots)],16)
 	app.dynamic(materials,func(): return "Metal scraps  %d / %d" % [m.count("scrap"),int(price.scrap)],16)
 	app.dynamic(materials,func(): return "Smithing  Lv.%d / %d" % [m.level("smithing"),int(price.level)],13,U.GOLD)

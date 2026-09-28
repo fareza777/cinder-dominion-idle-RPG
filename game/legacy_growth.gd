@@ -8,7 +8,7 @@ const CORES = {"fang":"core_4","heart":"core_0","ward":"core_6"}
 const GUARDIANS = {"fang":"secret_4","heart":"secret_0","ward":"secret_6"}
 
 static func level(xp: Dictionary) -> int:
-	return mini(100,1+int(sqrt(float(xp.bladecraft)/25.0)))
+	return RealmEconomy.level(xp.bladecraft)
 
 static func earned(s: Dictionary) -> int:
 	var initial = mini(10,int((s.xp.bladecraft+s.xp.might+s.xp.warding)/250))
@@ -41,13 +41,13 @@ static func next_point(m) -> String:
 	for enemy in GATES:
 		if int(m.s.kills.get(enemy,0))==0:
 			var probe = m.s.duplicate(true)
-			for skill in probe.xp: probe.xp[skill] = 245025
+			for skill in probe.xp: probe.xp[skill] = RealmEconomy.threshold(100,skill)
 			if earned(m.s)>=earned(probe): return "Next milestone: defeat "+m.local_name(m.data.enemies[enemy])+"."
 	if earned(m.s)<10: return "The first 10 points cost 250 combined melee XP each."
 	var next_level = level(m.s.xp)+1
 	while next_level<=100:
 		var probe = m.s.duplicate(true)
-		probe.xp.bladecraft = 25*(next_level-1)*(next_level-1)
+		probe.xp.bladecraft = RealmEconomy.threshold(next_level)
 		if earned(probe)>earned(m.s): return "Next point at Bladecraft Lv.%d. Boss milestones unlock later points." % next_level
 		next_level += 1
 	return "Defeat the next milestone boss to unlock more points."
@@ -61,7 +61,7 @@ static func ascended(m, id: String) -> int:
 
 static func essence(enemy: Dictionary) -> int:
 	if not enemy.boss: return 0
-	if enemy.get("secret",false) or enemy.get("depth",false) or enemy.has("art_tile"): return 3
+	if enemy.get("secret",false) or enemy.get("depth",false) or enemy.has("art_tile") or enemy.has("frontier"): return 3
 	if enemy.get("trial",false): return 2
 	return 1 if int(enemy.get("tier",0))>=3 else 0
 
@@ -77,6 +77,7 @@ static func relic_reason(m, id: String, resources: bool = true) -> String:
 		if level(m.s.xp)<[50,75,100][stage] or int(m.s.kills.get(enemy,0))<1:
 			return "Requires Bladecraft Lv.%d and victory over %s." % [[50,75,100][stage],m.local_name(m.data.enemies[enemy])]
 	if resources:
+		if m.s.gold<RealmEconomy.relic_fee(r): return "Ascension requires "+RealmEconomy.money(RealmEconomy.relic_fee(r))+" as well as hunting materials."
 		if int(c.fragments[id])<RealmChronicle.relic_cost(r): return "Gather more relic fragments."
 		if m.count("essence_"+id)<essence_cost(r): return "Gather %d %s Essence from regional Tier 3–5, Trial, Apex or guardian hunts." % [essence_cost(r)-m.count("essence_"+id),RealmChronicle.RELICS[id].name]
 		if r>=30 and m.count(CORES[id])<1: return "Requires 1 "+m.name_of(CORES[id])+" from "+m.local_name(m.data.enemies[GUARDIANS[id]])+"."

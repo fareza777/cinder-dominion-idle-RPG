@@ -27,10 +27,12 @@ func village(parent: Node):
 	preload("res://ui/chronicle.gd").new(app).services(parent)
 
 func explore(parent: Node):
-	preload("res://ui/stamina.gd").new(app).panel(parent,true)
+	parent.add_child(U.button("Hunting rewards & wallet",func(): preload("res://ui/economy.gd").new(app).open()))
+	if m.s.beacon: parent.add_child(U.button("Beyond the Sovereign · new regions",func(): preload("res://ui/frontiers.gd").new(app).open()))
 	var region = m.data.enemies.get(m.s.fight.get("enemy",""),{}).get("region","")
 	var current_enemy = m.data.enemies.get(m.s.fight.get("enemy",""),{})
-	if current_enemy.has("secret_tile"): heading(parent,"OPTIONAL EXPEDITION",current_enemy.location,"")
+	if current_enemy.has("frontier"): heading(parent,"LATE-GAME FRONTIER",RealmFrontiers.REGIONS[int(current_enemy.frontier)],"")
+	elif current_enemy.has("secret_tile"): heading(parent,"OPTIONAL EXPEDITION",current_enemy.location,"")
 	elif current_enemy.get("trial",false): heading(parent,"GUARDIAN TRIAL",m.local_name(current_enemy),"")
 	elif region!="": heading(parent,"EXPEDITION IN PROGRESS",RealmChronicle.REGIONS[region].name,"")
 	else:
@@ -63,7 +65,7 @@ func explore(parent: Node):
 	app.dynamic(battle,func():
 		if m.s.fight.is_empty(): return ""
 		var enemy = m.data.enemies[m.s.fight.enemy]
-		if enemy.get("secret",false) or enemy.get("depth",false):
+		if enemy.get("secret",false) or enemy.get("depth",false) or enemy.has("frontier"):
 			return "PHASE II · Heavy-strike pressure doubled. Finish the fight before danger builds." if RealmTrials.active_phase(m,enemy) else "PHASE I · Danger rises every 15 enemy attacks."
 		if not enemy.get("trial",false): return ""
 		return "PHASE II · "+RealmTrials.phase_text(enemy) if RealmTrials.active_phase(m,enemy) else "PHASE I · The guardian awakens at half health.",13,U.RED)
@@ -89,7 +91,7 @@ func explore(parent: Node):
 	U.section(parent,"DISCOVERED ENEMIES")
 	for id in m.data.enemies:
 		var d = m.data.enemies[id]
-		if d.has("region"): continue
+		if d.has("region") or d.has("frontier"): continue
 		if not RealmDiscovery.visible(m,id): continue
 		var why = m.available(id)
 		var card = U.card(parent,12,U.GOLD.darkened(.55) if d.boss else U.LINE)
@@ -101,7 +103,7 @@ func explore(parent: Node):
 		r.add_child(v)
 		v.add_child(U.para(m.local_name(d),19,U.GOLD if d.boss else U.TEXT))
 		v.add_child(U.para("%d HP  ·  %d ATK  ·  %d DEF" % [int(d.hp),int(d.attack),int(d.armor)],11,U.MUTED))
-		app.dynamic(v,func(): return "%d %s  ·  +%d gold" % [int(m.s.kills.get(id,0)),text("dikalahkan","defeated"),RealmHuntMastery.gold(m,d)],11,U.MUTED)
+		app.dynamic(v,func(): return "%d %s  ·  +%d gold" % [int(m.s.kills.get(id,0)),text("dikalahkan","defeated"),RealmHuntMastery.battle_gold(m,d)],11,U.MUTED)
 		var next_region = {"grave_thrall":"the next hunt","cinder_bandit":"the next hunt","chapel_guard":"the next hunt","ember_wraith":"the next hunt"}.get(id,"")
 		if next_region!="":
 			app.dynamic(card,func(): return "%d / 5 victories · unlock %s%s" % [mini(5,int(m.s.kills.get(id,0))),next_region," + Smithing Lv.10" if id=="ember_wraith" else ""],12,U.GOLD)
@@ -383,6 +385,10 @@ func supply_details(id: String):
 			app.send({"type":"potion","id":id})
 			app.toast("Automatic potion enabled"),true))
 	v.add_child(U.button("Where to find it",func(): app.sources_dialog(id)))
+	if id.begins_with("keepsake_") or id=="masterwork_commission":
+		v.add_child(U.para("Reserved for masterwork crafting. This item cannot be sold as an ordinary supply.",14,U.GOLD))
+		v.add_child(U.button("Masterwork blueprints",func(): preload("res://ui/masterworks.gd").new(app).open()))
+		return
 	var sell = U.button("Sell 1",func(): app.send({"type":"sell","id":id,"amount":1}))
 	v.add_child(sell)
 	var ref = weakref(sell)

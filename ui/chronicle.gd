@@ -67,6 +67,7 @@ func station(kind: String):
 			entries = [["Work orders","Plan gathering and crafting for your time away.",app.work_orders_dialog],["Food & survival","Choose cooked food and understand automatic healing.",app.experience.survival],["Merchant","Browse rotating stock, buy supplies and sell spare equipment.",app.merchant_dialog],["Stronghold contracts","Collect milestone supplies you have earned.",app.contracts_dialog],["Rebuild Cinderwatch","Improve the forge, gates and resting hearth.",app.refuge_dialog]]
 	for entry in entries:
 		v.add_child(U.button(entry[0]+"  →",entry[2]))
+	if kind=="armory": v.add_child(U.button("Masterwork blueprints",func(): preload("res://ui/masterworks.gd").new(app).open()))
 
 func act():
 	var focus = C.focus(m)
@@ -143,6 +144,7 @@ func relics():
 		if rank<40:
 			card.add_child(U.para("Next: "+RealmLegacyGrowth.relic_effect(id,rank+1),13,U.GOLD))
 			var cost = C.relic_cost(rank)
+			if rank>=10: card.add_child(U.para("Ascension fee: "+RealmEconomy.money(RealmEconomy.relic_fee(rank)),14,U.GOLD))
 			card.add_child(U.para("Fragments: %d / %d" % [state.fragments[id],cost],14))
 			if rank>=10: card.add_child(U.para("Essence: %d / %d" % [m.count("essence_"+id),RealmLegacyGrowth.essence_cost(rank)],14))
 			if rank>=30: card.add_child(U.para("%s: %d / 1" % [m.name_of(RealmLegacyGrowth.CORES[id]),m.count(RealmLegacyGrowth.CORES[id])],14))
@@ -206,6 +208,7 @@ func bounties():
 
 func world(selected: String = "wilds"):
 	var v = app.modal("Beyond the walls")
+	v.add_child(U.button("Beyond the Sovereign · three new regions",func(): preload("res://ui/frontiers.gd").new(app).open()))
 	var art = TextureRect.new()
 	art.texture = load("res://assets/art/world-map.png") if ResourceLoader.exists("res://assets/art/world-map.png") else load("res://assets/art/cinderwatch.png")
 	art.expand_mode = TextureRect.EXPAND_IGNORE_SIZE

@@ -56,12 +56,12 @@ func detail(id: String):
 	app.dynamic(words,func(): return "%d wins · rank %d / 4" % [int(m.s.kills.get(id,0)),H.rank(m,id)],15)
 	live_progress(v,id)
 	app.dynamic(v,func(): return "Against this enemy: +%d ATK" % H.rank(m,id),17,U.TEXT)
-	app.dynamic(v,func(): return "Per win: %d gold · %s" % [H.gold(m,enemy),fragments(H.fragments(m,enemy))],15,U.GREEN)
+	app.dynamic(v,func(): return "Per win: %d gold · %s" % [H.battle_gold(m,enemy),fragments(H.fragments(m,enemy))],15,U.GREEN)
 	for i in range(4):
 		var rank_number = i+1
 		var card = U.card(v,12,U.LINE)
 		app.dynamic(card,func(): return "%s · %d wins%s" % [H.NAMES[rank_number],H.TARGETS[rank_number-1]," · ✓" if H.rank(m,id)>=rank_number else ""],17,U.TEXT)
-		card.add_child(U.para("+%d ATK · +%d gold · +%s / win" % [rank_number,rank_number,fragments(int(rank_number/2))],13,U.GOLD))
+		card.add_child(U.para("+%d ATK · +%d%% coins · +%s / win" % [rank_number,rank_number*2,fragments(int(rank_number/2))],13,U.GOLD))
 	v.add_child(U.para("Bonuses are cumulative totals. New rates start on the next fight.",12))
 	v.add_child(U.button("All hunt mastery",open))
 	app.dynamic(v,func(): return m.available(id),14,U.GOLD)

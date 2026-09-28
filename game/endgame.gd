@@ -2,7 +2,7 @@ class_name RealmEndgame
 extends RefCounted
 
 const IDS = ["secret_0","secret_1","secret_2","secret_3","secret_4","secret_5","secret_6"]
-const ROUTES = {"safe":"Take 12% less damage; gain 20% less gold and XP.","resource":"Standard danger and rewards.","elite":"Take 20% more damage; gain 25% more gold and XP.","mastery":"Standard danger; gain 20% more XP and 20% less gold."}
+const ROUTES = {"safe":"Take 12% less damage; gain 20% less gold and XP.","resource":"Standard danger and rewards.","elite":"Take 20% more damage; gain 25% more coins and XP.","mastery":"Standard danger; gain 20% more XP and 20% less gold."}
 const CONTRACTS = {"gather":["Gather supplies",60],"craft":["Keep the forge working",25],"hunt":["Complete hunts",12],"elite":["Defeat optional guardians",3],"depth":["Clear Depths rooms",3]}
 
 static func defaults() -> Dictionary:
@@ -36,7 +36,7 @@ static func enemy(m, original: Dictionary) -> Dictionary:
 
 static func move(m, e: Dictionary, strike: int, damage: int, phase: bool) -> int:
 	# Unavoidable pressure keeps armor stacking from trivializing optional endgame.
-	if e.get("secret",false) or e.get("depth",false):
+	if e.get("secret",false) or e.get("depth",false) or e.has("frontier"):
 		if phase: damage = ceili(damage*1.18)
 		if strike%3==0: damage += int(e.pressure)*(2 if phase else 1)
 		# Fixed escalation after sustained exposure, independent of player gear.
@@ -118,7 +118,10 @@ static func command(m, cmd) -> String:
 			var merge = m.s.gear.any(func(other): return other.id==g.id and int(other.q)==int(g.q)+1)
 			if g.count>1 and m.s.gear.size()>=1000 and not merge: return "Make room in your equipment bag before splitting this stack."
 			var cost = 10*(int(g.q)+1)
+			var fee = RealmEconomy.temper_fee(int(g.q))
+			if m.s.gold<fee: return "Tempering requires "+RealmEconomy.money(fee)+" plus seals and shards."
 			if m.count("dread_token")<cost or m.count("depth_shard")<cost: return "Gather %d Dread Seals and Hollow Shards." % cost
+			m.s.gold -= fee
 			m.spend("dread_token",cost)
 			m.spend("depth_shard",cost)
 			# Upgrade a single piece, preserving references and flags.

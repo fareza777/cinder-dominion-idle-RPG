@@ -8,8 +8,8 @@ static func cost(g: Dictionary) -> Dictionary:
 	var q = clampi(int(g.q),1,4)-1
 	var metal = str(g.id).get_slice("_",0)
 	var base = {"steel":25,"moonsteel":45,"dusksteel":65,"dawnsteel":85}.get(metal,0)
-	var multiplier = 1+int(base/20)
-	return {"gold":[40,120,360,900][q]*multiplier,"scrap":[2,6,15,35][q]*multiplier,"ingots":[2,5,12,25][q],"level":mini(100,maxi([3,6,12,20][q],base+[0,3,7,15][q])),"metal":metal+"_ingot"}
+	var multiplier = {"copper":1,"iron":3,"steel":30,"moonsteel":150,"dusksteel":500,"dawnsteel":2000}.get(metal,1)
+	return {"gold":[40,120,360,900][q]*multiplier,"scrap":[2,6,15,35][q]*(1+int(base/20)),"ingots":[2,5,12,25][q],"level":mini(100,maxi([3,6,12,20][q],base+[0,3,7,15][q])),"metal":metal+"_ingot"}
 
 static func preview(m, uid: String, enemy: String) -> Dictionary:
 	var g = m.gear(uid)
@@ -32,7 +32,7 @@ static func reason(m, uid: String) -> String:
 	if g.q>=5: return "This piece has reached Legendary quality."
 	var c = cost(g)
 	if m.level("smithing")<c.level: return "Reach Smithing level %d to refine this quality." % int(c.level)
-	if m.s.gold<c.gold or m.count("scrap")<c.scrap or m.count(c.metal)<c.ingots: return "Gather the gold, ingots and scraps shown in the recipe."
+	if m.s.gold<c.gold or m.count("scrap")<c.scrap or m.count(c.metal)<c.ingots: return "Gather the coins, ingots and scraps shown in the recipe."
 	var merge = false
 	for other in m.s.gear:
 		if other.id==g.id and int(other.q)==int(g.q)+1: merge = true

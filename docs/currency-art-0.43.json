@@ -1,0 +1,6 @@
+{
+  "tool": "Built-in image_gen",
+  "asset": "assets/art/currency-0.43.png",
+  "source": "C:/Users/FAJAR/.codex/generated_images/01a0d6c6-87cf-7541-95c2-3388b3b24491/exec-edacfcf5-00db-47a8-8e45-0008cbde999d.png",
+  "prompt": "Create a premium dark fantasy RPG currency texture atlas, landscape 3:1 canvas, exactly three equal square cells in a single horizontal row. Transparent background with real alpha. One distinct coin centered in each square, each coin diameter approximately 70 percent of cell height with ample transparent margin. Left: weathered SILVER round coin engraved with a simple stalk of wheat. Middle: antique warm GOLD round coin engraved with a restrained crown made of three angular metal points. Right: luminous cold PLATINUM octagonal coin engraved with a faceted diamond. No text, no letters, no numbers, no human faces, no animals, no figures. Front-on view with shallow thickness and subtle bevel, exquisite hammered metal and worn engraving, subdued material realism, elegant collectible treasury objects, easy to distinguish at small game icon size. No rectangular frames, no glow haze outside coins, no props, no backgrounds. Precisely one coin per equal square cell aligned to centers at 1/6, 3/6, 5/6 of total canvas width."
+}

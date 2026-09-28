@@ -84,13 +84,13 @@ static func food_bonus(m) -> int:
 static func valid(s) -> bool:
 	if s.has("path_choice"):
 		if typeof(s.path_choice) not in [TYPE_INT,TYPE_FLOAT] or not RealmSave.counter(float(s.path_choice)+1) or s.path_choice>1: return false
-		if int(s.path_choice)!=-1 and (not s.has("hero") or float(s.xp.bladecraft)<14400): return false
+		if int(s.path_choice)!=-1 and (not s.has("hero") or RealmEconomy.level(s.xp.bladecraft)<25): return false
 	if s.has("sockets"):
 		if not s.sockets is Array or s.sockets.size()>3: return false
 		var seen = []
 		for id in s.sockets:
 			if id not in SOCKETS or id in seen or s.bag.get("socket_"+id,0)<1: return false
 			seen.append(id)
-		var limit = 0 if not s.beacon else (3 if s.kills.get("secret_4",0)>0 else (2 if float(s.xp.bladecraft)>=136900 else 1))
+		var limit = 0 if not s.beacon else (3 if s.kills.get("secret_4",0)>0 else (2 if RealmEconomy.level(s.xp.bladecraft)>=75 else 1))
 		if seen.size()>limit: return false
 	return true

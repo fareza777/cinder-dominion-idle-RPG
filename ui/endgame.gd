@@ -72,7 +72,7 @@ func forge():
 		for g in m.s.gear:
 			if g.id!=id or int(g.q)>=3: continue
 			var cost = 10*(int(g.q)+1)
-			action(c,"Temper %s · %d seals + %d shards" % [m.data.rarities[int(g.q)],cost,cost],{"type":"end_temper","id":g.uid},forge)
+			action(c,"Temper %s · %s + %d seals + %d shards" % [m.data.rarities[int(g.q)],RealmEconomy.money(RealmEconomy.temper_fee(int(g.q))),cost,cost],{"type":"end_temper","id":g.uid},forge)
 	v.add_child(U.para("Unique relics reach Rare quality through tempering. Their special effects work only while equipped.",14))
 	app.modal_action("Back",open,false)
 
@@ -141,7 +141,7 @@ func contracts():
 		if selected:
 			app.dynamic(c,func(): return "%d / %d" % [mini(def[1],RealmEndgame.totals(m)[id]-s.board.baseline[id]),def[1]],16)
 			if id in s.board.claimed: c.add_child(U.para("Reward collected",14))
-			else: action(c,"Collect gold & 5 scraps",{"type":"end_claim","id":id},contracts)
+			else: action(c,"Collect coins & 5 scraps",{"type":"end_claim","id":id},contracts)
 		else: action(c,"Choose · %d required" % def[1],{"type":"end_contract","id":id},contracts)
 	var c = U.card(v,12)
 	c.add_child(U.para("Weekly guardian",21,U.GOLD))

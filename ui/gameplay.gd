@@ -41,7 +41,7 @@ func work_orders(selected: String = "watch", batches: int = 1):
 		var a = m.data.activities[step.id]
 		experience[a.skill] = int(experience.get(a.skill,0))+int(a.xp)*int(step.target)
 	for skill in experience:
-		var projected = mini(100,1+int(sqrt(float(m.s.xp[skill]+experience[skill])/25.0)))
+		var projected = RealmEconomy.level(m.s.xp[skill]+experience[skill],skill)
 		v.add_child(U.para("%s · +%d XP · Lv.%d → %d" % [m.local_name(m.data.skills[skill]),int(experience[skill]),m.level(skill),projected],13,U.GREEN))
 	v.add_child(U.para("About %s · %d queue steps" % [time_label(plan.seconds),plan.steps.size()],14,U.GOLD))
 	v.add_child(U.para("Mastery may shorten this estimate as you work. Orders progress for up to 24 hours while away; finished food must be selected for auto-heal if it is not already your active food.",12))
@@ -73,7 +73,7 @@ func planner(id: String, amount: int = 1):
 		if not m.s.queue.is_empty(): v.add_child(U.button("Manage current queue",app.queue_dialog))
 		v.add_child(U.button("Find materials manually",func(): app.activity_dialog(id)))
 		return
-	v.add_child(U.para("%d steps · approximately %s · no gold cost" % [plan.steps.size(),time_label(plan.seconds)],13,U.GREEN))
+	v.add_child(U.para("%d steps · approximately %s · no coins cost" % [plan.steps.size(),time_label(plan.seconds)],13,U.GREEN))
 	for i in range(plan.steps.size()):
 		var step = plan.steps[i]
 		var c = U.card(v,12)
@@ -128,7 +128,7 @@ func advanced_training():
 
 func contracts():
 	var v = app.modal("Stronghold contracts")
-	v.add_child(U.para("Optional milestones. Progress is counted automatically across your entire journey. Each reward can be claimed once. Spend scraps and gold on permanent stronghold upgrades.",14))
+	v.add_child(U.para("Optional milestones. Progress is counted automatically across your entire journey. Each reward can be claimed once. Spend scraps and coins on permanent stronghold upgrades.",14))
 	for c in P.CONTRACTS:
 		var claimed = c.id in m.progression().claimed
 		var ready = P.value(m,c)>=c.target

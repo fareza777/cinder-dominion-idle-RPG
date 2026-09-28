@@ -184,3 +184,12 @@ Three persisted offers per eight-hour observation window, progress-gated stock t
 ## 0.42 Rest readiness and safe resume
 
 Next queued hunt, exact reserve deficit and live rest countdown lead the rest dialog. Resume activates only when ready, hides without a pending hunt/during battle, and closes the modal after starting combat. Explore and queue use matching readiness states. Command validation rejects premature resumes without changing queue/stamina/pause. Rules moved to a separate guide; no balance or save-schema changes. 83 essential checks, focused threshold/live-button/save checks and three narrow 130% screenshots passed. Physical Android playtest and known shutdown resource warnings remain outstanding. See docs/qa/rest-clarity-0.42-report.md.
+
+
+## 0.43 Expanded world, rare finds and a stamina-free economy
+
+User superseded stamina and requested old enemies retain rare-card/material value while late-game XP, equipment and currency remain meaningful. Removed stamina scripts, UI and limits; save migration preserves combat levels/fractional progress, removes obsolete reserve fields and retains numeric wallet units as Silver. Added Gold/Platinum denomination display, longer combat-only XP curve, authored reward tiers, revised workshop/relic/temper costs, versioned NPC prices and repeatable provisions.
+
+Expanded 42 to 60 enemy definitions across three sequential frontier regions, with 18 new cards, nine one-time objectives and four story chapters. All 60 enemies now have distinct ultra-rare materials, generated item art and crafting uses. Ten guaranteed Legendary masterworks have individual implemented combat effects and progressively obtainable recipes. Six selected art atlases include frontal concealed enemies, all rare materials, equipment and currencies. Existing 15 trial tiers count as enemy definitions; no claim of 60 wholly different species.
+
+83 essential checks, focused migration/currency/1,000-rat/crafting/drop/claim/offline checks and seven 360x720 views at 130% text passed. Thirty bounded five-class balance encounters and an eighteen-encounter Warden route checked increasing difficulty and obtainable recipe order. Historical shutdown resource warnings remain; long campaign pacing, all class routes and physical Android play are unverified. See docs/qa/economy-frontiers-0.43-report.md for artifact and limitations. No paid services or publication.

@@ -4,13 +4,13 @@ extends RefCounted
 const TALENTS = {
 	"power":{"name":"Blade of Dawn","detail":"+1 attack per rank. Finish fights sooner."},
 	"guard":{"name":"Last Bastion","detail":"+1 armor per rank. Spend less food on long hunts."},
-	"fortune":{"name":"Wayfarer's Fortune","detail":"+2 gold per victory per rank. Fund stronghold upgrades."},
+	"fortune":{"name":"Wayfarer's Fortune","detail":"+2% battle coins per rank. Stronger hunts yield larger rewards."},
 	"technique":{"name": "Measured Strike", "detail": "Special attacks deal 0.5% more damage per rank."},
 	"hunter":{"name": "Giant's Bane", "detail": "Deal 0.5% more damage to bosses per rank."},
 	"endurance":{"name": "Hold Fast", "detail": "Take 0.4% less boss damage per rank."},
 	"recovery":{"name": "Field Medicine", "detail": "Meals restore 1 extra HP for every 2 ranks."},
 	"resolve":{"name": "Steady Guard", "detail": "Every third incoming strike deals 0.5% less damage per rank."},
-	"bounty":{"name": "Seasoned Hunter", "detail": "Earn 1% more battle gold per rank. Does not affect rare drops."}}
+	"bounty":{"name": "Seasoned Hunter", "detail": "Earn 1% more battle coins per rank. Does not affect rare drops."}}
 const RELICS = {
 	"fang":{"name":"Ashfang","detail":"+2 attack per rank through rank 10. Ascension improves special attacks.","source":"Ash Rats, Hollow Hounds, Cinder Bandits; Ashen Wilds","enemy":"ash_rat","icon":"copper_sword","color":"d9b477"},
 	"ward":{"name":"Hollow Aegis","detail":"+2 armor per rank through rank 10. Ascension reduces boss damage.","source":"Grave Thralls, Chapel Guards, Bellkeeper; Obsidian Crown","enemy":"grave_thrall","icon":"iron_shield","color":"91b5db"},
@@ -108,6 +108,7 @@ static func command(m, cmd: Dictionary) -> String:
 			var cost = relic_cost(rank)
 			if c.fragments[id]<cost: return "Collect %d more fragments from the listed hunts." % (cost-int(c.fragments[id]))
 			c.fragments[id] -= cost
+			m.s.gold -= RealmEconomy.relic_fee(rank)
 			if rank>=10: m.spend("essence_"+id,RealmLegacyGrowth.essence_cost(rank))
 			if rank>=30: m.spend(RealmLegacyGrowth.CORES[id],1)
 			c.relics[id] += 1
@@ -137,18 +138,18 @@ static func next_expedition(m) -> String:
 
 static func focus(m) -> Dictionary:
 	if not m.s.queue.is_empty():
-		if m.s.active.is_empty() and m.s.fight.is_empty(): return {"title":"Your queue is blocked","why":"Rest, then resume hunting in Explore or Queue." if RealmStamina.state(m).paused else m.requirement(m.s.queue[0].id),"kind":"queue","id":"","amount":1}
+		if m.s.active.is_empty() and m.s.fight.is_empty(): return {"title":"Your queue is blocked","why":m.requirement(m.s.queue[0].id),"kind":"queue","id":"","amount":1}
 		return {"title":"Your task is running","why":"Your orders continue while you are away, for up to 24 hours. Review the queue to see what will be ready when you return.","kind":"queue","id":"","amount":1}
 	var o = m.objective()
 	if not m.s.tutorial: return {"title":o.title,"why":o.detail,"kind":"story","id":"","amount":1}
-	if points_free(m)>0: return {"title":"Spend your talent points","why":"Choose more damage, more armor or more gold. Reset freely outside combat.","kind":"talents","id":"","amount":1}
+	if points_free(m)>0: return {"title":"Spend your talent points","why":"Choose more damage, more armor or more coins. Reset freely outside combat.","kind":"talents","id":"","amount":1}
 	for relic in RELICS:
 		if state(m).relics[relic]==0 and state(m).fragments[relic]>=5: return {"title":"Awaken "+RELICS[relic].name,"why":RELICS[relic].detail,"kind":"relics","id":"","amount":1}
 	for g in m.s.gear:
 		var equipped = m.gear(str(m.s.equipped.get(RealmEquipmentSlots.target(m,g.uid),"")))
 		if equipped.is_empty() or m.gear_score(g)>m.gear_score(equipped): return {"title":"Equip your stronger gear","why":"Your bag contains an upgrade. Crafting alone does not improve your combat stats.","kind":"equip","id":"","amount":1}
 	if m.count(m.s.settings.food)<15: return {"title":"Prepare food for your next hunt","why":"Aim for 15 cooked meals. Food heals automatically during battle; raw ingredients cannot heal you.","kind":"plan","id":"craft_"+str(m.s.settings.food),"amount":15-m.count(m.s.settings.food)}
-	if RealmRuneforge.ready(m)>0: return {"title":"Claim your field record rewards","why":"Completed regional hunts have fragments, scraps and gold ready to collect. Put them toward your next rune or relic.","kind":"journal","id":"","amount":1}
+	if RealmRuneforge.ready(m)>0: return {"title":"Claim your field record rewards","why":"Completed regional hunts have fragments, scraps and coins ready to collect. Put them toward your next rune or relic.","kind":"journal","id":"","amount":1}
 	if m.s.beacon:
 		for id in RealmRuneforge.RUNES:
 			if RealmRuneforge.state(m).ranks[id]==0 and RealmRuneforge.forge_reason(m,id)=="": return {"title":"Inscribe "+RealmRuneforge.RUNES[id].name,"why":"You have discovered this rune and gathered its materials. Review its effect before choosing between a rune and a relic upgrade.","kind":"runes","id":id,"amount":1}

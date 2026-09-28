@@ -31,7 +31,7 @@ func fresh(seed_value: int = 12345):
 	last_hit = ""
 	last_forged = ""
 	rng.seed = seed_value
-	s = {"version":1,"revision":0,"time":0,"wall":0,"rng":str(rng.state),"gold":20,
+	s = {"version":1,"economy_revision":1,"revision":0,"time":0,"wall":0,"rng":str(rng.state),"gold":20,
 		"bag":{"cooked_minnow":5},"gear":[],"overflow":[],"equipped":{},"next_uid":1,
 		"xp":{},"mastery":{},"queue":[],"active":{},"fight":{},"hp":100,
 		"regen_at":1000,"kills":{},"gains":{},"spent":{},"tutorial":false,"beacon":false,
@@ -50,7 +50,7 @@ func name_of(id: String) -> String:
 	return local_name(data.items.get(id,{"name":id,"en":id}))
 
 func level(skill: String) -> int:
-	return mini(100, 1 + int(sqrt(float(s.xp.get(skill,0)) / 25.0)))
+	return RealmEconomy.level(s.xp.get(skill,0),skill)
 
 func count(id: String) -> int:
 	if data.items.has(id) and data.items[id].category=="equipment":
@@ -126,6 +126,7 @@ func note(message: String):
 
 func available(enemy_id: String) -> String:
 	var d = data.enemies[enemy_id]
+	if d.has("frontier"): return RealmFrontiers.available(self,enemy_id)
 	if d.get("secret",false) or d.get("depth",false): return RealmEndgame.available(self,enemy_id)
 	if d.has("region"):
 		if not s.beacon: return "Defeat the Bellkeeper in Chapter I first"
@@ -160,6 +161,9 @@ func command(cmd: Dictionary) -> bool:
 	var id = str(cmd.get("id",""))
 	if action in ["queue","clear","cancel","finish_hunt","work_order"]: RealmAutomation.stop(self,"Manual control. Enable rewarded assistance again when ready.")
 	match action:
+		"frontier_claim":
+			var why = RealmFrontiers.claim(self,int(cmd.get("region",-1)),int(cmd.get("stage",-1)))
+			if why!="": return fail(why)
 		"end_route","end_target","end_trade","end_temper","end_depth","end_bank","end_contract","end_claim","end_week","end_week_claim":
 			var why = RealmEndgame.command(self,cmd)
 			if why!="": return fail(why)
@@ -236,7 +240,7 @@ func command(cmd: Dictionary) -> bool:
 			var rank = int(progression().upgrades[id])
 			if rank>=3: return fail("Maximum rank reached")
 			var upgrade = RealmProgression.UPGRADES[id]
-			if s.gold<int(upgrade.gold)*(rank+1) or count("scrap")<int(upgrade.scrap)*(rank+1): return fail("Earn gold and metal scraps through hunts, contracts, or salvage.")
+			if s.gold<int(upgrade.gold)*(rank+1) or count("scrap")<int(upgrade.scrap)*(rank+1): return fail("Earn coins and metal scraps through hunts, contracts, or salvage.")
 			s.gold -= int(upgrade.gold)*(rank+1)
 			spend("scrap",int(upgrade.scrap)*(rank+1))
 			progression().upgrades[id] = rank+1
@@ -303,12 +307,9 @@ func command(cmd: Dictionary) -> bool:
 		"card_insert","card_remove":
 			var why = RealmCards.command(self,cmd)
 			if why!="": return fail(why)
-		"stamina_resume":
-			var why = RealmStamina.resume_reason(self)
+		"merchant_provisions":
+			var why = RealmMerchant.buy_provisions(self)
 			if why!="": return fail(why)
-			RealmStamina.state(self).paused = false
-			start_next()
-			if RealmStamina.state(self).paused: return fail(error)
 		"merchant_buy":
 			var why = RealmMerchant.buy(self,cmd)
 			if why!="": return fail(why)
@@ -317,13 +318,15 @@ func command(cmd: Dictionary) -> bool:
 			if why!="": return fail(why)
 		"buy":
 			if not data.merchant.has(id): return fail("This item is not sold here")
+			if id=="masterwork_commission" and int(s.kills.get("secret_2",0))<1: return fail("Defeat the Hollow Forgemaster to commission masterworks.")
 			var qty = clampi(int(cmd.get("amount",1)),1,100)
 			var cost = int(data.merchant[id])*qty
-			if s.gold<cost: return fail("Not enough gold. Hunt enemies to earn more.")
+			if s.gold<cost: return fail("Not enough coins. Hunt enemies to earn more.")
 			s.gold -= cost
 			gain(id,qty)
 		"sell":
 			if not data.items.has(id) or data.items[id].category=="equipment": return fail("Salvage equipment to recover metal scraps.")
+			if id.begins_with("keepsake_") or id=="masterwork_commission": return fail("Keep this rare crafting item for a masterwork. It cannot be sold as an ordinary supply.")
 			var qty = clampi(int(cmd.get("amount",1)),1,1000)
 			if count(id)<qty: return fail("Not enough items")
 			if id.begins_with("socket_") and id.trim_prefix("socket_") in RealmPaths.sockets(self) and count(id)-qty<1: return fail("Remove this socket relic from your build before selling it.")
@@ -365,7 +368,6 @@ func fail(message: String) -> bool:
 	return false
 
 func refund_active():
-	RealmStamina.finish(self)
 	RealmHunts.finish(self,"Recalled")
 	if not s.active.is_empty():
 		for id in s.active.reserved:
@@ -417,10 +419,8 @@ func start_next():
 		var a = data.activities[step.id]
 		if a.kind=="combat":
 			var enemy = RealmEndgame.enemy(self,data.enemies[a.enemy])
-			if not RealmStamina.start(self,enemy): return
 			RealmHunts.begin(self,a.enemy)
 			s.fight = {"enemy":a.enemy,"hp":enemy.hp,"player_at":int(s.time)+2000,"enemy_at":int(s.time)+int(enemy.interval),"hits":0,"buff_until":0,"buff":"attack","potion_at":0,"spawn_at":0}
-			if s.tutorial: s.fight.stamina_started = int(s.time)
 		else:
 			for id in a.inputs: spend(id,int(a.inputs[id]))
 			s.active = {"id":step.id,"started":s.time,"due":int(s.time)+duration(a),"reserved":a.inputs.duplicate(true)}
@@ -444,12 +444,9 @@ func advance(ms: int, budget_usec: int = 0) -> int:
 			due = mini(int(s.fight.player_at),int(s.fight.enemy_at))
 			if s.fight.buff_until>s.time: due = mini(due,int(s.fight.buff_until))
 			if s.fight.has("effects"): due = mini(due,int(s.fight.effects.next))
-			if s.fight.has("stamina_started"): due = mini(due,int(s.fight.stamina_started)+RealmStamina.DEADLINE)
 		else:
 			if s.hp<100: due = mini(due,maxi(int(s.regen_at),int(s.time)))
-			if RealmStamina.state(self).value<RealmStamina.cap(self): due = mini(due,int(s.time)+RealmStamina.REGEN-int(RealmStamina.state(self).rest))
 		if due>target: break
-		RealmStamina.advance(self,due-int(s.time))
 		s.time = due
 		if not s.fight.is_empty(): resolve_combat()
 		else:
@@ -458,7 +455,6 @@ func advance(ms: int, budget_usec: int = 0) -> int:
 				s.regen_at = int(s.time)+1000
 			if not s.active.is_empty() and s.active.due<=s.time: finish_production()
 		start_next()
-	RealmStamina.advance(self,target-int(s.time))
 	s.time = target
 	s.rng = str(rng.state)
 	return int(s.time)-initial_time
@@ -472,6 +468,7 @@ func finish_production():
 	var previous_level = level(a.skill)
 	var q = quality_roll() if data.items[a.output].category=="equipment" else 1
 	if a.output.begins_with("relic_"): q = 1
+	if a.has("fixed_quality"): q = int(a.fixed_quality)
 	var completed = int(s.mastery.get(a.id,0))+1
 	var bonus = data.items[a.output].category in ["food","material"] and not a.has("blueprint") and ((completed>=1000 and completed%5==0) or (completed>=250 and completed%10==0))
 	var produced = 2 if bonus else 1
@@ -492,12 +489,6 @@ func hit_damage(atk: int, armor: int) -> int:
 func resolve_combat():
 	var f = s.fight
 	var d = RealmEndgame.enemy(self,data.enemies[f.enemy])
-	if f.has("stamina_started") and s.time>=int(f.stamina_started)+RealmStamina.DEADLINE:
-		refund_active()
-		s.queue.clear()
-		RealmAutomation.stop(self,"Hunt timed out. Improve your build.")
-		last_reward = "HUNT ENDED · Ten-minute limit reached. Improve your damage before trying again."
-		return
 	RealmAfflictions.tick(self)
 	if s.hp<=0: defeat(d); return
 	if f.hp<=0: win(d); return
@@ -576,7 +567,6 @@ func resolve_combat():
 			combat_event("+%d HP" % restored_food,"hero","hit","apothecary" if RealmCharacters.id(self)=="apothecary" and RealmCharacters.rank(self)>0 else "")
 
 func defeat(d: Dictionary):
-	RealmStamina.finish(self)
 	RealmAutomation.stop(self,"Defeated. Review your build before restarting assistance.")
 	RealmEndgame.defeat(self)
 	s.hp = 0
@@ -591,7 +581,6 @@ func defeat(d: Dictionary):
 
 
 func win(enemy: Dictionary):
-	RealmStamina.finish(self)
 	var before_gains = s.gains.duplicate(true)
 	var before_gold = int(s.gold)
 	var id = enemy.id
@@ -602,13 +591,8 @@ func win(enemy: Dictionary):
 	legacy.fragments[fragment_id] += fragments
 	var essence_amount = RealmLegacyGrowth.essence(enemy)
 	if essence_amount>0: gain("essence_"+fragment_id,essence_amount)
-	var reward_gold = RealmHuntMastery.gold(self,enemy)
-	if RealmEndgame.route(self) in ["safe","mastery"]: reward_gold = int(reward_gold*.8)
-	elif RealmEndgame.route(self)=="elite": reward_gold = int(reward_gold*1.25)
-	var xp = int(enemy.xp)
-	if RealmEndgame.route(self)=="safe": xp = int(xp*.8)
-	elif RealmEndgame.route(self)=="mastery": xp = int(xp*1.2)
-	elif RealmEndgame.route(self)=="elite": xp = int(xp*1.25)
+	var reward_gold = RealmHuntMastery.battle_gold(self,enemy)
+	var xp = RealmEconomy.hunt_xp(self,enemy)
 	last_reward = "VICTORY · +%d gold · +%d XP · %s ×%d · +%d %s fragments" % [reward_gold,xp,name_of(enemy.drop),int(enemy.qty),fragments,RealmChronicle.RELICS[fragment_id].name]
 	if enemy.get("secret",false):
 		last_reward = "VICTORY · +%d gold · +%d XP · %s ×%d · +2 Dread Seals" % [reward_gold,xp,name_of(enemy.drop),3 if s.kills.get(id,0)==0 else 1]
@@ -656,6 +640,8 @@ func win(enemy: Dictionary):
 		note("The bells fall silent. Cinderwatch burns bright again.")
 	var card_drop = RealmCards.drop(self,id)
 	if card_drop!="": last_reward += " · CARD FOUND: "+name_of(card_drop)
+	var rare_material = RealmLegacyFinds.drop(self,enemy)
+	if rare_material!="": last_reward += " · RARE MATERIAL: "+name_of(rare_material)
 	if data.items[enemy.drop].category=="material" and not enemy.get("secret",false) and not enemy.get("depth",false):
 		var credit = int(s.get("card_material_credit",0))+roundi(enemy.qty*RealmCards.bonus(self,"material")*10000)
 		var bonus_count = int(credit/10000)
@@ -679,7 +665,7 @@ func check_quest():
 		s.tutorial = true
 		s.gold += 30
 		gain("cooked_minnow",10)
-		note("First Supplies complete · +30 gold · +10 grilled minnows. Hunts now use stamina; recover while gathering or crafting. Open Stamina & rest in Explore.")
+		note("First Supplies complete · +30S · +10 grilled minnows. Prepare armor and food, then face the Grave Thralls.")
 
 func activity_name(id: String) -> String:
 	var a = data.activities[id]
@@ -691,4 +677,5 @@ func sources(id: String) -> Array:
 	for key in data.activities:
 		var a = data.activities[key]
 		if a.output==id or a.get("side","")==id: out.append(key)
+		elif a.kind=="combat" and (data.enemies[a.enemy].get("rare_material","")==id or "card_"+a.enemy==id): out.append(key)
 	return out

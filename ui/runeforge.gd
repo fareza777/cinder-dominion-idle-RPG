@@ -78,7 +78,7 @@ func forge(selected: String = "thorn"):
 		var materials = U.card(v,12)
 		materials.add_child(U.label("MATERIALS · OWNED / NEEDED",10,U.GOLD))
 		app.dynamic(materials,func(): return "%s fragments   %d / %d" % [RealmChronicle.RELICS[d.relic].name,int(RealmChronicle.state(m).fragments[d.relic]),int(price.fragments)],14)
-		app.dynamic(materials,func(): return "Metal scraps   %d / %d    ·    Gold   %d / %d" % [m.count("scrap"),int(price.scrap),int(m.s.gold),int(price.gold)],14)
+		app.dynamic(materials,func(): return "Metal scraps   %d / %d    ·    Coins   %s / %s" % [m.count("scrap"),int(price.scrap),RealmEconomy.money(int(m.s.gold)),RealmEconomy.money(int(price.gold))],14)
 		v.add_child(U.para("Spend these materials once to inscribe the rune permanently. Fragments are shared with relic upgrades; choose what helps your next hunt.",13))
 		v.move_child(comparison.get_parent(),v.get_child_count()-1)
 	v.add_child(U.para("ONE ACTIVE RUNE\nA rune works alongside your fighting style and relic. Forging does not equip it. Switch or remove it freely outside combat.",13,U.GREEN))

@@ -10,8 +10,8 @@ static func steps(m) -> Array:
 		entry("wood","Gather 1 ash log","A sword needs a wooden grip. Your wood axe is already equipped.","cut_ash",int(m.s.gains.get("ash_log",0)),1,"Cut an ash log","Woodcutting → Ash log"),
 		entry("sword","Forge your copper sword","Use 2 copper ingots and 1 ash log. Crafting puts the weapon in your Bag; it does not equip it.","craft_copper_sword",int(m.s.gains.get("copper_sword",0)),1,"Forge a copper sword","Smithing → Copper Sword"),
 		entry("equip","Equip your new sword","Open the sword in your Bag and choose Equip item. Green numbers show an improvement over your current gear.","",1 if equipped or m.s.tutorial else 0,1,"Open your copper sword","Bag → Copper Sword → Equip item","equip"),
-		entry("rats","Defeat 3 Ash Rats","Attacks happen automatically. Your 5 starting grilled minnows restore 20 HP each when health falls to 50%. Each victory gives gold, XP and loot.","hunt_ash_rat",int(m.s.kills.get("ash_rat",0)),3,"Hunt 3 Ash Rats","Explore → Ash Rat"),
-		entry("thralls","Defeat 5 Grave Thralls","First Supplies unlocks the graveyard and grants 30 gold plus 10 grilled minnows. Craft copper armor and cook meat from rats if you need more protection or food.","hunt_grave_thrall",int(m.s.kills.get("grave_thrall",0)),5,"Hunt Grave Thralls","Explore → Grave Thrall"),
+		entry("rats","Defeat 3 Ash Rats","Attacks happen automatically. Your 5 starting grilled minnows restore 20 HP each when health falls to 50%. Each victory gives coins, XP and loot.","hunt_ash_rat",int(m.s.kills.get("ash_rat",0)),3,"Hunt 3 Ash Rats","Explore → Ash Rat"),
+		entry("thralls","Defeat 5 Grave Thralls","First Supplies unlocks the graveyard and grants 30 Silver plus 10 grilled minnows. Craft copper armor and cook meat from rats if you need more protection or food.","hunt_grave_thrall",int(m.s.kills.get("grave_thrall",0)),5,"Hunt Grave Thralls","Explore → Grave Thrall"),
 		entry("bandits","Defeat 5 Cinder Bandits","The path opens when 5 Grave Thralls fall. Bandits drop copper ore for more equipment. Keep your auto-heal food stocked.","hunt_cinder_bandit",int(m.s.kills.get("cinder_bandit",0)),5,"Hunt Cinder Bandits","Explore → Cinder Bandit"),
 		entry("guards","Defeat 5 Chapel Guards","Guards have more armor. Improve your sword and fill empty armor slots in the Bag before a long hunt.","hunt_chapel_guard",int(m.s.kills.get("chapel_guard",0)),5,"Hunt Chapel Guards","Explore → Chapel Guard"),
 		entry("wraiths","Defeat 5 Ember Wraiths","Wraiths strike quickly. Bring cooked food and consider a healing draught. You can Retreat at any time to stop combat.","hunt_ember_wraith",int(m.s.kills.get("ember_wraith",0)),5,"Hunt Ember Wraiths","Explore → Ember Wraith"),
@@ -50,4 +50,15 @@ static func current(m) -> Dictionary:
 		apex_index += 1
 		if int(m.s.kills.get(id,0))==0:
 			return {"key":id,"title":"Defeat "+m.local_name(enemy),"detail":"Use Ascension paths to craft stronger equipment, then prepare food and review this hunt. "+RealmCombat.mechanic(enemy),"activity":"hunt_"+id,"current":0,"goal":1,"action":"Prepare Apex hunt","route":"Explore → Ascension → Apex hunts","kind":"expedition","index":apex_index,"total":39}
-	return {"key":"complete","title":"All main challenges cleared","detail":"All expeditions, trials and Apex hunts are cleared. Continue with Hunt Mastery, contracts, relics and equipment refinement.","activity":"","current":1,"goal":1,"action":"Open world map","route":"All routes cleared","kind":"complete","index":39,"total":39}
+	var late_index = 39
+	for id in RealmEndgame.IDS:
+		late_index += 1
+		if int(m.s.kills.get(id,0))==0:
+			return {"key":id,"title":"Defeat "+m.local_name(m.data.enemies[id]),"detail":"An optional guardian stands beyond the Apex routes. Prepare a specialized build; its core opens unique crafting options.","activity":"hunt_"+id,"current":0,"goal":1,"action":"Prepare guardian hunt","route":"Beyond the beacon → Optional guardians","kind":"expedition","index":late_index,"total":64}
+	for region in range(3):
+		for n in range(6):
+			late_index += 1
+			var id = "frontier_%d_%d" % [region,n]
+			if int(m.s.kills.get(id,0))==0:
+				return {"key":id,"title":"Defeat "+m.local_name(m.data.enemies[id]),"detail":"Improve your equipment, counter this enemy's debuff and stock cooked food. Clear each pair of encounters to claim a frontier objective reward.","activity":"hunt_"+id,"current":0,"goal":1,"action":"Prepare frontier hunt","route":RealmFrontiers.REGIONS[region],"kind":"expedition","index":late_index,"total":64}
+	return {"key":"complete","title":"All charted hunts cleared","detail":"Claim remaining frontier rewards, complete your masterworks and card builds, or push deeper into the Hollow Depths.","activity":"","current":1,"goal":1,"action":"Open world map","route":"All routes cleared","kind":"complete","index":64,"total":64}

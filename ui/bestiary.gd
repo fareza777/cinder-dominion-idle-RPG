@@ -27,6 +27,7 @@ func open(region: String = "all"):
 		app.dynamic(c,func(): return "%d victories · mastery %d / 4" % [m.s.kills.get(id,0),RealmHuntMastery.rank(m,id)],13,U.GOLD)
 		c.add_child(U.para("%s ×%d · %d base XP" % [m.name_of(e.drop),e.qty,e.xp],14,U.GREEN))
 		c.add_child(U.para(RealmCombat.mechanic(e),13))
+		if e.has("rare_material"): c.add_child(U.para(RealmLegacyFinds.description(m,e),13,U.GOLD))
 		var reason = m.available(id)
 		if reason!="": c.add_child(U.para(reason,13,U.MUTED))
 		else:
