@@ -52,6 +52,9 @@ func work_orders(selected: String = "watch", batches: int = 1):
 			app.toast("Your order is underway. Cinderwatch will keep working while you are away."))
 
 func planner(id: String, amount: int = 1):
+	if not RealmBlueprints.learned(m,m.data.activities[id].output):
+		preload("res://ui/masterworks.gd").new(app).open()
+		return
 	var v = app.modal("Crafting plan")
 	app.dialog.set_meta("coach_plan",id)
 	v.add_child(U.icon(m.data.activities[id].output,72))

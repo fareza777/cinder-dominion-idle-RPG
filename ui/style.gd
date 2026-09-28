@@ -19,14 +19,22 @@ static var item_catalog = {}
 static var item_regions = {}
 static var scale = 1.0
 static var motion = true
+static var assets: Dictionary = {}
+static var enemy_catalog: Dictionary = {}
+
+static func asset(path: String) -> Resource:
+	if not assets.has(path): assets[path] = load(path)
+	return assets[path]
+
 
 static func setup(data: Dictionary):
-	body_font = load("res://assets/fonts/manrope-readable.ttf")
-	title_font = load("res://assets/fonts/cormorantgaramond-readable.ttf")
-	if ResourceLoader.exists("res://assets/art/portraits.png"): portraits = load("res://assets/art/portraits.png")
-	if ResourceLoader.exists("res://assets/art/items-0.46.png"): items_texture = load("res://assets/art/items-0.46.png")
+	body_font = asset("res://assets/fonts/manrope-readable.ttf")
+	title_font = asset("res://assets/fonts/cormorantgaramond-readable.ttf")
+	if ResourceLoader.exists("res://assets/art/portraits.png"): portraits = asset("res://assets/art/portraits.png")
+	if ResourceLoader.exists("res://assets/art/items-0.46.png"): items_texture = asset("res://assets/art/items-0.46.png")
 	item_ids = data.items.keys()
 	item_catalog = data.items
+	enemy_catalog = data.enemies
 
 static var frame_cache: Dictionary = {}
 
@@ -222,7 +230,7 @@ static func enemy_texture(enemy: Dictionary) -> Texture2D:
 	if enemy.has("secret_tile"): return atlas_tile("res://assets/art/superbosses-0.34.png",int(enemy.secret_tile),3,3)
 	if enemy.has("art_tile"): return atlas_tile("res://assets/art/ascension-enemies-0.25.png",int(enemy.art_tile),3,3)
 	if enemy.has("region") and ResourceLoader.exists("res://assets/art/expedition-guardians.png"):
-		var texture = load("res://assets/art/expedition-guardians.png")
+		var texture = asset("res://assets/art/expedition-guardians.png")
 		var atlas = AtlasTexture.new()
 		atlas.atlas = texture
 		atlas.filter_clip = true
@@ -247,7 +255,7 @@ static func enemy_portrait(enemy: Dictionary, dimensions: Vector2) -> TextureRec
 
 static func frontier_texture(tile: int) -> Texture2D:
 	var texture = AtlasTexture.new()
-	texture.atlas = load("res://assets/art/frontier-enemies-0.43.png")
+	texture.atlas = asset("res://assets/art/frontier-enemies-0.43.png")
 	var ys = [0,341,654,1024]
 	var row = int(tile/6)
 	texture.region = Rect2(tile%6*256+4,ys[row]+4,248,ys[row+1]-ys[row]-8)
@@ -261,6 +269,9 @@ static func icon(id: String, dimension: int = 52) -> TextureRect:
 	t.expand_mode = TextureRect.EXPAND_IGNORE_SIZE
 	t.stretch_mode = TextureRect.STRETCH_KEEP_ASPECT_CENTERED
 	t.mouse_filter = Control.MOUSE_FILTER_IGNORE
+	if id in ["card_ash_rat","card_hollow_hound"]:
+		t.texture = enemy_texture(enemy_catalog[id.trim_prefix("card_")])
+		return t
 	var data = item_catalog.get(id,{})
 	var detail_index = ["raw_meat","worn_sword","dusksteel_sword","dawnsteel_sword"].find(id)
 	if detail_index>=0:
@@ -281,13 +292,13 @@ static func icon(id: String, dimension: int = 52) -> TextureRect:
 		var col = tile%7
 		var row = int(tile/7)
 		var texture = AtlasTexture.new()
-		texture.atlas = load("res://assets/art/monster-cards-0.41.png")
+		texture.atlas = asset("res://assets/art/monster-cards-0.41.png")
 		texture.filter_clip = true
 		texture.region = Rect2(xs[col]+12,ys[row]+5,xs[col+1]-xs[col]-24,ys[row+1]-ys[row]-10)
 		t.texture = texture
 		return t
 	if data.get("slot","") in ["ring","necklace","belt"]:
-		t.texture = load("res://assets/ui/accessory-"+str(data.slot)+".svg")
+		t.texture = asset("res://assets/ui/accessory-"+str(data.slot)+".svg")
 		return t
 	if data.has("art_tile"):
 		t.texture = item_region("res://assets/art/ascension-items-0.46.png",int(data.art_tile),[0,319,610,931,1254],[0,308,606,906,1254])
@@ -300,7 +311,7 @@ static func icon(id: String, dimension: int = 52) -> TextureRect:
 static func item_region(path: String, index: int, _xs: Array, _ys: Array) -> AtlasTexture:
 	if item_regions.is_empty(): item_regions = JSON.parse_string(FileAccess.get_file_as_string("res://data/item-art-regions-0.46.json"))
 	var atlas = AtlasTexture.new()
-	atlas.atlas = load(path)
+	atlas.atlas = asset(path)
 	atlas.filter_clip = true
 	var rect = item_regions[path.get_file().get_basename()][index]
 	atlas.region = Rect2(rect[0],rect[1],rect[2],rect[3])
@@ -316,7 +327,7 @@ static func stat(parent: Node, value: String, title: String, color: Color = TEXT
 	v.add_child(label(title,11,MUTED))
 
 static func atlas_tile(path: String, index: int, cols: int, rows: int) -> AtlasTexture:
-	var texture = load(path)
+	var texture = asset(path)
 	var atlas = AtlasTexture.new()
 	atlas.atlas = texture
 	atlas.filter_clip = true

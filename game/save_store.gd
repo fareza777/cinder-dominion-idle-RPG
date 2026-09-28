@@ -11,6 +11,7 @@ static func counter(v) -> bool:
 func valid(s, data: Dictionary) -> bool:
 	if not s is Dictionary: return false
 	if s.has("economy_revision") and (not counter(s.economy_revision) or s.economy_revision!=1): return false
+	if s.has("blueprint_rng") and (not s.blueprint_rng is String or not s.blueprint_rng.is_valid_int()): return false
 	if s.has("legacy_rng") and (not s.legacy_rng is String or not s.legacy_rng.is_valid_int()): return false
 	var fields = ["version","revision","time","wall","rng","gold","bag","gear","overflow","equipped","next_uid","xp","mastery","queue","active","fight","hp","regen_at","kills","gains","spent","tutorial","beacon","presets","log","processed","settings","report"]
 	for key in fields:

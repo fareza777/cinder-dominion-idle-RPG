@@ -2566,6 +2566,96 @@
       "unique_effect": "Deal 6% more damage to Chilled or Weakened enemies.",
       "icon_alias": "iron_sword",
       "masterwork_tile": 6
+    },
+    "blueprint_heirloom_blade": {
+      "id": "blueprint_heirloom_blade",
+      "name": "Ashwake Blueprint",
+      "en": "Ashwake Blueprint",
+      "category": "material",
+      "sell": 0,
+      "masterwork_tile": 7,
+      "blueprint_for": "heirloom_blade"
+    },
+    "blueprint_heirloom_aegis": {
+      "id": "blueprint_heirloom_aegis",
+      "name": "Oathkeeper Blueprint",
+      "en": "Oathkeeper Blueprint",
+      "category": "material",
+      "sell": 0,
+      "masterwork_tile": 7,
+      "blueprint_for": "heirloom_aegis"
+    },
+    "blueprint_heirloom_pendant": {
+      "id": "blueprint_heirloom_pendant",
+      "name": "Lastlight Blueprint",
+      "en": "Lastlight Blueprint",
+      "category": "material",
+      "sell": 0,
+      "masterwork_tile": 7,
+      "blueprint_for": "heirloom_pendant"
+    },
+    "blueprint_heirloom_helm": {
+      "id": "blueprint_heirloom_helm",
+      "name": "Starless Visage Blueprint",
+      "en": "Starless Visage Blueprint",
+      "category": "material",
+      "sell": 0,
+      "masterwork_tile": 7,
+      "blueprint_for": "heirloom_helm"
+    },
+    "blueprint_heirloom_cuirass": {
+      "id": "blueprint_heirloom_cuirass",
+      "name": "Cinderbound Mantle Blueprint",
+      "en": "Cinderbound Mantle Blueprint",
+      "category": "material",
+      "sell": 0,
+      "masterwork_tile": 7,
+      "blueprint_for": "heirloom_cuirass"
+    },
+    "blueprint_heirloom_gauntlets": {
+      "id": "blueprint_heirloom_gauntlets",
+      "name": "Grasp of Ruin Blueprint",
+      "en": "Grasp of Ruin Blueprint",
+      "category": "material",
+      "sell": 0,
+      "masterwork_tile": 7,
+      "blueprint_for": "heirloom_gauntlets"
+    },
+    "blueprint_heirloom_boots": {
+      "id": "blueprint_heirloom_boots",
+      "name": "Gravetread Blueprint",
+      "en": "Gravetread Blueprint",
+      "category": "material",
+      "sell": 0,
+      "masterwork_tile": 7,
+      "blueprint_for": "heirloom_boots"
+    },
+    "blueprint_heirloom_belt": {
+      "id": "blueprint_heirloom_belt",
+      "name": "Keeper of the Last Light Blueprint",
+      "en": "Keeper of the Last Light Blueprint",
+      "category": "material",
+      "sell": 0,
+      "masterwork_tile": 7,
+      "blueprint_for": "heirloom_belt"
+    },
+    "blueprint_heirloom_ember_ring": {
+      "id": "blueprint_heirloom_ember_ring",
+      "name": "Ember Oath Blueprint",
+      "en": "Ember Oath Blueprint",
+      "category": "material",
+      "sell": 0,
+      "masterwork_tile": 7,
+      "blueprint_for": "heirloom_ember_ring"
+    },
+    "blueprint_heirloom_glass_ring": {
+      "id": "blueprint_heirloom_glass_ring",
+      "name": "Pale Covenant Blueprint",
+      "en": "Pale Covenant Blueprint",
+      "category": "material",
+      "sell": 0,
+      "masterwork_tile": 7,
+      "blueprint_for": "heirloom_glass_ring"
     }
   },
   "skills": {

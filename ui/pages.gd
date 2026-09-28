@@ -113,7 +113,6 @@ func explore(parent: Node):
 		elif id=="hollow_hound": card.add_child(U.para("OPTIONAL HUNT · Gather meat and melee XP.",12,U.GOLD))
 		if why!="": card.add_child(U.para(why,12,U.MUTED))
 		else:
-			app.dynamic(card,func(): return m.encounter_advice(id),12,U.MUTED)
 			card.add_child(U.button(text("Tantang boss" if d.boss else "Buru & kumpulkan loot","Challenge boss" if d.boss else "Hunt & gather loot"),func(): app.activity_dialog("hunt_"+id),true))
 
 	parent.add_child(U.button("Wallet & hunting rewards",func(): preload("res://ui/economy.gd").new(app).open()))
@@ -162,6 +161,7 @@ func skills(parent: Node):
 		for aid in m.data.activities:
 			var a = m.data.activities[aid]
 			if a.skill!=selected or a.kind=="combat": continue
+			if not RealmBlueprints.learned(m,a.output): continue
 			if not app.show_locked_recipes and m.level(selected)<int(a.level): continue
 			var c = U.card(parent,12)
 			var r = U.row(12)
@@ -198,6 +198,7 @@ func inventory(parent: Node):
 	picker.item_selected.connect(func(i):
 		app.filter = kinds[i]
 		app.inventory_page = 0
+		app.supply_page = 0
 		app.set_page("inventory"))
 	var drawer = U.column(10)
 	filters.add_child(U.button("Filter",func(): drawer.visible=not drawer.visible))
@@ -215,6 +216,7 @@ func inventory(parent: Node):
 	var search_action = func():
 		app.search_text = input.text
 		app.inventory_page = 0
+		app.supply_page = 0
 		app.set_page("inventory")
 	search.add_child(U.button(text("Cari","Find"),search_action))
 	input.text_submitted.connect(func(_value): search_action.call())
@@ -228,6 +230,7 @@ func inventory(parent: Node):
 	sorter.item_selected.connect(func(index):
 		app.inventory_sort = index
 		app.inventory_page = 0
+		app.supply_page = 0
 		app.set_page("inventory"))
 	options.add_child(sorter)
 	var slots = ["all","weapon","shield","head","body","hands","feet","necklace","belt","ring","axe","pick","rod"]
@@ -238,6 +241,7 @@ func inventory(parent: Node):
 	slot_picker.item_selected.connect(func(index):
 		app.inventory_slot = slots[index]
 		app.inventory_page = 0
+		app.supply_page = 0
 		app.set_page("inventory"))
 	options.add_child(slot_picker)
 	var shown = 0
@@ -274,12 +278,31 @@ func inventory(parent: Node):
 			if g.uid in m.s.equipped.values(): tags += " · Equipped"
 			if g.locked: tags += " · Locked"
 			P.item_tile(gear_grid,g.id,m.name_of(g.id),tags+" · ×%d" % int(g.count),U.QUALITY[int(g.q)],func(): app.item_dialog(g.uid))
-	var supply_grid = item_grid(parent)
+	var supplies = []
 	for id in m.s.bag:
 		if m.count(id)<=0: continue
 		var d = m.data.items[id]
 		if app.filter!="all" and d.category!=app.filter: continue
 		if app.search_text!="" and not m.name_of(id).to_lower().contains(app.search_text.to_lower()): continue
+		supplies.append(id)
+	var supply_pages = maxi(1,ceili(supplies.size()/30.0))
+	app.supply_page=clampi(app.supply_page,0,supply_pages-1)
+	if supply_pages>1:
+		var pager=U.row(6)
+		parent.add_child(pager)
+		var previous=U.button("Previous supplies",func():
+			app.supply_page-=1
+			app.set_page("inventory"))
+		previous.disabled=app.supply_page==0
+		pager.add_child(previous)
+		pager.add_child(U.para("%d / %d" % [app.supply_page+1,supply_pages],14))
+		var next=U.button("Next supplies",func():
+			app.supply_page+=1
+			app.set_page("inventory"))
+		next.disabled=app.supply_page+1>=supply_pages
+		pager.add_child(next)
+	var supply_grid = item_grid(parent)
+	for id in supplies.slice(app.supply_page*30,(app.supply_page+1)*30):
 		shown += 1
 		P.item_tile(supply_grid,id,m.name_of(id),"×%d" % m.count(id),U.GOLD,func(): supply_details(id))
 	if shown==0: parent.add_child(U.para(text("Tidak ada item sesuai filter ini.","No items match this filter.")))
@@ -380,6 +403,10 @@ func supply_details(id: String):
 			app.send({"type":"potion","id":id})
 			app.toast("Automatic potion enabled"),true))
 	v.add_child(U.button("Where to find it",func(): app.sources_dialog(id)))
+	if id.begins_with("blueprint_"):
+		v.add_child(U.para("Blueprint learned. This masterwork is now in your collection.",15,U.GOLD))
+		v.add_child(U.button("View blueprint",func(): preload("res://ui/masterworks.gd").new(app).recipe(id.trim_prefix("blueprint_"))))
+		return
 	if id.begins_with("keepsake_") or id=="masterwork_commission":
 		v.add_child(U.para("Reserved for masterwork crafting. This item cannot be sold as an ordinary supply.",14,U.GOLD))
 		v.add_child(U.button("Masterwork blueprints",func(): preload("res://ui/masterworks.gd").new(app).open()))

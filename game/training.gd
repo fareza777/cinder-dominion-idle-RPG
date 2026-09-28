@@ -25,6 +25,7 @@ static func plan(source, skill: String, target: int, minutes: int) -> Dictionary
 	var best_rate = -1.0
 	for id in m.data.activities:
 		var a = m.data.activities[id]
+		if not RealmBlueprints.learned(m,a.output): continue
 		if a.skill!=skill or a.kind=="combat" or a.level>m.level(skill): continue
 		var low = 1
 		var high = mini(1000,maxi(1,ceili(float(missing)/float(a.xp))))

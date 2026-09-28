@@ -40,6 +40,7 @@ func open_slot(slot: String):
 		for id in m.data.activities:
 			var a = m.data.activities[id]
 			if a.kind=="combat": continue
+			if not RealmBlueprints.learned(m,a.output): continue
 			var fits = RealmEquipmentSlots.accepts(slot,str(m.data.items[a.output].get("slot","")))
 			if fits and a.level<=m.level(a.skill):
 				v.add_child(U.button("Plan "+m.activity_name(id),func(): app.planner_dialog(id,1)))

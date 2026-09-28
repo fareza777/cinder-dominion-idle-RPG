@@ -40,6 +40,7 @@ static func count(m) -> int:
 static func unlocks(m, skill: String, from_level: int, to_level: int) -> Array:
 	var names = []
 	for activity in m.data.activities.values():
+		if not RealmBlueprints.learned(m,activity.output): continue
 		if activity.kind!="combat" and activity.skill==skill and int(activity.level)>from_level and int(activity.level)<=to_level:
 			var title = m.name_of(activity.output)
 			if title not in names: names.append(title)

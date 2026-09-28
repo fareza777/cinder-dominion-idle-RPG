@@ -13,6 +13,7 @@ var search_text = ""
 var inventory_sort = 0
 var inventory_slot = "all"
 var inventory_page = 0
+var supply_page = 0
 var hero_tab = "equipment"
 var page_scroll = {}
 var rendered_page_key = ""
@@ -405,7 +406,7 @@ func set_page(next: String, retain_scroll: bool = false):
 	var key = next
 	if next=="character": key += ":"+hero_tab
 	if next=="skills": key += ":"+skill
-	if next=="inventory": key += ":"+str([filter,search_text,inventory_sort,inventory_slot,inventory_page])
+	if next=="inventory": key += ":"+str([filter,search_text,inventory_sort,inventory_slot,inventory_page,supply_page])
 	var return_scroll = old_scroll if retain_scroll else int(page_scroll.get(key,0))
 	rendered_page_key = key
 	page = next
@@ -431,9 +432,14 @@ func dynamic(parent: Node, fn: Callable, size: int = 15, color: Color = U.TEXT) 
 	parent.add_child(l)
 	l.visible = not l.text.is_empty()
 	var target = weakref(l)
+	var clock = {"last":Time.get_ticks_msec()}
 	var callback = func():
 		var live = target.get_ref()
 		if is_instance_valid(live):
+			if Time.get_ticks_msec()-clock.last<150: return
+			if not live.is_visible_in_tree() and not live.text.is_empty(): return
+			if live.is_visible_in_tree() and not live.get_global_rect().intersects(get_viewport_rect()): return
+			clock.last=Time.get_ticks_msec()
 			live.text = RealmEconomy.text_value(str(fn.call()))
 			live.visible = not live.text.is_empty()
 	if is_instance_valid(dialog) and dialog.is_ancestor_of(parent): dialog_callbacks.append(callback)
@@ -646,6 +652,9 @@ func refuge_dialog():
 
 func activity_dialog(id: String, recommended: int = 0):
 	var a = model.data.activities[id]
+	if not RealmBlueprints.learned(model,a.output):
+		preload("res://ui/masterworks.gd").new(self).open()
+		return
 	var v = modal(model.activity_name(id))
 	dialog.set_meta("coach_activity",id)
 	if a.kind!="combat":

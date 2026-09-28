@@ -9,7 +9,7 @@ func check(ok: bool, label: String):
 
 func _init():
 	var m = RealmModel.new()
-	check(m.data.items.size()==267,"267 item definitions")
+	check(m.data.items.size()==277,"277 item definitions")
 	m.command({"type":"queue","id":"mine_copper","target":4})
 	m.advance(12000)
 	check(m.count("copper_ore")==4,"gather four ore")

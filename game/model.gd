@@ -147,7 +147,8 @@ func requirement(aid: String) -> String:
 		if locked!="": return locked
 		if s.hp<=0: return "Recover HP outside combat before hunting"
 	else:
-		if a.has("blueprint") and int(s.kills.get(a.blueprint,0))<1: return "Defeat its optional guardian to learn this blueprint."
+		var blueprint_reason=RealmBlueprints.reason(self,a)
+		if blueprint_reason!="": return blueprint_reason
 		if level(a.skill)<int(a.level): return "%s Lv.%d" % [local_name(data.skills[a.skill]),int(a.level)]
 		for id in a.inputs:
 			if count(id)<int(a.inputs[id]): return "Need %s (owned %d / required %d)" % [name_of(id),count(id),int(a.inputs[id])]
@@ -188,6 +189,7 @@ func command(cmd: Dictionary) -> bool:
 		"upgrade_goal":
 			if id!="" and (not data.items.has(id) or data.items[id].category!="equipment" or not data.activities.has("craft_"+id)):
 				return fail("Choose a craftable equipment target.")
+			if not RealmBlueprints.learned(self,id): return fail("Discover this blueprint first.")
 			s.upgrade_goal = id
 		"doctrine":
 			var why = RealmDoctrines.command(self,id)
@@ -326,7 +328,7 @@ func command(cmd: Dictionary) -> bool:
 			gain(id,qty)
 		"sell":
 			if not data.items.has(id) or data.items[id].category=="equipment": return fail("Salvage equipment to recover metal scraps.")
-			if id.begins_with("keepsake_") or id=="masterwork_commission": return fail("Keep this rare crafting item for a masterwork. It cannot be sold as an ordinary supply.")
+			if id.begins_with("blueprint_") or id.begins_with("keepsake_") or id=="masterwork_commission": return fail("Keep this rare crafting item for a masterwork. It cannot be sold as an ordinary supply.")
 			var qty = clampi(int(cmd.get("amount",1)),1,1000)
 			if count(id)<qty: return fail("Not enough items")
 			if id.begins_with("socket_") and id.trim_prefix("socket_") in RealmPaths.sockets(self) and count(id)-qty<1: return fail("Remove this socket relic from your build before selling it.")
@@ -640,6 +642,8 @@ func win(enemy: Dictionary):
 		note("The bells fall silent. Cinderwatch burns bright again.")
 	var card_drop = RealmCards.drop(self,id)
 	if card_drop!="": last_reward += " · CARD FOUND: "+name_of(card_drop)
+	var blueprint_drop = RealmBlueprints.drop(self,id)
+	if blueprint_drop!="": last_reward += " · BLUEPRINT FOUND: "+name_of(blueprint_drop)
 	var rare_material = RealmLegacyFinds.drop(self,enemy)
 	if rare_material!="": last_reward += " · RARE MATERIAL: "+name_of(rare_material)
 	if data.items[enemy.drop].category=="material" and not enemy.get("secret",false) and not enemy.get("depth",false):
@@ -676,6 +680,7 @@ func sources(id: String) -> Array:
 	var out = []
 	for key in data.activities:
 		var a = data.activities[key]
+		if not RealmBlueprints.learned(self,a.output): continue
 		if a.output==id or a.get("side","")==id: out.append(key)
 		elif a.kind=="combat" and (data.enemies[a.enemy].get("rare_material","")==id or "card_"+a.enemy==id): out.append(key)
 	return out

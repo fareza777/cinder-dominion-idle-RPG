@@ -29,6 +29,7 @@ static func pool(t: int, pricing: int = 1) -> Array:
 	if t>1:
 		for enemy in ["wilds_1","marsh_1","crown_1"]:
 			out.append({"id":"card_"+enemy,"qty":1,"price":250000,"quality":1})
+	if t==3 and pricing==1: out.append_array(RealmBlueprints.offers())
 	return out
 
 static func sync(m, now: int) -> Dictionary:
@@ -44,7 +45,7 @@ static func sync(m, now: int) -> Dictionary:
 		var random = RandomNumberGenerator.new()
 		random.seed = int(stock.seen)+int(stock.revision)*7919
 		var all_choices = pool(int(stock.tier))
-		var choices = all_choices.filter(func(o): return not str(o.id).begins_with("card_"))
+		var choices = all_choices.filter(func(o): return not str(o.id).begins_with("card_") and not str(o.id).begins_with("blueprint_"))
 		stock.offers = []
 		for i in range(3):
 			var index = random.randi_range(0,choices.size()-1)
@@ -57,6 +58,11 @@ static func sync(m, now: int) -> Dictionary:
 			var offer = cards[random.randi_range(0,cards.size()-1)].duplicate()
 			offer.bought = false
 			stock.offers[2] = offer
+		var blueprints=all_choices.filter(func(o): return str(o.id).begins_with("blueprint_") and not RealmBlueprints.learned(m,str(o.id).trim_prefix("blueprint_")))
+		if not blueprints.is_empty() and random.randf()<RealmBlueprints.STOCK_CHANCE:
+			var offer=blueprints[random.randi_range(0,blueprints.size()-1)].duplicate()
+			offer.bought=false
+			stock.offers[1]=offer
 	return stock
 
 static func valid(stock) -> bool:
@@ -86,6 +92,7 @@ static func buy(m, cmd: Dictionary) -> String:
 	if index<0 or index>=stock.offers.size(): return "Choose an available offer."
 	var offer = stock.offers[index]
 	if offer.bought: return "This offer is sold out."
+	if str(offer.id).begins_with("blueprint_") and RealmBlueprints.learned(m,str(offer.id).trim_prefix("blueprint_")): return "This blueprint is already in your collection."
 	if m.s.gold<int(offer.price): return "Not enough coins. Complete hunts and contracts to earn more."
 	if m.data.items[offer.id].category=="equipment" and m.s.gear.size()>=1000: return "Make room in your equipment bag first."
 	m.s.gold -= int(offer.price)

@@ -250,3 +250,12 @@ User asked to compare stone against iron. Hero stage rail texture is now an inje
 ## 0.48.1 — Selected stone hero rails
 
 User chose stone for the exposed background behind the hero's equipment slots and requested the APK. Set the actual default to fortress-floor-0.48, retaining iron equipment tiles and all prior 0.48 visuals. VersionName 0.48.1/code 49. Focused default-texture assertion, normal/130% rendering and pointer weapon-slot opening passed. No new art, save-schema or gameplay change. Existing shutdown warnings and physical-device verification limitation remain. Package verification: docs/qa/hero-stone-0.48.1-report.md.
+
+
+## 0.49 — Responsive navigation and discovered masterworks
+
+Measured repeat navigation stalls and retained strong references to shared image/font atlases, including battle backdrops. Removed full battle forecasts from every Explore list row (still available in hunt preparation), throttled dynamic labels and skipped offscreen updates; Bag supplies are paged by 30. Desktop warm Explore construction fell from 309–313ms to 30–33ms, Bag from 128–140ms to 33–34ms. Cold asset loading and physical Android responsiveness remain limitations.
+
+Rat/Hound cards now reference the exact bandaged battle atlas regions. Ten masterwork recipes stay hidden across collection, skills, training, sources, equipment suggestions and direct planners until a super-rare eligible-monster blueprint drop or rare premium merchant purchase. Existing actual ownership/crafting history preserves learned recipes; boss kills alone no longer unlock these ten. Earlier seven guardian relic recipes retain their rules. New optional independent RNG state persists through saves. No visible drop-rate percentages. Ten blueprint item records added (277 total).
+
+Focused discovery/save/merchant checks, 83 essential checks, six-step pointer onboarding and phone UI captures passed. Large text/pagination inspected at 360x800; cards and discoveries inspected at 412x892. Version 0.49.0/code50 exported and v2 signature verified. Known exit warnings persist. No paid service activation/public publishing. Details in docs/qa/responsiveness-blueprints-0.49-report.md.

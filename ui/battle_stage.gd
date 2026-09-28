@@ -34,7 +34,7 @@ func _ready():
 	mouse_filter = Control.MOUSE_FILTER_IGNORE
 	clip_contents = true
 	var backdrop = AtlasTexture.new()
-	backdrop.atlas = load("res://assets/art/cinematic.png")
+	backdrop.atlas = U.asset("res://assets/art/cinematic.png")
 	backdrop.region = Rect2(0,0,1536,341)
 	background = backdrop
 	for index in range(8):
@@ -44,7 +44,7 @@ func _ready():
 		face.filter_clip = true
 		faces.append(face)
 	if ResourceLoader.exists("res://assets/art/world-map.png"):
-		var map = load("res://assets/art/world-map.png")
+		var map = U.asset("res://assets/art/world-map.png")
 		var crops = {"wilds":Rect2(0,0,750,500),"marsh":Rect2(700,300,750,500),"crown":Rect2(900,0,636,420)}
 		for region in crops:
 			var art = AtlasTexture.new()
@@ -53,7 +53,7 @@ func _ready():
 			art.filter_clip = true
 			region_art[region] = art
 	if ResourceLoader.exists("res://assets/art/battlefields.png"):
-		var arenas = load("res://assets/art/battlefields.png")
+		var arenas = U.asset("res://assets/art/battlefields.png")
 		for index in range(3):
 			var art = AtlasTexture.new()
 			art.atlas = arenas

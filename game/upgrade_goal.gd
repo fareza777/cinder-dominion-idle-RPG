@@ -2,7 +2,8 @@ class_name RealmUpgradeGoal
 extends RefCounted
 
 static func current(m) -> String:
-	return str(m.s.get("upgrade_goal",""))
+	var id = str(m.s.get("upgrade_goal",""))
+	return id if RealmBlueprints.learned(m,id) else ""
 
 static func status(m) -> Dictionary:
 	var id = current(m)

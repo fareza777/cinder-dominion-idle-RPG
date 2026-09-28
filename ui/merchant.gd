@@ -48,6 +48,8 @@ func open():
 		if m.data.items[offer.id].category=="card":
 			card.add_child(U.para(RealmCards.description(offer.id),14))
 			card.add_child(U.button("Inspect card",func(): preload("res://ui/cards.gd").new(app).detail(offer.id)))
+		if str(offer.id).begins_with("blueprint_"):
+			card.add_child(U.para("Learn a lost masterwork recipe. Materials and Smithing training are still required.",14))
 		if gear:
 			var item = m.data.items[offer.id]
 			card.add_child(U.para("Gear bonus: +%.1f ATK · +%.1f DEF" % [float(item.get("attack",0))*RealmModel.QUALITY[int(offer.quality)],float(item.get("armor",0))*RealmModel.QUALITY[int(offer.quality)]],13))
