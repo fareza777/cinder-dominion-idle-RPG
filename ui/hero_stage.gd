@@ -1,8 +1,8 @@
 extends Control
 
 const U = preload("res://ui/style.gd")
-const IRON = preload("res://assets/art/blackened-iron-0.48.png")
-var rail_texture: Texture2D = IRON
+const STONE = preload("res://assets/art/fortress-floor-0.48.png")
+var rail_texture: Texture2D = STONE
 const SLOTS = ["head","necklace","weapon","hands","ring_left","body","shield","belt","ring_right","feet"]
 const ANCHORS = [Vector2(.50,.20),Vector2(.50,.30),Vector2(.38,.56),Vector2(.36,.62),Vector2(.36,.67),Vector2(.52,.39),Vector2(.65,.55),Vector2(.52,.55),Vector2(.65,.67),Vector2(.54,.84)]
 var app
@@ -87,7 +87,7 @@ func _process(delta):
 func _draw():
 	if portrait==null: return
 	draw_rect(Rect2(Vector2.ZERO,size),Color("0b1116"))
-	# Portrait covers the center; iron remains visible behind both equipment rails.
+	# Portrait covers the center; stone remains visible behind both equipment rails.
 	draw_texture_rect(rail_texture,Rect2(Vector2.ZERO,size),false,Color(.60,.60,.60))
 	var width = size.y*portrait.get_width()/portrait.get_height()
 	draw_texture_rect(portrait,Rect2((size.x-width)/2,0,width,size.y),false)

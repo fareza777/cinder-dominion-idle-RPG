@@ -246,3 +246,7 @@ User screenshot identified the flat dark strips behind left/right equipment slot
 ### Hero rail material comparison
 
 User asked to compare stone against iron. Hero stage rail texture is now an injectable Texture2D, default still iron. A nonpersistent preview test overrides it with the existing fortress stone; 100%/130% captures and pointer weapon-slot opening passed. No new generated art, saved setting or APK. Comparison gallery: build/visual-comparison/hero-materials.html. Recommendation: stone for rails/background, iron for individual equipment tiles. This recommendation is not applied as a default without the user's selection.
+
+## 0.48.1 — Selected stone hero rails
+
+User chose stone for the exposed background behind the hero's equipment slots and requested the APK. Set the actual default to fortress-floor-0.48, retaining iron equipment tiles and all prior 0.48 visuals. VersionName 0.48.1/code 49. Focused default-texture assertion, normal/130% rendering and pointer weapon-slot opening passed. No new art, save-schema or gameplay change. Existing shutdown warnings and physical-device verification limitation remain. Package verification: docs/qa/hero-stone-0.48.1-report.md.
