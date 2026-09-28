@@ -71,4 +71,4 @@ static func experience_note(m, enemy: Dictionary) -> String:
 	var per_win = xp-int(xp/3)*2
 	var remaining = threshold(current+1)-int(m.s.xp.bladecraft)
 	var wins = ceili(float(remaining)/maxi(1,per_win))
-	return "%d Bladecraft XP per win · about %d wins to Lv.%d." % [per_win,wins,current+1]
+	return "%d Bladecraft XP / win · ~%d %s to Lv.%d" % [per_win,wins,"win" if wins==1 else "wins",current+1]

@@ -510,6 +510,7 @@ func dismiss():
 
 func modal(title: String, dim_background: bool = true) -> VBoxContainer:
 	dismiss()
+	if is_instance_valid(toast_label): toast_label.hide()
 	dialog = Control.new()
 	dialog.set_anchors_and_offsets_preset(Control.PRESET_FULL_RECT)
 	dialog.z_index = 10
@@ -620,7 +621,8 @@ func activity_dialog(id: String, recommended: int = 0):
 	if a.kind!="combat":
 		v.add_child(U.icon(a.output,92))
 		v.add_child(U.para("%s · Lv.%d · %.1fs · +%d XP" % [model.local_name(model.data.skills[a.skill]),int(a.level),model.duration(a)/1000.0,int(a.xp)]))
-		v.add_child(U.para("Mastery %d · At 250 completions: +1 output every 10 cycles. At 1,000: every 5 cycles. Applies to ordinary materials and food." % int(model.s.mastery.get(id,0)),13))
+		var mastery = U.disclosure(v,"crafting mastery")
+		mastery.add_child(U.para("%d completions. At 250: +1 output every 10 cycles. At 1,000: every 5 cycles. Materials and food only." % int(model.s.mastery.get(id,0)),13))
 		for key in a.inputs:
 			var r = U.row()
 			v.add_child(r)
@@ -628,44 +630,43 @@ func activity_dialog(id: String, recommended: int = 0):
 			r.add_child(U.para("%s   %d / %d" % [model.name_of(key),model.count(key),int(a.inputs[key])]))
 			r.add_child(U.button(tr2("Cari","Find"),func(): sources_dialog(key)))
 	else:
-		v.add_child(U.button("Plan a longer hunt",func(): hunt_plan_dialog(a.enemy)))
 		var e = RealmEndgame.enemy(model,model.data.enemies[a.enemy])
-		if e.has("rare_material"): v.add_child(U.para(RealmLegacyFinds.description(model,e),14,U.GOLD))
 		var encounter = U.row(16)
 		v.add_child(encounter)
 		encounter.add_child(U.enemy_portrait(e,Vector2(76,100)))
-		var introduction = U.column(10)
+		var introduction = U.column(8)
 		introduction.size_flags_horizontal = Control.SIZE_EXPAND_FILL
 		encounter.add_child(introduction)
 		introduction.add_child(U.para("%d HP · %d ATK · %d DEF" % [int(e.hp),int(e.attack),int(e.armor)],13,U.GOLD))
-		v.add_child(U.para(model.encounter_advice(a.enemy),14,U.GOLD))
-		var card = RealmCards.definitions()["card_"+a.enemy]
-		v.add_child(U.para("%s card · %.3f%% per victory" % [card.rarity,float(card.chance)*100],13,U.GOLD))
-		if model.data.enemies[a.enemy].has("status"): v.add_child(U.para("Special damage: "+RealmAfflictions.element(model.data.enemies[a.enemy])+" · applies "+str(model.data.enemies[a.enemy].status).replace("_"," ").capitalize()+". Bosses resist Freeze and Stun.",13))
-		v.add_child(U.para("Forecast excludes timed status and card proc damage; allow extra food.",12))
-		v.add_child(U.button("Mastery · "+RealmHuntMastery.NAMES[RealmHuntMastery.rank(model,a.enemy)],func(): preload("res://ui/hunt_mastery.gd").new(self).detail(a.enemy)))
-		v.add_child(U.para(RealmCombat.mechanic(e),14,U.TEXT))
-		if e.get("trial",false): v.add_child(U.para("PHASE II · "+RealmTrials.phase_text(e),14,U.RED))
-		var rune = RealmRuneforge.state(model).equipped
-		if rune!="": v.add_child(U.para("EQUIPPED RUNE · "+RealmRuneforge.RUNES[rune].name+"\n"+RealmRuneforge.effect(rune,RealmRuneforge.active_rank(model,rune)),13,U.GREEN))
-		var fragment_id = RealmChronicle.fragments_for(e)
-		v.add_child(U.para("%d × %s fragments / win" % [RealmHuntMastery.fragments(model,e),RealmChronicle.RELICS[fragment_id].name],14,U.GREEN))
-		if e.has("region") and int(model.s.kills.get(e.id,0))==0:
-			if e.get("trial",false): v.add_child(U.para("First clear: Epic %s · 120 bonus fragments · 15 scraps · 20 grilled minnows." % model.name_of(e.trial_reward),13,U.GOLD))
-			else: v.add_child(U.para("First clear: +10 meals and %d scraps.%s" % [5+int(e.tier)," Tier 5 also grants a Rare Iron Sword." if int(e.tier)==5 else ""],13,U.GOLD))
-		v.add_child(U.para(RealmEconomy.experience_note(model,e),14,U.TEXT))
-		v.add_child(U.para("+%d gold · +%d melee XP · %s ×%d / win" % [RealmHuntMastery.battle_gold(model,e),RealmEconomy.hunt_xp(model,e),model.name_of(e.drop),int(e.qty)],14,U.GOLD))
+		introduction.add_child(U.para(model.encounter_advice(a.enemy),14,U.TEXT))
+		v.add_child(U.para("%s · %d melee XP / win" % [RealmEconomy.money(RealmHuntMastery.battle_gold(model,e)),RealmEconomy.hunt_xp(model,e)],15,U.GOLD))
 		v.add_child(U.para("Food: %s ×%d · heal at %d%% HP" % [model.name_of(model.s.settings.food),model.count(model.s.settings.food),int(model.s.settings.threshold*100)],14,U.GREEN if model.count(model.s.settings.food)>0 else U.RED))
+		var intel = U.disclosure(v,"enemy & loot details")
+		intel.add_child(U.para(RealmCombat.mechanic(e),14,U.TEXT))
+		if model.data.enemies[a.enemy].has("status"): intel.add_child(U.para(RealmAfflictions.element(model.data.enemies[a.enemy])+" · "+str(model.data.enemies[a.enemy].status).replace("_"," ").capitalize(),13,U.RED))
+		if e.get("trial",false): intel.add_child(U.para("Phase II · "+RealmTrials.phase_text(e),14,U.RED))
+		intel.add_child(U.para("%s ×%d / win" % [model.name_of(e.drop),int(e.qty)],14,U.GREEN))
+		var fragment_id = RealmChronicle.fragments_for(e)
+		intel.add_child(U.para("%d %s fragments / win" % [RealmHuntMastery.fragments(model,e),RealmChronicle.RELICS[fragment_id].name],14,U.GREEN))
+		if e.has("rare_material"): intel.add_child(U.para(RealmLegacyFinds.description(model,e),14,U.GOLD))
+		var card_id = "card_"+a.enemy
+		intel.add_child(U.button("View monster card",func(): preload("res://ui/cards.gd").new(self).detail(card_id)))
+		if e.has("region") and int(model.s.kills.get(e.id,0))==0:
+			if e.get("trial",false): intel.add_child(U.para("First clear: Epic %s · 120 bonus fragments · 15 scraps · 20 grilled minnows." % model.name_of(e.trial_reward),13,U.GOLD))
+			else: intel.add_child(U.para("First clear: +10 meals and %d scraps.%s" % [5+int(e.tier)," Tier 5 also grants a Rare Iron Sword." if int(e.tier)==5 else ""],13,U.GOLD))
+		intel.add_child(U.para(RealmEconomy.experience_note(model,e),14))
+		intel.add_child(U.para("Estimates exclude timed effects and card triggers. Bring spare food.",12))
+		intel.add_child(U.button("Mastery · "+RealmHuntMastery.NAMES[RealmHuntMastery.rank(model,a.enemy)],func(): preload("res://ui/hunt_mastery.gd").new(self).detail(a.enemy)))
+		v.add_child(U.button("Plan a longer hunt",func(): hunt_plan_dialog(a.enemy)))
 	if a.kind!="combat":
-		var cost_tip = "No material cost." if a.inputs.is_empty() else "Cost per cycle shown above."
-		v.add_child(U.para("Per cycle: 1 × "+model.name_of(a.output)+". "+cost_tip,14,U.GREEN))
-	if a.kind!="combat" and not a.inputs.is_empty():
-		v.add_child(U.button("Plan materials & craft automatically",func(): planner_dialog(id,maxi(1,mini(100,recommended))),true))
+		v.add_child(U.para("Makes 1 "+model.name_of(a.output)+" per cycle",14,U.GREEN))
+	if a.kind!="combat" and not a.inputs.is_empty() and model.requirement(id)=="":
+		v.add_child(U.button("Gather & craft",func(): planner_dialog(id,maxi(1,mini(100,recommended))),true))
 	var reason = model.requirement(id)
 	if reason!="":
 		if model.s.active.get("id","")==id:
 			v.add_child(U.para("Current cycle supplied. More materials are needed for another cycle.",14,U.GOLD))
-		else: v.add_child(U.para(reason+". Gather the missing materials before starting.",14,U.RED))
+		else: v.add_child(U.para("Missing materials" if reason.begins_with("Need ") else reason,14,U.RED))
 	if recommended>0:
 		var unit = ("fight" if recommended==1 else "fights") if a.kind=="combat" else ("cycle" if recommended==1 else "cycles")
 		var suggested = modal_action("Begin · %d %s" % [recommended,unit],func(): enqueue_activity(id,recommended))
@@ -688,10 +689,10 @@ func activity_dialog(id: String, recommended: int = 0):
 		b.size_flags_horizontal = Control.SIZE_EXPAND_FILL
 		targets.add_child(b)
 	var advanced = U.column(12)
-	v.add_child(U.button("Advanced target options ▾",func(): advanced.visible = not advanced.visible))
+	v.add_child(U.button("Custom target",func(): advanced.visible = not advanced.visible))
 	v.add_child(advanced)
 	advanced.hide()
-	advanced.add_child(U.para("Choose an exact count, a number of new items, or a skill level. A level target trains until that level is reached.",13))
+	advanced.add_child(U.para("Set a count, output goal or skill level.",13))
 	var amount = SpinBox.new()
 	amount.min_value = 1
 	amount.max_value = 1000000
@@ -719,7 +720,7 @@ func sources_dialog(id: String):
 	var v = modal(tr2("Sumber: ","Sources: ")+model.name_of(id))
 	if id.begins_with("keepsake_"):
 		for enemy in model.data.enemies.values():
-			if enemy.get("rare_material","")==id: v.add_child(U.para(RealmLegacyFinds.description(model,enemy)+". No guaranteed drop count.",15,U.GOLD))
+			if enemy.get("rare_material","")==id: v.add_child(U.para("Used to craft masterwork equipment.",15,U.GOLD))
 	for aid in model.sources(id):
 		var a = model.data.activities[aid]
 		v.add_child(U.button(model.activity_name(aid)+" · "+model.local_name(model.data.skills[a.skill]),func(): activity_dialog(aid)))

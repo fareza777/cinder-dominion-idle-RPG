@@ -120,6 +120,17 @@ static func column(separation: int = 10) -> VBoxContainer:
 	v.add_theme_constant_override("separation",separation)
 	return v
 
+static func disclosure(parent: Node, title: String) -> VBoxContainer:
+	var content = column(8)
+	var toggle = button("Show "+title,func(): pass)
+	toggle.pressed.connect(func():
+		content.visible = not content.visible
+		toggle.text = ("Hide " if content.visible else "Show ")+title)
+	parent.add_child(toggle)
+	parent.add_child(content)
+	content.hide()
+	return content
+
 static func spacer() -> Control:
 	var c = Control.new()
 	c.size_flags_horizontal = Control.SIZE_EXPAND_FILL

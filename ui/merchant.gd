@@ -23,7 +23,7 @@ func open():
 	app.dynamic(v,func():
 		var left = maxi(0,int(stock.until)-maxi(int(stock.seen),app.now_ms()))
 		return "New offers ready · reopen the merchant" if left==0 else "New offers in %dh %dm" % [int(left/3600000),int(left/60000)%60],14)
-	v.add_child(U.para("Three offers per visit cycle. Each bundle can be bought once. Later stock unlocks through Smithing and regional boss victories.",13))
+	v.add_child(U.para("Each offer can be bought once before restocking.",13))
 	if int(stock.tier)<3:
 		var next = int(stock.tier)+1
 		v.add_child(U.para("Next stock tier: Smithing Lv.%d and defeat %s. Unlocks apply on the next refresh." % [[0,30,60,90][next],m.local_name(m.data.enemies[["","wilds_5","marsh_5","crown_5"][next]])],13,U.GOLD))

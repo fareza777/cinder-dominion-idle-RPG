@@ -18,4 +18,4 @@ static func drop(m, enemy: Dictionary) -> String:
 
 static func description(m, enemy: Dictionary) -> String:
 	var id = str(enemy.get("rare_material",""))
-	return "" if id=="" else "%s · %.3f%% per victory · masterwork material" % [m.name_of(id),float(enemy.get("rare_chance",CHANCE))*100]
+	return "" if id=="" else m.name_of(id)+" · Masterwork material"

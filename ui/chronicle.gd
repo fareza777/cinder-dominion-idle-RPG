@@ -239,7 +239,7 @@ func world(selected: String = "wilds"):
 	if not m.s.beacon:
 		v.add_child(U.para("Restore Cinderwatch's beacon by defeating the Bellkeeper to begin expeditions. Your next story objective is: "+m.objective().title,15,U.GOLD))
 		v.add_child(U.button("Continue Chapter I",app.guide_dialog,true))
-	v.add_child(U.para("Clear a tier once to open the next. Repeat cleared tiers for guaranteed fragments and a 5% chance of iron equipment. Each guardian has a different third-strike ability.",14))
+	v.add_child(U.para("Clear each tier to open the next. Return for fragments and equipment.",14))
 	v.add_child(U.button("Guardian trials · beyond tier five",app.trials_dialog))
 	v.add_child(U.button("Field journal · learn this guardian",func(): preload("res://ui/runeforge.gd").new(app).journal(selected)))
 	for region in C.REGIONS:

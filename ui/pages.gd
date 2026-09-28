@@ -27,8 +27,8 @@ func village(parent: Node):
 	preload("res://ui/chronicle.gd").new(app).services(parent)
 
 func explore(parent: Node):
-	parent.add_child(U.button("Hunting rewards & wallet",func(): preload("res://ui/economy.gd").new(app).open()))
-	if m.s.beacon: parent.add_child(U.button("Beyond the Sovereign · new regions",func(): preload("res://ui/frontiers.gd").new(app).open()))
+	parent.add_child(U.button("Wallet & hunting rewards",func(): preload("res://ui/economy.gd").new(app).open()))
+	if m.s.beacon: parent.add_child(U.button("Beyond the Sovereign",func(): preload("res://ui/frontiers.gd").new(app).open()))
 	var region = m.data.enemies.get(m.s.fight.get("enemy",""),{}).get("region","")
 	var current_enemy = m.data.enemies.get(m.s.fight.get("enemy",""),{})
 	if current_enemy.has("frontier"): heading(parent,"LATE-GAME FRONTIER",RealmFrontiers.REGIONS[int(current_enemy.frontier)],"")

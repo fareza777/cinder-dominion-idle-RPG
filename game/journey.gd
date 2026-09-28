@@ -38,7 +38,7 @@ static func current(m) -> Dictionary:
 	if expedition!="":
 		var enemy = m.data.enemies[expedition]
 		var region_index = RealmChronicle.REGIONS.keys().find(enemy.region)
-		return {"key":expedition,"title":"Clear "+m.local_name(enemy),"detail":"Win once to unlock the next tier. If the fight is too costly, farm a cleared tier and upgrade your gear, relic or rune. Each victory gives %d %s fragments per victory." % [int(enemy.fragments),RealmChronicle.RELICS[enemy.relic].name],"activity":"hunt_"+expedition,"current":0,"goal":1,"action":"Prepare expedition","route":RealmChronicle.REGIONS[enemy.region].name+" → Tier "+str(int(enemy.tier)),"kind":"expedition","index":12+region_index*5+int(enemy.tier),"total":27}
+		return {"key":expedition,"title":"Clear "+m.local_name(enemy),"detail":"Win once to unlock the next tier. If the fight is too costly, farm a cleared tier and upgrade your gear, relic or rune. Each victory gives %d %s fragments." % [int(enemy.fragments),RealmChronicle.RELICS[enemy.relic].name],"activity":"hunt_"+expedition,"current":0,"goal":1,"action":"Prepare expedition","route":RealmChronicle.REGIONS[enemy.region].name+" → Tier "+str(int(enemy.tier)),"kind":"expedition","index":12+region_index*5+int(enemy.tier),"total":27}
 	for trial_id in RealmTrials.IDS:
 		if int(m.s.kills.get(trial_id,0))==0:
 			var trial_enemy = m.data.enemies[trial_id]

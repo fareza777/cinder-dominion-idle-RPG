@@ -393,8 +393,8 @@ func gear_score(g: Dictionary) -> float:
 
 func encounter_advice(id: String) -> String:
 	var f = RealmCombat.forecast(self,id)
-	if f.stalled: return "Outmatched · the enemy can recover faster than your current damage. Improve your weapon, talents or relic."
-	return "%s · about %ds · roughly %d %s per fight" % [f.rating,int(f.seconds),int(f.meals),"meal" if int(f.meals)==1 else "meals"]
+	if f.stalled: return "Outmatched · increase damage to overcome enemy healing."
+	return "%s · ~%ds · ~%d %s" % [f.rating,int(f.seconds),int(f.meals),"meal" if int(f.meals)==1 else "meals"]
 
 func step_complete(step: Dictionary) -> bool:
 	if step.kind=="level": return level(data.activities[step.id].skill)>=int(step.target)

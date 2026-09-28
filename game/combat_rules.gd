@@ -102,7 +102,7 @@ static func mechanic(enemy: Dictionary) -> String:
 		"wilds": return "Bramble crush · Every third attack ignores half your armor. A stronger blade can shorten your exposure."
 		"marsh": return "Drowned hymn · Every third attack restores 5% of the Oracle's maximum HP, even if her strike misses. Bring enough damage to overcome the healing."
 		"crown": return "Final toll · Every third attack deals 2.2× attack damage before armor. Prepare armor and a generous healing threshold."
-	return "Third toll · Every third attack deals 1.8× attack damage before armor." if enemy.boss else "No special attack. Your style skill is attempted every fourth attack."
+	return "Third toll · Every third attack deals 1.8× attack damage before armor." if enemy.boss else "No special attack."
 
 # A bounded analytical forecast, not a second simulation and never a reward source.
 static func forecast(m, id: String) -> Dictionary:

@@ -5,7 +5,7 @@ var m
 func _init(owner): app = owner; m = owner.model
 
 func open():
-	var v = app.modal("Hunting rewards & wallet")
+	var v = app.modal("Wallet")
 	app.dynamic(v,func(): return RealmEconomy.money(int(m.s.gold)),24,U.GOLD)
 	v.add_child(U.para("S · Silver    G · Gold    P · Platinum",13,U.TEXT))
 	var path = "res://assets/art/currency-0.43.png"
@@ -17,12 +17,12 @@ func open():
 		art.stretch_mode = TextureRect.STRETCH_KEEP_ASPECT_CENTERED
 		v.add_child(art)
 	v.add_child(U.para("1,000 Silver = 1 Gold\n1,000 Gold = 1 Platinum",17,U.GOLD))
-	v.add_child(U.para("Coins convert automatically. Prices use the same wallet; no exchange fee or separate balances.",14))
+	v.add_child(U.para("Coins convert automatically.",14))
 	var level = m.level("bladecraft")
 	v.add_child(U.para("Bladecraft · Level %d / 100" % level,21,U.TEXT))
 	if level<100:
 		v.add_child(U.para("%d XP to level %d" % [RealmEconomy.threshold(level+1)-int(m.s.xp.bladecraft),level+1],15,U.GOLD))
-	v.add_child(U.para("Stronger enemies offer better XP and coins. Earlier hunts remain useful for their cards and materials. Prepare food and improve equipment before moving on.",14))
+	v.add_child(U.para("Hunt stronger enemies for XP. Revisit old foes for cards and materials.",14))
 	v.add_child(U.button("Compare available hunts",hunts,true))
 	v.add_child(U.button("What to spend coins on",spending))
 	v.add_child(U.button("Masterwork blueprints",func(): preload("res://ui/masterworks.gd").new(app).open()))

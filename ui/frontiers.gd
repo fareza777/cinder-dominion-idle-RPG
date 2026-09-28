@@ -10,7 +10,6 @@ func open(region: int = 0):
 	var first = "frontier_%d_0" % region
 	if m.available(first)!="":
 		v.add_child(U.para(m.available(first),17,U.GOLD))
-		v.add_child(U.para("Six new encounters, three objectives and exclusive crafting materials await beyond this route.",15))
 		return
 	v.add_child(U.para(RealmFrontiers.STORIES[region],16))
 	for stage in range(3):
@@ -30,7 +29,7 @@ func open(region: int = 0):
 			row.add_child(details)
 			details.add_child(U.para(m.local_name(e),18,U.TEXT))
 			details.add_child(U.para("Defeated" if int(m.s.kills.get(id,0))>0 else "Next encounter",12,U.GOLD))
-			c.add_child(U.button("Prepare "+m.local_name(e),func(): app.activity_dialog("hunt_"+id,1)))
+			c.add_child(U.button("Prepare hunt",func(): app.activity_dialog("hunt_"+id,1)))
 		c.add_child(U.para("%d / 2 encounters · %s + %d Hollow Shards" % [completed,RealmEconomy.money(RealmFrontiers.reward(region,stage)),5*(stage+1)],14))
 		var claimed = "%d_%d" % [region,stage] in m.s.get("frontier_claimed",[])
 		var b = U.button("Claimed" if claimed else "Claim objective reward",func():

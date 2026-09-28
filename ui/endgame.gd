@@ -41,7 +41,7 @@ func locations():
 		c.add_child(U.para(e.location,21,U.GOLD))
 		c.add_child(U.para(e.en,17,U.TEXT))
 		c.add_child(U.para(RealmCombat.mechanic(e),14))
-		c.add_child(U.para("First victory: blueprint + 3 cores. Repeat victories: 1 core. Every victory: 2 Dread Seals and an 8% unique relic chance.",14))
+		c.add_child(U.para("First win: blueprint + 3 cores. Repeats: 1 core. Each win: 2 Dread Seals. Unique relics may also drop.",14))
 		c.add_child(U.para("%d victories · %s" % [m.s.kills.get(id,0),m.name_of("relic_"+str(int(e.secret_tile)))],14,U.GOLD))
 		c.add_child(U.button("Prepare hunt",func(): app.activity_dialog("hunt_"+id),true))
 		action(c,"Track this relic",{"type":"end_target","id":"relic_"+str(int(e.secret_tile))},forge)
@@ -101,7 +101,7 @@ func builds():
 
 func routes():
 	var v = app.modal("Hunting routes")
-	v.add_child(U.para("Choose your preparation before a hunt. Routes affect all combat, including offline hunts. Enemy loot chances stay the same.",16))
+	v.add_child(U.para("Choose a route for your next hunts, including offline combat.",16))
 	for id in RealmEndgame.ROUTES:
 		var c = U.card(v,12)
 		c.add_child(U.para({"safe":"Sheltered route","resource":"Standard route","elite":"Dangerous route","mastery":"Training route"}[id],21,U.GOLD))
