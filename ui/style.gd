@@ -367,10 +367,19 @@ static func section(parent: Node, title: String):
 	rule.add_theme_stylebox_override("separator",style)
 	line.add_child(rule)
 
+static func stone_hud(padding: int, shade: float = .48) -> StyleBoxFlat:
+	var style = StyleBoxFlat.new()
+	style.bg_color = Color(.025,.032,.038,shade)
+	style.border_color = Color(GOLD,.28)
+	style.border_width_bottom = 1
+	style.border_width_top = 1
+	style.set_content_margin_all(padding)
+	return style
+
 static func navigation(active: bool) -> StyleBoxFlat:
 	var style = StyleBoxFlat.new()
-	style.bg_color = Color("172027") if active else Color("0e151a")
-	style.border_color = GOLD if active else Color("0e151a")
+	style.bg_color = Color(.24,.18,.10,.42) if active else Color(0,0,0,.08)
+	style.border_color = GOLD if active else Color(0,0,0,0)
 	style.border_width_top = 2
 	style.set_content_margin_all(6)
 	return style

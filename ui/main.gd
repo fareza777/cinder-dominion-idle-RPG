@@ -293,7 +293,7 @@ func build_shell():
 	var layout = U.column(0)
 	margin.add_child(layout)
 	var header = PanelContainer.new()
-	header.add_theme_stylebox_override("panel",U.box(Color("10181e"),U.LINE,0,8))
+	header.add_theme_stylebox_override("panel",U.stone_hud(8,.40))
 	layout.add_child(header)
 	var header_rows = U.column(2)
 	header.add_child(header_rows)
@@ -319,7 +319,7 @@ func build_shell():
 	hp_label.size_flags_vertical = Control.SIZE_SHRINK_CENTER
 	balances.add_child(hp_label)
 	var journey_bar = PanelContainer.new()
-	journey_bar.add_theme_stylebox_override("panel",U.box(Color("202a2c"),U.LINE,0,6))
+	journey_bar.add_theme_stylebox_override("panel",U.stone_hud(6,.52))
 	layout.add_child(journey_bar)
 	var journey_row = U.row(10)
 	journey_bar.add_child(journey_row)
@@ -346,7 +346,7 @@ func build_shell():
 	body.size_flags_horizontal = Control.SIZE_EXPAND_FILL
 	inset.add_child(body)
 	var footer = PanelContainer.new()
-	footer.add_theme_stylebox_override("panel",U.box(Color("182128"),U.LINE,0,7))
+	footer.add_theme_stylebox_override("panel",U.stone_hud(7,.48))
 	layout.add_child(footer)
 	var footer_col = U.column(5)
 	footer.add_child(footer_col)
@@ -370,7 +370,7 @@ func build_shell():
 	footer.set_meta("coach_target","running")
 	var nav = U.row(2)
 	var nav_panel = PanelContainer.new()
-	nav_panel.add_theme_stylebox_override("panel",U.box(Color("0e151a"),U.LINE,0,6))
+	nav_panel.add_theme_stylebox_override("panel",U.stone_hud(6,.35))
 	nav_panel.add_child(nav)
 	layout.add_child(nav_panel)
 	for entry in [["village","Desa","Stronghold"],["explore","Jelajah","Explore"],["skills","Keahlian","Skills"],["inventory","Tas","Bag"],["character","Karakter","Hero"]]:
