@@ -242,3 +242,7 @@ User approved extending the iron treatment to all remaining plain gray interface
 ### 0.48 follow-up — Hero equipment rail background
 
 User screenshot identified the flat dark strips behind left/right equipment slots. Hero stage now draws the existing generated iron beneath the central portrait, filling those exposed rails with material instead of a plain rectangle. Portrait, slot positions, borders and input remain unchanged. tests/hero_iron_rails.gd captured 100%/130% phone views and opened the weapon slot via real pointer in both sizes; passed. Visually inspected both captures; prior exit warnings remain. Source-only follow-up: the already exported 0.48 APK predates this fix; no replacement APK generated for this small visual correction.
+
+### Hero rail material comparison
+
+User asked to compare stone against iron. Hero stage rail texture is now an injectable Texture2D, default still iron. A nonpersistent preview test overrides it with the existing fortress stone; 100%/130% captures and pointer weapon-slot opening passed. No new generated art, saved setting or APK. Comparison gallery: build/visual-comparison/hero-materials.html. Recommendation: stone for rails/background, iron for individual equipment tiles. This recommendation is not applied as a default without the user's selection.
