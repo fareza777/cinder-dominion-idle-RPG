@@ -2,9 +2,12 @@ extends RefCounted
 const U = preload("res://ui/style.gd")
 var app
 var m
+var collection_page = 0
 func _init(owner): app=owner; m=owner.model
 
-func open(page: int = 0):
+func open(page: int = -1):
+	if page<0: page=collection_page
+	collection_page=page
 	var v = app.modal("Masterwork blueprints")
 	v.add_child(U.para("10 masterworks · Legendary quality",19,U.GOLD))
 	v.add_child(U.para("Craft with rare monster finds and guardian materials.",14))

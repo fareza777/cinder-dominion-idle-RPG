@@ -12,7 +12,13 @@ func open():
 	var stock = RealmMerchant.sync(m,app.now_ms())
 	app.persist()
 	var v = app.modal("Cinderwatch merchant")
-	app.dynamic(v,func(): return RealmEconomy.money(int(m.s.gold)),21,U.GOLD)
+	U.scenic(v,preload("res://ui/premium.gd").art(1),"","The merchant",120)
+	var wallet = preload("res://ui/currency.gd").new()
+	wallet.setup(func(): preload("res://ui/economy.gd").new(app).open())
+	v.add_child(wallet)
+	wallet.update_amount(int(m.s.gold))
+	app.dialog_callbacks.append(func():
+		if is_instance_valid(wallet): wallet.update_amount(int(m.s.gold)))
 	v.add_child(U.button("Wallet & progression",func(): preload("res://ui/economy.gd").new(app).open()))
 	var supplies = RealmMerchant.provisions(m)
 	if not supplies.is_empty():
@@ -32,7 +38,7 @@ func open():
 		var card = U.card(v,14)
 		var row = U.row(12)
 		card.add_child(row)
-		row.add_child(U.icon(offer.id,56))
+		row.add_child(U.icon(offer.id,88))
 		var text = U.column(4)
 		text.size_flags_horizontal = Control.SIZE_EXPAND_FILL
 		row.add_child(text)
@@ -45,7 +51,7 @@ func open():
 		if gear:
 			var item = m.data.items[offer.id]
 			card.add_child(U.para("Gear bonus: +%.1f ATK · +%.1f DEF" % [float(item.get("attack",0))*RealmModel.QUALITY[int(offer.quality)],float(item.get("armor",0))*RealmModel.QUALITY[int(offer.quality)]],13))
-		var b = U.button("Sold out" if offer.bought else "Buy bundle · %d gold" % int(offer.price),func():
+		var b = U.button("Sold out" if offer.bought else "Buy · "+RealmEconomy.money(int(offer.price)),func():
 			app.send({"type":"merchant_buy","index":index,"revision":stock.revision,"now":app.now_ms()})
 			open(),true)
 		b.disabled = offer.bought or m.s.gold<int(offer.price)
@@ -62,7 +68,7 @@ func open():
 	for id in m.data.merchant:
 		if id=="masterwork_commission" and int(m.s.kills.get("secret_2",0))<1: continue
 		var qty = 10 if id=="empty_vial" else 1
-		v.add_child(U.button("%s ×%d · %d gold" % [m.name_of(id),qty,int(m.data.merchant[id])*qty],func():
+		v.add_child(U.button("%s ×%d · %s" % [m.name_of(id),qty,RealmEconomy.money(int(m.data.merchant[id])*qty)],func():
 			app.send({"type":"buy","id":id,"amount":qty})
 			open()))
 
@@ -77,7 +83,7 @@ func sell_list(page: int = 0):
 		var card = U.card(v,12)
 		card.add_child(U.para(m.name_of(g.id),20,U.TEXT))
 		card.add_child(U.para("%s · %d owned" % [m.data.rarities[int(g.q)],g.count],13,U.GOLD))
-		card.add_child(U.button("Review sale · %d gold" % RealmMerchant.sell_price(m,g),func(): confirm_sale(g.uid)))
+		card.add_child(U.button("Review sale · "+RealmEconomy.money(RealmMerchant.sell_price(m,g)),func(): confirm_sale(g.uid)))
 	if candidates.is_empty(): v.add_child(U.para("No spare equipment available to sell.",18))
 	if page>0: v.add_child(U.button("Previous page",func(): sell_list(page-1)))
 	if page+1<pages: v.add_child(U.button("Next page",func(): sell_list(page+1)))
@@ -91,7 +97,7 @@ func confirm_sale(uid: String):
 	var v = app.modal("Confirm equipment sale")
 	v.add_child(U.icon(g.id,80))
 	v.add_child(U.para(m.data.rarities[int(g.q)]+" "+m.name_of(g.id),23,U.TEXT))
-	v.add_child(U.para("Sell one piece for %d gold? This cannot be undone." % RealmMerchant.sell_price(m,g),16))
+	v.add_child(U.para("Sell one piece for %s? This cannot be undone." % RealmEconomy.money(RealmMerchant.sell_price(m,g)),16))
 	v.add_child(U.button("Keep item",sell_list))
 	app.modal_action("Sell one piece",func():
 		app.send({"type":"merchant_sell","id":uid})

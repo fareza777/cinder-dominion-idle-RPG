@@ -104,7 +104,7 @@ static func label(text: String, size: int = 16, color: Color = TEXT, serif: bool
 	return l
 
 static func para(text: String, size: int = 15, color: Color = MUTED) -> Label:
-	var l = label(text,size,color)
+	var l = label(text,maxi(14,size),color)
 	l.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
 	l.size_flags_horizontal = Control.SIZE_EXPAND_FILL
 	return l
@@ -146,6 +146,15 @@ static func card(parent: Node, padding: int = 16, border: Color = LINE) -> VBoxC
 	p.add_child(v)
 	return v
 
+static func surface(padding: int = 12, edge: Color = LINE) -> StyleBoxFlat:
+	var s = StyleBoxFlat.new()
+	s.bg_color = Color("141d22")
+	s.border_color = edge
+	s.border_width_top = 1
+	s.set_corner_radius_all(3)
+	s.set_content_margin_all(padding)
+	return s
+
 static func button(text: String, callback: Callable, primary: bool = false) -> Button:
 	var b = Button.new()
 	b.mouse_filter = Control.MOUSE_FILTER_PASS
@@ -159,7 +168,7 @@ static func button(text: String, callback: Callable, primary: bool = false) -> B
 	b.add_theme_color_override("font_hover_color",GOLD)
 	b.add_theme_color_override("font_pressed_color",GOLD)
 	b.add_theme_color_override("font_disabled_color",Color("737e84"))
-	b.add_theme_stylebox_override("normal",frame(Color("493620"),GOLD,"button",12) if primary else frame(Color("182126"),LINE,"action",12))
+	b.add_theme_stylebox_override("normal",frame(Color("493620"),GOLD,"button",12) if primary else frame(Color("20282b"),LINE,"button",12))
 	b.add_theme_stylebox_override("hover",box(Color("60462a") if primary else Color("2c353a"),GOLD,6,12))
 	b.add_theme_stylebox_override("pressed",box(Color("302519") if primary else Color("111a21"),GOLD,6,12))
 	b.add_theme_stylebox_override("disabled",box(Color("182027"),LINE,6,10))
@@ -339,7 +348,7 @@ static func scenic(parent: Node, texture: Texture2D, eyebrow: String, title: Str
 	var words = column(3)
 	words.alignment = BoxContainer.ALIGNMENT_END
 	panel.add_child(words)
-	words.add_child(para(eyebrow,10,GOLD))
+	if eyebrow!="": words.add_child(para(eyebrow,10,GOLD))
 	var heading = para(title,34,TEXT)
 	heading.add_theme_font_override("font",title_font)
 	words.add_child(heading)

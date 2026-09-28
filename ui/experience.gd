@@ -3,7 +3,7 @@ extends RefCounted
 const U = preload("res://ui/style.gd")
 const Brand = preload("res://ui/brand.gd")
 const STORE_URL = "" # Set only after a real public listing exists.
-const VERSION = "0.46.0"
+const VERSION = "0.47.0"
 var app
 var front: Control
 var cinematic_page = 0
@@ -91,8 +91,8 @@ func menu():
 	app.mode = "menu"
 	var v = screen()
 	v.add_theme_constant_override("separation",10)
-	v.add_child(Brand.emblem(Vector2(0,144)))
-	title(v,"CINDER\nDOMINION",50)
+	v.add_child(Brand.emblem(Vector2(0,112)))
+	title(v,"CINDER\nDOMINION",44)
 	v.get_child(v.get_child_count()-1).horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
 	var genre = U.label("DARK FANTASY · IDLE RPG",12,U.GOLD)
 	genre.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
@@ -103,10 +103,10 @@ func menu():
 	gap(v,8)
 	if app.has_campaign:
 		var card = U.card(v,14,U.GOLD.darkened(.6))
-		card.add_child(U.label("YOUR JOURNEY",10,U.GOLD))
+		card.add_child(U.para(RealmCharacters.hero_name(app.model)+" · Lv."+str(app.model.level("bladecraft")),20,U.GOLD))
 		card.add_child(U.para(app.model.objective().title,19,U.TEXT))
-		card.add_child(U.para("Cinderwatch  ·  %d gold  ·  %d queued activities" % [int(app.model.s.gold),app.model.s.queue.size()],12))
-		v.add_child(U.button("Continue journey  →",app.enter_world,true))
+		card.add_child(U.para("%d active orders" % app.model.s.queue.size(),14))
+		v.add_child(U.button("Continue",app.enter_world,true))
 	v.add_child(U.button("New game",new_game,not app.has_campaign))
 	v.add_child(U.button("How to play",handbook))
 	v.add_child(U.button("Settings",app.settings_dialog))

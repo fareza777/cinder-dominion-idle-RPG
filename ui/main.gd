@@ -13,10 +13,13 @@ var search_text = ""
 var inventory_sort = 0
 var inventory_slot = "all"
 var inventory_page = 0
+var hero_tab = "equipment"
+var page_scroll = {}
+var rendered_page_key = ""
 var body: VBoxContainer
 var scroller: ScrollContainer
 var hp_label: Label
-var wallet: VBoxContainer
+var wallet: Container
 var activity_label: Label
 var activity_sub: Label
 var activity_progress: ProgressBar
@@ -280,11 +283,13 @@ func build_shell():
 	var layout = U.column(0)
 	margin.add_child(layout)
 	var header = PanelContainer.new()
-	header.add_theme_stylebox_override("panel",U.box(Color("10181e"),U.LINE,0,16))
+	header.add_theme_stylebox_override("panel",U.box(Color("10181e"),U.LINE,0,8))
 	layout.add_child(header)
-	var hr = U.row(12)
-	header.add_child(hr)
-	hr.add_child(Brand.emblem(Vector2(48,48)))
+	var header_rows = U.column(2)
+	header.add_child(header_rows)
+	var hr = U.row(10)
+	header_rows.add_child(hr)
+	hr.add_child(Brand.emblem(Vector2(34,34)))
 	var title = U.column(0)
 	hr.add_child(title)
 	title.size_flags_horizontal = Control.SIZE_EXPAND_FILL
@@ -294,22 +299,23 @@ func build_shell():
 	var menu_button = U.button("☰",func(): experience.menu())
 	menu_button.size_flags_vertical = Control.SIZE_SHRINK_CENTER
 	hr.add_child(menu_button)
-	var counters = U.column(2)
-	hr.add_child(counters)
 	wallet = preload("res://ui/currency.gd").new()
 	wallet.setup(func(): preload("res://ui/economy.gd").new(self).open())
+	var balances = U.row(8)
+	header_rows.add_child(balances)
+	balances.add_child(wallet)
+	balances.add_child(U.spacer())
 	hp_label = U.label("",12,U.MUTED)
-	counters.add_child(wallet)
-	counters.add_child(hp_label)
+	hp_label.size_flags_vertical = Control.SIZE_SHRINK_CENTER
+	balances.add_child(hp_label)
 	var journey_bar = PanelContainer.new()
-	journey_bar.add_theme_stylebox_override("panel",U.box(Color("202a2c"),U.LINE,0,12))
+	journey_bar.add_theme_stylebox_override("panel",U.box(Color("202a2c"),U.LINE,0,6))
 	layout.add_child(journey_bar)
 	var journey_row = U.row(10)
 	journey_bar.add_child(journey_row)
 	var journey_words = U.column(3)
 	journey_words.size_flags_horizontal = Control.SIZE_EXPAND_FILL
 	journey_row.add_child(journey_words)
-	journey_words.add_child(U.label("YOUR NEXT STEP",9,U.GOLD))
 	objective_label = U.para("",14,U.TEXT)
 	journey_words.add_child(objective_label)
 	var goals = U.button("Goals",guide_dialog)
@@ -330,7 +336,7 @@ func build_shell():
 	body.size_flags_horizontal = Control.SIZE_EXPAND_FILL
 	inset.add_child(body)
 	var footer = PanelContainer.new()
-	footer.add_theme_stylebox_override("panel",U.box(Color("182128"),U.LINE,0,12))
+	footer.add_theme_stylebox_override("panel",U.box(Color("182128"),U.LINE,0,7))
 	layout.add_child(footer)
 	var footer_col = U.column(5)
 	footer.add_child(footer_col)
@@ -385,6 +391,13 @@ func build_shell():
 
 func set_page(next: String, retain_scroll: bool = false):
 	var old_scroll = scroller.scroll_vertical if is_instance_valid(scroller) else 0
+	page_scroll[rendered_page_key] = old_scroll
+	var key = next
+	if next=="character": key += ":"+hero_tab
+	if next=="skills": key += ":"+skill
+	if next=="inventory": key += ":"+str([filter,search_text,inventory_sort,inventory_slot,inventory_page])
+	var return_scroll = old_scroll if retain_scroll else int(page_scroll.get(key,0))
+	rendered_page_key = key
 	page = next
 	update_callbacks.clear()
 	for child in body.get_children():
@@ -400,16 +413,19 @@ func set_page(next: String, retain_scroll: bool = false):
 	for b in nav.get_children():
 		b.add_theme_stylebox_override("normal",U.navigation(b.name==page))
 		b.add_theme_color_override("font_color",U.GOLD if b.name==page else U.MUTED)
-	scroller.set_deferred("scroll_vertical",old_scroll if retain_scroll else 0)
+	scroller.set_deferred("scroll_vertical",return_scroll)
 	refresh()
 
 func dynamic(parent: Node, fn: Callable, size: int = 15, color: Color = U.TEXT) -> Label:
 	var l = U.para(str(fn.call()),size,color)
 	parent.add_child(l)
+	l.visible = not l.text.is_empty()
 	var target = weakref(l)
 	var callback = func():
 		var live = target.get_ref()
-		if is_instance_valid(live): live.text = RealmEconomy.text_value(str(fn.call()))
+		if is_instance_valid(live):
+			live.text = RealmEconomy.text_value(str(fn.call()))
+			live.visible = not live.text.is_empty()
 	if is_instance_valid(dialog) and dialog.is_ancestor_of(parent): dialog_callbacks.append(callback)
 	else: update_callbacks.append(callback)
 	return l
@@ -756,58 +772,62 @@ func salvage_dialog(ids: Array):
 func offline_dialog(report: Dictionary):
 	preload("res://ui/return_report.gd").new(self).open(report)
 
-func settings_dialog():
-	var v = modal(tr2("Pengaturan","Settings"))
-	for cfg in [["motion","Animasi lingkungan","Ambient animation"],["battery","Hemat baterai · 30 FPS","Battery saver · 30 FPS"]]:
-		var b = CheckButton.new()
-		b.text = tr2(cfg[1],cfg[2])
-		b.button_pressed = bool(model.s.settings[cfg[0]])
-		b.custom_minimum_size.y = 48
-		v.add_child(b)
-		b.toggled.connect(func(value):
-			send({"type":"setting","id":cfg[0],"value":value},false)
-			Engine.max_fps = 30 if model.s.settings.battery else 60
-			refresh_shell()
-			settings_dialog())
-	v.add_child(U.label(tr2("Ukuran teks","Text size"),16))
-	var fonts = U.row()
-	v.add_child(fonts)
-	for size_value in [1.0,1.15,1.3]:
-		fonts.add_child(U.button("%d%%" % roundi(size_value*100),func():
-			send({"type":"setting","id":"font","value":size_value},false)
-			U.scale = size_value
-			refresh_shell()
-			settings_dialog()))
-	v.add_child(U.para("Language · English",13))
-	for key in ["music","sfx"]:
-		v.add_child(U.label(tr2("Musik" if key=="music" else "Efek suara","Music" if key=="music" else "Sound effects"),15))
-		var slider = HSlider.new()
-		slider.min_value = 0
-		slider.max_value = 1
-		slider.step = .05
-		slider.value = float(model.s.settings[key])
-		slider.custom_minimum_size.y = 40
-		v.add_child(slider)
-		slider.value_changed.connect(func(value):
-			model.s.settings[key] = value
-			if key=="sfx" and is_instance_valid(effect):
-				effect.volume_db = linear_to_db(maxf(.00001,value))
-				for voice in effect.get_children(): voice.volume_db = effect.volume_db
-			persist())
-	v.add_child(U.button("Music & sound preview",func(): preload("res://ui/sound_room.gd").new(self).open()))
-	v.add_child(U.button("AdMob · test ads",func(): preload("res://ui/ad_settings.gd").new(self).open()))
-	v.add_child(U.label("PROGRESS & BACKUPS",11,U.GOLD))
-	if has_campaign: v.add_child(U.button(tr2("Ekspor cadangan save","Export save backup"),export_save))
-	v.add_child(U.button(tr2("Impor cadangan save","Import save backup"),import_save))
-	v.add_child(U.button("Restore a previous journey",experience.archives))
-	v.add_child(U.label("HELP & COMMUNITY",11,U.GOLD))
-	v.add_child(U.button("How to play",experience.handbook))
-	if mode=="play": v.add_child(U.button("Replay beginner tips",experience.welcome))
-	v.add_child(U.button("About Cinder Dominion",experience.about))
-	v.add_child(U.button("Share",experience.share))
-	v.add_child(U.button("Rate",experience.rate))
-	v.add_child(U.button("Return to main menu",experience.menu))
-	v.add_child(U.para("Version "+experience.VERSION+" · Adventure preview",12))
+func settings_dialog(section: String = "display"):
+	var v = modal("Settings")
+	preload("res://ui/premium.gd").tabs(v,[["display","Display"],["audio","Audio"],["save","Save"],["about","About"]],section,settings_dialog)
+	if section=="display":
+		for cfg in [["motion","Animasi lingkungan","Ambient animation"],["battery","Hemat baterai · 30 FPS","Battery saver · 30 FPS"]]:
+			var b = CheckButton.new()
+			b.text = tr2(cfg[1],cfg[2])
+			b.button_pressed = bool(model.s.settings[cfg[0]])
+			b.custom_minimum_size.y = 48
+			v.add_child(b)
+			b.toggled.connect(func(value):
+				send({"type":"setting","id":cfg[0],"value":value},false)
+				Engine.max_fps = 30 if model.s.settings.battery else 60
+				refresh_shell()
+				settings_dialog("display"))
+		v.add_child(U.label(tr2("Ukuran teks","Text size"),16))
+		var fonts = U.row()
+		v.add_child(fonts)
+		for size_value in [1.0,1.15,1.3]:
+			fonts.add_child(U.button("%d%%" % roundi(size_value*100),func():
+				send({"type":"setting","id":"font","value":size_value},false)
+				U.scale = size_value
+				refresh_shell()
+				settings_dialog("display")))
+		v.add_child(U.para("Language · English",13))
+	if section=="audio":
+		for key in ["music","sfx"]:
+			v.add_child(U.label(tr2("Musik" if key=="music" else "Efek suara","Music" if key=="music" else "Sound effects"),15))
+			var slider = HSlider.new()
+			slider.min_value = 0
+			slider.max_value = 1
+			slider.step = .05
+			slider.value = float(model.s.settings[key])
+			slider.custom_minimum_size.y = 40
+			v.add_child(slider)
+			slider.value_changed.connect(func(value):
+				model.s.settings[key] = value
+				if key=="sfx" and is_instance_valid(effect):
+					effect.volume_db = linear_to_db(maxf(.00001,value))
+					for voice in effect.get_children(): voice.volume_db = effect.volume_db
+				persist())
+		v.add_child(U.button("Music & sound preview",func(): preload("res://ui/sound_room.gd").new(self).open()))
+	if section=="save":
+		if has_campaign: v.add_child(U.button(tr2("Ekspor cadangan save","Export save backup"),export_save))
+		v.add_child(U.button(tr2("Impor cadangan save","Import save backup"),import_save))
+		v.add_child(U.button("Restore a previous journey",experience.archives))
+	if section=="about":
+		v.add_child(U.button("How to play",experience.handbook))
+		if mode=="play": v.add_child(U.button("Replay beginner tips",experience.welcome))
+		v.add_child(U.button("About Cinder Dominion",experience.about))
+		v.add_child(U.button("Share",experience.share))
+		v.add_child(U.button("Rate",experience.rate))
+		v.add_child(U.button("Return to main menu",experience.menu))
+		v.add_child(U.para("Version "+experience.VERSION+" · Adventure preview",12))
+		var advanced = U.disclosure(v,"Developer options")
+		advanced.add_child(U.button("AdMob · test ads",func(): preload("res://ui/ad_settings.gd").new(self).open()))
 
 func export_save():
 	var fd = FileDialog.new()

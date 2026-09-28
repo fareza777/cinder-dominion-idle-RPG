@@ -17,7 +17,7 @@ func open():
 		app.modal_action("View my next objective",app.guide_dialog)
 		return
 	v.add_child(U.para("%d / 20 tasks queued" % m.s.queue.size(),22,U.TEXT))
-	v.add_child(U.para("One task runs at a time. The animation in the bottom bar follows your active task.",14))
+
 	var initial = queue_signature()
 	var dialog_ref = weakref(app.dialog)
 	var pending = {"refresh":false}
@@ -38,7 +38,13 @@ func open():
 		var step = m.s.queue[i]
 		var activity = m.data.activities[step.id]
 		var card = U.card(v,12,U.GOLD.darkened(.5) if i==0 else U.LINE)
-		card.add_child(U.para("%02d · %s" % [i+1,m.activity_name(step.id)],19,U.TEXT))
+		var heading = U.row(10)
+		card.add_child(heading)
+		if activity.kind=="combat": heading.add_child(U.enemy_portrait(m.data.enemies[activity.enemy],Vector2(48,60)))
+		else: heading.add_child(U.icon(activity.output,48))
+		var name_label = U.para("%02d · %s" % [i+1,m.activity_name(step.id)],18,U.TEXT)
+		name_label.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+		heading.add_child(name_label)
 		card.add_child(U.para(("Waiting for requirements" if blocked else "Running") if i==0 else "Queued",12,U.GOLD if i==0 else U.MUTED))
 		var value = m.level(activity.skill) if step.kind=="level" else int(step.output if step.kind=="output" else step.done)
 		var unit = "skill level" if step.kind=="level" else ("items produced" if step.kind=="output" else ("fights completed" if activity.kind=="combat" else "cycles completed"))
@@ -55,8 +61,7 @@ func open():
 		row.add_child(U.button("Cancel task",func():
 			if i<m.s.queue.size() and m.s.queue[i]==step: app.send({"type":"cancel","index":i})
 			open()))
-	v.add_child(U.para("Cancelling an active crafting cycle returns its reserved ingredients. Cancelling combat stops that hunt. Rewards already earned are kept.",12))
-	v.add_child(U.button("Refresh progress",open))
+	U.disclosure(v,"Cancelling tasks").add_child(U.para("Unused crafting ingredients are returned. Cancelling a hunt ends combat. Earned rewards are kept.",14))
 	app.modal_action("Stop all tasks",func():
 		if app.send({"type":"clear"}): open(),false)
 

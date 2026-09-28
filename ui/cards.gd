@@ -3,9 +3,12 @@ extends RefCounted
 const U = preload("res://ui/style.gd")
 var app
 var m
+var collection_page = 0
 func _init(owner): app = owner; m = owner.model
 
-func collection(page: int = 0):
+func collection(page: int = -1):
+	if page<0: page=collection_page
+	collection_page=page
 	var v = app.modal("Monster Cards")
 	v.add_child(U.para("Defeat monsters to discover their cards.",14))
 	var known = []

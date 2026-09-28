@@ -25,8 +25,8 @@ func open(index: int = -1):
 			var width = atlas.atlas.get_width()/3.0
 			atlas.region = Rect2(int(chapter.art)*width,0,width,atlas.atlas.get_height())
 			atlas.filter_clip = true
-			art.texture = U.frontier_texture(int(chapter.frontier_tile)) if chapter.has("frontier_tile") else atlas
-			art.custom_minimum_size.y = 240
+			art.texture = preload("res://ui/premium.gd").art(9+mini(2,int(chapter.frontier_tile)/6)) if chapter.has("frontier_tile") else atlas
+			art.custom_minimum_size.y = 150
 			art.expand_mode = TextureRect.EXPAND_IGNORE_SIZE
 			art.stretch_mode = TextureRect.STRETCH_KEEP_ASPECT_COVERED
 			v.add_child(art)
@@ -38,8 +38,14 @@ func open(index: int = -1):
 	else:
 		v.add_child(U.para("This chapter is still locked.",25,U.TEXT))
 		v.add_child(U.para(chapter.gate+" to read it. Your progress is tracked automatically.",16))
-	v.add_child(U.para("Chapters",18,U.GOLD))
+	var chapters = OptionButton.new()
+	chapters.custom_minimum_size.y = 48
+	chapters.fit_to_longest_item = false
+	v.add_child(chapters)
+	v.move_child(chapters,1)
 	for i in range(RealmStory.CHAPTERS.size()):
-		var label = RealmStory.CHAPTERS[i].title if RealmStory.unlocked(m,i) else RealmStory.CHAPTERS[i].gate
-		v.add_child(U.button("%02d · %s" % [i+1,label],func(): open(i),i==index))
+		var label = RealmStory.CHAPTERS[i].title if RealmStory.unlocked(m,i) else "Locked chapter"
+		chapters.add_item("%02d · %s" % [i+1,label])
+	chapters.select(index)
+	chapters.item_selected.connect(open)
 	app.modal_action("View my current objective",app.guide_dialog)

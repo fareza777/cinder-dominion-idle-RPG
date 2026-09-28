@@ -1,6 +1,7 @@
 extends RefCounted
 
 const U = preload("res://ui/style.gd")
+const P = preload("res://ui/premium.gd")
 var app
 var m: RealmModel
 
@@ -14,21 +15,19 @@ func text(id: String, en: String) -> String:
 func heading(parent: Node, overline: String, title: String, subtitle: String = ""):
 	var v = U.column(3)
 	parent.add_child(v)
-	v.add_child(U.label(overline,10,U.GOLD))
-	var title_label = U.label(title,38,U.TEXT,true)
+	if overline!="": v.add_child(U.label(overline,10,U.GOLD))
+	var title_label = U.label(title,30,U.TEXT,true)
 	title_label.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
 	v.add_child(title_label)
 	if subtitle!="": v.add_child(U.para(subtitle,14))
 
 func village(parent: Node):
-	U.scenic(parent,page_art(0),"YOUR STRONGHOLD","Cinderwatch",210)
+	U.scenic(parent,page_art(0),"YOUR STRONGHOLD","Cinderwatch",180)
 	preload("res://ui/chronicle.gd").new(app).home(parent)
 	preload("res://ui/upgrade_goal.gd").new(app).home(parent)
 	preload("res://ui/chronicle.gd").new(app).services(parent)
 
 func explore(parent: Node):
-	parent.add_child(U.button("Wallet & hunting rewards",func(): preload("res://ui/economy.gd").new(app).open()))
-	if m.s.beacon: parent.add_child(U.button("Beyond the Sovereign",func(): preload("res://ui/frontiers.gd").new(app).open()))
 	var region = m.data.enemies.get(m.s.fight.get("enemy",""),{}).get("region","")
 	var current_enemy = m.data.enemies.get(m.s.fight.get("enemy",""),{})
 	if current_enemy.has("frontier"): heading(parent,"LATE-GAME FRONTIER",RealmFrontiers.REGIONS[int(current_enemy.frontier)],"")
@@ -78,7 +77,7 @@ func explore(parent: Node):
 	app.update_callbacks.append(func():
 		if is_instance_valid(retreat): retreat.visible = not m.s.fight.is_empty())
 	battle.add_child(U.button("Hunt reports",app.hunt_reports_dialog))
-	var prep = U.card(parent,14)
+	var prep = U.disclosure(parent,"hunt preparation") if not m.s.fight.is_empty() else U.card(parent,14)
 	U.section(prep,"HUNT PREPARATION")
 	app.dynamic(prep,func(): return "%s · %d ATK · %d DEF" % [RealmProgression.STANCES[m.progression().stance].name,int(m.stats().attack),int(m.stats().armor)],16,U.GOLD)
 	app.dynamic(prep,func(): return "%s ×%d · heals %d HP at %d%% health" % [m.name_of(m.s.settings.food),m.count(m.s.settings.food),RealmCombat.food_heal(m,m.s.settings.food),int(m.s.settings.threshold*100)],13,U.GREEN)
@@ -117,13 +116,15 @@ func explore(parent: Node):
 			app.dynamic(card,func(): return m.encounter_advice(id),12,U.MUTED)
 			card.add_child(U.button(text("Tantang boss" if d.boss else "Buru & kumpulkan loot","Challenge boss" if d.boss else "Hunt & gather loot"),func(): app.activity_dialog("hunt_"+id),true))
 
+	parent.add_child(U.button("Wallet & hunting rewards",func(): preload("res://ui/economy.gd").new(app).open()))
+	if m.s.beacon: parent.add_child(U.button("Beyond the Sovereign",func(): preload("res://ui/frontiers.gd").new(app).open()))
+
 func skills(parent: Node):
-	U.scenic(parent,page_art(2),"GATHER · CRAFT · ADVANCE","Skills",156)
+	heading(parent,"","Professions")
 	parent.add_child(U.button("Gear paths · level 25–100",func(): preload("res://ui/ascension.gd").new(app).open()))
 	preload("res://ui/training.gd").new(app).home(parent)
 	if app.skill=="":
-		var grid = GridContainer.new()
-		grid.columns = 2
+		var grid = VBoxContainer.new()
 		grid.add_theme_constant_override("h_separation",10)
 		grid.add_theme_constant_override("v_separation",10)
 		parent.add_child(grid)
@@ -131,9 +132,9 @@ func skills(parent: Node):
 			var skill = m.data.skills[id]
 			var c = U.card(grid,12)
 			c.get_parent().size_flags_horizontal = Control.SIZE_EXPAND_FILL
-			var icon_id = {"woodcutting":"ash_axe","mining":"copper_pick","fishing":"iron_rod","cooking":"cooked_meat","smithing":"copper_sword","alchemy":"healing_draught"}[id]
-			c.add_child(U.icon(icon_id,72))
-			c.add_child(U.para(m.local_name(skill),18,U.TEXT))
+			P.destination(c,m.local_name(skill),{"woodcutting":4,"mining":5,"fishing":6,"cooking":7,"smithing":0,"alchemy":8}[id],func():
+				app.skill=id
+				app.set_page("skills"),140)
 			c.add_child(U.para({"woodcutting":"Timber & logs","mining":"Ore & minerals","fishing":"Fresh supplies","cooking":"Food for hunts","smithing":"Weapons & armor","alchemy":"Combat potions"}[id],12))
 			app.dynamic(c,func(): return "LEVEL %d  /  100" % m.level(id),10,U.GOLD)
 			var bar = U.progress(0,1,U.GOLD)
@@ -183,8 +184,7 @@ func skills(parent: Node):
 			c.add_child(U.button(text("Atur aktivitas","Set activity"),func(): app.activity_dialog(aid),m.level(selected)>=int(a.level)))
 
 func inventory(parent: Node):
-	U.scenic(parent,page_art(3),"EQUIPMENT · MATERIALS · SUPPLIES","Inventory",150)
-	parent.add_child(U.para("Select an item to equip it, use it or find its source.",13))
+	heading(parent,"","Inventory")
 	var filters = U.row(6)
 	parent.add_child(filters)
 	var picker = OptionButton.new()
@@ -199,9 +199,12 @@ func inventory(parent: Node):
 		app.filter = kinds[i]
 		app.inventory_page = 0
 		app.set_page("inventory"))
-	filters.add_child(U.button("↻",func(): app.set_page("inventory",true)))
+	var drawer = U.column(10)
+	filters.add_child(U.button("Filter",func(): drawer.visible=not drawer.visible))
+	parent.add_child(drawer)
+	drawer.hide()
 	var search = U.row(6)
-	parent.add_child(search)
+	drawer.add_child(search)
 	var input = LineEdit.new()
 	input.placeholder_text = text("Cari nama item…","Search items…")
 	input.text = app.search_text
@@ -216,7 +219,7 @@ func inventory(parent: Node):
 	search.add_child(U.button(text("Cari","Find"),search_action))
 	input.text_submitted.connect(func(_value): search_action.call())
 	var options = U.row(6)
-	parent.add_child(options)
+	drawer.add_child(options)
 	var sorter = OptionButton.new()
 	for label in ["Equipped first","Name","Highest quality","Highest stats"]: sorter.add_item(label)
 	sorter.selected = app.inventory_sort
@@ -267,16 +270,10 @@ func inventory(parent: Node):
 		var gear_grid = item_grid(parent)
 		for g in gear_list.slice(app.inventory_page*30,(app.inventory_page+1)*30):
 			shown += 1
-			var c = U.card(gear_grid,10,U.QUALITY[int(g.q)].darkened(.65))
-			c.get_parent().size_flags_horizontal = Control.SIZE_EXPAND_FILL
-			c.add_child(U.icon(g.id,70))
-			c.add_child(U.para(m.name_of(g.id),16,U.TEXT))
 			var tags = m.data.rarities[int(g.q)]
 			if g.uid in m.s.equipped.values(): tags += " · Equipped"
 			if g.locked: tags += " · Locked"
-			c.add_child(U.para(tags+" · ×%d" % int(g.count),11,U.QUALITY[int(g.q)]))
-			c.add_child(U.spacer())
-			c.add_child(U.button("Inspect",func(): app.item_dialog(g.uid)))
+			P.item_tile(gear_grid,g.id,m.name_of(g.id),tags+" · ×%d" % int(g.count),U.QUALITY[int(g.q)],func(): app.item_dialog(g.uid))
 	var supply_grid = item_grid(parent)
 	for id in m.s.bag:
 		if m.count(id)<=0: continue
@@ -284,13 +281,7 @@ func inventory(parent: Node):
 		if app.filter!="all" and d.category!=app.filter: continue
 		if app.search_text!="" and not m.name_of(id).to_lower().contains(app.search_text.to_lower()): continue
 		shown += 1
-		var c = U.card(supply_grid,10)
-		c.get_parent().size_flags_horizontal = Control.SIZE_EXPAND_FILL
-		c.add_child(U.icon(id,64))
-		c.add_child(U.para(m.name_of(id),16,U.TEXT))
-		app.dynamic(c,func(): return "×%d" % m.count(id),14,U.GOLD)
-		c.add_child(U.spacer())
-		c.add_child(U.button("Details",func(): supply_details(id)))
+		P.item_tile(supply_grid,id,m.name_of(id),"×%d" % m.count(id),U.GOLD,func(): supply_details(id))
 	if shown==0: parent.add_child(U.para(text("Tidak ada item sesuai filter ini.","No items match this filter.")))
 	if not m.s.overflow.is_empty(): parent.add_child(U.button(text("Ambil item kotak hasil","Retrieve overflow items"),func(): app.send({"type":"overflow"})))
 	var salvage = []
@@ -299,21 +290,25 @@ func inventory(parent: Node):
 	if not salvage.is_empty(): parent.add_child(U.button(text("Tinjau peleburan item umum…","Review common item salvage…"),func(): app.salvage_dialog(salvage)))
 
 func character(parent: Node):
-	parent.add_child(U.button("Monster Cards",func(): preload("res://ui/cards.gd").new(app).collection()))
-	heading(parent,"EQUIPMENT & BUILD",RealmCharacters.hero_name(m))
-	preload("res://ui/hero_equipment.gd").new(app).home(parent)
+	heading(parent,"",RealmCharacters.hero_name(m))
+	P.tabs(parent,[["equipment","Equipment"],["build","Build"],["legacy","Legacy"]],app.hero_tab,func(tab):
+		app.hero_tab=tab
+		app.set_page("character"))
+	if app.hero_tab=="equipment":
+		preload("res://ui/hero_equipment.gd").new(app).home(parent)
+		return
+	if app.hero_tab=="legacy":
+		P.destination(parent,"Talents",3,app.talents_dialog,150)
+		parent.add_child(U.button("Relics & ascension",app.relics_dialog))
+		parent.add_child(U.button("Runeforge",app.runeforge_dialog))
+		parent.add_child(U.button("Monster cards",func(): preload("res://ui/cards.gd").new(app).collection()))
+		parent.add_child(U.button("Specializations & sockets",func(): preload("res://ui/endgame.gd").new(app).builds()))
+		return
 	parent.add_child(U.button("Attributes & class skill" if RealmCharacters.id(m)!="" else "Choose your character · keep progress",func(): preload("res://ui/character_stats.gd").new(app).open(),true))
 	var c = U.card(parent)
 	c.add_child(U.label("COMBAT SKILLS",11,U.GOLD))
 	for id in ["bladecraft","might","warding"]:
 		app.dynamic(c,func(): return "%s   Lv.%d   ·   %d XP" % [m.local_name(m.data.skills[id]),m.level(id),int(m.s.xp[id])],15)
-	var legacy = U.card(parent,14,U.GOLD.darkened(.5))
-	legacy.add_child(U.label("OATHS & RELICS",10,U.GOLD))
-	app.dynamic(legacy,func(): return "%d talent points available · %s" % [RealmChronicle.points_free(m),RealmChronicle.RELICS[RealmChronicle.state(m).relic].name if RealmChronicle.state(m).relic!="" else "No relic equipped"],14,U.TEXT)
-	legacy.add_child(U.button("Talents · choose your strengths",app.talents_dialog,true))
-	legacy.add_child(U.button("Relics · targeted progression",app.relics_dialog))
-	legacy.add_child(U.button("Runeforge · refine your build",app.runeforge_dialog))
-	app.dynamic(legacy,func(): return "Rune: "+(RealmRuneforge.RUNES[RealmRuneforge.state(m).equipped].name if RealmRuneforge.state(m).equipped!="" else "None equipped"),13,U.GREEN)
 	var style = U.card(parent)
 	style.add_child(U.label("YOUR FIGHTING STYLE",10,U.GOLD))
 	app.dynamic(style,func(): return RealmProgression.STANCES[m.progression().stance].name,24,U.TEXT)
@@ -361,7 +356,7 @@ func page_art(index: int) -> Texture2D:
 
 func item_grid(parent: Node) -> GridContainer:
 	var grid = GridContainer.new()
-	grid.columns = 2
+	grid.columns = 3 if U.scale<1.15 else 2
 	grid.add_theme_constant_override("h_separation",10)
 	grid.add_theme_constant_override("v_separation",10)
 	parent.add_child(grid)

@@ -16,7 +16,7 @@ func home(parent):
 	var c = U.card(parent,12)
 	app.dynamic(c,func(): return "%d ATK  ·  %d DEF  ·  %d / 100 HP" % [m.stats().attack,m.stats().armor,m.s.hp],17,U.GOLD)
 	app.dynamic(c,func(): return RealmGearSets.summary(m),14,U.TEXT)
-	c.add_child(U.para("Tap a slot to choose equipment. The portrait is your hero's base appearance.",12))
+	c.add_child(U.para("Tap a slot to change equipment.",12))
 	var tools = U.row(6)
 	parent.add_child(tools)
 	for slot in ["pick","axe","rod"]:

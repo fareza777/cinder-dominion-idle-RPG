@@ -1,0 +1,21 @@
+{
+  "generator": "builtin image_gen",
+  "source": "C:/Users/FAJAR/.codex/generated_images/01a0d6c6-87cf-7541-95c2-3388b3b24491/exec-d502dc00-039e-4eef-9645-6d68da4b9e99.png",
+  "destination": "assets/art/locations-0.47.png",
+  "prompt": "Create an original premium dark fantasy mobile RPG environment atlas, EXACTLY 4 columns and 3 rows of equal rectangular scene panels, separated by narrow straight dark gutters. Twelve distinct atmospheric location paintings, no text or UI. Row 1 left to right: glowing blacksmith forge with anvil and molten crucible; mysterious merchant's wooden display table with small treasures and brass scales; war-room table with an unlettered parchment map and tiny iron route markers; ancient stone relic altar with three empty circular recesses. Row 2: silver moonlit pine forest with felled timber; subterranean mineral mine with copper seams and hanging lanterns; secluded river fishing jetty at blue dusk; stone kitchen with a small warm cooking hearth and hanging cookware. Row 3: alchemist laboratory with emerald glass vials and herbs; abandoned pale astronomical observatory beneath an eclipsed moon; iron sepulcher with colossal sealed burial doors and chains; volcanic ember rift with a distant restrained golden flame emerging from black rock. Every scene composed for a landscape crop, central focal subject, readable silhouettes, atmospheric depth, restrained warm brass against charcoal and muted blue. Elegant painterly realism, cinematic game environment art, no excessive bloom, no purple neon. Absolutely NO people, NO animals, NO faces, NO statues shaped like humans, NO skulls, NO eyes, NO letters, NO numbers. All architecture and inanimate objects only. Consistent lighting language and visual quality across panels. High resolution atlas.",
+  "layout": "4 columns × 3 rows; runtime cell inset 7px, original raster unchanged",
+  "scenes": [
+    "Forge",
+    "Merchant",
+    "War room",
+    "Relic altar",
+    "Woodcutting",
+    "Mining",
+    "Fishing",
+    "Cooking",
+    "Alchemy",
+    "Pale Observatory",
+    "Iron Sepulcher",
+    "Ember Rift"
+  ]
+}

@@ -4,6 +4,9 @@ const U = preload("res://ui/style.gd")
 const C = preload("res://game/chronicle.gd")
 var app
 var m
+var talent_branch = "power"
+var chosen_talent = "power"
+var chosen_relic = "fang"
 
 func _init(owner):
 	app = owner
@@ -39,7 +42,11 @@ func home(parent: Node):
 
 
 func services(parent: Node):
-	U.section(parent,"TOWN")
+	U.section(parent,"STRONGHOLD SERVICES")
+	var p = preload("res://ui/premium.gd")
+	p.destination(parent,"Forge",0,app.workshop_dialog,150)
+	p.destination(parent,"Merchant",1,app.merchant_dialog,150)
+	p.destination(parent,"Journey",2,app.world_dialog,150)
 	var row = U.row(7)
 	parent.add_child(row)
 	for entry in [["journey","Journey"],["armory","Armory"],["supplies","Supplies"]]:
@@ -93,13 +100,25 @@ func roadmap():
 	app.progress_dialog()
 
 func talents():
-	var v = app.modal("Talents · shape your build")
+	var v = app.modal("Talents")
 	if locked(v): return
 	var state = C.state(m)
 	v.add_child(U.para("%d points available · %d / 60 earned" % [C.points_free(m),C.points_earned(m)],18,U.GOLD))
 	v.add_child(U.para(RealmLegacyGrowth.next_point(m),14))
-	v.add_child(U.para("Keep your early talents. Advanced ranks unlock at Bladecraft Lv.25, 50, 75 and 100 with boss victories. Reset freely outside combat.",13))
-	for id in C.TALENTS:
+	var branches = {"power":["power","technique","hunter"],"guard":["guard","endurance","resolve"],"fortune":["fortune","recovery","bounty"]}
+	preload("res://ui/premium.gd").tabs(v,[["power","Power"],["guard","Guard"],["fortune","Hunt"]],talent_branch,func(key):
+		talent_branch=key
+		chosen_talent=branches[key][0]
+		talents())
+	var path = preload("res://ui/route_view.gd").new()
+	for key in branches[talent_branch]:
+		path.entries.append({"title":C.TALENTS[key].name,"rank":"%d / %d" % [int(state.talents.get(key,0)),RealmLegacyGrowth.limit(key)],"done":int(state.talents.get(key,0))>=RealmLegacyGrowth.limit(key)})
+	path.selected=branches[talent_branch].find(chosen_talent)
+	path.changed=func(index):
+		chosen_talent=branches[talent_branch][index]
+		talents()
+	v.add_child(path)
+	for id in [chosen_talent]:
 		var d = C.TALENTS[id]
 		var rank = int(state.talents.get(id,0))
 		var maximum = RealmLegacyGrowth.limit(id)
@@ -128,7 +147,13 @@ func relics():
 	v.add_child(U.para("One active relic · four ascensions · 40 ranks each",15))
 	v.add_child(U.para("Ranks 1–10 keep their original bonuses. Later ranks add smaller specialist effects and require essence from stronger hunts.",13))
 	var state = C.state(m)
-	for id in C.RELICS:
+	U.scenic(v,preload("res://ui/premium.gd").art(3),"","Relic altar",125)
+	var choices = []
+	for key in C.RELICS: choices.append([key,C.RELICS[key].name])
+	preload("res://ui/premium.gd").tabs(v,choices,chosen_relic,func(key):
+		chosen_relic=key
+		relics())
+	for id in [chosen_relic]:
 		var d = C.RELICS[id]
 		var rank = int(state.relics[id])
 		var card = U.card(v,15,Color(d.color).darkened(.4))

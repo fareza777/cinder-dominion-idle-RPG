@@ -15,14 +15,14 @@ var clock = 0.0
 
 func _ready():
 	name = "HeroEquipment"
-	custom_minimum_size.y = 610
+	custom_minimum_size.y = 450+maxf(0,U.scale-1)*80
 	clip_contents = true
 	mouse_filter = Control.MOUSE_FILTER_PASS
 	portrait = RealmCharacters.portrait(app.model)
 	for slot in SLOTS:
 		var b = U.button("",func(): equipment.open_slot(slot))
 		b.name = "Slot_"+slot
-		b.custom_minimum_size = Vector2(78,96)
+		b.custom_minimum_size = Vector2(72,70)
 		b.tooltip_text = equipment.NAMES[slot]+" · choose equipment"
 		add_child(b)
 		buttons.append(b)
@@ -55,7 +55,7 @@ func _process(delta):
 			var g = app.model.gear(str(app.model.s.equipped.get(SLOTS[i],"")))
 			var color = U.LINE if g.is_empty() else U.QUALITY[int(g.q)]
 			buttons[i].add_theme_stylebox_override("normal",U.box(Color("111a20"),color,6,6))
-			marks[i].text = "Empty" if g.is_empty() else "Equipped"
+			marks[i].text = "Empty" if g.is_empty() else ""
 			marks[i].modulate = U.MUTED if g.is_empty() else U.GOLD
 			if not g.is_empty():
 				var image = U.icon(g.id,40)
@@ -72,9 +72,9 @@ func _process(delta):
 						image.free()
 						break
 	var width = clampf(size.x*.21,78,94)
-	var height = 92+maxf(0,U.scale-1)*36
+	var height = 70+maxf(0,U.scale-1)*24
 	for i in range(buttons.size()):
-		buttons[i].position = Vector2(8 if i<5 else size.x-width-8,22+(i%5)*116)
+		buttons[i].position = Vector2(8 if i<5 else size.x-width-8,12+(i%5)*(size.y-24)/5)
 		buttons[i].size = Vector2(width,height)
 	if app.model.s.settings.motion and not app.paused: elapsed += delta
 	clock += delta
@@ -91,7 +91,7 @@ func _draw():
 		var from = buttons[i].position+Vector2(buttons[i].size.x if i<5 else 0,buttons[i].size.y*.5)
 		var to = Vector2(size.x*ANCHORS[i].x,size.y*ANCHORS[i].y)
 		var elbow = Vector2(lerpf(from.x,to.x,.5),from.y)
-		draw_polyline(PackedVector2Array([from,elbow,to]),Color(U.GOLD,.55),1,true)
+		draw_polyline(PackedVector2Array([from,elbow,to]),Color(U.GOLD,.25),1,true)
 		draw_circle(to,2,U.GOLD)
 	if app.model.s.settings.motion:
 		for i in range(12):
