@@ -138,9 +138,9 @@ static func spacer() -> Control:
 	return c
 
 static func card(parent: Node, padding: int = 16, border: Color = LINE) -> VBoxContainer:
-	var p = PanelContainer.new()
+	var p = preload("res://ui/metal_panel.gd").new()
 	p.mouse_filter = Control.MOUSE_FILTER_PASS
-	p.add_theme_stylebox_override("panel",box(PANEL,border,10,padding))
+	p.add_theme_stylebox_override("panel",box(Color("15191b"),border,10,padding))
 	parent.add_child(p)
 	var v = column(10)
 	p.add_child(v)

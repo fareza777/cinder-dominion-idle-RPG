@@ -32,9 +32,10 @@ static func tabs(parent: Node, entries: Array, selected: String, callback: Calla
 		row.add_child(b)
 
 static func item_tile(parent: Node, id: String, title: String, note: String, color: Color, action: Callable):
-	var panel = PanelContainer.new()
+	var panel = preload("res://ui/metal_panel.gd").new()
+	panel.item_accent = color
 	panel.size_flags_horizontal = Control.SIZE_EXPAND_FILL
-	panel.add_theme_stylebox_override("panel",U.frame(U.PANEL,color.darkened(.48),"panel",14))
+	panel.add_theme_stylebox_override("panel",U.frame(Color("15191b"),color.darkened(.48),"panel",14))
 	parent.add_child(panel)
 	var words = U.column(5)
 	words.mouse_filter = Control.MOUSE_FILTER_IGNORE

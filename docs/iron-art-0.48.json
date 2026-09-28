@@ -1,0 +1,7 @@
+{
+  "generator": "builtin image_gen",
+  "prompt": "Material texture for a premium dark fantasy RPG interface: a single flat square sheet of aged blackened iron, straight-on orthographic macro view, fills the entire image edge to edge. Restrained charcoal and warm iron gray, fine hammered grain, very faint brushed metal hairlines and tiny scattered wear. Soft grazing warm brass reflection close to the upper corners only. Central and lower areas nearly uniform dark charcoal, low contrast, intended behind readable UI text. Sophisticated old weapon-smith craftsmanship, realistic material, matte not glossy. Absolutely no objects, no border, no frame, no rivets, no holes, no stone, no cracks, no symbols, no runes, no text, no faces, no illustrations, no strong scratches or stripes. No dramatic spotlight, no bright highlights. Subtle detail visible up close, calm at thumbnail scale. Seamless-looking material, no vignette.",
+  "source": "C:/Users/FAJAR/.codex/generated_images/01a0d6c6-87cf-7541-95c2-3388b3b24491/exec-64c59a47-e994-49c4-afd6-2f09f1c6ec01.png",
+  "destination": "assets/art/blackened-iron-0.48.png",
+  "usage": "Static inset texture at 38% opacity on darker shared cards, existing frames preserved. Item tiles add a restrained rarity tint behind their icon. Raster unchanged. Project visual trial, APK remains 0.47."
+}
