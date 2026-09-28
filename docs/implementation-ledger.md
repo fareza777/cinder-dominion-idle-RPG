@@ -232,3 +232,9 @@ User requested the remaining gray upper/lower menu areas receive the same treatm
 ### 0.48 visual trial — Blackened iron cards
 
 User requested a trial of subtle iron material inside the gray cards. Generated one original blackened-iron texture using builtin image_gen (prompt/source: docs/iron-art-0.48.json). Shared card PanelContainer subclass draws a static inset material behind children; original ornamental nine-slice frames remain untouched. Item tiles add a faint rarity-color pool behind icons. No new rune/symbol decoration. Four phone captures include normal and 130% inventory text; pointer item opening and bottom navigation passed in tests/iron_cards48.gd. Inspected Stronghold and inventory captures. No gameplay or save changes. Prior shutdown resource warnings remain; no physical Android verification. Preview gallery: build/visual-comparison/iron-cards.html. Still a visual trial; packaged APK remains 0.47.
+
+## 0.48 — Stone and iron release
+
+User approved extending the iron treatment to all remaining plain gray interface boxes. Shared StyleBox wrapper now applies the existing generated iron material beneath button/dropdown/input text, popup/modal contents and equipment slots while preserving the original ornamental frames and distinct states. Card subclass no longer draws duplicate texture; item tint remains. Includes the preceding floor and upper/lower stone-bar trials. Game/package version advanced to 0.48.0 (code 48); identity and saves unchanged.
+
+22 phone captures and focused interaction/layout checks passed, including 130% text; existing six-step onboarding pointer regression passed. Menu, inventory/filter, hero, settings, merchant, hunt and Stronghold screenshots inspected. Known exit resource warnings persist; physical Android performance remains unverified. Full verification/package details: docs/qa/stone-iron-0.48-report.md. No balance changes, public publishing or paid-service activation.

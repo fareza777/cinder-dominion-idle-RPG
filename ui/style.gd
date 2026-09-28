@@ -42,7 +42,7 @@ static func box(color: Color = PANEL, border: Color = LINE, radius: int = 10, pa
 		return flat
 	return frame(color,border,"panel" if radius>=10 else "button",padding)
 
-static func frame(color: Color, border: Color, kind: String, padding: int) -> StyleBoxTexture:
+static func frame(color: Color, border: Color, kind: String, padding: int) -> StyleBox:
 	var key = color.to_html()+border.to_html()+kind
 	if not frame_cache.has(key):
 		var svg = FileAccess.get_file_as_string("res://assets/ui/"+kind+"-frame.svg.txt")
@@ -56,7 +56,11 @@ static func frame(color: Color, border: Color, kind: String, padding: int) -> St
 	for side in [SIDE_LEFT,SIDE_TOP,SIDE_RIGHT,SIDE_BOTTOM]:
 		style.set_texture_margin(side,24 if kind=="panel" else 12)
 		style.set_content_margin(side,padding)
-	return style
+	var textured = preload("res://ui/metal_style.gd").new()
+	textured.base = style
+	textured.inset = 12 if kind=="panel" else 5
+	textured.set_content_margin_all(padding)
+	return textured
 
 static func apply_theme(theme: Theme):
 	for type in ["LineEdit","TextEdit"]:
