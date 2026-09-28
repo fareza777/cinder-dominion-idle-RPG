@@ -19,8 +19,8 @@ config/description="An original dark fantasy idle RPG. Playable foundation."
 run/main_scene="res://ui/main.tscn"
 config/features=PackedStringArray("4.7", "GL Compatibility")
 boot_splash/bg_color=Color(0.035, 0.045, 0.053, 1)
-boot_splash/image="res://assets/art/cinderwatch.png"
-config/icon="res://assets/art/cinder-dominion-emblem-0.35.png"
+boot_splash/image="res://assets/art/cinder-dominion-emblem-0.46.png"
+config/icon="res://assets/art/cinder-dominion-emblem-0.46.png"
 
 [application_run]
 

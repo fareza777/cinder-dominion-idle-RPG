@@ -3,7 +3,7 @@ extends RefCounted
 const U = preload("res://ui/style.gd")
 const Brand = preload("res://ui/brand.gd")
 const STORE_URL = "" # Set only after a real public listing exists.
-const VERSION = "0.45.0"
+const VERSION = "0.46.0"
 var app
 var front: Control
 var cinematic_page = 0
@@ -73,20 +73,18 @@ func title(parent, value, size=42):
 
 func splash():
 	app.mode = "boot"
-	var v = screen()
-	gap(v,90)
-	v.add_child(Brand.emblem(Vector2(0,220)))
-	title(v,Brand.SHORT,34)
-	v.get_child(v.get_child_count()-1).horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
-	var genre = U.label("IDLE RPG",16,U.GOLD)
-	genre.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
-	v.add_child(genre)
-	var tagline = U.para("Hunt. Forge. Rise.",16,U.TEXT)
-	tagline.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
-	v.add_child(tagline)
-	v.add_child(U.progress(1,1,U.GOLD,2))
-	app.get_tree().create_timer(1.6).timeout.connect(func():
-		if app.mode=="boot": menu())
+	app.dismiss()
+	clear()
+	front = preload("res://ui/title_reveal.gd").new()
+	front.motion = bool(app.model.s.settings.motion)
+	front.finished = func():
+		if app.mode=="boot": menu()
+	front.set_anchors_and_offsets_preset(Control.PRESET_FULL_RECT)
+	front.z_index = 5
+	app.add_child(front)
+	var current = weakref(front)
+	app.get_tree().create_timer(2.8 if app.model.s.settings.motion else 1.0).timeout.connect(func():
+		if app.mode=="boot" and current.get_ref()==front: menu())
 
 func menu():
 	if app.mode=="play": app.persist()

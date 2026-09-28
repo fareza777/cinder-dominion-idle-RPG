@@ -16,6 +16,7 @@ static var portraits: Texture2D
 static var items_texture: Texture2D
 static var item_ids: Array = []
 static var item_catalog = {}
+static var item_regions = {}
 static var scale = 1.0
 static var motion = true
 
@@ -23,7 +24,7 @@ static func setup(data: Dictionary):
 	body_font = load("res://assets/fonts/manrope-readable.ttf")
 	title_font = load("res://assets/fonts/cormorantgaramond-readable.ttf")
 	if ResourceLoader.exists("res://assets/art/portraits.png"): portraits = load("res://assets/art/portraits.png")
-	if ResourceLoader.exists("res://assets/art/items.png"): items_texture = load("res://assets/art/items.png")
+	if ResourceLoader.exists("res://assets/art/items-0.46.png"): items_texture = load("res://assets/art/items-0.46.png")
 	item_ids = data.items.keys()
 	item_catalog = data.items
 
@@ -242,11 +243,16 @@ static func frontier_texture(tile: int) -> Texture2D:
 
 static func icon(id: String, dimension: int = 52) -> TextureRect:
 	var t = TextureRect.new()
+	t.texture_filter = CanvasItem.TEXTURE_FILTER_LINEAR
 	t.custom_minimum_size = Vector2(dimension,dimension)
 	t.expand_mode = TextureRect.EXPAND_IGNORE_SIZE
 	t.stretch_mode = TextureRect.STRETCH_KEEP_ASPECT_CENTERED
 	t.mouse_filter = Control.MOUSE_FILTER_IGNORE
 	var data = item_catalog.get(id,{})
+	var detail_index = ["raw_meat","worn_sword","dusksteel_sword","dawnsteel_sword"].find(id)
+	if detail_index>=0:
+		t.texture = item_region("res://assets/art/item-details-0.46.png",detail_index,[],[])
+		return t
 	if data.has("frontier_card_tile"):
 		t.texture = frontier_texture(int(data.frontier_card_tile))
 		return t
@@ -271,21 +277,23 @@ static func icon(id: String, dimension: int = 52) -> TextureRect:
 		t.texture = load("res://assets/ui/accessory-"+str(data.slot)+".svg")
 		return t
 	if data.has("art_tile"):
-		t.texture = atlas_tile("res://assets/art/ascension-items-0.25.png",int(data.art_tile),4,4)
+		t.texture = item_region("res://assets/art/ascension-items-0.46.png",int(data.art_tile),[0,319,610,931,1254],[0,308,606,906,1254])
 		return t
 	var index = item_ids.find(str(data.get("icon_alias",id)))
 	if index>=0 and index<40 and items_texture!=null:
-		var a = AtlasTexture.new()
-		a.atlas = items_texture
-		a.filter_clip = true
-		var w = items_texture.get_width()/8.0
-		# Painted rows have unequal margins; use their observed atlas boundaries.
-		var row_index = int(index/8)
-		var tops = [0,190,380,570,765]
-		var heights = [185,190,185,190,259]
-		a.region = Rect2((index%8)*w,tops[row_index],w,heights[row_index])
-		t.texture = a
+		t.texture = item_region("res://assets/art/items-0.46.png",index,[0,205,401,589,789,975,1180,1381,1586],[0,197,384,585,770,992])
 	return t
+
+static func item_region(path: String, index: int, _xs: Array, _ys: Array) -> AtlasTexture:
+	if item_regions.is_empty(): item_regions = JSON.parse_string(FileAccess.get_file_as_string("res://data/item-art-regions-0.46.json"))
+	var atlas = AtlasTexture.new()
+	atlas.atlas = load(path)
+	atlas.filter_clip = true
+	var rect = item_regions[path.get_file().get_basename()][index]
+	atlas.region = Rect2(rect[0],rect[1],rect[2],rect[3])
+	var padding = maxf(rect[2],rect[3])*.06
+	atlas.margin = Rect2(padding,padding,padding*2,padding*2)
+	return atlas
 
 static func stat(parent: Node, value: String, title: String, color: Color = TEXT):
 	var v = column(3)
