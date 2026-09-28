@@ -304,6 +304,8 @@ func command(cmd: Dictionary) -> bool:
 			var why = RealmCards.command(self,cmd)
 			if why!="": return fail(why)
 		"stamina_resume":
+			var why = RealmStamina.resume_reason(self)
+			if why!="": return fail(why)
 			RealmStamina.state(self).paused = false
 			start_next()
 			if RealmStamina.state(self).paused: return fail(error)

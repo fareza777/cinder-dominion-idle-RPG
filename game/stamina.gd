@@ -48,6 +48,41 @@ static func summary(m) -> String:
 	var st = state(m)
 	return "Stamina %d / %d%s" % [st.value,cap(m)," · Hunting paused" if st.paused else (" · Reserved during battle" if not m.s.fight.is_empty() and m.s.tutorial else " · +1 every 3m resting")]
 
+static func next_enemy(m) -> String:
+	if m.s.queue.is_empty(): return ""
+	var a = m.data.activities[m.s.queue[0].id]
+	return str(a.enemy) if a.kind=="combat" else ""
+
+static func wait_ms(m, target: int) -> int:
+	return maxi(0,(target-int(state(m).value))*REGEN-int(state(m).rest))
+
+static func duration_text(ms: int) -> String:
+	var seconds = ceili(ms/1000.0)
+	if seconds>=3600:
+		var minutes = ceili(seconds/60.0)
+		return "%dh %dm" % [int(minutes/60),minutes%60]
+	return "%dm %ds" % [int(seconds/60),seconds%60]
+
+static func resume_reason(m) -> String:
+	if not m.s.fight.is_empty(): return "Your hunt is already running."
+	if not m.s.active.is_empty(): return "Finish your current task first."
+	var enemy = next_enemy(m)
+	if enemy=="": return "Choose a hunt from Explore."
+	var why = m.requirement(m.s.queue[0].id)
+	if why!="": return why
+	var reserve = int(cost(m.data.enemies[enemy]).reserve) if m.s.tutorial else 0
+	if state(m).value<reserve:
+		return "Need %d more stamina · ready in %s while resting." % [reserve-int(state(m).value),duration_text(wait_ms(m,reserve))]
+	return ""
+
+static func readiness(m) -> String:
+	if not m.s.fight.is_empty(): return "Recovery begins after this hunt. Unused reserved stamina returns when it ends."
+	var enemy = next_enemy(m)
+	if enemy=="": return "Choose a hunt from Explore when you are ready. Gathering and crafting restore stamina as time passes."
+	var reserve = int(cost(m.data.enemies[enemy]).reserve) if m.s.tutorial else 0
+	var why = resume_reason(m)
+	return "%s · %d stamina to start\n%s" % [m.local_name(m.data.enemies[enemy]),reserve,"Ready. Resume when you want to hunt." if why=="" else why]
+
 static func valid(s: Dictionary) -> bool:
 	if not s.has("stamina"): return true
 	var st = s.stamina
