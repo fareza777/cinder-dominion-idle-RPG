@@ -2,13 +2,13 @@ class_name RealmWorkshop
 extends RefCounted
 
 static func eligible(m, g: Dictionary) -> bool:
-	return not g.is_empty() and str(g.id).get_slice("_",0) in ["copper","iron","steel","moonsteel","dusksteel","dawnsteel"] and m.data.items[g.id].slot in ["weapon","shield","head","body","hands","feet","necklace","belt","ring"]
+	return not g.is_empty() and str(g.id).get_slice("_",0) in ["copper","iron","steel","moonsteel","dusksteel","dawnsteel","rime","briar","cinder","hush","gloam","star"] and m.data.items[g.id].slot in ["weapon","shield","head","body","hands","feet","necklace","belt","ring"]
 
 static func cost(g: Dictionary) -> Dictionary:
 	var q = clampi(int(g.q),1,4)-1
 	var metal = str(g.id).get_slice("_",0)
-	var base = {"steel":25,"moonsteel":45,"dusksteel":65,"dawnsteel":85}.get(metal,0)
-	var multiplier = {"copper":1,"iron":3,"steel":30,"moonsteel":150,"dusksteel":500,"dawnsteel":2000}.get(metal,1)
+	var base = {"steel":25,"moonsteel":45,"dusksteel":65,"dawnsteel":85,"rime":65,"briar":72,"cinder":79,"hush":86,"gloam":93,"star":100}.get(metal,0)
+	var multiplier = {"copper":1,"iron":3,"steel":30,"moonsteel":150,"dusksteel":500,"dawnsteel":2000,"rime":1200,"briar":1800,"cinder":2500,"hush":3500,"gloam":5000,"star":7000}.get(metal,1)
 	return {"gold":[40,120,360,900][q]*multiplier,"scrap":[2,6,15,35][q]*(1+int(base/20)),"ingots":[2,5,12,25][q],"level":mini(100,maxi([3,6,12,20][q],base+[0,3,7,15][q])),"metal":metal+"_ingot"}
 
 static func preview(m, uid: String, enemy: String) -> Dictionary:
@@ -53,7 +53,10 @@ static func command(m, uid: String) -> String:
 	m.spend(c.metal,int(c.ingots))
 	if g.count==1: m.s.gear.erase(g)
 	else: g.count -= 1
-	var new_uid = m.add_gear(item_id,quality,m.s.get("card_sockets",{}).has(uid))
+	var new_uid = m.add_gear(item_id,quality,m.s.get("card_sockets",{}).has(uid) or m.s.get("gear_attunements",{}).has(uid))
+	if m.s.get("gear_attunements",{}).has(uid):
+		m.s.gear_attunements[new_uid]=m.s.gear_attunements[uid]
+		if new_uid!=uid:m.s.gear_attunements.erase(uid)
 	if m.s.get("card_sockets",{}).has(uid):
 		var card = m.s.card_sockets[uid]
 		m.s.card_sockets.erase(uid)

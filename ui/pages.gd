@@ -31,6 +31,7 @@ func explore(parent: Node):
 	var region = m.data.enemies.get(m.s.fight.get("enemy",""),{}).get("region","")
 	var current_enemy = m.data.enemies.get(m.s.fight.get("enemy",""),{})
 	if current_enemy.has("frontier"): heading(parent,"LATE-GAME FRONTIER",RealmFrontiers.REGIONS[int(current_enemy.frontier)],"")
+	elif current_enemy.has("march"):heading(parent,"THE FAR MARCHES",RealmMarches.data().regions[int(current_enemy.march)].name,"")
 	elif current_enemy.has("secret_tile"): heading(parent,"OPTIONAL EXPEDITION",current_enemy.location,"")
 	elif current_enemy.get("trial",false): heading(parent,"GUARDIAN TRIAL",m.local_name(current_enemy),"")
 	elif region!="": heading(parent,"EXPEDITION IN PROGRESS",RealmChronicle.REGIONS[region].name,"")
@@ -64,7 +65,7 @@ func explore(parent: Node):
 	app.dynamic(battle,func():
 		if m.s.fight.is_empty(): return ""
 		var enemy = m.data.enemies[m.s.fight.enemy]
-		if enemy.get("secret",false) or enemy.get("depth",false) or enemy.has("frontier"):
+		if enemy.get("secret",false) or enemy.get("depth",false) or (enemy.has("frontier") or enemy.has("march")):
 			return "PHASE II · Heavy-strike pressure doubled. Finish the fight before danger builds." if RealmTrials.active_phase(m,enemy) else "PHASE I · Danger rises every 15 enemy attacks."
 		if not enemy.get("trial",false): return ""
 		return "PHASE II · "+RealmTrials.phase_text(enemy) if RealmTrials.active_phase(m,enemy) else "PHASE I · The guardian awakens at half health.",13,U.RED)
@@ -90,7 +91,7 @@ func explore(parent: Node):
 	U.section(parent,"DISCOVERED ENEMIES")
 	for id in m.data.enemies:
 		var d = m.data.enemies[id]
-		if d.has("region") or d.has("frontier"): continue
+		if d.has("region") or d.has("frontier") or d.has("march"): continue
 		if not RealmDiscovery.visible(m,id): continue
 		var why = m.available(id)
 		var card = U.card(parent,12,U.GOLD.darkened(.55) if d.boss else U.LINE)
@@ -116,6 +117,7 @@ func explore(parent: Node):
 			card.add_child(U.button(text("Tantang boss" if d.boss else "Buru & kumpulkan loot","Challenge boss" if d.boss else "Hunt & gather loot"),func(): app.activity_dialog("hunt_"+id),true))
 
 	parent.add_child(U.button("Wallet & hunting rewards",func(): preload("res://ui/economy.gd").new(app).open()))
+	if m.s.beacon: parent.add_child(U.button("The Far Marches",func(): preload("res://ui/marches.gd").new(app).open()))
 	if m.s.beacon: parent.add_child(U.button("Beyond the Sovereign",func(): preload("res://ui/frontiers.gd").new(app).open()))
 
 func skills(parent: Node):
@@ -157,12 +159,22 @@ func skills(parent: Node):
 		for choice in [[false,"Available"],[true,"All recipes"]]:
 			visibility.add_child(U.button(choice[1],func():
 				app.show_locked_recipes = choice[0]
+				app.recipe_page = 0
 				app.set_page("skills",true),app.show_locked_recipes==choice[0]))
-		for aid in m.data.activities:
-			var a = m.data.activities[aid]
-			if a.skill!=selected or a.kind=="combat": continue
-			if not RealmBlueprints.learned(m,a.output): continue
-			if not app.show_locked_recipes and m.level(selected)<int(a.level): continue
+		var recipes=m.data.activities.keys().filter(func(id):
+			var a=m.data.activities[id]
+			return a.skill==selected and a.kind!="combat" and RealmBlueprints.learned(m,a.output) and (app.show_locked_recipes or m.level(selected)>=int(a.level)))
+		var count=maxi(1,ceili(recipes.size()/20.0))
+		app.recipe_page=clampi(app.recipe_page,0,count-1)
+		if count>1:
+			var pager=U.row(6);parent.add_child(pager)
+			var back=U.button("Previous",func():app.recipe_page-=1;app.set_page("skills"))
+			back.disabled=app.recipe_page==0;pager.add_child(back)
+			pager.add_child(U.para("%d / %d" % [app.recipe_page+1,count],14))
+			var next=U.button("Next",func():app.recipe_page+=1;app.set_page("skills"))
+			next.disabled=app.recipe_page+1>=count;pager.add_child(next)
+		for aid in recipes.slice(app.recipe_page*20,(app.recipe_page+1)*20):
+			var a=m.data.activities[aid]
 			var c = U.card(parent,12)
 			var r = U.row(12)
 			c.add_child(r)

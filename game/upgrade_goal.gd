@@ -28,4 +28,5 @@ static func status(m) -> Dictionary:
 	var plan = RealmProgression.plan(m,recipe.id,1)
 	if plan.has("unlock_skill"):
 		return {"kind":"train","text":plan.error,"action":"Train "+m.local_name(m.data.skills[plan.unlock_skill]),"skill":plan.unlock_skill,"level":plan.unlock_level}
+	if plan.has("missing_item") and not m.sources(plan.missing_item).is_empty():return {"kind":"farm","text":"Gather %d %s for this upgrade" % [plan.missing_amount,m.name_of(plan.missing_item)],"action":"Find missing materials","material":plan.missing_item}
 	return {"kind":"craft","text":"Gather missing materials, then forge one piece","action":"Plan materials & craft"}

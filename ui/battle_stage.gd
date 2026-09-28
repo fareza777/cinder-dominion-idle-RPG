@@ -86,6 +86,7 @@ func _process(delta: float):
 		arrival = .65
 		enemy_face = U.enemy_texture(model.data.enemies[id])
 		enemy_background = U.atlas_tile("res://assets/art/ascension-places-0.25.png",int(model.data.enemies[id].place_tile),2,2) if model.data.enemies[id].has("place_tile") else null
+		if model.data.enemies[id].has("march"):enemy_background=U.atlas_tile("res://assets/art/march-places-0.50.png",int(model.data.enemies[id].march),3,2)
 		if model.data.enemies[id].has("frontier"): enemy_background = preload("res://ui/premium.gd").art(9+int(model.data.enemies[id].frontier))
 	if serial!=int(model.battle_event.serial):
 		for event in model.combat_events:
@@ -184,7 +185,7 @@ func _draw():
 				draw_set_transform(Vector2.ZERO)
 			else:
 				draw_rect(r.grow(1),Color(U.LINE,.6))
-				var face = enemy_face if enemy_face!=null else faces[int(enemy.portrait)]
+				var face = enemy_face if enemy_face!=null else faces[int(enemy.get("portrait",0))]
 				draw_face(face,r,Color.WHITE)
 		else:
 			draw_rect(r,U.INK)

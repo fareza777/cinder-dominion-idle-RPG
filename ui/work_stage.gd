@@ -29,9 +29,10 @@ func load_character():
 	hero_poses.clear()
 	var path = "res://assets/art/work-poses-0.31.png" if character_id=="" else "res://assets/art/work-%s-0.32.png" % character_id
 	if character_id in ["reaver","apothecary"]: path = "res://assets/art/work-%s-0.33.png" % character_id
-	var sheet = load(path)
+	if character_id in ["frostbound","penitent","duskblade"]:path="res://assets/art/work-%s-0.50.png" % character_id
+	var sheet = U.asset(path)
 	# Observed painted row edges, excluding thin separators in the source atlas.
-	var edges = [0,236,474,713,969,1210,1536]
+	var edges = [0,256,512,768,1024,1280,1536] if character_id in ["frostbound","penitent","duskblade"] else [0,236,474,713,969,1210,1536]
 	for i in range(24):
 		var tile = AtlasTexture.new()
 		tile.atlas = sheet

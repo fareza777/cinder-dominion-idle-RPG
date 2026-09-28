@@ -9,7 +9,7 @@ func check(ok: bool, label: String):
 
 func _init():
 	var m = RealmModel.new()
-	check(m.data.items.size()==277,"277 item definitions")
+	check(m.data.items.size()==598,"598 item definitions")
 	m.command({"type":"queue","id":"mine_copper","target":4})
 	m.advance(12000)
 	check(m.count("copper_ore")==4,"gather four ore")
@@ -422,7 +422,7 @@ func _init():
 	for skill in asc.data.skills: asc.s.xp[skill] = 245025
 	var plans_ok = true
 	for activity in asc.data.activities.values():
-		if activity.kind=="craft" and int(activity.level)>=25 and not activity.has("blueprint") and not activity.output.begins_with("socket_"):
+		if activity.kind=="craft" and int(activity.level)>=25 and not activity.get("hunt_materials",false) and not activity.has("blueprint") and not activity.output.begins_with("socket_"):
 			plans_ok = plans_ok and RealmProgression.plan(asc,activity.id,1).error==""
 	check(plans_ok,"ordinary advanced recipes have a finite material plan at level 100")
 	check(asc.command({"type":"plan","id":"craft_dawnsteel_chest","amount":1}),"level 100 cuirass plans its own materials")

@@ -14,6 +14,8 @@ var inventory_sort = 0
 var inventory_slot = "all"
 var inventory_page = 0
 var supply_page = 0
+var recipe_page = 0
+var recipe_skill = ""
 var hero_tab = "equipment"
 var page_scroll = {}
 var rendered_page_key = ""
@@ -405,7 +407,9 @@ func set_page(next: String, retain_scroll: bool = false):
 	page_scroll[rendered_page_key] = old_scroll
 	var key = next
 	if next=="character": key += ":"+hero_tab
-	if next=="skills": key += ":"+skill
+	if next=="skills":
+		if recipe_skill!=skill:recipe_page=0;recipe_skill=skill
+		key += ":"+skill+":"+str(recipe_page)
 	if next=="inventory": key += ":"+str([filter,search_text,inventory_sort,inventory_slot,inventory_page,supply_page])
 	var return_scroll = old_scroll if retain_scroll else int(page_scroll.get(key,0))
 	rendered_page_key = key

@@ -34,6 +34,9 @@ static func drop(m, enemy_id: String) -> String:
 	m.note("Blueprint discovered: "+m.name_of(candidates[0])+". A new masterwork can be forged.")
 	return found
 
+static func candidates(m, source: String) -> Array:
+	return RealmLegacyFinds.GEAR.filter(func(id): return m.data.activities["craft_"+id].blueprint==source and not learned(m,id))
+
 static func offers() -> Array:
 	var out = []
 	for i in range(RealmLegacyFinds.GEAR.size()):

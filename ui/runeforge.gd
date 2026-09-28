@@ -15,13 +15,13 @@ func rune_art(id: String, size: int = 100) -> TextureRect:
 	t.expand_mode = TextureRect.EXPAND_IGNORE_SIZE
 	t.stretch_mode = TextureRect.STRETCH_KEEP_ASPECT_CENTERED
 	t.mouse_filter = Control.MOUSE_FILTER_IGNORE
-	if ResourceLoader.exists("res://assets/art/runestones.png"):
-		var atlas = AtlasTexture.new()
-		atlas.atlas = load("res://assets/art/runestones.png")
-		var width = atlas.atlas.get_width()/3.0
-		atlas.region = Rect2(R.RUNES.keys().find(id)*width,0,width,atlas.atlas.get_height())
-		atlas.filter_clip = true
-		t.texture = atlas
+	var atlas=AtlasTexture.new()
+	atlas.atlas=U.asset("res://assets/art/runes-0.50.png")
+	var index=R.RUNES.keys().find(id)
+	var rows=[0,384,728,1086]
+	var row=int(index/4)
+	atlas.region=Rect2((index%4)*362,rows[row],362,rows[row+1]-rows[row])
+	atlas.filter_clip=true;t.texture=atlas
 	return t
 
 func forge(selected: String = "thorn"):
@@ -34,13 +34,12 @@ func forge(selected: String = "thorn"):
 	var s = R.state(m)
 	var d = R.RUNES[selected]
 	var rank = int(s.ranks[selected])
-	var tabs = U.row(5)
+	var tabs=OptionButton.new()
+	tabs.fit_to_longest_item=false;tabs.custom_minimum_size.y=48
+	for id in R.RUNES:tabs.add_item(R.RUNES[id].name)
+	tabs.select(R.RUNES.keys().find(selected))
+	tabs.item_selected.connect(func(index):forge(R.RUNES.keys()[index]))
 	v.add_child(tabs)
-	for id in R.RUNES:
-		var tab = U.button(R.RUNES[id].name,func(): forge(id),selected==id)
-		tab.size_flags_horizontal = Control.SIZE_EXPAND_FILL
-		tab.add_theme_font_size_override("font_size",int(13*U.scale))
-		tabs.add_child(tab)
 	var hero = U.card(v,16,Color(d.color).darkened(.45))
 	var row = U.row(12)
 	hero.add_child(row)
@@ -74,7 +73,7 @@ func forge(selected: String = "thorn"):
 	comparison.add_child(U.para("Enemy special hit   %d → %d damage" % [int(old_move.damage),int(new_move.damage)],14,U.RED if new_move.damage>old_move.damage else U.MUTED))
 	comparison.add_child(U.para("Current rune → selected inscription equipped. Damage shown on a hit, before criticals. No materials are spent by this preview.",11))
 	if rank<3:
-		var price = R.cost(rank)
+		var price = R.cost(rank,selected)
 		var materials = U.card(v,12)
 		materials.add_child(U.label("MATERIALS · OWNED / NEEDED",10,U.GOLD))
 		app.dynamic(materials,func(): return "%s fragments   %d / %d" % [RealmChronicle.RELICS[d.relic].name,int(RealmChronicle.state(m).fragments[d.relic]),int(price.fragments)],14)
@@ -82,7 +81,8 @@ func forge(selected: String = "thorn"):
 		v.add_child(U.para("Spend these materials once to inscribe the rune permanently. Fragments are shared with relic upgrades; choose what helps your next hunt.",13))
 		v.move_child(comparison.get_parent(),v.get_child_count()-1)
 	v.add_child(U.para("ONE ACTIVE RUNE\nA rune works alongside your fighting style and relic. Forging does not equip it. Switch or remove it freely outside combat.",13,U.GREEN))
-	if rank==0 and R.victories(m,d.region)<1: v.add_child(U.para("Discover this inscription by defeating any guardian in "+RealmChronicle.REGIONS[d.region].name+".",14,U.GOLD))
+	if rank==0 and d.has("gate") and m.s.kills.get(d.gate,0)<1:v.add_child(U.para("Defeat "+m.local_name(m.data.enemies[d.gate])+" to discover this inscription.",14,U.GOLD))
+	elif rank==0 and R.victories(m,d.region)<1: v.add_child(U.para("Discover this inscription by defeating any guardian in "+RealmChronicle.REGIONS[d.region].name+".",14,U.GOLD))
 	v.add_child(U.button("Field journal · hunts & supplies",func(): journal(d.region)))
 	v.add_child(U.button("Find "+RealmChronicle.RELICS[d.relic].name+" fragments",func(): preload("res://ui/chronicle.gd").new(app).farms(d.relic)))
 	v.add_child(U.para("Scraps come from expedition first clears, field records, stronghold contracts and salvaging unprotected spare equipment in Bag.",12))

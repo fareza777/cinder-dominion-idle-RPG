@@ -6,7 +6,10 @@ const ALL = {
 	"ranger":{"name":"Ranger","role":"Relentless hunter","trade":"15% more attack · 20% less armor","attack":1.15,"armor":.8,"guard":0,"tile":1,"skill":"Marked Strike","detail":"Every fourth attack deals 20% more damage."},
 	"arcanist":{"name":"Arcanist","role":"Armor-breaking spellblade","trade":"5% more attack · 30% less armor","attack":1.05,"armor":.7,"guard":0,"tile":2,"skill":"Ember Lance","detail":"Every fourth attack ignores 40% of enemy armor."},
 	"reaver":{"name":"Reaver","role":"Relentless boss hunter","trade":"20% more attack · 40% less armor","attack":1.2,"armor":.6,"guard":0,"tile":0,"skill":"Sundering Blow","detail":"Every fourth attack deals 25% more damage against bosses."},
-	"apothecary":{"name":"Apothecary","role":"Resourceful survivor","trade":"+1 armor · 15% less attack","attack":.85,"armor":1.0,"guard":1,"tile":1,"skill":"Field Remedy","detail":"Each meal restores 6 extra HP in battle."}
+	"apothecary":{"name":"Apothecary","role":"Resourceful survivor","trade":"+1 armor · 15% less attack","attack":.85,"armor":1.0,"guard":1,"tile":1,"skill":"Field Remedy","detail":"Each meal restores 6 extra HP in battle."},
+	"frostbound":{"name": "Frostbound", "role": "Patient controller", "trade": "+2 armor; 10% less attack", "attack": 0.9, "armor": 1.0, "guard": 2, "tile": 0, "skill": "Rime Spear", "detail": "Every fourth attack deals 20% more damage to chilled enemies."},
+	"penitent":{"name": "Penitent", "role": "Armored counterfighter", "trade": "10% more armor; 15% less attack", "attack": 0.85, "armor": 1.1, "guard": 0, "tile": 1, "skill": "Iron Penance", "detail": "Every fourth attack gains damage equal to 15% of armor."},
+	"duskblade":{"name": "Duskblade", "role": "Wounded-target finisher", "trade": "10% more attack; 25% less armor", "attack": 1.1, "armor": 0.75, "guard": 0, "tile": 2, "skill": "Last Light", "detail": "Deal 20% more damage while the enemy is below 30% HP."}
 }
 const ATTRIBUTES = {"might":"Might","resolve":"Resolve","focus":"Focus"}
 
@@ -59,13 +62,14 @@ static func portrait(m) -> Texture2D:
 	return portrait_for(id(m))
 
 static func portrait_for(character: String) -> Texture2D:
+	if character in ["frostbound","penitent","duskblade"]: return preload("res://ui/style.gd").atlas_tile("res://assets/art/heroes-0.50.png",ALL[character].tile,3,1)
 	var added = character in ["reaver","apothecary"]
 	return preload("res://ui/style.gd").atlas_tile("res://assets/art/heroes-new-0.33.png" if added else "res://assets/art/heroes-0.32.png",ALL[character].tile,2 if added else 3,1)
 
 static func skill_description(character: String, skill_rank: int) -> String:
 	var text = base_skill_description(character,skill_rank)
 	if character not in ALL: return text
-	var effect = {"warden":"Stun","ranger":"Bleed","arcanist":"Burn","reaver":"Armor Break","apothecary":"Poison"}[character]
+	var effect = {"warden":"Stun","ranger":"Bleed","arcanist":"Burn","reaver":"Armor Break","apothecary":"Poison","frostbound":"Chill","penitent":"Weaken","duskblade":"Bleed"}[character]
 	text += " From Bladecraft Lv.25, every fourth attack that hits also applies "+effect+"."
 	if character=="apothecary": text += " Meals also grant Regeneration from Lv.25."
 	return text
@@ -78,4 +82,7 @@ static func base_skill_description(character: String, skill_rank: int) -> String
 		"arcanist": return "Every fourth attack ignores %d%% of enemy armor." % (40+10*step)
 		"reaver": return "Every fourth attack deals %d%% more damage against bosses." % (25+10*step)
 		"apothecary": return "Each meal restores %d extra HP in battle." % (6+3*step)
+		"frostbound": return "Every fourth attack deals %d%% more damage to chilled enemies." % (20+10*step)
+		"penitent": return "Every fourth attack gains damage equal to %d%% of armor." % (15+5*step)
+		"duskblade": return "Deal %d%% more damage below 30%% enemy HP." % (20+5*step)
 	return ""

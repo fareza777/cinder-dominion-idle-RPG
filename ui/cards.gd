@@ -35,12 +35,13 @@ func detail(id: String, uid: String = ""):
 	v.add_child(U.icon(id,200))
 	v.add_child(U.para(d.rarity+" · "+d.get("role","Build choice"),18,U.GOLD))
 	v.add_child(U.para(d.detail,17,U.TEXT))
+	v.add_child(U.para(RealmCards.slot_text(id),15,U.GOLD))
 	v.add_child(U.para("Owned %d · duplicates do not stack" % m.count(id),13))
 	if uid!="":
 		v.add_child(U.para("Attach to "+m.name_of(m.gear(uid).id)+". Removal needs a crafted Card Extractor.",14))
 		var b = U.button("Attach card",func():
 			if app.send({"type":"card_insert","id":id,"uid":uid}): socket(uid),true)
-		b.disabled = m.count(id)<1 or not m.s.fight.is_empty()
+		b.disabled = m.count(id)<1 or not m.s.fight.is_empty() or not RealmCards.fits_card(m,uid,id)
 		v.add_child(b)
 	elif m.count(id)>0:
 		v.add_child(U.button("Choose equipment",func(): choose_equipment(id),true))
@@ -51,13 +52,13 @@ func detail(id: String, uid: String = ""):
 func choose_equipment(id: String, page: int = 0):
 	var v = app.modal("Choose equipment")
 	v.add_child(U.para("A card stays with its item when you change loadouts. Duplicate cards do not stack on one hero.",14))
-	var choices = m.s.gear.filter(func(g): return RealmCards.fits(m,g.uid) and not m.s.get("card_sockets",{}).has(g.uid))
+	var choices = m.s.gear.filter(func(g): return RealmCards.fits_card(m,g.uid,id) and not m.s.get("card_sockets",{}).has(g.uid))
 	choices.sort_custom(func(a,b): return (a.uid in m.s.equipped.values()) and not (b.uid in m.s.equipped.values()))
 	var pages = maxi(1,ceili(choices.size()/20.0))
 	page = clampi(page,0,pages-1)
 	for g in choices.slice(page*20,(page+1)*20):
 		v.add_child(U.button(m.data.rarities[int(g.q)]+" "+m.name_of(g.id)+(" · Equipped" if g.uid in m.s.equipped.values() else ""),func(): detail(id,g.uid)))
-	if choices.is_empty(): v.add_child(U.para("No empty combat-equipment sockets. Remove a card or craft another piece.",16))
+	if choices.is_empty(): v.add_child(U.para("No compatible empty sockets. Check this card's allowed slots, then craft or free a matching piece.",16))
 	if page>0: v.add_child(U.button("Previous equipment",func(): choose_equipment(id,page-1)))
 	if page+1<pages: v.add_child(U.button("Next equipment",func(): choose_equipment(id,page+1)))
 
@@ -77,13 +78,13 @@ func socket(uid: String):
 		v.add_child(b)
 		v.add_child(U.button("Craft an extractor · Smithing Lv.20",func(): app.planner_dialog("craft_card_extractor",1)))
 	else:
-		v.add_child(U.para("One empty socket. Any monster card can fit combat equipment. Tools have no sockets.",14))
+		v.add_child(U.para("One empty socket. Only cards made for this equipment slot can be attached.",14))
 		var found = false
 		for id in RealmCards.definitions():
-			if m.count(id)>0:
+			if m.count(id)>0 and RealmCards.fits_card(m,uid,id):
 				found = true
 				v.add_child(U.button(m.name_of(id),func(): detail(id,uid)))
-		if not found: v.add_child(U.para("No cards yet. Find them while hunting.",16))
+		if not found: v.add_child(U.para("No compatible cards in your Bag. Hunt for cards that fit this slot.",16))
 	v.add_child(U.button("Card collection",collection))
 
 func sell(id: String):
@@ -97,7 +98,7 @@ func sell(id: String):
 
 func help():
 	var v = app.modal("Hunting & cards")
-	for line in ["1. Pick an enemy and prepare food. Check its rewards, debuffs and recommended food before starting.","2. Hunt for experience, materials and monster cards.","3. Attach a card to a combat item from Hero or the card collection. Each item holds one; duplicates of the same card only apply once per hero.","4. Refine equipment to carry its card forward. Use a Card Extractor to move a card safely.","5. Move to stronger enemies for better XP, coins and materials. Return to earlier hunts when you need their cards or specific drops.","6. Buy occasional Rare or Epic cards from the merchant, or sell spare copies. Legendary and Mythic cards come from hunts."]:
+	for line in ["1. Pick an enemy and prepare food. Check its rewards, debuffs and recommended food before starting.","2. Hunt for experience, materials and monster cards.","3. Check the card's allowed slots, then attach it to a matching combat item from Hero or the card collection. Each item holds one; duplicates of the same card only apply once per hero.","4. Refine equipment to carry its card forward. Use a Card Extractor to move a card safely.","5. Move to stronger enemies for better XP, coins and materials. Return to earlier hunts when you need their cards or specific drops.","6. Buy occasional Rare or Epic cards from the merchant, or sell spare copies. Legendary and Mythic cards come from hunts."]:
 		v.add_child(U.para(line,16))
 	v.add_child(U.button("Combat effects explained",effects))
 

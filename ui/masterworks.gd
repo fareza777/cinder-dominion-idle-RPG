@@ -11,6 +11,7 @@ func open(page: int = -1):
 	var v = app.modal("Masterwork blueprints")
 	var known=RealmLegacyFinds.GEAR.filter(func(id): return RealmBlueprints.learned(m,id))
 	v.add_child(U.para("%d blueprint%s discovered" % [known.size(),"" if known.size()==1 else "s"],19,U.GOLD))
+	v.add_child(U.button("Restore a lost blueprint",research))
 	if known.is_empty():
 		v.add_child(U.para("Rare blueprints can be found on difficult hunts or among the merchant’s rarest offers.",16))
 		return
@@ -47,3 +48,19 @@ func recipe(id: String):
 		row.add_child(b)
 	v.add_child(U.button("Review & craft",func(): app.activity_dialog("craft_"+id,1),true))
 	v.add_child(U.button("All masterworks",open))
+
+func research(page: int = 0):
+	var v=app.modal("Lost blueprints")
+	v.add_child(U.para("Difficult hunts leave field notes. Collect 200 notes from one source and 5 Platinum to restore a blueprint. A complete blueprint can still be found unexpectedly.",15))
+	var sources=m.data.enemies.keys().filter(func(source):return m.s.kills.get(source,0)>0 and not RealmBlueprints.candidates(m,source).is_empty())
+	page=clampi(page,0,maxi(0,ceili(sources.size()/6.0)-1))
+	for source in sources.slice(page*6,(page+1)*6):
+		var c=U.card(v,12);c.add_child(U.para(m.local_name(m.data.enemies[source]),20,U.GOLD))
+		c.add_child(U.para("%d / 200 field notes" % m.count("research_"+source),15))
+		c.add_child(U.button("Hunt for field notes",func():app.activity_dialog("hunt_"+source,1)))
+		var b=U.button("Restore blueprint · 5P",func():
+			if app.send({"type":"blueprint_research","id":source}):open())
+		b.disabled=m.count("research_"+source)<200 or m.s.gold<5*RealmEconomy.PLATINUM;c.add_child(b)
+	if page>0:v.add_child(U.button("Previous sources",func():research(page-1)))
+	if (page+1)*6<sources.size():v.add_child(U.button("More sources",func():research(page+1)))
+	if sources.is_empty():v.add_child(U.para("No unfinished research yet. Explore difficult hunts to find a lead.",16))

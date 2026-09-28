@@ -129,10 +129,17 @@ func advanced_training():
 		button.disabled = selected or not m.s.fight.is_empty() or (id!="none" and m.level("bladecraft")<25)
 		c.add_child(button)
 
-func contracts():
+func contracts(page: int = 0):
 	var v = app.modal("Stronghold contracts")
 	v.add_child(U.para("Optional milestones. Progress is counted automatically across your entire journey. Each reward can be claimed once. Spend scraps and coins on permanent stronghold upgrades.",14))
-	for c in P.CONTRACTS:
+	var visible=P.CONTRACTS.filter(func(c):return not str(c.id).begins_with("contract_march") or RealmDiscovery.visible(m,c.key))
+	var pages=maxi(1,ceili(visible.size()/10.0))
+	page=clampi(page,0,pages-1)
+	var nav=U.row(6);v.add_child(nav)
+	if page>0:nav.add_child(U.button("Previous",func():contracts(page-1)))
+	nav.add_child(U.para("%d / %d" % [page+1,pages],14))
+	if page+1<pages:nav.add_child(U.button("Next",func():contracts(page+1)))
+	for c in visible.slice(page*10,(page+1)*10):
 		var claimed = c.id in m.progression().claimed
 		var ready = P.value(m,c)>=c.target
 		var card = U.card(v,14,U.GREEN if ready and not claimed else U.LINE)
@@ -148,7 +155,7 @@ func contracts():
 		card.add_child(U.para("+%d gold · +%d food · +%d scraps" % [int(c.gold),int(c.food),int(c.scrap)],12,U.GOLD))
 		if not claimed:
 			var claim = U.button("Claim reward",func():
-				if app.send({"type":"claim","id":c.id}): contracts(),true)
+				if app.send({"type":"claim","id":c.id}): contracts(page),true)
 			claim.disabled = not ready
 			card.add_child(claim)
 			var ref = weakref(claim)

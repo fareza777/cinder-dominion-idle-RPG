@@ -38,7 +38,7 @@ func open(keep_progress: bool = false):
 	v.add_child(U.para(c.name+" · "+c.role,21,U.GOLD))
 	v.add_child(U.para(c.trade,15,U.TEXT))
 	v.add_child(U.para(c.skill+" · unlocks at Bladecraft Lv.5\n"+c.detail,14))
-	var note = U.para("Choose once for this journey. All five characters are free."+(" Your existing progress stays intact." if adopting else ""),12)
+	var note = U.para("Choose once for this journey. All eight characters are free."+(" Your existing progress stays intact." if adopting else ""),12)
 	v.add_child(note)
 	var begin = app.modal_action("Keep progress & choose" if adopting else "Begin journey",func():
 		if not RealmCharacters.valid_name(player_name.strip_edges()): return

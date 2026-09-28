@@ -8,7 +8,7 @@ const STORIES = {
 	"crown":"The outer bells are silent. At the throne, the keeper raises the last hammer. For the first time, the keeper looks down from his throne."}
 
 static func second_phase(enemy: Dictionary, hp: int) -> bool:
-	return (bool(enemy.get("trial",false)) or enemy.get("secret",false) or (enemy.get("depth",false) or enemy.has("frontier"))) and hp*2<=int(enemy.hp)
+	return (bool(enemy.get("trial",false)) or enemy.get("secret",false) or (enemy.get("depth",false) or (enemy.has("frontier") or enemy.has("march")))) and hp*2<=int(enemy.hp)
 
 static func active_phase(m, enemy: Dictionary) -> bool:
 	return not m.s.fight.is_empty() and m.s.fight.enemy==enemy.id and int(m.s.fight.get("phase",1))==2

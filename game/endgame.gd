@@ -1,7 +1,7 @@
 class_name RealmEndgame
 extends RefCounted
 
-const IDS = ["secret_0","secret_1","secret_2","secret_3","secret_4","secret_5","secret_6"]
+const IDS = ["secret_0","secret_1","secret_2","secret_3","secret_4","secret_5","secret_6","march_guard_0","march_guard_1","march_guard_2","march_guard_3","march_guard_4"]
 const ROUTES = {"safe":"Take 12% less damage; gain 20% less gold and XP.","resource":"Standard danger and rewards.","elite":"Take 20% more damage; gain 25% more coins and XP.","mastery":"Standard danger; gain 20% more XP and 20% less gold."}
 const CONTRACTS = {"gather":["Gather supplies",60],"craft":["Keep the forge working",25],"hunt":["Complete hunts",12],"elite":["Defeat optional guardians",3],"depth":["Clear Depths rooms",3]}
 
@@ -32,11 +32,19 @@ static func enemy(m, original: Dictionary) -> Dictionary:
 		if d.risk=="perilous": e.attack = int(e.attack*1.2)
 		e.name = "Hollow Sentinel · Depth %d" % d.floor
 		e.en = e.name
+		var variant=int(floor_index)%4
+		e.status=["burn","chill","bleed","weaken"][variant]
+		e.special_name=["Cinder Sweep","Winter Grasp","Rending Chain","Hollow Toll"][variant]
+		if variant==0:e.attack=int(e.attack*1.08)
+		elif variant==1:e.armor=int(e.armor*1.15)
+		elif variant==2:e.interval=int(e.interval*.92)
+		else:e.special_heal=.005
+		if int(d.floor)%5==0:e.hp=int(e.hp*1.2);e.pressure+=2
 	return e
 
 static func move(m, e: Dictionary, strike: int, damage: int, phase: bool) -> int:
 	# Unavoidable pressure keeps armor stacking from trivializing optional endgame.
-	if e.get("secret",false) or e.get("depth",false) or e.has("frontier"):
+	if e.get("secret",false) or e.get("depth",false) or (e.has("frontier") or e.has("march")):
 		if phase: damage = ceili(damage*1.18)
 		if strike%3==0: damage += int(e.pressure)*(2 if phase else 1)
 		# Fixed escalation after sustained exposure, independent of player gear.
@@ -67,6 +75,7 @@ static func victory(m, e: Dictionary):
 		var d = state(m).depth
 		d.stash += (3 if d.risk=="perilous" else 2)+int(d.floor/5)
 		d.best = maxi(int(d.best),int(d.floor))
+		if int(d.floor)%5==0:d.checkpoint=int(d.floor)
 		d.floor = mini(1000,int(d.floor)+1)
 		state(m).rooms += 1
 		m.note("Depth cleared. Bank %d Hollow Shards or continue into greater danger." % d.stash)
@@ -132,7 +141,10 @@ static func command(m, cmd) -> String:
 			var favorite = g.favorite
 			if g.count==1: m.s.gear.erase(g)
 			else: g.count -= 1
-			var uid = m.add_gear(item,quality,m.s.get("card_sockets",{}).has(old_uid))
+			var uid = m.add_gear(item,quality,m.s.get("card_sockets",{}).has(old_uid) or m.s.get("gear_attunements",{}).has(old_uid))
+			if m.s.get("gear_attunements",{}).has(old_uid):
+				m.s.gear_attunements[uid]=m.s.gear_attunements[old_uid]
+				if uid!=old_uid:m.s.gear_attunements.erase(old_uid)
 			if m.s.get("card_sockets",{}).has(old_uid):
 				var card = m.s.card_sockets[old_uid]
 				m.s.card_sockets.erase(old_uid)
@@ -150,7 +162,7 @@ static func command(m, cmd) -> String:
 			if id not in ["steady","perilous"]: return "Choose an expedition risk."
 			if not s.depth.active:
 				s.depth.active = true
-				s.depth.floor = 1
+				s.depth.floor = mini(1000,int(s.depth.get("checkpoint",0))+1)
 				s.depth.stash = 0
 			if id not in ["steady","perilous"]: return "Choose an expedition risk."
 			s.depth.risk = id
@@ -205,6 +217,7 @@ static func valid(value, data) -> bool:
 	if not d is Dictionary or not d.get("active") is bool or d.get("risk","") not in ["steady","perilous"]: return false
 	for key in ["floor","best","stash"]:
 		if not RealmSave.counter(d.get(key,-1)): return false
+	if not RealmSave.counter(d.get("checkpoint",0)) or d.get("checkpoint",0)>d.best or int(d.get("checkpoint",0))%5!=0:return false
 	if d.floor<1 or d.floor>1000 or d.best>1000: return false
 	var b = value.board
 	if not b is Dictionary or not b.get("selected") is Array or not b.get("claimed") is Array or not b.get("baseline") is Dictionary: return false

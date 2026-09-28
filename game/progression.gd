@@ -45,7 +45,7 @@ const BASE_CONTRACTS = [
 	{"id":"wraiths","title":"Embers in the Mist","detail":"Defeat 15 ember wraiths.","source":"kills","key":"ember_wraith","target":15,"gold":80,"food":10,"scrap":6,"activity":"hunt_ember_wraith"},
 	{"id":"bell","title":"The Last Toll","detail":"Defeat the Bellkeeper.","source":"kills","key":"bellkeeper","target":1,"gold":120,"food":15,"scrap":10,"activity":"hunt_bellkeeper"}]
 
-const CONTRACTS = BASE_CONTRACTS + preload("res://game/ascension_contracts.gd").ALL
+const CONTRACTS = BASE_CONTRACTS + preload("res://game/ascension_contracts.gd").ALL + preload("res://game/march_contracts.gd").ALL
 
 static func state(m) -> Dictionary:
 	if not m.s.has("progression"):
@@ -99,6 +99,8 @@ static func append_recipe(m, aid: String, amount: int, result: Dictionary, trail
 					source = candidate
 					break
 			if source=="":
+				result.missing_item=id
+				result.missing_amount=missing
 				result.error = "Collect %d %s first (Sources or Merchant). Combat drops and merchant purchases need a separate step." % [missing,m.name_of(id)]
 				if not locked_source.is_empty():
 					result.error = "%s requires %s Lv.%d. Train this skill before planning this recipe." % [m.name_of(id),m.local_name(m.data.skills[locked_source.skill]),int(locked_source.level)]

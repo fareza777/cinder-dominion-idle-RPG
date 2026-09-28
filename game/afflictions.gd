@@ -76,8 +76,15 @@ static func proc(m, enemy: Dictionary, side: String, special: bool):
 	if not special: return
 	if side=="enemy":
 		if RealmCharacters.rank(m)>=2:
-			var effect = {"warden":"stun","ranger":"bleed","arcanist":"burn","reaver":"armor_break","apothecary":"poison"}.get(RealmCharacters.id(m),"")
+			var effect = {"warden":"stun","ranger":"bleed","arcanist":"burn","reaver":"armor_break","apothecary":"poison","frostbound":"chill","penitent":"weaken","duskblade":"bleed"}.get(RealmCharacters.id(m),"")
 			apply(m,"enemy",effect,2)
+		var rune=RealmRuneforge.state(m).equipped
+		if rune!="" and RealmRuneforge.RUNES[rune].has("proc"):
+			var re=RealmRuneforge.RUNES[rune].proc
+			apply(m,"hero" if re in ["barrier","regeneration"] else "enemy",re,2*RealmRuneforge.active_rank(m,rune))
+		for effect in RealmMarches.effects(m):
+			if effect in ["bleed","burn","chill","poison"]:apply(m,"enemy",effect,2)
+			elif effect=="sustain":apply(m,"hero","regeneration",2)
 		for card in RealmCards.active(m):
 			var d = RealmCards.definitions()[card]
 			var potency = {"Rare":1,"Epic":2,"Legendary":3,"Mythic":4}[d.rarity]

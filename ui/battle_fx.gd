@@ -1,7 +1,7 @@
 extends RefCounted
 
-const COLORS = {"warden":Color("e1bc78"),"ranger":Color("a7cec0"),"arcanist":Color("e5ba91"),"reaver":Color("c79886"),"apothecary":Color("aac6ab")}
-const LABELS = {"warden":"IRON GUARD","ranger":"MARKED STRIKE","arcanist":"EMBER LANCE","reaver":"SUNDERING BLOW","apothecary":"FIELD REMEDY","balanced":"CLEAVE","guard":"WARD","reaver_style":"REND"}
+const COLORS = {"frostbound":Color("9bc9d5"),"penitent":Color("c69774"),"duskblade":Color("b6a6cf"),"warden":Color("e1bc78"),"ranger":Color("a7cec0"),"arcanist":Color("e5ba91"),"reaver":Color("c79886"),"apothecary":Color("aac6ab")}
+const LABELS = {"frostbound":"RIME SPEAR","penitent":"IRON PENANCE","duskblade":"LAST LIGHT","warden":"IRON GUARD","ranger":"MARKED STRIKE","arcanist":"EMBER LANCE","reaver":"SUNDERING BLOW","apothecary":"FIELD REMEDY","balanced":"CLEAVE","guard":"WARD","reaver_style":"REND"}
 
 static func from_event(model, event: Dictionary) -> Dictionary:
 	if event.get("kind","hit")!="hit" or event.text in ["MISS","PHASE II"]: return {}

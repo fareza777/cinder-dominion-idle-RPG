@@ -31,7 +31,7 @@ func fresh(seed_value: int = 12345):
 	last_hit = ""
 	last_forged = ""
 	rng.seed = seed_value
-	s = {"version":1,"economy_revision":1,"revision":0,"time":0,"wall":0,"rng":str(rng.state),"gold":20,
+	s = {"version":1,"card_slot_revision":1,"economy_revision":1,"revision":0,"time":0,"wall":0,"rng":str(rng.state),"gold":20,
 		"bag":{"cooked_minnow":5},"gear":[],"overflow":[],"equipped":{},"next_uid":1,
 		"xp":{},"mastery":{},"queue":[],"active":{},"fight":{},"hp":100,
 		"regen_at":1000,"kills":{},"gains":{},"spent":{},"tutorial":false,"beacon":false,
@@ -91,7 +91,7 @@ func stats() -> Dictionary:
 func protected(uid: String) -> bool:
 	var g = gear(uid)
 	if g.is_empty(): return true
-	if g.locked or g.favorite or uid in s.equipped.values() or s.get("card_sockets",{}).has(uid): return true
+	if g.locked or g.favorite or s.get("gear_attunements",{}).has(uid) or uid in s.equipped.values() or s.get("card_sockets",{}).has(uid): return true
 	for slots in s.presets.values():
 		if uid in slots.values(): return true
 	for build in RealmLoadouts.state(self).values():
@@ -100,7 +100,7 @@ func protected(uid: String) -> bool:
 
 func add_gear(id: String, quality: int, unique: bool = false) -> String:
 	for g in s.gear:
-		if not unique and not s.get("card_sockets",{}).has(g.uid) and data.items[id].slot != "ring" and g.id == id and int(g.q) == quality:
+		if not unique and not s.get("card_sockets",{}).has(g.uid) and not s.get("gear_attunements",{}).has(g.uid) and data.items[id].slot != "ring" and g.id == id and int(g.q) == quality:
 			g.count += 1
 			return g.uid
 	var uid = "eq_%d" % int(s.next_uid)
@@ -126,6 +126,7 @@ func note(message: String):
 
 func available(enemy_id: String) -> String:
 	var d = data.enemies[enemy_id]
+	if d.has("march"): return RealmMarches.available(self,enemy_id)
 	if d.has("frontier"): return RealmFrontiers.available(self,enemy_id)
 	if d.get("secret",false) or d.get("depth",false): return RealmEndgame.available(self,enemy_id)
 	if d.has("region"):
@@ -185,6 +186,9 @@ func command(cmd: Dictionary) -> bool:
 			if why!="": return fail(why)
 		"rune_forge","rune_equip","research_claim":
 			var why = RealmRuneforge.command(self,cmd)
+			if why!="": return fail(why)
+		"march_claim","blueprint_research","gear_attune":
+			var why = RealmMarches.command(self,cmd)
 			if why!="": return fail(why)
 		"upgrade_goal":
 			if id!="" and (not data.items.has(id) or data.items[id].category!="equipment" or not data.activities.has("craft_"+id)):
@@ -328,7 +332,7 @@ func command(cmd: Dictionary) -> bool:
 			gain(id,qty)
 		"sell":
 			if not data.items.has(id) or data.items[id].category=="equipment": return fail("Salvage equipment to recover metal scraps.")
-			if id.begins_with("blueprint_") or id.begins_with("keepsake_") or id=="masterwork_commission": return fail("Keep this rare crafting item for a masterwork. It cannot be sold as an ordinary supply.")
+			if id.begins_with("research_") or id.begins_with("blueprint_") or id.begins_with("keepsake_") or id=="masterwork_commission": return fail("Keep this rare crafting item for a masterwork. It cannot be sold as an ordinary supply.")
 			var qty = clampi(int(cmd.get("amount",1)),1,1000)
 			if count(id)<qty: return fail("Not enough items")
 			if id.begins_with("socket_") and id.trim_prefix("socket_") in RealmPaths.sockets(self) and count(id)-qty<1: return fail("Remove this socket relic from your build before selling it.")
@@ -587,6 +591,7 @@ func win(enemy: Dictionary):
 	var before_gold = int(s.gold)
 	var id = enemy.id
 	RealmEndgame.victory(self,enemy)
+	RealmMarches.victory(self,enemy)
 	var legacy = RealmChronicle.state(self)
 	var fragment_id = RealmChronicle.fragments_for(enemy)
 	var fragments = RealmHuntMastery.fragments(self,enemy)
@@ -647,7 +652,7 @@ func win(enemy: Dictionary):
 	var rare_material = RealmLegacyFinds.drop(self,enemy)
 	if rare_material!="": last_reward += " · RARE MATERIAL: "+name_of(rare_material)
 	if data.items[enemy.drop].category=="material" and not enemy.get("secret",false) and not enemy.get("depth",false):
-		var credit = int(s.get("card_material_credit",0))+roundi(enemy.qty*RealmCards.bonus(self,"material")*10000)
+		var credit = int(s.get("card_material_credit",0))+roundi(enemy.qty*(RealmCards.bonus(self,"material")+.01*RealmLegacyGrowth.rank(self,"reclamation"))*10000)
 		var bonus_count = int(credit/10000)
 		s.card_material_credit = credit%10000
 		if bonus_count>0: gain(enemy.drop,bonus_count)

@@ -226,6 +226,13 @@ static func portrait(index: int, dimensions: Vector2) -> TextureRect:
 	return t
 
 static func enemy_texture(enemy: Dictionary) -> Texture2D:
+	if enemy.has("march_tile"):
+		var sheet=int(enemy.march_tile/12);var cell=int(enemy.march_tile)%12
+		var tile=atlas_tile("res://assets/art/march-enemies-%d-0.50.png" % sheet,cell,4,3)
+		var rows=[[0,315,640,1024],[0,341,683,1024],[0,308,684,1024],[0,318,665,1024],[0,341,684,1024]][sheet]
+		var row=int(cell/4)
+		tile.region=Rect2(cell%4*384+5,rows[row]+5,374,rows[row+1]-rows[row]-10)
+		return tile
 	if enemy.has("frontier_tile"): return frontier_texture(int(enemy.frontier_tile))
 	if enemy.has("secret_tile"): return atlas_tile("res://assets/art/superbosses-0.34.png",int(enemy.secret_tile),3,3)
 	if enemy.has("art_tile"): return atlas_tile("res://assets/art/ascension-enemies-0.25.png",int(enemy.art_tile),3,3)
@@ -273,6 +280,12 @@ static func icon(id: String, dimension: int = 52) -> TextureRect:
 		t.texture = enemy_texture(enemy_catalog[id.trim_prefix("card_")])
 		return t
 	var data = item_catalog.get(id,{})
+	if data.has("enemy_art"):
+		t.texture=enemy_texture(enemy_catalog[data.enemy_art])
+		return t
+	if data.has("expansion_icon"):
+		t.texture=atlas_tile("res://assets/art/march-items-0.50.png",int(data.expansion_icon),6,8)
+		return t
 	var detail_index = ["raw_meat","worn_sword","dusksteel_sword","dawnsteel_sword"].find(id)
 	if detail_index>=0:
 		t.texture = item_region("res://assets/art/item-details-0.46.png",detail_index,[],[])

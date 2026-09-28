@@ -14,12 +14,15 @@ static func build(character: String, masterwork: bool):
 			var uid=m.add_gear(id,5)
 			var slot="ring_left" if id=="heirloom_ember_ring" else ("ring_right" if id=="heirloom_glass_ring" else m.data.items[id].slot)
 			m.command({"type":"equip","id":uid,"slot":slot})
-		var cards=["card_chapel_guard","card_grave_thrall","card_bellkeeper","card_wilds_4","card_wilds_5","card_trial_marsh","card_trial_crown","card_apex_crown_2","card_apex_crown_1","card_apex_marsh_2"]
+		var _legacy_cards=["card_chapel_guard","card_grave_thrall","card_bellkeeper","card_wilds_4","card_wilds_5","card_trial_marsh","card_trial_crown","card_apex_crown_2","card_apex_crown_1","card_apex_marsh_2"]
 		var index=0
 		for slot in m.s.equipped:
 			if slot in ["axe","pick","rod"]:continue
-			m.gain(cards[index],1)
-			assert(m.command({"type":"card_insert","uid":m.s.equipped[slot],"id":cards[index]}))
+			var family=m.data.items[m.gear(m.s.equipped[slot]).id].slot
+			var choices=RealmCards.definitions().keys().filter(func(id):return RealmCards.allowed(id,family) and id not in RealmCards.active(m))
+			if not choices.is_empty():
+				m.gain(choices[0],1)
+				assert(m.command({"type":"card_insert","uid":m.s.equipped[slot],"id":choices[0]}))
 			index+=1
 	return m
 

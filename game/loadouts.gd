@@ -14,7 +14,7 @@ static func valid(build, data: Dictionary, items: Dictionary) -> bool:
 	if not build is Dictionary or not build.get("gear") is Dictionary or not build.get("talents") is Dictionary: return false
 	if build.get("stance","") not in RealmProgression.STANCES: return false
 	if build.get("doctrine","none") not in RealmDoctrines.ALL: return false
-	if build.get("relic",null) not in ["","fang","ward","heart"] or build.get("rune",null) not in ["","thorn","tide","bell"]: return false
+	if build.get("relic",null) not in ["","fang","ward","heart"] or (build.get("rune",null)!="" and build.get("rune",null) not in RealmRuneforge.RUNES): return false
 	var path = build.get("path",-1)
 	if typeof(path) not in [TYPE_INT,TYPE_FLOAT] or not RealmSave.counter(float(path)+1) or path>1 or not build.get("sockets",[]) is Array: return false
 	var seen = []
@@ -30,7 +30,7 @@ static func valid(build, data: Dictionary, items: Dictionary) -> bool:
 	for id in RealmChronicle.TALENTS:
 		if not RealmChronicle.number(build.talents.get(id,0),RealmLegacyGrowth.limit(id)): return false
 		total += int(build.talents.get(id,0))
-	if total>60: return false
+	if total>80: return false
 	if not RealmEquipmentSlots.valid(build.gear,items,data): return false
 	for field in ["food","potion"]:
 		var id = build.get(field,null)

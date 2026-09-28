@@ -7,7 +7,11 @@
     "detail": "+3% ordinary hunt material yield.",
     "material": 0.03,
     "role": "Farming",
-    "build_hint": "For material and coin farming. Does not increase card or rare-material drop odds."
+    "build_hint": "For material and coin farming. Does not increase card or rare-material drop odds.",
+    "slots": [
+      "body",
+      "shield"
+    ]
   },
   "card_hollow_hound": {
     "enemy": "hollow_hound",
@@ -18,7 +22,11 @@
     "attack": 0.025,
     "proc": "bleed",
     "role": "Status combinations",
-    "build_hint": "Combine an effect source with a card that benefits from that effect. Boss control is brief."
+    "build_hint": "Combine an effect source with a card that benefits from that effect. Boss control is brief.",
+    "slots": [
+      "weapon",
+      "hands"
+    ]
   },
   "card_grave_thrall": {
     "enemy": "grave_thrall",
@@ -29,7 +37,12 @@
     "resist": "bleed",
     "defense": 0.01,
     "role": "Defense",
-    "build_hint": "Choose this when the enemy uses the matching effect or its attacks drain your food."
+    "build_hint": "Choose this when the enemy uses the matching effect or its attacks drain your food.",
+    "slots": [
+      "body",
+      "shield",
+      "head"
+    ]
   },
   "card_cinder_bandit": {
     "enemy": "cinder_bandit",
@@ -39,7 +52,11 @@
     "detail": "+5% battle coins.",
     "gold": 0.05,
     "role": "Farming",
-    "build_hint": "For material and coin farming. Does not increase card or rare-material drop odds."
+    "build_hint": "For material and coin farming. Does not increase card or rare-material drop odds.",
+    "slots": [
+      "feet",
+      "ring"
+    ]
   },
   "card_chapel_guard": {
     "enemy": "chapel_guard",
@@ -49,7 +66,11 @@
     "detail": "Every fourth attack, if it hits, grants a Barrier.",
     "boon": "barrier",
     "role": "Survival",
-    "build_hint": "For longer hunts. Combine with suitable food and defensive equipment."
+    "build_hint": "For longer hunts. Combine with suitable food and defensive equipment.",
+    "slots": [
+      "necklace",
+      "belt"
+    ]
   },
   "card_ember_wraith": {
     "enemy": "ember_wraith",
@@ -59,7 +80,11 @@
     "detail": "Every fourth attack, if it hits, applies Burn.",
     "proc": "burn",
     "role": "Status combinations",
-    "build_hint": "Combine an effect source with a card that benefits from that effect. Boss control is brief."
+    "build_hint": "Combine an effect source with a card that benefits from that effect. Boss control is brief.",
+    "slots": [
+      "weapon",
+      "hands"
+    ]
   },
   "card_bellkeeper": {
     "enemy": "bellkeeper",
@@ -70,7 +95,11 @@
     "resist": "stun",
     "special": 0.02,
     "role": "Defense",
-    "build_hint": "Choose this when the enemy uses the matching effect or its attacks drain your food."
+    "build_hint": "Choose this when the enemy uses the matching effect or its attacks drain your food.",
+    "slots": [
+      "weapon",
+      "hands"
+    ]
   },
   "card_wilds_1": {
     "enemy": "wilds_1",
@@ -81,7 +110,11 @@
     "pierce": 0.02,
     "vs_bleed": 0.04,
     "role": "Status combinations",
-    "build_hint": "Combine an effect source with a card that benefits from that effect. Boss control is brief."
+    "build_hint": "Combine an effect source with a card that benefits from that effect. Boss control is brief.",
+    "slots": [
+      "weapon",
+      "hands"
+    ]
   },
   "card_wilds_2": {
     "enemy": "wilds_2",
@@ -91,7 +124,11 @@
     "detail": "Every fourth attack, if it hits, applies Bleed.",
     "proc": "bleed",
     "role": "Status combinations",
-    "build_hint": "Combine an effect source with a card that benefits from that effect. Boss control is brief."
+    "build_hint": "Combine an effect source with a card that benefits from that effect. Boss control is brief.",
+    "slots": [
+      "weapon",
+      "hands"
+    ]
   },
   "card_wilds_3": {
     "enemy": "wilds_3",
@@ -102,7 +139,11 @@
     "boss": 0.025,
     "vs_poison": 0.04,
     "role": "Status combinations",
-    "build_hint": "Combine an effect source with a card that benefits from that effect. Boss control is brief."
+    "build_hint": "Combine an effect source with a card that benefits from that effect. Boss control is brief.",
+    "slots": [
+      "weapon",
+      "hands"
+    ]
   },
   "card_wilds_4": {
     "enemy": "wilds_4",
@@ -112,7 +153,12 @@
     "detail": "Take 2.5% less direct damage.",
     "defense": 0.025,
     "role": "Defense",
-    "build_hint": "Choose this when the enemy uses the matching effect or its attacks drain your food."
+    "build_hint": "Choose this when the enemy uses the matching effect or its attacks drain your food.",
+    "slots": [
+      "body",
+      "shield",
+      "head"
+    ]
   },
   "card_wilds_5": {
     "enemy": "wilds_5",
@@ -122,7 +168,11 @@
     "detail": "+4% armor penetration.",
     "pierce": 0.04,
     "role": "Damage",
-    "build_hint": "For damage checks and heavily armored targets. Keep enough defense to survive."
+    "build_hint": "For damage checks and heavily armored targets. Keep enough defense to survive.",
+    "slots": [
+      "weapon",
+      "hands"
+    ]
   },
   "card_marsh_1": {
     "enemy": "marsh_1",
@@ -133,7 +183,12 @@
     "resist": "poison",
     "vs_burn": 0.04,
     "role": "Defense",
-    "build_hint": "Choose this when the enemy uses the matching effect or its attacks drain your food."
+    "build_hint": "Choose this when the enemy uses the matching effect or its attacks drain your food.",
+    "slots": [
+      "body",
+      "shield",
+      "head"
+    ]
   },
   "card_marsh_2": {
     "enemy": "marsh_2",
@@ -143,7 +198,11 @@
     "detail": "Every fourth attack, if it hits, applies Chill.",
     "proc": "chill",
     "role": "Status combinations",
-    "build_hint": "Combine an effect source with a card that benefits from that effect. Boss control is brief."
+    "build_hint": "Combine an effect source with a card that benefits from that effect. Boss control is brief.",
+    "slots": [
+      "weapon",
+      "hands"
+    ]
   },
   "card_marsh_3": {
     "enemy": "marsh_3",
@@ -153,7 +212,11 @@
     "detail": "Every fourth attack, if it hits, applies Wound.",
     "proc": "wound",
     "role": "Status combinations",
-    "build_hint": "Combine an effect source with a card that benefits from that effect. Boss control is brief."
+    "build_hint": "Combine an effect source with a card that benefits from that effect. Boss control is brief.",
+    "slots": [
+      "weapon",
+      "hands"
+    ]
   },
   "card_marsh_4": {
     "enemy": "marsh_4",
@@ -163,7 +226,11 @@
     "detail": "+6% meal healing.",
     "healing": 0.06,
     "role": "Survival",
-    "build_hint": "For longer hunts. Combine with suitable food and defensive equipment."
+    "build_hint": "For longer hunts. Combine with suitable food and defensive equipment.",
+    "slots": [
+      "necklace",
+      "belt"
+    ]
   },
   "card_marsh_5": {
     "enemy": "marsh_5",
@@ -174,7 +241,11 @@
     "boon": "barrier",
     "healing": 0.02,
     "role": "Survival",
-    "build_hint": "For longer hunts. Combine with suitable food and defensive equipment."
+    "build_hint": "For longer hunts. Combine with suitable food and defensive equipment.",
+    "slots": [
+      "necklace",
+      "belt"
+    ]
   },
   "card_crown_1": {
     "enemy": "crown_1",
@@ -185,7 +256,12 @@
     "resist": "burn",
     "vs_chill": 0.04,
     "role": "Defense",
-    "build_hint": "Choose this when the enemy uses the matching effect or its attacks drain your food."
+    "build_hint": "Choose this when the enemy uses the matching effect or its attacks drain your food.",
+    "slots": [
+      "body",
+      "shield",
+      "head"
+    ]
   },
   "card_crown_2": {
     "enemy": "crown_2",
@@ -195,7 +271,12 @@
     "detail": "Take 3% less direct damage.",
     "defense": 0.03,
     "role": "Defense",
-    "build_hint": "Choose this when the enemy uses the matching effect or its attacks drain your food."
+    "build_hint": "Choose this when the enemy uses the matching effect or its attacks drain your food.",
+    "slots": [
+      "body",
+      "shield",
+      "head"
+    ]
   },
   "card_crown_3": {
     "enemy": "crown_3",
@@ -205,7 +286,11 @@
     "detail": "Every fourth attack, if it hits, applies Shock.",
     "proc": "shock",
     "role": "Status combinations",
-    "build_hint": "Combine an effect source with a card that benefits from that effect. Boss control is brief."
+    "build_hint": "Combine an effect source with a card that benefits from that effect. Boss control is brief.",
+    "slots": [
+      "weapon",
+      "hands"
+    ]
   },
   "card_crown_4": {
     "enemy": "crown_4",
@@ -215,7 +300,11 @@
     "detail": "Every fourth attack, if it hits, applies Weaken.",
     "proc": "weaken",
     "role": "Status combinations",
-    "build_hint": "Combine an effect source with a card that benefits from that effect. Boss control is brief."
+    "build_hint": "Combine an effect source with a card that benefits from that effect. Boss control is brief.",
+    "slots": [
+      "weapon",
+      "hands"
+    ]
   },
   "card_crown_5": {
     "enemy": "crown_5",
@@ -225,7 +314,11 @@
     "detail": "+4% special-attack damage.",
     "special": 0.04,
     "role": "Damage",
-    "build_hint": "For damage checks and heavily armored targets. Keep enough defense to survive."
+    "build_hint": "For damage checks and heavily armored targets. Keep enough defense to survive.",
+    "slots": [
+      "weapon",
+      "hands"
+    ]
   },
   "card_trial_wilds": {
     "enemy": "trial_wilds",
@@ -236,7 +329,11 @@
     "proc": "bleed",
     "special": 0.03,
     "role": "Status combinations",
-    "build_hint": "Combine an effect source with a card that benefits from that effect. Boss control is brief."
+    "build_hint": "Combine an effect source with a card that benefits from that effect. Boss control is brief.",
+    "slots": [
+      "weapon",
+      "hands"
+    ]
   },
   "card_trial_marsh": {
     "enemy": "trial_marsh",
@@ -246,7 +343,11 @@
     "detail": "Every fourth attack, if it hits, cleanses one harmful effect.",
     "boon": "cleanse",
     "role": "Survival",
-    "build_hint": "For longer hunts. Combine with suitable food and defensive equipment."
+    "build_hint": "For longer hunts. Combine with suitable food and defensive equipment.",
+    "slots": [
+      "necklace",
+      "belt"
+    ]
   },
   "card_trial_crown": {
     "enemy": "trial_crown",
@@ -257,7 +358,11 @@
     "defense": 0.04,
     "attack": -0.02,
     "role": "Defense",
-    "build_hint": "Choose this when the enemy uses the matching effect or its attacks drain your food."
+    "build_hint": "Choose this when the enemy uses the matching effect or its attacks drain your food.",
+    "slots": [
+      "weapon",
+      "hands"
+    ]
   },
   "card_apex_wilds_1": {
     "enemy": "apex_wilds_1",
@@ -267,7 +372,11 @@
     "detail": "+4.5% special-attack damage.",
     "special": 0.045,
     "role": "Damage",
-    "build_hint": "For damage checks and heavily armored targets. Keep enough defense to survive."
+    "build_hint": "For damage checks and heavily armored targets. Keep enough defense to survive.",
+    "slots": [
+      "weapon",
+      "hands"
+    ]
   },
   "card_apex_wilds_2": {
     "enemy": "apex_wilds_2",
@@ -278,7 +387,11 @@
     "defense": 0.06,
     "attack": -0.03,
     "role": "Defense",
-    "build_hint": "Choose this when the enemy uses the matching effect or its attacks drain your food."
+    "build_hint": "Choose this when the enemy uses the matching effect or its attacks drain your food.",
+    "slots": [
+      "weapon",
+      "hands"
+    ]
   },
   "card_apex_wilds_3": {
     "enemy": "apex_wilds_3",
@@ -289,7 +402,11 @@
     "proc": "burn",
     "attack": 0.025,
     "role": "Status combinations",
-    "build_hint": "Combine an effect source with a card that benefits from that effect. Boss control is brief."
+    "build_hint": "Combine an effect source with a card that benefits from that effect. Boss control is brief.",
+    "slots": [
+      "weapon",
+      "hands"
+    ]
   },
   "card_apex_marsh_1": {
     "enemy": "apex_marsh_1",
@@ -300,7 +417,12 @@
     "resist": "slow",
     "defense": 0.02,
     "role": "Defense",
-    "build_hint": "Choose this when the enemy uses the matching effect or its attacks drain your food."
+    "build_hint": "Choose this when the enemy uses the matching effect or its attacks drain your food.",
+    "slots": [
+      "body",
+      "shield",
+      "head"
+    ]
   },
   "card_apex_marsh_2": {
     "enemy": "apex_marsh_2",
@@ -310,7 +432,11 @@
     "detail": "Every fourth attack, if it hits, applies Poison.",
     "proc": "poison",
     "role": "Status combinations",
-    "build_hint": "Combine an effect source with a card that benefits from that effect. Boss control is brief."
+    "build_hint": "Combine an effect source with a card that benefits from that effect. Boss control is brief.",
+    "slots": [
+      "weapon",
+      "hands"
+    ]
   },
   "card_apex_marsh_3": {
     "enemy": "apex_marsh_3",
@@ -321,7 +447,11 @@
     "boon": "barrier",
     "healing": -0.03,
     "role": "Survival",
-    "build_hint": "For longer hunts. Combine with suitable food and defensive equipment."
+    "build_hint": "For longer hunts. Combine with suitable food and defensive equipment.",
+    "slots": [
+      "necklace",
+      "belt"
+    ]
   },
   "card_apex_crown_1": {
     "enemy": "apex_crown_1",
@@ -331,7 +461,11 @@
     "detail": "+5% boss damage.",
     "boss": 0.05,
     "role": "Damage",
-    "build_hint": "For damage checks and heavily armored targets. Keep enough defense to survive."
+    "build_hint": "For damage checks and heavily armored targets. Keep enough defense to survive.",
+    "slots": [
+      "weapon",
+      "hands"
+    ]
   },
   "card_apex_crown_2": {
     "enemy": "apex_crown_2",
@@ -342,7 +476,12 @@
     "boon": "cleanse",
     "defense": 0.01,
     "role": "Survival",
-    "build_hint": "For longer hunts. Combine with suitable food and defensive equipment."
+    "build_hint": "For longer hunts. Combine with suitable food and defensive equipment.",
+    "slots": [
+      "body",
+      "shield",
+      "head"
+    ]
   },
   "card_apex_crown_3": {
     "enemy": "apex_crown_3",
@@ -353,7 +492,11 @@
     "proc": "shock",
     "special": 0.025,
     "role": "Status combinations",
-    "build_hint": "Combine an effect source with a card that benefits from that effect. Boss control is brief."
+    "build_hint": "Combine an effect source with a card that benefits from that effect. Boss control is brief.",
+    "slots": [
+      "weapon",
+      "hands"
+    ]
   },
   "card_secret_0": {
     "enemy": "secret_0",
@@ -363,7 +506,12 @@
     "detail": "Take 4.5% less direct damage.",
     "defense": 0.045,
     "role": "Defense",
-    "build_hint": "Choose this when the enemy uses the matching effect or its attacks drain your food."
+    "build_hint": "Choose this when the enemy uses the matching effect or its attacks drain your food.",
+    "slots": [
+      "body",
+      "shield",
+      "head"
+    ]
   },
   "card_secret_1": {
     "enemy": "secret_1",
@@ -373,7 +521,11 @@
     "detail": "+6% special-attack damage.",
     "special": 0.06,
     "role": "Damage",
-    "build_hint": "For damage checks and heavily armored targets. Keep enough defense to survive."
+    "build_hint": "For damage checks and heavily armored targets. Keep enough defense to survive.",
+    "slots": [
+      "weapon",
+      "hands"
+    ]
   },
   "card_secret_2": {
     "enemy": "secret_2",
@@ -383,7 +535,11 @@
     "detail": "Every fourth attack, if it hits, applies Armor Break.",
     "proc": "armor_break",
     "role": "Status combinations",
-    "build_hint": "Combine an effect source with a card that benefits from that effect. Boss control is brief."
+    "build_hint": "Combine an effect source with a card that benefits from that effect. Boss control is brief.",
+    "slots": [
+      "weapon",
+      "hands"
+    ]
   },
   "card_secret_3": {
     "enemy": "secret_3",
@@ -393,7 +549,11 @@
     "detail": "Every fourth attack, if it hits, applies Stun.",
     "proc": "stun",
     "role": "Status combinations",
-    "build_hint": "Combine an effect source with a card that benefits from that effect. Boss control is brief."
+    "build_hint": "Combine an effect source with a card that benefits from that effect. Boss control is brief.",
+    "slots": [
+      "weapon",
+      "hands"
+    ]
   },
   "card_secret_4": {
     "enemy": "secret_4",
@@ -404,7 +564,11 @@
     "defense": 0.04,
     "proc": "weaken",
     "role": "Defense",
-    "build_hint": "Choose this when the enemy uses the matching effect or its attacks drain your food."
+    "build_hint": "Choose this when the enemy uses the matching effect or its attacks drain your food.",
+    "slots": [
+      "weapon",
+      "hands"
+    ]
   },
   "card_secret_5": {
     "enemy": "secret_5",
@@ -415,7 +579,11 @@
     "attack": 0.07,
     "defense": -0.04,
     "role": "Damage",
-    "build_hint": "For damage checks and heavily armored targets. Keep enough defense to survive."
+    "build_hint": "For damage checks and heavily armored targets. Keep enough defense to survive.",
+    "slots": [
+      "weapon",
+      "hands"
+    ]
   },
   "card_secret_6": {
     "enemy": "secret_6",
@@ -426,7 +594,11 @@
     "boss": 0.07,
     "healing": -0.03,
     "role": "Damage",
-    "build_hint": "For damage checks and heavily armored targets. Keep enough defense to survive."
+    "build_hint": "For damage checks and heavily armored targets. Keep enough defense to survive.",
+    "slots": [
+      "weapon",
+      "hands"
+    ]
   },
   "card_hollow_depth": {
     "enemy": "hollow_depth",
@@ -437,7 +609,12 @@
     "defense": 0.05,
     "resist": "wound",
     "role": "Defense",
-    "build_hint": "Choose this when the enemy uses the matching effect or its attacks drain your food."
+    "build_hint": "Choose this when the enemy uses the matching effect or its attacks drain your food.",
+    "slots": [
+      "body",
+      "shield",
+      "head"
+    ]
   },
   "card_frontier_0_0": {
     "enemy": "frontier_0_0",
@@ -448,7 +625,12 @@
     "role": "Survival",
     "build_hint": "For longer hunts. Combine with suitable food and defensive equipment.",
     "resist": "chill",
-    "healing": 0.025
+    "healing": 0.025,
+    "slots": [
+      "body",
+      "shield",
+      "head"
+    ]
   },
   "card_frontier_0_1": {
     "enemy": "frontier_0_1",
@@ -459,7 +641,11 @@
     "role": "Defense",
     "build_hint": "Choose this when the enemy uses the matching effect or its attacks drain your food.",
     "defense": 0.025,
-    "pierce": 0.025
+    "pierce": 0.025,
+    "slots": [
+      "weapon",
+      "hands"
+    ]
   },
   "card_frontier_0_2": {
     "enemy": "frontier_0_2",
@@ -470,7 +656,11 @@
     "role": "Status combinations",
     "build_hint": "Combine an effect source with a card that benefits from that effect. Boss control is brief.",
     "proc": "shock",
-    "special": 0.03
+    "special": 0.03,
+    "slots": [
+      "weapon",
+      "hands"
+    ]
   },
   "card_frontier_0_3": {
     "enemy": "frontier_0_3",
@@ -481,7 +671,11 @@
     "role": "Survival",
     "build_hint": "For longer hunts. Combine with suitable food and defensive equipment.",
     "boon": "cleanse",
-    "healing": 0.03
+    "healing": 0.03,
+    "slots": [
+      "necklace",
+      "belt"
+    ]
   },
   "card_frontier_0_4": {
     "enemy": "frontier_0_4",
@@ -492,7 +686,11 @@
     "role": "Damage",
     "build_hint": "For damage checks and heavily armored targets. Keep enough defense to survive.",
     "pierce": 0.06,
-    "defense": -0.02
+    "defense": -0.02,
+    "slots": [
+      "weapon",
+      "hands"
+    ]
   },
   "card_frontier_0_5": {
     "enemy": "frontier_0_5",
@@ -503,7 +701,11 @@
     "role": "Status combinations",
     "build_hint": "Combine an effect source with a card that benefits from that effect. Boss control is brief.",
     "vs_chill": 0.08,
-    "boss": 0.02
+    "boss": 0.02,
+    "slots": [
+      "weapon",
+      "hands"
+    ]
   },
   "card_frontier_1_0": {
     "enemy": "frontier_1_0",
@@ -514,7 +716,12 @@
     "role": "Defense",
     "build_hint": "Choose this when the enemy uses the matching effect or its attacks drain your food.",
     "resist": "armor_break",
-    "defense": 0.025
+    "defense": 0.025,
+    "slots": [
+      "body",
+      "shield",
+      "head"
+    ]
   },
   "card_frontier_1_1": {
     "enemy": "frontier_1_1",
@@ -525,7 +732,11 @@
     "role": "Farming",
     "build_hint": "For material and coin farming. Does not increase card or rare-material drop odds.",
     "material": 0.06,
-    "gold": 0.04
+    "gold": 0.04,
+    "slots": [
+      "feet",
+      "ring"
+    ]
   },
   "card_frontier_1_2": {
     "enemy": "frontier_1_2",
@@ -536,7 +747,11 @@
     "role": "Survival",
     "build_hint": "For longer hunts. Combine with suitable food and defensive equipment.",
     "proc": "weaken",
-    "healing": 0.02
+    "healing": 0.02,
+    "slots": [
+      "weapon",
+      "hands"
+    ]
   },
   "card_frontier_1_3": {
     "enemy": "frontier_1_3",
@@ -547,7 +762,11 @@
     "role": "Status combinations",
     "build_hint": "Combine an effect source with a card that benefits from that effect. Boss control is brief.",
     "vs_burn": 0.08,
-    "special": 0.025
+    "special": 0.025,
+    "slots": [
+      "weapon",
+      "hands"
+    ]
   },
   "card_frontier_1_4": {
     "enemy": "frontier_1_4",
@@ -558,7 +777,11 @@
     "role": "Status combinations",
     "build_hint": "Combine an effect source with a card that benefits from that effect. Boss control is brief.",
     "proc": "slow",
-    "pierce": 0.03
+    "pierce": 0.03,
+    "slots": [
+      "weapon",
+      "hands"
+    ]
   },
   "card_frontier_1_5": {
     "enemy": "frontier_1_5",
@@ -569,7 +792,11 @@
     "role": "Damage",
     "build_hint": "For damage checks and heavily armored targets. Keep enough defense to survive.",
     "boss": 0.075,
-    "attack": -0.015
+    "attack": -0.015,
+    "slots": [
+      "weapon",
+      "hands"
+    ]
   },
   "card_frontier_2_0": {
     "enemy": "frontier_2_0",
@@ -580,7 +807,12 @@
     "role": "Farming",
     "build_hint": "For material and coin farming. Does not increase card or rare-material drop odds.",
     "resist": "burn",
-    "gold": 0.05
+    "gold": 0.05,
+    "slots": [
+      "body",
+      "shield",
+      "head"
+    ]
   },
   "card_frontier_2_1": {
     "enemy": "frontier_2_1",
@@ -591,7 +823,11 @@
     "role": "Status combinations",
     "build_hint": "Combine an effect source with a card that benefits from that effect. Boss control is brief.",
     "proc": "bleed",
-    "vs_bleed": 0.05
+    "vs_bleed": 0.05,
+    "slots": [
+      "weapon",
+      "hands"
+    ]
   },
   "card_frontier_2_2": {
     "enemy": "frontier_2_2",
@@ -602,7 +838,11 @@
     "role": "Defense",
     "build_hint": "Choose this when the enemy uses the matching effect or its attacks drain your food.",
     "defense": 0.055,
-    "attack": -0.02
+    "attack": -0.02,
+    "slots": [
+      "weapon",
+      "hands"
+    ]
   },
   "card_frontier_2_3": {
     "enemy": "frontier_2_3",
@@ -613,7 +853,11 @@
     "role": "Status combinations",
     "build_hint": "Combine an effect source with a card that benefits from that effect. Boss control is brief.",
     "proc": "burn",
-    "vs_burn": 0.04
+    "vs_burn": 0.04,
+    "slots": [
+      "weapon",
+      "hands"
+    ]
   },
   "card_frontier_2_4": {
     "enemy": "frontier_2_4",
@@ -624,7 +868,11 @@
     "role": "Damage",
     "build_hint": "For damage checks and heavily armored targets. Keep enough defense to survive.",
     "special": 0.085,
-    "healing": -0.025
+    "healing": -0.025,
+    "slots": [
+      "weapon",
+      "hands"
+    ]
   },
   "card_frontier_2_5": {
     "enemy": "frontier_2_5",
@@ -635,6 +883,864 @@
     "role": "Damage",
     "build_hint": "For damage checks and heavily armored targets. Keep enough defense to survive.",
     "boss": 0.09,
-    "defense": -0.04
+    "defense": -0.04,
+    "slots": [
+      "weapon",
+      "hands"
+    ]
+  },
+  "card_march_0_0": {
+    "enemy": "march_0_0",
+    "tile": 0,
+    "rarity": "Epic",
+    "chance": 8e-05,
+    "detail": "Take 1.2% less direct damage. Chill lasts 25% less time; matching special strikes deal 25% less damage.",
+    "role": "Build choice",
+    "build_hint": "Choose equipment that fits this card and complements your build.",
+    "slots": [
+      "body",
+      "shield"
+    ],
+    "resist": "chill",
+    "defense": 0.012
+  },
+  "card_march_0_1": {
+    "enemy": "march_0_1",
+    "tile": 0,
+    "rarity": "Epic",
+    "chance": 8e-05,
+    "detail": "+1.5% attack damage. Every fourth hit applies Chill.",
+    "role": "Build choice",
+    "build_hint": "Choose equipment that fits this card and complements your build.",
+    "slots": [
+      "weapon",
+      "hands"
+    ],
+    "proc": "chill",
+    "attack": 0.015
+  },
+  "card_march_0_2": {
+    "enemy": "march_0_2",
+    "tile": 0,
+    "rarity": "Epic",
+    "chance": 8e-05,
+    "detail": "+3.5% damage against enemies affected by Chill.",
+    "role": "Build choice",
+    "build_hint": "Choose equipment that fits this card and complements your build.",
+    "slots": [
+      "ring",
+      "necklace"
+    ],
+    "vs_chill": 0.035
+  },
+  "card_march_0_3": {
+    "enemy": "march_0_3",
+    "tile": 0,
+    "rarity": "Epic",
+    "chance": 8e-05,
+    "detail": "Meals restore 3.5% more HP.",
+    "role": "Build choice",
+    "build_hint": "Choose equipment that fits this card and complements your build.",
+    "slots": [
+      "belt",
+      "necklace"
+    ],
+    "healing": 0.035
+  },
+  "card_march_0_4": {
+    "enemy": "march_0_4",
+    "tile": 0,
+    "rarity": "Legendary",
+    "chance": 2.5e-05,
+    "detail": "Deal 3.5% more damage to bosses.",
+    "role": "Build choice",
+    "build_hint": "Choose equipment that fits this card and complements your build.",
+    "slots": [
+      "weapon",
+      "ring"
+    ],
+    "boss": 0.035
+  },
+  "card_march_0_5": {
+    "enemy": "march_0_5",
+    "tile": 0,
+    "rarity": "Epic",
+    "chance": 8e-05,
+    "detail": "Gain 2.5% more ordinary hunt materials.",
+    "role": "Build choice",
+    "build_hint": "Choose equipment that fits this card and complements your build.",
+    "slots": [
+      "feet",
+      "head"
+    ],
+    "material": 0.025
+  },
+  "card_march_0_6": {
+    "enemy": "march_0_6",
+    "tile": 0,
+    "rarity": "Epic",
+    "chance": 8e-05,
+    "detail": "Ignore 3.5% of enemy armor.",
+    "role": "Build choice",
+    "build_hint": "Choose equipment that fits this card and complements your build.",
+    "slots": [
+      "hands",
+      "weapon"
+    ],
+    "pierce": 0.035
+  },
+  "card_march_0_7": {
+    "enemy": "march_0_7",
+    "tile": 0,
+    "rarity": "Epic",
+    "chance": 8e-05,
+    "detail": "Every fourth hit grants a small Barrier.",
+    "role": "Build choice",
+    "build_hint": "Choose equipment that fits this card and complements your build.",
+    "slots": [
+      "shield",
+      "body"
+    ],
+    "boon": "barrier"
+  },
+  "card_march_0_8": {
+    "enemy": "march_0_8",
+    "tile": 0,
+    "rarity": "Legendary",
+    "chance": 2.5e-05,
+    "detail": "Every fourth attack deals 4% more damage.",
+    "role": "Build choice",
+    "build_hint": "Choose equipment that fits this card and complements your build.",
+    "slots": [
+      "weapon",
+      "necklace"
+    ],
+    "special": 0.04
+  },
+  "card_march_1_0": {
+    "enemy": "march_1_0",
+    "tile": 0,
+    "rarity": "Epic",
+    "chance": 8e-05,
+    "detail": "Take 1.2% less direct damage. Poison lasts 25% less time; matching special strikes deal 25% less damage.",
+    "role": "Build choice",
+    "build_hint": "Choose equipment that fits this card and complements your build.",
+    "slots": [
+      "body",
+      "shield"
+    ],
+    "resist": "poison",
+    "defense": 0.012
+  },
+  "card_march_1_1": {
+    "enemy": "march_1_1",
+    "tile": 0,
+    "rarity": "Epic",
+    "chance": 8e-05,
+    "detail": "+1.5% attack damage. Every fourth hit applies Poison.",
+    "role": "Build choice",
+    "build_hint": "Choose equipment that fits this card and complements your build.",
+    "slots": [
+      "weapon",
+      "hands"
+    ],
+    "proc": "poison",
+    "attack": 0.015
+  },
+  "card_march_1_2": {
+    "enemy": "march_1_2",
+    "tile": 0,
+    "rarity": "Epic",
+    "chance": 8e-05,
+    "detail": "+3.5% damage against enemies affected by Poison.",
+    "role": "Build choice",
+    "build_hint": "Choose equipment that fits this card and complements your build.",
+    "slots": [
+      "ring",
+      "necklace"
+    ],
+    "vs_poison": 0.035
+  },
+  "card_march_1_3": {
+    "enemy": "march_1_3",
+    "tile": 0,
+    "rarity": "Epic",
+    "chance": 8e-05,
+    "detail": "Meals restore 3.5% more HP.",
+    "role": "Build choice",
+    "build_hint": "Choose equipment that fits this card and complements your build.",
+    "slots": [
+      "belt",
+      "necklace"
+    ],
+    "healing": 0.035
+  },
+  "card_march_1_4": {
+    "enemy": "march_1_4",
+    "tile": 0,
+    "rarity": "Legendary",
+    "chance": 2.5e-05,
+    "detail": "Deal 3.5% more damage to bosses.",
+    "role": "Build choice",
+    "build_hint": "Choose equipment that fits this card and complements your build.",
+    "slots": [
+      "weapon",
+      "ring"
+    ],
+    "boss": 0.035
+  },
+  "card_march_1_5": {
+    "enemy": "march_1_5",
+    "tile": 0,
+    "rarity": "Epic",
+    "chance": 8e-05,
+    "detail": "Gain 2.5% more ordinary hunt materials.",
+    "role": "Build choice",
+    "build_hint": "Choose equipment that fits this card and complements your build.",
+    "slots": [
+      "feet",
+      "head"
+    ],
+    "material": 0.025
+  },
+  "card_march_1_6": {
+    "enemy": "march_1_6",
+    "tile": 0,
+    "rarity": "Epic",
+    "chance": 8e-05,
+    "detail": "Ignore 3.5% of enemy armor.",
+    "role": "Build choice",
+    "build_hint": "Choose equipment that fits this card and complements your build.",
+    "slots": [
+      "hands",
+      "weapon"
+    ],
+    "pierce": 0.035
+  },
+  "card_march_1_7": {
+    "enemy": "march_1_7",
+    "tile": 0,
+    "rarity": "Epic",
+    "chance": 8e-05,
+    "detail": "Every fourth hit grants a small Barrier.",
+    "role": "Build choice",
+    "build_hint": "Choose equipment that fits this card and complements your build.",
+    "slots": [
+      "shield",
+      "body"
+    ],
+    "boon": "barrier"
+  },
+  "card_march_1_8": {
+    "enemy": "march_1_8",
+    "tile": 0,
+    "rarity": "Legendary",
+    "chance": 2.5e-05,
+    "detail": "Every fourth attack deals 4% more damage.",
+    "role": "Build choice",
+    "build_hint": "Choose equipment that fits this card and complements your build.",
+    "slots": [
+      "weapon",
+      "necklace"
+    ],
+    "special": 0.04
+  },
+  "card_march_2_0": {
+    "enemy": "march_2_0",
+    "tile": 0,
+    "rarity": "Epic",
+    "chance": 8e-05,
+    "detail": "Take 1.2% less direct damage. Burn lasts 25% less time; matching special strikes deal 25% less damage.",
+    "role": "Build choice",
+    "build_hint": "Choose equipment that fits this card and complements your build.",
+    "slots": [
+      "body",
+      "shield"
+    ],
+    "resist": "burn",
+    "defense": 0.012
+  },
+  "card_march_2_1": {
+    "enemy": "march_2_1",
+    "tile": 0,
+    "rarity": "Epic",
+    "chance": 8e-05,
+    "detail": "+1.5% attack damage. Every fourth hit applies Burn.",
+    "role": "Build choice",
+    "build_hint": "Choose equipment that fits this card and complements your build.",
+    "slots": [
+      "weapon",
+      "hands"
+    ],
+    "proc": "burn",
+    "attack": 0.015
+  },
+  "card_march_2_2": {
+    "enemy": "march_2_2",
+    "tile": 0,
+    "rarity": "Epic",
+    "chance": 8e-05,
+    "detail": "+3.5% damage against enemies affected by Burn.",
+    "role": "Build choice",
+    "build_hint": "Choose equipment that fits this card and complements your build.",
+    "slots": [
+      "ring",
+      "necklace"
+    ],
+    "vs_burn": 0.035
+  },
+  "card_march_2_3": {
+    "enemy": "march_2_3",
+    "tile": 0,
+    "rarity": "Epic",
+    "chance": 8e-05,
+    "detail": "Meals restore 3.5% more HP.",
+    "role": "Build choice",
+    "build_hint": "Choose equipment that fits this card and complements your build.",
+    "slots": [
+      "belt",
+      "necklace"
+    ],
+    "healing": 0.035
+  },
+  "card_march_2_4": {
+    "enemy": "march_2_4",
+    "tile": 0,
+    "rarity": "Legendary",
+    "chance": 2.5e-05,
+    "detail": "Deal 3.5% more damage to bosses.",
+    "role": "Build choice",
+    "build_hint": "Choose equipment that fits this card and complements your build.",
+    "slots": [
+      "weapon",
+      "ring"
+    ],
+    "boss": 0.035
+  },
+  "card_march_2_5": {
+    "enemy": "march_2_5",
+    "tile": 0,
+    "rarity": "Epic",
+    "chance": 8e-05,
+    "detail": "Gain 2.5% more ordinary hunt materials.",
+    "role": "Build choice",
+    "build_hint": "Choose equipment that fits this card and complements your build.",
+    "slots": [
+      "feet",
+      "head"
+    ],
+    "material": 0.025
+  },
+  "card_march_2_6": {
+    "enemy": "march_2_6",
+    "tile": 0,
+    "rarity": "Epic",
+    "chance": 8e-05,
+    "detail": "Ignore 3.5% of enemy armor.",
+    "role": "Build choice",
+    "build_hint": "Choose equipment that fits this card and complements your build.",
+    "slots": [
+      "hands",
+      "weapon"
+    ],
+    "pierce": 0.035
+  },
+  "card_march_2_7": {
+    "enemy": "march_2_7",
+    "tile": 0,
+    "rarity": "Epic",
+    "chance": 8e-05,
+    "detail": "Every fourth hit grants a small Barrier.",
+    "role": "Build choice",
+    "build_hint": "Choose equipment that fits this card and complements your build.",
+    "slots": [
+      "shield",
+      "body"
+    ],
+    "boon": "barrier"
+  },
+  "card_march_2_8": {
+    "enemy": "march_2_8",
+    "tile": 0,
+    "rarity": "Legendary",
+    "chance": 2.5e-05,
+    "detail": "Every fourth attack deals 4% more damage.",
+    "role": "Build choice",
+    "build_hint": "Choose equipment that fits this card and complements your build.",
+    "slots": [
+      "weapon",
+      "necklace"
+    ],
+    "special": 0.04
+  },
+  "card_march_3_0": {
+    "enemy": "march_3_0",
+    "tile": 0,
+    "rarity": "Epic",
+    "chance": 8e-05,
+    "detail": "Take 1.2% less direct damage. Weaken lasts 25% less time; matching special strikes deal 25% less damage.",
+    "role": "Build choice",
+    "build_hint": "Choose equipment that fits this card and complements your build.",
+    "slots": [
+      "body",
+      "shield"
+    ],
+    "resist": "weaken",
+    "defense": 0.012
+  },
+  "card_march_3_1": {
+    "enemy": "march_3_1",
+    "tile": 0,
+    "rarity": "Epic",
+    "chance": 8e-05,
+    "detail": "+1.5% attack damage. Every fourth hit applies Weaken.",
+    "role": "Build choice",
+    "build_hint": "Choose equipment that fits this card and complements your build.",
+    "slots": [
+      "weapon",
+      "hands"
+    ],
+    "proc": "weaken",
+    "attack": 0.015
+  },
+  "card_march_3_2": {
+    "enemy": "march_3_2",
+    "tile": 0,
+    "rarity": "Epic",
+    "chance": 8e-05,
+    "detail": "+3.5% damage against enemies affected by Chill.",
+    "role": "Build choice",
+    "build_hint": "Choose equipment that fits this card and complements your build.",
+    "slots": [
+      "ring",
+      "necklace"
+    ],
+    "vs_chill": 0.035
+  },
+  "card_march_3_3": {
+    "enemy": "march_3_3",
+    "tile": 0,
+    "rarity": "Epic",
+    "chance": 8e-05,
+    "detail": "Meals restore 3.5% more HP.",
+    "role": "Build choice",
+    "build_hint": "Choose equipment that fits this card and complements your build.",
+    "slots": [
+      "belt",
+      "necklace"
+    ],
+    "healing": 0.035
+  },
+  "card_march_3_4": {
+    "enemy": "march_3_4",
+    "tile": 0,
+    "rarity": "Legendary",
+    "chance": 2.5e-05,
+    "detail": "Deal 3.5% more damage to bosses.",
+    "role": "Build choice",
+    "build_hint": "Choose equipment that fits this card and complements your build.",
+    "slots": [
+      "weapon",
+      "ring"
+    ],
+    "boss": 0.035
+  },
+  "card_march_3_5": {
+    "enemy": "march_3_5",
+    "tile": 0,
+    "rarity": "Epic",
+    "chance": 8e-05,
+    "detail": "Gain 2.5% more ordinary hunt materials.",
+    "role": "Build choice",
+    "build_hint": "Choose equipment that fits this card and complements your build.",
+    "slots": [
+      "feet",
+      "head"
+    ],
+    "material": 0.025
+  },
+  "card_march_3_6": {
+    "enemy": "march_3_6",
+    "tile": 0,
+    "rarity": "Epic",
+    "chance": 8e-05,
+    "detail": "Ignore 3.5% of enemy armor.",
+    "role": "Build choice",
+    "build_hint": "Choose equipment that fits this card and complements your build.",
+    "slots": [
+      "hands",
+      "weapon"
+    ],
+    "pierce": 0.035
+  },
+  "card_march_3_7": {
+    "enemy": "march_3_7",
+    "tile": 0,
+    "rarity": "Epic",
+    "chance": 8e-05,
+    "detail": "Every fourth hit grants a small Barrier.",
+    "role": "Build choice",
+    "build_hint": "Choose equipment that fits this card and complements your build.",
+    "slots": [
+      "shield",
+      "body"
+    ],
+    "boon": "barrier"
+  },
+  "card_march_3_8": {
+    "enemy": "march_3_8",
+    "tile": 0,
+    "rarity": "Legendary",
+    "chance": 2.5e-05,
+    "detail": "Every fourth attack deals 4% more damage.",
+    "role": "Build choice",
+    "build_hint": "Choose equipment that fits this card and complements your build.",
+    "slots": [
+      "weapon",
+      "necklace"
+    ],
+    "special": 0.04
+  },
+  "card_march_4_0": {
+    "enemy": "march_4_0",
+    "tile": 0,
+    "rarity": "Epic",
+    "chance": 8e-05,
+    "detail": "Take 1.2% less direct damage. Bleed lasts 25% less time; matching special strikes deal 25% less damage.",
+    "role": "Build choice",
+    "build_hint": "Choose equipment that fits this card and complements your build.",
+    "slots": [
+      "body",
+      "shield"
+    ],
+    "resist": "bleed",
+    "defense": 0.012
+  },
+  "card_march_4_1": {
+    "enemy": "march_4_1",
+    "tile": 0,
+    "rarity": "Epic",
+    "chance": 8e-05,
+    "detail": "+1.5% attack damage. Every fourth hit applies Bleed.",
+    "role": "Build choice",
+    "build_hint": "Choose equipment that fits this card and complements your build.",
+    "slots": [
+      "weapon",
+      "hands"
+    ],
+    "proc": "bleed",
+    "attack": 0.015
+  },
+  "card_march_4_2": {
+    "enemy": "march_4_2",
+    "tile": 0,
+    "rarity": "Epic",
+    "chance": 8e-05,
+    "detail": "+3.5% damage against enemies affected by Bleed.",
+    "role": "Build choice",
+    "build_hint": "Choose equipment that fits this card and complements your build.",
+    "slots": [
+      "ring",
+      "necklace"
+    ],
+    "vs_bleed": 0.035
+  },
+  "card_march_4_3": {
+    "enemy": "march_4_3",
+    "tile": 0,
+    "rarity": "Epic",
+    "chance": 8e-05,
+    "detail": "Meals restore 3.5% more HP.",
+    "role": "Build choice",
+    "build_hint": "Choose equipment that fits this card and complements your build.",
+    "slots": [
+      "belt",
+      "necklace"
+    ],
+    "healing": 0.035
+  },
+  "card_march_4_4": {
+    "enemy": "march_4_4",
+    "tile": 0,
+    "rarity": "Legendary",
+    "chance": 2.5e-05,
+    "detail": "Deal 3.5% more damage to bosses.",
+    "role": "Build choice",
+    "build_hint": "Choose equipment that fits this card and complements your build.",
+    "slots": [
+      "weapon",
+      "ring"
+    ],
+    "boss": 0.035
+  },
+  "card_march_4_5": {
+    "enemy": "march_4_5",
+    "tile": 0,
+    "rarity": "Epic",
+    "chance": 8e-05,
+    "detail": "Gain 2.5% more ordinary hunt materials.",
+    "role": "Build choice",
+    "build_hint": "Choose equipment that fits this card and complements your build.",
+    "slots": [
+      "feet",
+      "head"
+    ],
+    "material": 0.025
+  },
+  "card_march_4_6": {
+    "enemy": "march_4_6",
+    "tile": 0,
+    "rarity": "Epic",
+    "chance": 8e-05,
+    "detail": "Ignore 3.5% of enemy armor.",
+    "role": "Build choice",
+    "build_hint": "Choose equipment that fits this card and complements your build.",
+    "slots": [
+      "hands",
+      "weapon"
+    ],
+    "pierce": 0.035
+  },
+  "card_march_4_7": {
+    "enemy": "march_4_7",
+    "tile": 0,
+    "rarity": "Epic",
+    "chance": 8e-05,
+    "detail": "Every fourth hit grants a small Barrier.",
+    "role": "Build choice",
+    "build_hint": "Choose equipment that fits this card and complements your build.",
+    "slots": [
+      "shield",
+      "body"
+    ],
+    "boon": "barrier"
+  },
+  "card_march_4_8": {
+    "enemy": "march_4_8",
+    "tile": 0,
+    "rarity": "Legendary",
+    "chance": 2.5e-05,
+    "detail": "Every fourth attack deals 4% more damage.",
+    "role": "Build choice",
+    "build_hint": "Choose equipment that fits this card and complements your build.",
+    "slots": [
+      "weapon",
+      "necklace"
+    ],
+    "special": 0.04
+  },
+  "card_march_5_0": {
+    "enemy": "march_5_0",
+    "tile": 0,
+    "rarity": "Epic",
+    "chance": 8e-05,
+    "detail": "Take 1.2% less direct damage. Shock lasts 25% less time; matching special strikes deal 25% less damage.",
+    "role": "Build choice",
+    "build_hint": "Choose equipment that fits this card and complements your build.",
+    "slots": [
+      "body",
+      "shield"
+    ],
+    "resist": "shock",
+    "defense": 0.012
+  },
+  "card_march_5_1": {
+    "enemy": "march_5_1",
+    "tile": 0,
+    "rarity": "Epic",
+    "chance": 8e-05,
+    "detail": "+1.5% attack damage. Every fourth hit applies Shock.",
+    "role": "Build choice",
+    "build_hint": "Choose equipment that fits this card and complements your build.",
+    "slots": [
+      "weapon",
+      "hands"
+    ],
+    "proc": "shock",
+    "attack": 0.015
+  },
+  "card_march_5_2": {
+    "enemy": "march_5_2",
+    "tile": 0,
+    "rarity": "Epic",
+    "chance": 8e-05,
+    "detail": "+3.5% damage against enemies affected by Shock.",
+    "role": "Build choice",
+    "build_hint": "Choose equipment that fits this card and complements your build.",
+    "slots": [
+      "ring",
+      "necklace"
+    ],
+    "vs_shock": 0.035
+  },
+  "card_march_5_3": {
+    "enemy": "march_5_3",
+    "tile": 0,
+    "rarity": "Epic",
+    "chance": 8e-05,
+    "detail": "Meals restore 3.5% more HP.",
+    "role": "Build choice",
+    "build_hint": "Choose equipment that fits this card and complements your build.",
+    "slots": [
+      "belt",
+      "necklace"
+    ],
+    "healing": 0.035
+  },
+  "card_march_5_4": {
+    "enemy": "march_5_4",
+    "tile": 0,
+    "rarity": "Legendary",
+    "chance": 2.5e-05,
+    "detail": "Deal 3.5% more damage to bosses.",
+    "role": "Build choice",
+    "build_hint": "Choose equipment that fits this card and complements your build.",
+    "slots": [
+      "weapon",
+      "ring"
+    ],
+    "boss": 0.035
+  },
+  "card_march_5_5": {
+    "enemy": "march_5_5",
+    "tile": 0,
+    "rarity": "Epic",
+    "chance": 8e-05,
+    "detail": "Gain 2.5% more ordinary hunt materials.",
+    "role": "Build choice",
+    "build_hint": "Choose equipment that fits this card and complements your build.",
+    "slots": [
+      "feet",
+      "head"
+    ],
+    "material": 0.025
+  },
+  "card_march_5_6": {
+    "enemy": "march_5_6",
+    "tile": 0,
+    "rarity": "Epic",
+    "chance": 8e-05,
+    "detail": "Ignore 3.5% of enemy armor.",
+    "role": "Build choice",
+    "build_hint": "Choose equipment that fits this card and complements your build.",
+    "slots": [
+      "hands",
+      "weapon"
+    ],
+    "pierce": 0.035
+  },
+  "card_march_5_7": {
+    "enemy": "march_5_7",
+    "tile": 0,
+    "rarity": "Epic",
+    "chance": 8e-05,
+    "detail": "Every fourth hit grants a small Barrier.",
+    "role": "Build choice",
+    "build_hint": "Choose equipment that fits this card and complements your build.",
+    "slots": [
+      "shield",
+      "body"
+    ],
+    "boon": "barrier"
+  },
+  "card_march_5_8": {
+    "enemy": "march_5_8",
+    "tile": 0,
+    "rarity": "Legendary",
+    "chance": 2.5e-05,
+    "detail": "Every fourth attack deals 4% more damage.",
+    "role": "Build choice",
+    "build_hint": "Choose equipment that fits this card and complements your build.",
+    "slots": [
+      "weapon",
+      "necklace"
+    ],
+    "special": 0.04
+  },
+  "card_march_guard_0": {
+    "enemy": "march_guard_0",
+    "tile": 0,
+    "rarity": "Mythic",
+    "chance": 2.5e-05,
+    "detail": "Take 1.2% less direct damage. Poison lasts 25% less time; matching special strikes deal 25% less damage.",
+    "role": "Build choice",
+    "build_hint": "Choose equipment that fits this card and complements your build.",
+    "slots": [
+      "body",
+      "shield"
+    ],
+    "resist": "poison",
+    "defense": 0.012
+  },
+  "card_march_guard_1": {
+    "enemy": "march_guard_1",
+    "tile": 0,
+    "rarity": "Mythic",
+    "chance": 2.5e-05,
+    "detail": "+1.5% attack damage. Every fourth hit applies Burn.",
+    "role": "Build choice",
+    "build_hint": "Choose equipment that fits this card and complements your build.",
+    "slots": [
+      "weapon",
+      "hands"
+    ],
+    "proc": "burn",
+    "attack": 0.015
+  },
+  "card_march_guard_2": {
+    "enemy": "march_guard_2",
+    "tile": 0,
+    "rarity": "Mythic",
+    "chance": 2.5e-05,
+    "detail": "+3.5% damage against enemies affected by Chill.",
+    "role": "Build choice",
+    "build_hint": "Choose equipment that fits this card and complements your build.",
+    "slots": [
+      "ring",
+      "necklace"
+    ],
+    "vs_chill": 0.035
+  },
+  "card_march_guard_3": {
+    "enemy": "march_guard_3",
+    "tile": 0,
+    "rarity": "Mythic",
+    "chance": 2.5e-05,
+    "detail": "Meals restore 3.5% more HP.",
+    "role": "Build choice",
+    "build_hint": "Choose equipment that fits this card and complements your build.",
+    "slots": [
+      "belt",
+      "necklace"
+    ],
+    "healing": 0.035
+  },
+  "card_march_guard_4": {
+    "enemy": "march_guard_4",
+    "tile": 0,
+    "rarity": "Mythic",
+    "chance": 2.5e-05,
+    "detail": "Deal 3.5% more damage to bosses.",
+    "role": "Build choice",
+    "build_hint": "Choose equipment that fits this card and complements your build.",
+    "slots": [
+      "weapon",
+      "ring"
+    ],
+    "boss": 0.035
+  },
+  "card_march_wanderer": {
+    "enemy": "march_wanderer",
+    "tile": 0,
+    "rarity": "Epic",
+    "chance": 8e-05,
+    "detail": "Gain 2.5% more ordinary hunt materials.",
+    "role": "Build choice",
+    "build_hint": "Choose equipment that fits this card and complements your build.",
+    "slots": [
+      "feet",
+      "head"
+    ],
+    "material": 0.025
   }
 }

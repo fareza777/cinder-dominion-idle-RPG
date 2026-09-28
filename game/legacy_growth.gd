@@ -1,6 +1,7 @@
 class_name RealmLegacyGrowth
 extends RefCounted
 
+const MARCH_TALENTS = ["searing", "venomcraft", "frostcraft", "hemorrhage", "laststand", "execution", "counter", "reclamation", "vitality"]
 const ADVANCED = ["technique","hunter","endurance","recovery","resolve","bounty"]
 const GATES = ["bellkeeper","wilds_5","marsh_5","crown_5","secret_6"]
 const REGIONS = {"fang":"wilds","heart":"marsh","ward":"crown"}
@@ -16,12 +17,19 @@ static func earned(s: Dictionary) -> int:
 	for enemy in GATES:
 		if int(s.kills.get(enemy,0))==0: break
 		cap += 10
-	return mini(cap,initial+maxi(0,int((level(s.xp)-20)*50/80)))
+	var bonus=0
+	for r in range(6):
+		if s.kills.get("march_%d_8" % r,0)>0:bonus+=3
+	for i in range(5):
+		if s.kills.get("march_guard_%d" % i,0)>0:bonus+=1
+	return mini(80,mini(cap,initial+maxi(0,int((level(s.xp)-20)*50/80)))+bonus)
 
 static func limit(id: String) -> int: return 10 if id in ADVANCED else 5
 static func rank(m, id: String) -> int: return int(RealmChronicle.state(m).talents.get(id,0))
 
 static func rank_gate(id: String, rank_value: int, xp: Dictionary, kills: Dictionary) -> bool:
+	if id in MARCH_TALENTS and rank_value>0:
+		return level(xp)>=65 and kills.get("crown_5",0)>0 and (rank_value<=3 or kills.get("march_0_8",0)>0)
 	if id not in ADVANCED or rank_value==0: return true
 	var stage = int((rank_value-1)/3)
 	return level(xp)>=[25,50,75,100][stage] and int(kills.get(["bellkeeper","wilds_5","crown_5","secret_6"][stage],0))>0
@@ -30,6 +38,7 @@ static func talent_reason(m, id: String) -> String:
 	if id not in RealmChronicle.TALENTS: return "Unknown talent."
 	var current = rank(m,id)
 	if current>=limit(id): return "Maximum rank reached."
+	if id in MARCH_TALENTS and not rank_gate(id,current+1,m.s.xp,m.s.kills):return "Requires Bladecraft Lv.65 and the Obsidian Crown cleared; ranks 4–5 also require the Winter Abbot."
 	if not rank_gate(id,current+1,m.s.xp,m.s.kills):
 		var stage = int(current/3)
 		return "Requires Bladecraft Lv.%d and victory over %s." % [[25,50,75,100][stage],m.local_name(m.data.enemies[["bellkeeper","wilds_5","crown_5","secret_6"][stage]])]
@@ -37,7 +46,8 @@ static func talent_reason(m, id: String) -> String:
 	return ""
 
 static func next_point(m) -> String:
-	if earned(m.s)>=60: return "All 60 points earned. Choose your strengths; the full tree costs 75 points."
+	if earned(m.s)>=80:return "All 80 points earned. Choose your strengths; the full tree costs 120 points."
+	if earned(m.s)>=60:return "Secure the Far Marches and defeat their optional guardians to earn more talent points."
 	for enemy in GATES:
 		if int(m.s.kills.get(enemy,0))==0:
 			var probe = m.s.duplicate(true)
@@ -61,7 +71,7 @@ static func ascended(m, id: String) -> int:
 
 static func essence(enemy: Dictionary) -> int:
 	if not enemy.boss: return 0
-	if enemy.get("secret",false) or enemy.get("depth",false) or enemy.has("art_tile") or enemy.has("frontier"): return 3
+	if enemy.get("secret",false) or enemy.get("depth",false) or enemy.has("art_tile") or enemy.has("frontier") or enemy.has("march"): return 3
 	if enemy.get("trial",false): return 2
 	return 1 if int(enemy.get("tier",0))>=3 else 0
 
@@ -93,9 +103,14 @@ static func relic_effect(id: String, r: int) -> String:
 static func outgoing(m, enemy: Dictionary, swing: int, damage: int) -> int:
 	var bonus = rank(m,"hunter")*.005 if enemy.boss else 0.0
 	if swing%4==0: bonus += rank(m,"technique")*.005+ascended(m,"fang")*.003
+	for pair in [["searing","burn"],["venomcraft","poison"],["frostcraft","chill"],["hemorrhage","bleed"]]:
+		if RealmAfflictions.has(m,"enemy",pair[1]):bonus+=rank(m,pair[0])*.01
+	if not m.s.fight.is_empty() and m.s.fight.hp<enemy.hp*.3:bonus+=rank(m,"execution")*.01
+	if swing%4==0:damage+=int(m.stats().armor*rank(m,"counter")*.01)
 	return maxi(1,int(damage*(1.0+bonus)))
 
 static func incoming(m, enemy: Dictionary, strike: int, damage: int) -> int:
 	var reduction = rank(m,"resolve")*.005 if strike%3==0 else 0.0
 	if enemy.boss: reduction += rank(m,"endurance")*.004+ascended(m,"ward")*.003
+	if m.s.hp<40:reduction+=rank(m,"laststand")*.01
 	return maxi(1,ceili(damage*(1.0-reduction)))

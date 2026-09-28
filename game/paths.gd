@@ -6,7 +6,11 @@ const ALL = {
 	"ranger":[["Deadeye","Ordinary attacks deal 15% more damage."],["Venom","Every fourth attack adds 0.3% of enemy maximum HP, capped at 18 damage."]],
 	"arcanist":[["Fracture","Every attack ignores 20% of enemy armor."],["Ember","Every fourth attack adds 12 damage after armor."]],
 	"reaver":[["Slayer","Deal 20% more damage to bosses, but take 12% more damage."],["Frenzy","Deal 12% more damage to all enemies, but take 12% more damage."]],
-	"apothecary":[["Provisioner","Meals restore 8 extra HP; deal 5% less damage."],["Blight","Enemy healing is reduced by 35%."]]}
+	"apothecary":[["Provisioner","Meals restore 8 extra HP; deal 5% less damage."],["Blight","Enemy healing is reduced by 35%."]],
+ "frostbound":[["Deep Winter","Deal 12% more damage to chilled enemies."],["Icebound","Take 8% less damage, but deal 5% less damage."]],
+ "penitent":[["Retribution","Fourth attacks gain an additional 10% of armor as damage."],["Absolution","Meals restore 10 extra HP; deal 5% less damage."]],
+ "duskblade":[["Nightfall","Deal 15% more damage below 30% enemy HP."],["Bloodletter","Deal 12% more damage to bleeding enemies."]]
+}
 const SOCKETS = {
 	"ember":["Ember","Every fourth attack adds 8 damage; take 5% more damage."],
 	"fracture":["Fracture","Every fourth attack ignores 15% armor; ordinary damage is reduced by 5%."],
@@ -56,6 +60,11 @@ static func outgoing(m, enemy, swing: int, damage: int) -> int:
 			if enemy.boss: damage = int(damage*1.2)
 		"Frenzy": damage = int(damage*1.12)
 		"Provisioner": damage = int(damage*.95)
+	if active(m)=="Deep Winter" and RealmAfflictions.has(m,"enemy","chill"):damage=int(damage*1.12)
+	if active(m)=="Bloodletter" and RealmAfflictions.has(m,"enemy","bleed"):damage=int(damage*1.12)
+	if active(m)=="Nightfall" and not m.s.fight.is_empty() and m.s.fight.hp<enemy.hp*.3:damage=int(damage*1.15)
+	if active(m)=="Retribution" and special:damage+=int(m.stats().armor*.1)
+	if active(m) in ["Icebound","Absolution"]:damage=int(damage*.95)
 	var relics = sockets(m)
 	if "ember" in relics and special: damage += 8
 	if "echo" in relics and special: damage = int(damage*1.12)
@@ -66,6 +75,7 @@ static func outgoing(m, enemy, swing: int, damage: int) -> int:
 	return maxi(1,damage)
 
 static func incoming(m, strike: int, damage: int) -> int:
+	if active(m)=="Icebound":damage=ceili(damage*.92)
 	if active(m)=="Bulwark" and strike%3==0: damage = ceili(damage*.8)
 	if active(m) in ["Slayer","Frenzy"]: damage = ceili(damage*1.12)
 	if "ember" in sockets(m): damage = ceili(damage*1.05)
@@ -79,7 +89,7 @@ static func has_item(m, id: String) -> bool:
 	return false
 
 static func food_bonus(m) -> int:
-	return (8 if active(m)=="Provisioner" else 0)-(5 if "echo" in sockets(m) else 0)+(8 if has_item(m,"relic_3") else 0)
+	return (10 if active(m)=="Absolution" else 0)+(8 if active(m)=="Provisioner" else 0)-(5 if "echo" in sockets(m) else 0)+(8 if has_item(m,"relic_3") else 0)
 
 static func valid(s) -> bool:
 	if s.has("path_choice"):

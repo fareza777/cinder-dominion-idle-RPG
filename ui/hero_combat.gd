@@ -6,6 +6,9 @@ const ROWS = {"warden":0,"ranger":1,"arcanist":2,"reaver":3,"apothecary":4}
 static func frames(character: String) -> Array[Texture2D]:
 	var result: Array[Texture2D] = []
 	for frame in range(4):
+		if character in ["frostbound","penitent","duskblade"]:
+			result.append(U.atlas_tile("res://assets/art/march-combat-0.50.png",["frostbound","penitent","duskblade"].find(character)*4+frame,4,3))
+			continue
 		if character in ROWS:
 			result.append(U.atlas_tile("res://assets/art/hero-combat-0.37.png",int(ROWS[character])*4+frame,4,5))
 		else: result.append(U.atlas_tile("res://assets/art/combat-poses-0.27.png",frame,4,4))
@@ -29,6 +32,9 @@ static func frame(model) -> int:
 static var sheet: Texture2D
 
 static func draw(canvas: CanvasItem, character: String, index: int, area: Rect2, tint: Color = Color.WHITE):
+	if character in ["frostbound","penitent","duskblade"]:
+		canvas.draw_texture_rect(frames(character)[index],area,false,tint)
+		return
 	if character not in ROWS:
 		canvas.draw_texture_rect(frames("")[index],area,false,tint)
 		return

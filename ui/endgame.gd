@@ -114,14 +114,16 @@ func depths():
 	var d = RealmEndgame.state(m).depth
 	v.add_child(U.enemy_portrait(m.data.enemies.hollow_depth,Vector2(0,140)))
 	v.add_child(U.para("Clear one room, then bank your shards or risk the next. Defeat loses unbanked shards. Banked rewards and equipment stay safe.",16))
-	app.dynamic(v,func(): return "Next depth %d · Best %d\n%d unbanked Hollow Shards" % [d.floor if d.active else 1,d.best,d.stash],21,U.GOLD)
-	v.add_child(U.para("Each depth raises enemy health, attack and armor. Heavy strikes grow stronger, and long fights become more dangerous. Eventually, you must return with a stronger build.",14))
+	app.dynamic(v,func(): return "Next depth %d · Best %d\n%d unbanked Hollow Shards" % [d.floor if d.active else mini(1000,int(d.get("checkpoint",0))+1),d.best,d.stash],21,U.GOLD)
+	v.add_child(U.para("Rooms rotate through Fire, Frost, Bleed and Weaken threats. Every fifth room has a stronger guardian and saves a checkpoint. Bank your shards before risking the next stretch.",14))
 	if m.s.kills.get("secret_2",0)<1:
 		v.add_child(U.para("Defeat the third optional guardian to discover this expedition.",16,U.GOLD))
 	else:
 		var preview = RealmModel.new()
 		preview.s = m.s.duplicate(true)
 		RealmEndgame.state(preview).depth.risk = "steady"
+		RealmEndgame.state(preview).depth.floor = d.floor if d.active else mini(1000,int(d.get("checkpoint",0))+1)
+		RealmEndgame.state(preview).depth.active = true
 		var outlook = RealmCombat.forecast(preview,"hollow_depth")
 		v.add_child(U.para("Steady risk · %s\nAbout %ds · roughly %d meals · heavy hit up to %d HP" % [outlook.rating,outlook.seconds,outlook.meals,outlook.burst],15,U.GOLD))
 		action(v,"Continue · steady risk" if d.active else "Enter · steady risk",{"type":"end_depth","id":"steady"},depths,true)

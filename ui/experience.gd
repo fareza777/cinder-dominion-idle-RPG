@@ -3,7 +3,7 @@ extends RefCounted
 const U = preload("res://ui/style.gd")
 const Brand = preload("res://ui/brand.gd")
 const STORE_URL = "" # Set only after a real public listing exists.
-const VERSION = "0.49.0"
+const VERSION = "0.50.0"
 var app
 var front: Control
 var cinematic_page = 0
@@ -316,7 +316,7 @@ func handbook():
 		["10 · Keep more than one answer","In Hero, save a complete loadout with your gear, fighting style, talents, relic, rune, food, potion and healing threshold. Apply it outside combat. Loadouts do not create supplies: check your pack before a long hunt."],
 		["11 · Read the road","Hunt reports record completed, recalled and defeated hunting orders, including time away. Gold, loot and fragments are already delivered. Review food consumption, refine your gear or adjust your build before returning."],
 		["12 · Find your next challenge","Food, equipment and enemy strength determine how far you can go. Early enemies remain useful for their cards and materials; stronger hunts offer better XP and coins."],
-		["13 · Collect monster cards","Each enemy has a rare card. Open Hero → Monster Cards to see discovered cards and their effects. Attach one per combat item; duplicate cards do not stack. A crafted Card Extractor removes a card safely."],
+		["13 · Collect monster cards","Each enemy has a rare card. Open Hero → Monster Cards to see discovered cards and their effects. Attach cards only to their allowed equipment slots; duplicate cards do not stack. A crafted Card Extractor removes a card safely."],
 		["14 · Prepare for combat effects","From Bladecraft Lv.25, your class can apply a combat effect. Stronger enemies also inflict debuffs. Review the enemy before hunting; cards, gear and food help counter the threat."],
 		["15 · Find your way around","Stronghold: your objective, Journey, Armory and Supplies. Explore: enemies and combat. Skills: gathering and crafting. Bag: equipment and supplies. Hero: build choices and Settings. The Journey guide remains at the top of every screen."]
 	]:
@@ -345,7 +345,7 @@ func archives():
 func about():
 	var v = app.modal("About Cinder Dominion")
 	title(v,"Keep the last fire burning.",30)
-	v.add_child(U.para("Cinder Dominion: Idle RPG is an independent dark fantasy idle RPG about gathering, crafting and preparing for the battles ahead.\n\nVersion "+VERSION+" · Adventure preview\n60 enemies · 6 expedition regions\n7 optional guardians + Hollow Depths\n5 playable characters · class skills · customizable attributes\n\nFree to play. No purchases are active in this preview. Settings includes optional Android test ads. Cosmetics and content expansions are planned for future releases.",16,U.TEXT))
+	v.add_child(U.para("Cinder Dominion: Idle RPG is an independent dark fantasy idle RPG about gathering, crafting and preparing for the battles ahead.\n\nVersion "+VERSION+" · Adventure preview\n120 enemies · 12 expedition regions\n12 optional guardians + Hollow Depths\n8 playable characters · class skills · customizable attributes\n\nFree to play. No purchases are active in this preview. Settings includes optional Android test ads. Cosmetics and content expansions are planned for future releases.",16,U.TEXT))
 	v.add_child(U.para("Art generated for this project with OpenAI image generation. Original synthesized audio. Fonts: Manrope and Cormorant Garamond. Built with Godot.",14))
 	v.add_child(U.button("Credits & open-source licenses",licenses))
 	v.add_child(U.button("Replay cinematic intro",func(): intro(true)))

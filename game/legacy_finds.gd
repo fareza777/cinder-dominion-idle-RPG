@@ -2,7 +2,7 @@ class_name RealmLegacyFinds
 extends RefCounted
 
 const CHANCE = .0001
-const GEAR = ["heirloom_blade","heirloom_aegis","heirloom_pendant","heirloom_helm","heirloom_cuirass","heirloom_gauntlets","heirloom_boots","heirloom_belt","heirloom_ember_ring","heirloom_glass_ring"]
+const GEAR = ["heirloom_blade","heirloom_aegis","heirloom_pendant","heirloom_helm","heirloom_cuirass","heirloom_gauntlets","heirloom_boots","heirloom_belt","heirloom_ember_ring","heirloom_glass_ring","master_0","master_1","master_2","master_3","master_4","master_5","master_6","master_7","master_8","master_9","master_10","master_11","master_12","master_13"]
 
 static func drop(m, enemy: Dictionary) -> String:
 	var id = str(enemy.get("rare_material",""))

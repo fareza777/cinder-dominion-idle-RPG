@@ -25,6 +25,7 @@ func open(report: Dictionary):
 		status.add_child(U.para(m.activity_name(m.s.queue[0].id)+" · %d tasks remaining" % m.s.queue.size(),14))
 	else:
 		status.add_child(U.para("No tasks remaining",21,U.TEXT))
+	preload("res://ui/upgrade_goal.gd").new(app).home(v)
 	var rewards = U.card(v,14)
 	rewards.add_child(U.para("Results",20,U.TEXT))
 	rewards.add_child(U.para("%+d gold · %d XP · %d victories" % [int(report.gold),int(report.xp),int(report.kills)],16,U.GREEN))

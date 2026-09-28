@@ -1,16 +1,22 @@
-# Cinder Dominion: Idle RPG — Adventure preview 0.49.0
+# Cinder Dominion: Idle RPG — Adventure preview 0.50.0
 
 Idle RPG dark fantasy untuk Android. Gratis; iklan uji Android tersedia secara opsional di Settings dan bantuan antrean. Build ini untuk dimainkan dan dievaluasi, belum versi rilis publik.
 
 ## Mulai bermain
 
-1. Pasang `build/android/cinder-dominion-0.49.0.apk` di Android 64-bit. APK memakai identitas aplikasi yang sama dengan 0.1–0.48 sehingga bisa dipasang sebagai pembaruan.
-2. Seluruh antarmuka dan narasi game memakai **English**. Splash mengantar ke menu utama. Pilih **New game** untuk memilih Warden, Ranger, Arcanist, Reaver atau Apothecary dan memasukkan nama, lalu pilih **Show me the way** untuk panduan dengan sorotan emas. Intro opsional tersedia di About. **Continue** melanjutkan progres yang sudah ada.
+1. Pasang `build/android/cinder-dominion-0.50.0.apk` di Android 64-bit. APK memakai identitas aplikasi yang sama dengan 0.1–0.49 sehingga bisa dipasang sebagai pembaruan.
+2. Seluruh antarmuka dan narasi game memakai **English**. Splash mengantar ke menu utama. Pilih **New game** untuk memilih Warden, Ranger, Arcanist, Reaver, Apothecary, Frostbound, Penitent atau Duskblade dan memasukkan nama, lalu pilih **Show me the way** untuk panduan dengan sorotan emas. Intro opsional tersedia di About. **Continue** melanjutkan progres yang sudah ada.
 3. Tekan **Goals** di bagian atas layar. Layar menampilkan target, angka progres, checklist dan tombol tugas. Tekan tindakannya, lalu **Begin · 4 cycles** (jumlahnya mengikuti tujuan) untuk memulai jumlah siklus yang tepat.
 4. Tugas awal: 4 copper ore → 2 copper ingots → 1 ash log → Copper Sword → Equip item → 3 Ash Rats. Panduan lalu mengantar lewat musuh berikutnya hingga Bellkeeper, tanpa melompat langsung ke boss.
 5. Pantau activity bar. **Queue** menampilkan tugas berjalan/menunggu, progres target, dan alasan terhambat. **Sources/Find** membantu mencari bahan yang kurang. Satu aktivitas berjalan pada satu waktu.
 6. Buka **Food & survival guide** untuk belajar memancing, memasak, memilih makanan dan menyiapkan auto-heal. Perlengkapan hasil crafting harus dipasang dari **Bag**.
 7. Progres tersimpan otomatis dan berlanjut maksimal 24 jam saat kembali. Menu **☰** tersedia dari dalam permainan. New Game meminta konfirmasi dan menyimpan cadangan terpisah; **Settings → Save → Restore a previous journey** memulihkannya.
+
+## 0.50 — The Far Marches & kartu khusus equipment
+
+Total konten: **8 hero, 120 musuh/kartu, 598 item (182 equipment), 208 resep, 18 bab cerita, 60 kontrak, 24 masterwork, 18 talent, 12 rune, dan 12 guardian opsional**. Enam wilayah baru menyediakan jalur farming equipment, armor set, tiga hero baru dan art baru. Weapon attunement memberi pilihan build; Depths punya variasi ancaman dan checkpoint. Masterwork tetap tersembunyi sampai blueprint ditemukan; field notes menyediakan jalur riset alternatif berbiaya tinggi.
+
+Setiap kartu memiliki slot khusus: **Rat Card → Chest/Shield**, **Hound Card → Weapon/Hands**. Pilihan pemasangan hanya menampilkan gear yang sesuai. Kartu lama pada slot yang tidak cocok dikembalikan gratis ke Bag saat save dimuat. Level maksimum tetap 100, relic tetap 40 rank; talent berkembang sampai 80 poin dari 120 biaya seluruh tree. [Hasil pemeriksaan dan batas pengujian](docs/qa/expansion-0.50-report.md).
 
 ## 0.49 — Navigasi ringan & blueprint tersembunyi
 

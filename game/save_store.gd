@@ -47,6 +47,7 @@ func valid(s, data: Dictionary) -> bool:
 	if not RealmCards.valid(s,uids) or not RealmAfflictions.valid(s.fight,int(s.time)): return false
 	for uid in s.get("card_sockets",{}):
 		if data.items[uids[uid].id].slot in ["axe","pick","rod"]: return false
+		if int(s.get("card_slot_revision",0))>=1 and not RealmCards.allowed(s.card_sockets[uid],str(data.items[uids[uid].id].slot)):return false
 	if not RealmEquipmentSlots.valid(s.equipped,uids,data): return false
 	for slots in s.presets.values():
 		if not slots is Dictionary: return false
@@ -58,6 +59,7 @@ func valid(s, data: Dictionary) -> bool:
 			if id not in RealmLoadouts.NAMES or not RealmLoadouts.valid(s.loadouts[id],data,uids): return false
 	if s.has("hero") and not RealmCharacters.valid(s.hero,s.xp): return false
 	if not RealmPaths.valid(s): return false
+	if not RealmMarches.valid(s,data): return false
 	if not RealmFrontiers.valid(s): return false
 	if s.has("endgame") and not RealmEndgame.valid(s.endgame,data): return false
 	if s.has("assistant_queue") and not RealmAutomation.valid(s.assistant_queue,data): return false
@@ -139,6 +141,8 @@ func decode(text: String, data: Dictionary) -> Dictionary:
 		if not counter(state.xp.get(skill,-1)): return {}
 	if not counter(state.get("economy_revision",0)) or state.get("economy_revision",0)>1: return {}
 	RealmEconomy.migrate(state)
+	if not valid(state,data): return {}
+	RealmCards.migrate(state,data)
 	return state if valid(state,data) else {}
 
 func generations(directory: String) -> Array:

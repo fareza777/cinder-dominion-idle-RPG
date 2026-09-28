@@ -26,6 +26,7 @@ func open(index: int = -1):
 			atlas.region = Rect2(int(chapter.art)*width,0,width,atlas.atlas.get_height())
 			atlas.filter_clip = true
 			art.texture = preload("res://ui/premium.gd").art(9+mini(2,int(chapter.frontier_tile)/6)) if chapter.has("frontier_tile") else atlas
+			if chapter.has("march_art"):art.texture=U.atlas_tile("res://assets/art/march-places-0.50.png",int(chapter.march_art),3,2)
 			art.custom_minimum_size.y = 150
 			art.expand_mode = TextureRect.EXPAND_IGNORE_SIZE
 			art.stretch_mode = TextureRect.STRETCH_KEEP_ASPECT_COVERED

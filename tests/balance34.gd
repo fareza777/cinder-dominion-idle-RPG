@@ -42,7 +42,7 @@ static func build(character: String, tier: String, seed_value: int = 42):
 	m.s.settings.threshold = .9
 	m.s.bag.cooked_dawnsteel_fish = 10000
 	if tier in ["max","unique"]:
-		m.s.path_choice = {"warden":1,"ranger":0,"arcanist":0,"reaver":0,"apothecary":1}[character]
+		m.s.path_choice = {"warden":1,"ranger":0,"arcanist":0,"reaver":0,"apothecary":1}.get(character,0)
 		m.s.sockets = ["ember","fracture"]
 		for id in m.s.sockets: m.s.bag["socket_"+id] = 1
 	return m

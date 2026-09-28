@@ -26,6 +26,7 @@ func open():
 	var ingredients = U.column(10)
 	v.add_child(ingredients)
 	for material in recipe.inputs:
+		if m.count(material)<recipe.inputs[material]:ingredients.add_child(U.button("Find "+m.name_of(material),func():app.sources_dialog(material)))
 		app.dynamic(ingredients,func(): return "%s · %d / %d" % [m.name_of(material),m.count(material),recipe.inputs[material]],15)
 	ingredients.add_child(U.para("The crafting plan includes missing ingredients. Equipment must be equipped after crafting.",13))
 	var update_ingredients = func():
@@ -50,4 +51,5 @@ func follow():
 		"equip": app.item_dialog(step.uid)
 		"queue": app.queue_dialog()
 		"train": preload("res://ui/gameplay.gd").new(app).training(step.skill,step.level)
+		"farm":app.sources_dialog(step.material)
 		"craft": app.planner_dialog("craft_"+RealmUpgradeGoal.current(m),1)

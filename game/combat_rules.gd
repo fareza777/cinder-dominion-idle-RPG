@@ -5,6 +5,8 @@ static func food_heal(m, id: String) -> int:
 	var legacy = RealmChronicle.state(m)
 	var remedy = 6+3*(RealmCharacters.rank(m)-1) if RealmCharacters.id(m)=="apothecary" and RealmCharacters.rank(m)>0 else 0
 	var base = maxi(1,int(m.data.items[id].get("heal",0))+(RealmLegacyGrowth.relic_base(int(legacy.relics.heart),3) if legacy.relic=="heart" else 0)+(8 if RealmGearSets.active(m,"dawnsteel") else 0)+remedy+RealmPaths.food_bonus(m)+int(RealmLegacyGrowth.rank(m,"recovery")/2)+int(RealmLegacyGrowth.ascended(m,"heart")/5))
+	base+=RealmLegacyGrowth.rank(m,"vitality")
+	if "sustain" in RealmMarches.effects(m):base=int(base*1.08)
 	if m.s.hp<=40 and RealmPaths.has_item(m,"heirloom_belt"): base = int(base*1.15)
 	return maxi(1,int(base*(1.0+RealmCards.bonus(m,"healing"))*(1.1 if RealmPaths.has_item(m,"heirloom_pendant") else 1.0)*(.65 if RealmAfflictions.has(m,"hero","wound") else 1.0)))
 
@@ -53,6 +55,7 @@ static func move(m, enemy: Dictionary, strike: int, armor: int, second_phase: bo
 	if third and enemy.boss and RealmPaths.has_item(m,"heirloom_aegis"): damage = maxi(1,ceili(damage*.9))
 	if strike<=3 and RealmPaths.has_item(m,"heirloom_boots"): damage = maxi(1,ceili(damage*.85))
 	if RealmPaths.has_item(m,"heirloom_ember_ring"): damage = maxi(1,ceili(damage*1.05))
+	damage=RealmMarches.incoming(m,damage,third)
 	return {"damage":damage,"heal":heal,"label":label}
 
 static func player_damage(m, enemy: Dictionary, swing: int) -> int:
@@ -82,6 +85,12 @@ static func player_damage(m, enemy: Dictionary, swing: int) -> int:
 		damage = maxi(1,int(damage*(1+.03*RealmCharacters.allocated(m,"focus"))))
 	damage = RealmPaths.outgoing(m,enemy,swing,damage)
 	damage = RealmLegacyGrowth.outgoing(m,enemy,swing,maxi(1,int(damage*(1-float(enemy.get("resist",0))))))
+	var class_rank=RealmCharacters.rank(m)
+	if class_rank>0:
+		if RealmCharacters.id(m)=="frostbound" and special and RealmAfflictions.has(m,"enemy","chill"):damage=int(damage*(1.2+.1*(class_rank-1)))
+		if RealmCharacters.id(m)=="penitent" and special:damage+=int(m.stats().armor*(.15+.05*(class_rank-1)))
+		if RealmCharacters.id(m)=="duskblade" and not m.s.fight.is_empty() and m.s.fight.hp<enemy.hp*.3:damage=int(damage*(1.2+.05*(class_rank-1)))
+	damage=RealmMarches.outgoing(m,enemy,damage,special)
 	var card_bonus = RealmCards.bonus(m,"attack")+(RealmCards.bonus(m,"boss") if enemy.boss else 0.0)+(RealmCards.bonus(m,"special") if special else 0.0)
 	card_bonus += RealmCards.conditional_damage(m)
 	if special and RealmPaths.has_item(m,"heirloom_gauntlets"): damage = int(damage*1.08)
@@ -90,7 +99,7 @@ static func player_damage(m, enemy: Dictionary, swing: int) -> int:
 	return maxi(1,int(damage*(1.0+minf(.40,card_bonus))))
 
 static func mechanic(enemy: Dictionary) -> String:
-	if enemy.get("secret",false) or (enemy.get("depth",false) or enemy.has("frontier")):
+	if enemy.get("secret",false) or (enemy.get("depth",false) or (enemy.has("frontier") or enemy.has("march"))):
 		var recovery = " Restores %.1f%% HP." % (float(enemy.special_heal)*100) if enemy.special_heal>0 else ""
 		return "%s · Every third attack: %.2f× attack, ignores %d%% armor, +%d pressure damage.%s\nBelow half HP: +18%% damage, double pressure. Every 15 attacks: +12%% damage (cap +150%%). Resists %d%% of your damage." % [enemy.special_name,enemy.special_attack,roundi((1-float(enemy.special_armor))*100),enemy.pressure,recovery,roundi(float(enemy.get("resist",0))*100)]
 	if enemy.has("special_name"):
@@ -112,13 +121,13 @@ static func forecast(m, id: String) -> Dictionary:
 	var cycle_damage = player_damage(m,enemy,1)*3+player_damage(m,enemy,4)
 	var damage_per_second = cycle_damage*float(stats.accuracy)*1.025/8.0
 	var ordinary = move(m,enemy,1,int(stats.armor))
-	var late_special = move(m,enemy,3,int(stats.armor),bool(enemy.get("trial",false)) or enemy.get("secret",false) or (enemy.get("depth",false) or enemy.has("frontier")))
+	var late_special = move(m,enemy,3,int(stats.armor),bool(enemy.get("trial",false)) or enemy.get("secret",false) or (enemy.get("depth",false) or (enemy.has("frontier") or enemy.has("march"))))
 	var interval = float(enemy.interval)/1000.0
 	# Trials use the stronger phase for a conservative recovery/risk estimate.
 	var net_damage = damage_per_second-float(late_special.heal)/(interval*3.0)
 	var stalled = net_damage<=0
 	var seconds = 3600.0 if stalled else clampf(ceil(float(enemy.hp)/maxf(.01,net_damage)/2.0)*2.0,2,3600)
-	if enemy.get("secret",false) or (enemy.get("depth",false) or enemy.has("frontier")):
+	if enemy.get("secret",false) or (enemy.get("depth",false) or (enemy.has("frontier") or enemy.has("march"))):
 		var late_strike = maxi(3,int(seconds/interval))
 		late_strike += (3-late_strike%3)%3
 		late_special = move(m,enemy,late_strike,int(stats.armor),true)

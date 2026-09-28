@@ -5,7 +5,7 @@ const ALL = {
 	"steel":{"name":"Ironwatch","effect":"Take 15% less damage from every third enemy attack."},
 	"moonsteel":{"name":"Stillwater","effect":"Reduce enemy healing by 20%. Multiplies with your rune."},
 	"dusksteel":{"name":"Nightfall","effect":"Your fourth attack deals 15% more damage."},
-	"dawnsteel":{"name":"Daybreak","effect":"Cooked food restores 8 additional HP."}}
+	"dawnsteel":{"name":"Daybreak","effect":"Cooked food restores 8 additional HP."},"rime":{"name": "Winterwatch", "effect": "Fourth hits apply Chill; +6% damage against chilled enemies."},"briar":{"name": "Thornward", "effect": "Fourth hits apply Poison; +6% damage against poisoned enemies."},"cinder":{"name": "Kindled Iron", "effect": "Fourth hits apply Burn; +6% damage against burning enemies."},"hush":{"name": "Tidekeeper", "effect": "Meals restore 8% more HP; fourth hits grant Regeneration."},"gloam":{"name": "Nightstalker", "effect": "Fourth hits apply Bleed; +6% damage against bleeding enemies."},"star":{"name": "Last Light", "effect": "Deal 12% more damage below 30% enemy HP; take 5% more direct damage."}}
 const SLOTS = ["shield","head","body","hands","feet"]
 
 static func metal(id: String) -> String:
@@ -13,7 +13,8 @@ static func metal(id: String) -> String:
 	return prefix if ALL.has(prefix) else ""
 
 static func counts(m) -> Dictionary:
-	var out = {"steel":0,"moonsteel":0,"dusksteel":0,"dawnsteel":0}
+	var out = {}
+	for id in ALL:out[id]=0
 	for slot in SLOTS:
 		var item = m.gear(str(m.s.equipped.get(slot,"")))
 		if item.is_empty(): continue
