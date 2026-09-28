@@ -1,8 +1,8 @@
 extends Control
 
 const U = preload("res://ui/style.gd")
-const SLOTS = ["head","weapon","hands","body","shield","feet"]
-const ANCHORS = [Vector2(.50,.20),Vector2(.38,.56),Vector2(.36,.62),Vector2(.52,.39),Vector2(.65,.55),Vector2(.54,.84)]
+const SLOTS = ["head","necklace","weapon","hands","ring_left","body","shield","belt","ring_right","feet"]
+const ANCHORS = [Vector2(.50,.20),Vector2(.50,.30),Vector2(.38,.56),Vector2(.36,.62),Vector2(.36,.67),Vector2(.52,.39),Vector2(.65,.55),Vector2(.52,.55),Vector2(.65,.67),Vector2(.54,.84)]
 var app
 var equipment
 var portrait: Texture2D
@@ -15,7 +15,7 @@ var clock = 0.0
 
 func _ready():
 	name = "HeroEquipment"
-	custom_minimum_size.y = 488
+	custom_minimum_size.y = 610
 	clip_contents = true
 	mouse_filter = Control.MOUSE_FILTER_PASS
 	portrait = RealmCharacters.portrait(app.model)
@@ -65,7 +65,7 @@ func _process(delta):
 				buttons[i].tooltip_text = equipment.NAMES[SLOTS[i]]+" · "+app.model.name_of(g.id)
 			else:
 				for id in app.model.data.items:
-					if app.model.data.items[id].get("slot","")==SLOTS[i]:
+					if RealmEquipmentSlots.accepts(SLOTS[i],str(app.model.data.items[id].get("slot",""))):
 						var image = U.icon(id,40)
 						icons[i].texture = image.texture
 						icons[i].modulate = Color(.65,.65,.65,.28)
@@ -74,7 +74,7 @@ func _process(delta):
 	var width = clampf(size.x*.21,78,94)
 	var height = 92+maxf(0,U.scale-1)*36
 	for i in range(buttons.size()):
-		buttons[i].position = Vector2(8 if i<3 else size.x-width-8,26+(i%3)*145)
+		buttons[i].position = Vector2(8 if i<5 else size.x-width-8,22+(i%5)*116)
 		buttons[i].size = Vector2(width,height)
 	if app.model.s.settings.motion and not app.paused: elapsed += delta
 	clock += delta
@@ -88,7 +88,7 @@ func _draw():
 	var width = size.y*portrait.get_width()/portrait.get_height()
 	draw_texture_rect(portrait,Rect2((size.x-width)/2,0,width,size.y),false)
 	for i in range(buttons.size()):
-		var from = buttons[i].position+Vector2(buttons[i].size.x if i<3 else 0,buttons[i].size.y*.5)
+		var from = buttons[i].position+Vector2(buttons[i].size.x if i<5 else 0,buttons[i].size.y*.5)
 		var to = Vector2(size.x*ANCHORS[i].x,size.y*ANCHORS[i].y)
 		var elbow = Vector2(lerpf(from.x,to.x,.5),from.y)
 		draw_polyline(PackedVector2Array([from,elbow,to]),Color(U.GOLD,.55),1,true)

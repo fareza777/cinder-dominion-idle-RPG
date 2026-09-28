@@ -222,7 +222,7 @@ func inventory(parent: Node):
 		app.inventory_page = 0
 		app.set_page("inventory"))
 	options.add_child(sorter)
-	var slots = ["all","weapon","shield","head","body","hands","feet","axe","pick","rod"]
+	var slots = ["all","weapon","shield","head","body","hands","feet","necklace","belt","ring","axe","pick","rod"]
 	var slot_picker = OptionButton.new()
 	for slot in slots: slot_picker.add_item("All slots" if slot=="all" else slot.capitalize())
 	slot_picker.selected = maxi(0,slots.find(app.inventory_slot))

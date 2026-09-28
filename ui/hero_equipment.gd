@@ -1,7 +1,7 @@
 extends RefCounted
 
 const U = preload("res://ui/style.gd")
-const NAMES = {"head":"Head","body":"Chest","hands":"Hands","feet":"Feet","weapon":"Weapon","shield":"Shield","pick":"Pickaxe","axe":"Axe","rod":"Fishing rod"}
+const NAMES = RealmEquipmentSlots.NAMES
 var app
 var m
 func _init(owner):
@@ -31,14 +31,16 @@ func open_slot(slot: String):
 	var current = m.gear(str(m.s.equipped.get(slot,"")))
 	v.add_child(U.para("Equipped: "+(m.name_of(current.id) if not current.is_empty() else "Empty slot"),19,U.GOLD))
 	if not m.s.fight.is_empty(): v.add_child(U.para("Finish or leave your hunt before changing equipment.",14,U.GOLD))
-	var choices = m.s.gear.filter(func(g): return m.data.items[g.id].slot==slot)
+	var choices = m.s.gear.filter(func(g): return RealmEquipmentSlots.accepts(slot,str(m.data.items[g.id].slot)))
 	choices.sort_custom(func(a,b): return m.gear_score(a)>m.gear_score(b))
+	if slot in ["necklace","belt","ring_left","ring_right"]:
+		v.add_child(U.para("Forge accessories in Skills at Smithing Lv.30, 60 and 90. Refine their quality at the workshop.",13))
 	if choices.is_empty():
 		v.add_child(U.para("No equipment for this slot yet. Craft a piece or find one on a hunt.",16))
 		for id in m.data.activities:
 			var a = m.data.activities[id]
 			if a.kind=="combat": continue
-			var fits = m.data.items[a.output].get("slot","")==slot
+			var fits = RealmEquipmentSlots.accepts(slot,str(m.data.items[a.output].get("slot","")))
 			if fits and a.level<=m.level(a.skill):
 				v.add_child(U.button("Plan "+m.activity_name(id),func(): app.planner_dialog(id,1)))
 		v.add_child(U.button("Explore gear paths",func(): preload("res://ui/ascension.gd").new(app).open()))
@@ -52,12 +54,13 @@ func open_slot(slot: String):
 		r.add_child(text)
 		text.add_child(U.para(m.name_of(item.id),17,U.TEXT))
 		var equipped = m.s.equipped.get(slot,"")==item.uid
-		text.add_child(U.para(m.data.rarities[int(item.q)]+(" · Equipped" if equipped else " · In bag"),12,U.QUALITY[int(item.q)]))
+		var location = "Equipped" if equipped else ("Worn on other hand" if item.uid in m.s.equipped.values() else "In bag")
+		text.add_child(U.para(m.data.rarities[int(item.q)]+" · "+location,12,U.QUALITY[int(item.q)]))
 		var d = m.data.items[item.id]
 		var summary = "%d ATK · %d DEF" % [roundi(d.get("attack",0)*RealmModel.QUALITY[int(item.q)]),roundi(d.get("armor",0)*RealmModel.QUALITY[int(item.q)])]
 		if d.has("speed"): summary = "%d%% faster gathering" % roundi(d.speed*100)
 		c.add_child(U.para(summary,14,U.MUTED))
-		c.add_child(U.button("Compare & equip" if not equipped else "Inspect equipped item",func(): app.item_dialog(item.uid),not equipped))
+		c.add_child(U.button("Compare & equip" if not equipped else "Inspect equipped item",func(): preload("res://ui/equipment_detail.gd").new(app).open(item.uid,slot),not equipped))
 	app.modal_action("Back to hero",func():
 		app.dismiss()
 		app.set_page("character"))

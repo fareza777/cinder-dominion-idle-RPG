@@ -1,6 +1,6 @@
 # Hunting, equipment and long-term progression
 
-Status: proposed design, not implemented. All numbers below are initial tuning targets, not measured campaign balance. Existing release remains 0.37. User confirmed an offline NPC economy; no player-to-player market.
+Status: approved direction. Accessory foundation implemented in 0.38; all other systems below remain proposed. All numbers below are initial tuning targets, not measured campaign balance. See docs/qa/accessories-0.38-report.md for the implemented scope. User confirmed an offline NPC economy; no player-to-player market.
 
 ## Goal and current constraints
 

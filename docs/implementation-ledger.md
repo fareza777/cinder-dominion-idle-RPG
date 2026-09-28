@@ -161,3 +161,8 @@ Solo user-directed visual iteration across Stronghold, Explore, Skills, Inventor
 ## 0.37 Five hero battle sprites and restrained effects
 
 User rejected an articulated Warden/Ash Rat experiment, clarified that heroes should be small full-body sprites changing attack poses like the original battle, and requested static enemy art plus elegant non-symbolic effects for all classes. Final implementation: twenty generated poses across five classes, shared battle/queue sprites, static enemy rendering, class-specific trails/sparks/healing wisps and accurate transient skill tags. No combat math/save changes. Five-class pixel/motion checks, real trigger/rank/boss-gating checks, essential suite, six phone captures and a four-second visual recording. Original puppet experiment archived under ignored build/experiments and not exported. Versioned Android debug APK; physical-device performance unverified and existing shutdown warnings remain. See docs/qa/hero-battle-0.37-report.md.
+
+
+## 0.38 Accessory equipment foundation
+
+First implementation stage of the approved long-term hunting design: necklace, belt and separate left/right ring positions; nine Smithing recipes at levels 30/60/90; original vector icons; ten-slot hero layout; bag filters and hand-specific comparisons. Distinct ring UIDs, shared slot compatibility, equip-best, save/preset/loadout validation and workshop refinement preserve ownership. Existing saves remain compatible without a rewrite. 83 essential checks and focused ownership/crafting/refinement checks passed; four phone captures including narrow 130% text. Full campaign accessory balance, physical Android testing and remaining stamina/card/merchant/talent/relic/status stages are outstanding. See docs/qa/accessories-0.38-report.md.

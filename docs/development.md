@@ -21,3 +21,8 @@ Use RealmUI.scenic for art-led headers with text in container flow, RealmUI.sect
 ## Battle direction from 0.37
 
 User explicitly wants small full-body hero sprites with distinct attack poses, matching the earliest battle style, for all five classes. Do not substitute sliding portrait cards or the rejected articulated Warden puppet. Enemy art stays stationary; damage/skill overlays remain. Use restrained weapon trails, sparks and healing wisps, not oversized shield/crosshair/plus/magic-circle symbols. Runtime UV sprite mapping is in ui/hero_combat.gd; new skill metadata is transient combat-event data and must never alter balance or save schema.
+
+
+## Equipment positions from 0.38
+
+Use RealmEquipmentSlots.accepts/target/place/valid for equipment position mapping. Ring item family maps to ring_left or ring_right; never write an equipped.ring field. New rings do not stack, so each hand owns a distinct UID. When moving a UID remove its prior position, including in previews. Accessory recipes unlock at Smithing 30/60/90; armor sets still count only their five armor positions. Keep saved loadout/preset references when refining.

@@ -41,12 +41,10 @@ func valid(s, data: Dictionary) -> bool:
 		if not counter(g.q) or g.q>7 or not counter(g.count) or g.count<1: return false
 		if not g.uid is String or uids.has(g.uid) or not g.locked is bool or not g.favorite is bool: return false
 		uids[g.uid] = g
-	for slot in s.equipped:
-		if not uids.has(s.equipped[slot]) or data.items[uids[s.equipped[slot]].id].slot!=slot: return false
+	if not RealmEquipmentSlots.valid(s.equipped,uids,data): return false
 	for slots in s.presets.values():
 		if not slots is Dictionary: return false
-		for slot in slots:
-			if not uids.has(slots[slot]) or data.items[uids[slots[slot]].id].slot!=slot: return false
+		if not RealmEquipmentSlots.valid(slots,uids,data): return false
 	if s.has("loadouts"):
 		if not s.loadouts is Dictionary or s.loadouts.size()>3: return false
 		for id in s.loadouts:

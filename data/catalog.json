@@ -1217,6 +1217,105 @@
       "category": "material",
       "sell": 1,
       "icon_alias": "fury_draught"
+    },
+    "steel_necklace": {
+      "id": "steel_necklace",
+      "name": "Steel Pendant",
+      "en": "Steel Pendant",
+      "category": "equipment",
+      "sell": 12,
+      "slot": "necklace",
+      "attack": 1,
+      "armor": 0,
+      "icon": "necklace"
+    },
+    "steel_belt": {
+      "id": "steel_belt",
+      "name": "Steel Girdle",
+      "en": "Steel Girdle",
+      "category": "equipment",
+      "sell": 12,
+      "slot": "belt",
+      "attack": 0,
+      "armor": 1,
+      "icon": "belt"
+    },
+    "steel_ring": {
+      "id": "steel_ring",
+      "name": "Steel Signet",
+      "en": "Steel Signet",
+      "category": "equipment",
+      "sell": 12,
+      "slot": "ring",
+      "attack": 1,
+      "armor": 0,
+      "icon": "ring"
+    },
+    "moonsteel_necklace": {
+      "id": "moonsteel_necklace",
+      "name": "Moonsteel Pendant",
+      "en": "Moonsteel Pendant",
+      "category": "equipment",
+      "sell": 24,
+      "slot": "necklace",
+      "attack": 2,
+      "armor": 0,
+      "icon": "necklace"
+    },
+    "moonsteel_belt": {
+      "id": "moonsteel_belt",
+      "name": "Moonsteel Girdle",
+      "en": "Moonsteel Girdle",
+      "category": "equipment",
+      "sell": 24,
+      "slot": "belt",
+      "attack": 0,
+      "armor": 2,
+      "icon": "belt"
+    },
+    "moonsteel_ring": {
+      "id": "moonsteel_ring",
+      "name": "Moonsteel Signet",
+      "en": "Moonsteel Signet",
+      "category": "equipment",
+      "sell": 24,
+      "slot": "ring",
+      "attack": 2,
+      "armor": 0,
+      "icon": "ring"
+    },
+    "dawnsteel_necklace": {
+      "id": "dawnsteel_necklace",
+      "name": "Dawnsteel Pendant",
+      "en": "Dawnsteel Pendant",
+      "category": "equipment",
+      "sell": 36,
+      "slot": "necklace",
+      "attack": 3,
+      "armor": 0,
+      "icon": "necklace"
+    },
+    "dawnsteel_belt": {
+      "id": "dawnsteel_belt",
+      "name": "Dawnsteel Girdle",
+      "en": "Dawnsteel Girdle",
+      "category": "equipment",
+      "sell": 36,
+      "slot": "belt",
+      "attack": 0,
+      "armor": 3,
+      "icon": "belt"
+    },
+    "dawnsteel_ring": {
+      "id": "dawnsteel_ring",
+      "name": "Dawnsteel Signet",
+      "en": "Dawnsteel Signet",
+      "category": "equipment",
+      "sell": 36,
+      "slot": "ring",
+      "attack": 3,
+      "armor": 0,
+      "icon": "ring"
     }
   },
   "skills": {
@@ -3109,6 +3208,123 @@
       "inputs": {},
       "xp": 0,
       "duration": 3,
+      "side": ""
+    },
+    "craft_steel_necklace": {
+      "id": "craft_steel_necklace",
+      "kind": "craft",
+      "skill": "smithing",
+      "output": "steel_necklace",
+      "level": 30,
+      "inputs": {
+        "steel_ingot": 12
+      },
+      "duration": 30,
+      "xp": 60,
+      "side": ""
+    },
+    "craft_steel_belt": {
+      "id": "craft_steel_belt",
+      "kind": "craft",
+      "skill": "smithing",
+      "output": "steel_belt",
+      "level": 30,
+      "inputs": {
+        "steel_ingot": 12
+      },
+      "duration": 30,
+      "xp": 60,
+      "side": ""
+    },
+    "craft_steel_ring": {
+      "id": "craft_steel_ring",
+      "kind": "craft",
+      "skill": "smithing",
+      "output": "steel_ring",
+      "level": 30,
+      "inputs": {
+        "steel_ingot": 12
+      },
+      "duration": 30,
+      "xp": 60,
+      "side": ""
+    },
+    "craft_moonsteel_necklace": {
+      "id": "craft_moonsteel_necklace",
+      "kind": "craft",
+      "skill": "smithing",
+      "output": "moonsteel_necklace",
+      "level": 60,
+      "inputs": {
+        "moonsteel_ingot": 16
+      },
+      "duration": 40,
+      "xp": 120,
+      "side": ""
+    },
+    "craft_moonsteel_belt": {
+      "id": "craft_moonsteel_belt",
+      "kind": "craft",
+      "skill": "smithing",
+      "output": "moonsteel_belt",
+      "level": 60,
+      "inputs": {
+        "moonsteel_ingot": 16
+      },
+      "duration": 40,
+      "xp": 120,
+      "side": ""
+    },
+    "craft_moonsteel_ring": {
+      "id": "craft_moonsteel_ring",
+      "kind": "craft",
+      "skill": "smithing",
+      "output": "moonsteel_ring",
+      "level": 60,
+      "inputs": {
+        "moonsteel_ingot": 16
+      },
+      "duration": 40,
+      "xp": 120,
+      "side": ""
+    },
+    "craft_dawnsteel_necklace": {
+      "id": "craft_dawnsteel_necklace",
+      "kind": "craft",
+      "skill": "smithing",
+      "output": "dawnsteel_necklace",
+      "level": 90,
+      "inputs": {
+        "dawnsteel_ingot": 20
+      },
+      "duration": 50,
+      "xp": 180,
+      "side": ""
+    },
+    "craft_dawnsteel_belt": {
+      "id": "craft_dawnsteel_belt",
+      "kind": "craft",
+      "skill": "smithing",
+      "output": "dawnsteel_belt",
+      "level": 90,
+      "inputs": {
+        "dawnsteel_ingot": 20
+      },
+      "duration": 50,
+      "xp": 180,
+      "side": ""
+    },
+    "craft_dawnsteel_ring": {
+      "id": "craft_dawnsteel_ring",
+      "kind": "craft",
+      "skill": "smithing",
+      "output": "dawnsteel_ring",
+      "level": 90,
+      "inputs": {
+        "dawnsteel_ingot": 20
+      },
+      "duration": 50,
+      "xp": 180,
       "side": ""
     }
   },

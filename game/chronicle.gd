@@ -135,7 +135,7 @@ static func focus(m) -> Dictionary:
 	for relic in RELICS:
 		if state(m).relics[relic]==0 and state(m).fragments[relic]>=5: return {"title":"Awaken "+RELICS[relic].name,"why":RELICS[relic].detail,"kind":"relics","id":"","amount":1}
 	for g in m.s.gear:
-		var equipped = m.gear(str(m.s.equipped.get(m.data.items[g.id].slot,"")))
+		var equipped = m.gear(str(m.s.equipped.get(RealmEquipmentSlots.target(m,g.uid),"")))
 		if equipped.is_empty() or m.gear_score(g)>m.gear_score(equipped): return {"title":"Equip your stronger gear","why":"Your bag contains an upgrade. Crafting alone does not improve your combat stats.","kind":"equip","id":"","amount":1}
 	if m.count(m.s.settings.food)<15: return {"title":"Prepare food for your next hunt","why":"Aim for 15 cooked meals. Food heals automatically during battle; raw ingredients cannot heal you.","kind":"plan","id":"craft_"+str(m.s.settings.food),"amount":15-m.count(m.s.settings.food)}
 	if RealmRuneforge.ready(m)>0: return {"title":"Claim your field record rewards","why":"Completed regional hunts have fragments, scraps and gold ready to collect. Put them toward your next rune or relic.","kind":"journal","id":"","amount":1}

@@ -11,7 +11,12 @@ static func status(m) -> Dictionary:
 	var best = {}
 	for g in m.s.gear:
 		if g.id==id and (best.is_empty() or m.gear_score(g)>m.gear_score(best)): best = g
-	var equipped = m.gear(str(m.s.equipped.get(item.slot,"")))
+	var position = str(item.slot)
+	if position=="ring":
+		position = "ring_left"
+		for hand in ["ring_left","ring_right"]:
+			if m.gear(str(m.s.equipped.get(hand,""))).get("id","")==id: position = hand
+	var equipped = m.gear(str(m.s.equipped.get(position,"")))
 	if not equipped.is_empty() and (equipped.id==id or m.gear_score(equipped)>=m.gear_score({"id":id,"q":1})):
 		return {"kind":"ready","text":"Target equipped · review your next hunt" if equipped.id==id else "Stronger equipment already equipped · review your next hunt","action":"Review hunts"}
 	if not best.is_empty(): return {"kind":"equip","text":"Crafted · review your new equipment","action":"Review & equip","uid":best.uid}

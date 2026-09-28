@@ -9,11 +9,13 @@ func _init(owner):
 	app = owner
 	m = owner.model
 
-func open(uid: String):
+func open(uid: String, requested_slot: String = ""):
 	var item = m.gear(uid)
 	if item.is_empty(): return
 	var data = m.data.items[item.id]
-	var comparison = RealmEquipmentPreview.compare(m,uid)
+	var slot = RealmEquipmentSlots.target(m,uid) if requested_slot=="" else requested_slot
+	var comparison = RealmEquipmentPreview.compare(m,uid,slot)
+	if comparison.is_empty(): return
 	var v = app.modal(m.name_of(item.id))
 	if item.id=="copper_sword": app.dialog.set_meta("coach_equip",true)
 	var hero = U.card(v,14,U.QUALITY[int(item.q)].darkened(.4))
@@ -24,11 +26,15 @@ func open(uid: String):
 	title.size_flags_horizontal = Control.SIZE_EXPAND_FILL
 	row.add_child(title)
 	title.add_child(U.para(m.data.rarities[int(item.q)],23,U.QUALITY[int(item.q)]))
-	title.add_child(U.para(SLOTS.get(data.slot,data.slot)+" · %d owned" % int(item.count),14))
-	title.add_child(U.para("Equipped" if comparison.equipped else "In your bag",13,U.GOLD))
+	title.add_child(U.para(RealmEquipmentSlots.NAMES.get(slot,slot)+" · %d owned" % int(item.count),14))
+	title.add_child(U.para("Equipped" if comparison.equipped else ("Worn on other hand — equipping moves this ring" if uid in m.s.equipped.values() else "In your bag"),13,U.GOLD))
 	if data.has("unique_effect"):
 		hero.add_child(U.para("Unique effect · "+data.unique_effect,15,U.GOLD))
 		hero.add_child(U.button("Relic forge & tempering",func(): preload("res://ui/endgame.gd").new(app).forge()))
+	if data.slot=="ring":
+		v.add_child(U.para("Each ring occupies one hand. Choose which ring to replace.",13))
+		for hand in ["ring_left","ring_right"]:
+			if hand!=slot: v.add_child(U.button("Compare in "+RealmEquipmentSlots.NAMES[hand].to_lower(),func(): open(uid,hand)))
 	var current = comparison.current
 	v.add_child(U.para("Currently equipped: "+(m.data.rarities[int(current.q)]+" "+m.name_of(current.id) if not current.is_empty() else "Nothing in this slot"),14))
 	var changes = U.card(v,14)
@@ -55,17 +61,17 @@ func open(uid: String):
 	protection.add_child(U.para("Keep or salvage",17,U.TEXT))
 	protection.add_child(U.para("Equipped, locked, favorite and saved-loadout items are protected from salvage.",13))
 	protection.add_child(U.button("Unlock item" if item.locked else "Lock item",func():
-		if app.send({"type":"lock","id":uid}): open(uid)))
+		if app.send({"type":"lock","id":uid}): open(uid,slot)))
 	protection.add_child(U.button("Remove favorite" if item.favorite else "Add to favorites",func():
-		if app.send({"type":"favorite","id":uid}): open(uid)))
+		if app.send({"type":"favorite","id":uid}): open(uid,slot)))
 	if not m.protected(uid): protection.add_child(U.button("Review salvage…",func(): app.salvage_dialog([uid])))
 	var equip = app.modal_action("Already equipped" if comparison.equipped else "Equip item",func():
-		if app.send({"type":"equip","id":uid}):
-			open(uid)
+		if app.send({"type":"equip","id":uid,"slot":slot}):
+			open(uid,slot)
 			app.toast(m.name_of(item.id)+" equipped."))
 	equip.set_meta("coach_target","equip")
 	equip.disabled = comparison.equipped or not m.s.fight.is_empty()
 	var ref = weakref(equip)
 	app.dialog_callbacks.append(func():
 		var button = ref.get_ref()
-		if is_instance_valid(button): button.disabled = m.s.equipped.get(data.slot,"")==uid or not m.s.fight.is_empty())
+		if is_instance_valid(button): button.disabled = m.s.equipped.get(slot,"")==uid or not m.s.fight.is_empty())

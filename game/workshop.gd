@@ -2,7 +2,7 @@ class_name RealmWorkshop
 extends RefCounted
 
 static func eligible(m, g: Dictionary) -> bool:
-	return not g.is_empty() and str(g.id).get_slice("_",0) in ["copper","iron","steel","moonsteel","dusksteel","dawnsteel"] and m.data.items[g.id].slot in ["weapon","shield","head","body","hands","feet"]
+	return not g.is_empty() and str(g.id).get_slice("_",0) in ["copper","iron","steel","moonsteel","dusksteel","dawnsteel"] and m.data.items[g.id].slot in ["weapon","shield","head","body","hands","feet","necklace","belt","ring"]
 
 static func cost(g: Dictionary) -> Dictionary:
 	var q = clampi(int(g.q),1,4)-1
@@ -19,8 +19,8 @@ static func preview(m, uid: String, enemy: String) -> Dictionary:
 	var proposed = RealmModel.new()
 	proposed.s = m.s.duplicate(true)
 	proposed.gear(uid).q = int(g.q)+1
-	var slot = m.data.items[g.id].slot
-	proposed.s.equipped[slot] = uid
+	var slot = RealmEquipmentSlots.target(m,uid)
+	RealmEquipmentSlots.place(proposed.s.equipped,uid,slot)
 	return {"equipped":m.s.equipped.get(slot,"")==uid,"before":baseline.stats(),"after":proposed.stats(),
 		"hunt_before":RealmCombat.forecast(baseline,enemy),"hunt_after":RealmCombat.forecast(proposed,enemy)}
 

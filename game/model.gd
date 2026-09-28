@@ -98,7 +98,7 @@ func protected(uid: String) -> bool:
 
 func add_gear(id: String, quality: int) -> String:
 	for g in s.gear:
-		if g.id == id and int(g.q) == quality:
+		if data.items[id].slot != "ring" and g.id == id and int(g.q) == quality:
 			g.count += 1
 			return g.uid
 	var uid = "eq_%d" % int(s.next_uid)
@@ -215,10 +215,7 @@ func command(cmd: Dictionary) -> bool:
 			progression().stance = id
 		"equip_best":
 			if not s.fight.is_empty(): return fail("Retreat before changing equipment.")
-			for g in s.gear:
-				var slot = data.items[g.id].slot
-				var current = gear(str(s.equipped.get(slot,"")))
-				if current.is_empty() or gear_score(g)>gear_score(current): s.equipped[slot] = g.uid
+			RealmEquipmentSlots.equip_best(self)
 		"claim":
 			var found = false
 			for contract in RealmProgression.CONTRACTS:
@@ -279,7 +276,9 @@ func command(cmd: Dictionary) -> bool:
 			if not s.fight.is_empty(): return fail("Retreat from combat before changing equipment.")
 			var g = gear(id)
 			if g.is_empty(): return fail("Item not found")
-			s.equipped[data.items[g.id].slot] = id
+			var slot = str(cmd.get("slot",RealmEquipmentSlots.target(self,id)))
+			if not RealmEquipmentSlots.accepts(slot,str(data.items[g.id].slot)): return fail("This item does not fit that slot.")
+			RealmEquipmentSlots.place(s.equipped,id,slot)
 		"lock","favorite":
 			var g = gear(id)
 			if g.is_empty(): return fail("Item not found")

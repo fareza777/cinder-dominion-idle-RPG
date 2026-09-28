@@ -226,6 +226,9 @@ static func icon(id: String, dimension: int = 52) -> TextureRect:
 	t.stretch_mode = TextureRect.STRETCH_KEEP_ASPECT_CENTERED
 	t.mouse_filter = Control.MOUSE_FILTER_IGNORE
 	var data = item_catalog.get(id,{})
+	if data.get("slot","") in ["ring","necklace","belt"]:
+		t.texture = load("res://assets/ui/accessory-"+str(data.slot)+".svg")
+		return t
 	if data.has("art_tile"):
 		t.texture = atlas_tile("res://assets/art/ascension-items-0.25.png",int(data.art_tile),4,4)
 		return t

@@ -27,8 +27,7 @@ static func valid(build, data: Dictionary, items: Dictionary) -> bool:
 		if not RealmChronicle.number(build.talents.get(id,-1),5): return false
 		total += int(build.talents[id])
 	if total>10: return false
-	for slot in build.gear:
-		if not items.has(build.gear[slot]) or data.items[items[build.gear[slot]].id].slot!=slot: return false
+	if not RealmEquipmentSlots.valid(build.gear,items,data): return false
 	for field in ["food","potion"]:
 		var id = build.get(field,null)
 		if field=="potion" and id=="": continue
