@@ -141,7 +141,7 @@ static func command(m, cmd) -> String:
 			var favorite = g.favorite
 			if g.count==1: m.s.gear.erase(g)
 			else: g.count -= 1
-			var uid = m.add_gear(item,quality,m.s.get("card_sockets",{}).has(old_uid) or m.s.get("gear_attunements",{}).has(old_uid))
+			var uid = m.add_gear(item,quality,m.s.get("card_sockets",{}).has(old_uid) or m.s.get("gear_attunements",{}).has(old_uid) or RealmArtisan.has_traits(g))
 			if m.s.get("gear_attunements",{}).has(old_uid):
 				m.s.gear_attunements[uid]=m.s.gear_attunements[old_uid]
 				if uid!=old_uid:m.s.gear_attunements.erase(old_uid)
@@ -149,6 +149,7 @@ static func command(m, cmd) -> String:
 				var card = m.s.card_sockets[old_uid]
 				m.s.card_sockets.erase(old_uid)
 				m.s.card_sockets[uid] = card
+			RealmArtisan.copy_traits(g,m.gear(uid))
 			m.gear(uid).locked = m.gear(uid).locked or locked
 			m.gear(uid).favorite = m.gear(uid).favorite or favorite
 			var references = [m.s.equipped]+m.s.presets.values()

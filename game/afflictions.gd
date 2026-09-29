@@ -75,6 +75,7 @@ static func absorb(m, side: String, damage: int) -> int:
 static func proc(m, enemy: Dictionary, side: String, special: bool):
 	if not special: return
 	if side=="enemy":
+		RealmArtisan.procs(m)
 		if RealmCharacters.rank(m)>=2:
 			var effect = {"warden":"stun","ranger":"bleed","arcanist":"burn","reaver":"armor_break","apothecary":"poison","frostbound":"chill","penitent":"weaken","duskblade":"bleed"}.get(RealmCharacters.id(m),"")
 			apply(m,"enemy",effect,2)

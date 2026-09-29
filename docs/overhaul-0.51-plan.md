@@ -1,0 +1,15 @@
+# 0.51 — Battle actors, artisan equipment and long expeditions
+
+User requests implementation, solo execution and limited meaningful checks. This is an architectural change spanning presentation, equipment identity, production, loot and offline simulation. Existing continuing authorization covers routine design choices; no repeated design-approval gate. Preserve all saves and English UI, no stamina, hidden rare drop percentages, no paid-service activation.
+
+## Connected design
+
+1. Every one of the 120 existing enemies receives an individually mapped transparent battle actor with ready/attack poses. Ten 24-cell atlases cover the roster. Runtime adds anticipation, short attack arcs, recoil, dodge and recovery; rat/insects are small, humanoids medium and guardians large. Existing bestiary/card illustrations remain. Damage uses outlined floating text without rectangular plates. Reduced-motion and battery settings remain respected.
+2. Extend existing Smithing with selectable reusable artisan hammers, rare crafting outcomes and per-instance affixes. Common through Epic can occur without the top hammer; a purpose-made late-game hammer enables extremely rare Legendary rolls. Existing fixed-quality named-relic/masterwork recipes keep their earned rules. Affixes vary by item slot and rarity, use the status system (Burn, Poison, Weaken, Armor Break, Chill/Bleed), and survive refinement, equipment presets and saves. Refining to Legendary also requires the special hammer; no retroactive downgrades.
+3. Upgrade profession tools as real equipment: quality affects gathering speed, six earned tool ranks add bounded speed/yield, targeted resources and escalating costs. Axe/pick/rod retain their existing slots. Hammers occupy a separate artisan selection rather than displacing combat or gathering equipment.
+4. Add source-specific rare equipment pools for elite/guardian enemies, diverse secondary material drops and a coherent set of new equipment/material/hammer/dungeon rewards. Use distinct equipment identities plus rolled quality/affixes for breadth, not thousands of identical database entries.
+5. Long expeditions: twelve unlockable routes with 1/2/4/8-hour journeys, explicit provisions/fees and equipment requirements, progressive supply caches and final rewards. The hero travels instead of running another work queue. Offline time follows the same simulation clock and 24h cap; recall keeps earned caches but forfeits final reward. Starting and claiming are atomic, results cannot be rerolled or claimed twice. Routes unlock from actual hunt victories and become harder with region progression.
+
+## Delivery sequence
+
+Generate roster sheets while inspecting integration points; implement persistent equipment/production and travel modules; integrate battle and compact UI; add focused save/command/offline checks and selected phone screenshots; export 0.51.0 APK, verify signing, document measured results/limits and commit. Art atlases are inspected, copied into project, and source prompts retained. No claim of exhaustive 120-enemy playtesting or final SSS quality.

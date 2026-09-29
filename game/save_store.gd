@@ -60,6 +60,7 @@ func valid(s, data: Dictionary) -> bool:
 	if s.has("hero") and not RealmCharacters.valid(s.hero,s.xp): return false
 	if not RealmPaths.valid(s): return false
 	if not RealmMarches.valid(s,data): return false
+	if not RealmArtisan.valid(s,data) or not RealmVoyages.valid(s,data.items):return false
 	if not RealmFrontiers.valid(s): return false
 	if s.has("endgame") and not RealmEndgame.valid(s.endgame,data): return false
 	if s.has("assistant_queue") and not RealmAutomation.valid(s.assistant_queue,data): return false

@@ -5,7 +5,7 @@ func check(ok,label):
  else:print("PASS ",label)
 func _init():
  var m=RealmModel.new();var save=RealmSave.new()
- check(m.data.enemies.size()==120 and m.data.items.size()==598 and RealmCards.definitions().size()==120,"catalog counts")
+ check(m.data.enemies.size()==120 and m.data.items.size()==682 and RealmCards.definitions().size()==120,"catalog counts")
  check(RealmCharacters.ALL.size()==8 and RealmStory.CHAPTERS.size()==18 and RealmProgression.CONTRACTS.size()==60 and RealmLegacyFinds.GEAR.size()==24,"heroes story contracts masterworks")
  check(RealmChronicle.TALENTS.size()==18 and RealmRuneforge.RUNES.size()==12,"expanded build choices")
  var links=true

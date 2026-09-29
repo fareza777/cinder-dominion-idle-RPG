@@ -1,0 +1,318 @@
+{
+  "routes": [
+    {
+      "id": "journey_0",
+      "name": "Smuggler’s Catacombs",
+      "gate": "bellkeeper",
+      "hours": 1,
+      "level": 15,
+      "power": 18,
+      "fee": 100,
+      "food": "cooked_minnow",
+      "provisions": 12,
+      "material": "journey_material_0",
+      "gear": "journey_gear_0",
+      "art": 0,
+      "stages": [
+        "Find the entrance",
+        "Cross the outer chambers",
+        "Secure the inner vault",
+        "Defeat the vault keeper"
+      ]
+    },
+    {
+      "id": "journey_1",
+      "name": "Thornroot Warrens",
+      "gate": "wilds_5",
+      "hours": 1,
+      "level": 23,
+      "power": 35,
+      "fee": 500,
+      "food": "cooked_perch",
+      "provisions": 24,
+      "material": "journey_material_1",
+      "gear": "journey_gear_1",
+      "art": 1,
+      "stages": [
+        "Find the entrance",
+        "Cross the outer chambers",
+        "Secure the inner vault",
+        "Defeat the vault keeper"
+      ]
+    },
+    {
+      "id": "journey_2",
+      "name": "The Drowned Archive",
+      "gate": "marsh_5",
+      "hours": 2,
+      "level": 31,
+      "power": 50,
+      "fee": 2500,
+      "food": "cooked_perch",
+      "provisions": 36,
+      "material": "journey_material_2",
+      "gear": "journey_gear_2",
+      "art": 2,
+      "stages": [
+        "Find the entrance",
+        "Cross the outer chambers",
+        "Secure the inner vault",
+        "Defeat the vault keeper"
+      ]
+    },
+    {
+      "id": "journey_3",
+      "name": "The Bell Crypt",
+      "gate": "crown_5",
+      "hours": 2,
+      "level": 39,
+      "power": 70,
+      "fee": 10000,
+      "food": "cooked_steel_fish",
+      "provisions": 48,
+      "material": "journey_material_3",
+      "gear": "journey_gear_3",
+      "art": 3,
+      "stages": [
+        "Find the entrance",
+        "Cross the outer chambers",
+        "Secure the inner vault",
+        "Defeat the vault keeper"
+      ]
+    },
+    {
+      "id": "journey_4",
+      "name": "Forges Beneath",
+      "gate": "secret_2",
+      "hours": 2,
+      "level": 47,
+      "power": 95,
+      "fee": 25000,
+      "food": "cooked_moonsteel_fish",
+      "provisions": 60,
+      "material": "journey_material_4",
+      "gear": "journey_gear_4",
+      "art": 4,
+      "stages": [
+        "Find the entrance",
+        "Cross the outer chambers",
+        "Secure the inner vault",
+        "Defeat the vault keeper"
+      ]
+    },
+    {
+      "id": "journey_5",
+      "name": "The Unlit Treasury",
+      "gate": "secret_6",
+      "hours": 4,
+      "level": 55,
+      "power": 130,
+      "fee": 75000,
+      "food": "cooked_dusksteel_fish",
+      "provisions": 72,
+      "material": "journey_material_5",
+      "gear": "journey_gear_5",
+      "art": 5,
+      "stages": [
+        "Find the entrance",
+        "Cross the outer chambers",
+        "Secure the inner vault",
+        "Defeat the vault keeper"
+      ]
+    },
+    {
+      "id": "journey_6",
+      "name": "The Fallen Observatory",
+      "gate": "frontier_0_5",
+      "hours": 4,
+      "level": 63,
+      "power": 170,
+      "fee": 150000,
+      "food": "cooked_dawnsteel_fish",
+      "provisions": 84,
+      "material": "journey_material_6",
+      "gear": "journey_gear_6",
+      "art": 0,
+      "stages": [
+        "Find the entrance",
+        "Cross the outer chambers",
+        "Secure the inner vault",
+        "Defeat the vault keeper"
+      ]
+    },
+    {
+      "id": "journey_7",
+      "name": "The Iron Ossuary",
+      "gate": "frontier_1_5",
+      "hours": 4,
+      "level": 71,
+      "power": 210,
+      "fee": 300000,
+      "food": "cooked_dawnsteel_fish",
+      "provisions": 96,
+      "material": "journey_material_7",
+      "gear": "journey_gear_7",
+      "art": 1,
+      "stages": [
+        "Find the entrance",
+        "Cross the outer chambers",
+        "Secure the inner vault",
+        "Defeat the vault keeper"
+      ]
+    },
+    {
+      "id": "journey_8",
+      "name": "Rimeglass Vault",
+      "gate": "march_0_8",
+      "hours": 4,
+      "level": 79,
+      "power": 270,
+      "fee": 600000,
+      "food": "cooked_dawnsteel_fish",
+      "provisions": 108,
+      "material": "journey_material_8",
+      "gear": "journey_gear_8",
+      "art": 2,
+      "stages": [
+        "Find the entrance",
+        "Cross the outer chambers",
+        "Secure the inner vault",
+        "Defeat the vault keeper"
+      ]
+    },
+    {
+      "id": "journey_9",
+      "name": "The Living Crucible",
+      "gate": "march_2_8",
+      "hours": 8,
+      "level": 87,
+      "power": 350,
+      "fee": 1000000,
+      "food": "cooked_dawnsteel_fish",
+      "provisions": 120,
+      "material": "journey_material_9",
+      "gear": "journey_gear_9",
+      "art": 3,
+      "stages": [
+        "Find the entrance",
+        "Cross the outer chambers",
+        "Secure the inner vault",
+        "Defeat the vault keeper"
+      ]
+    },
+    {
+      "id": "journey_10",
+      "name": "The Gloam Labyrinth",
+      "gate": "march_4_8",
+      "hours": 8,
+      "level": 95,
+      "power": 430,
+      "fee": 2000000,
+      "food": "cooked_dawnsteel_fish",
+      "provisions": 132,
+      "material": "journey_material_10",
+      "gear": "journey_gear_10",
+      "art": 4,
+      "stages": [
+        "Find the entrance",
+        "Cross the outer chambers",
+        "Secure the inner vault",
+        "Defeat the vault keeper"
+      ]
+    },
+    {
+      "id": "journey_11",
+      "name": "The Starless Reliquary",
+      "gate": "march_5_8",
+      "hours": 8,
+      "level": 100,
+      "power": 510,
+      "fee": 4000000,
+      "food": "cooked_dawnsteel_fish",
+      "provisions": 144,
+      "material": "journey_material_11",
+      "gear": "journey_gear_11",
+      "art": 5,
+      "stages": [
+        "Find the entrance",
+        "Cross the outer chambers",
+        "Secure the inner vault",
+        "Defeat the vault keeper"
+      ]
+    }
+  ],
+  "elite_loot": {
+    "secret_0": [
+      "trophygear_0_edge",
+      "trophygear_0_ward",
+      "trophygear_0_seal",
+      "trophygear_0_chain"
+    ],
+    "secret_1": [
+      "trophygear_1_edge",
+      "trophygear_1_ward",
+      "trophygear_1_seal",
+      "trophygear_1_chain"
+    ],
+    "secret_2": [
+      "trophygear_2_edge",
+      "trophygear_2_ward",
+      "trophygear_2_seal",
+      "trophygear_2_chain"
+    ],
+    "secret_3": [
+      "trophygear_3_edge",
+      "trophygear_3_ward",
+      "trophygear_3_seal",
+      "trophygear_3_chain"
+    ],
+    "secret_4": [
+      "trophygear_4_edge",
+      "trophygear_4_ward",
+      "trophygear_4_seal",
+      "trophygear_4_chain"
+    ],
+    "secret_5": [
+      "trophygear_5_edge",
+      "trophygear_5_ward",
+      "trophygear_5_seal",
+      "trophygear_5_chain"
+    ],
+    "secret_6": [
+      "trophygear_6_edge",
+      "trophygear_6_ward",
+      "trophygear_6_seal",
+      "trophygear_6_chain"
+    ],
+    "march_guard_0": [
+      "trophygear_7_edge",
+      "trophygear_7_ward",
+      "trophygear_7_seal",
+      "trophygear_7_chain"
+    ],
+    "march_guard_1": [
+      "trophygear_8_edge",
+      "trophygear_8_ward",
+      "trophygear_8_seal",
+      "trophygear_8_chain"
+    ],
+    "march_guard_2": [
+      "trophygear_9_edge",
+      "trophygear_9_ward",
+      "trophygear_9_seal",
+      "trophygear_9_chain"
+    ],
+    "march_guard_3": [
+      "trophygear_10_edge",
+      "trophygear_10_ward",
+      "trophygear_10_seal",
+      "trophygear_10_chain"
+    ],
+    "march_guard_4": [
+      "trophygear_11_edge",
+      "trophygear_11_ward",
+      "trophygear_11_seal",
+      "trophygear_11_chain"
+    ]
+  }
+}

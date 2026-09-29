@@ -18,7 +18,7 @@ func workshop(uid: String = "", target: String = ""):
 	var g = m.gear(uid)
 	if g.is_empty():
 		v.add_child(U.para("Choose a piece to improve",26,U.TEXT))
-		v.add_child(U.para("Refine one piece at a time through Fine, Rare, Epic and Legendary. Each step is guaranteed. Equipped pieces appear first.",14))
+		v.add_child(U.para("Refine one piece at a time through Uncommon, Rare, Epic and Legendary. Refinement is guaranteed; Legendary requires the Blackstar Hammer. Equipped pieces appear first.",14))
 		var choices = m.s.gear.filter(func(item): return RealmWorkshop.eligible(m,item))
 		choices.sort_custom(func(a,b):
 			if (a.uid in m.s.equipped.values())!=(b.uid in m.s.equipped.values()): return a.uid in m.s.equipped.values()
@@ -64,6 +64,9 @@ Requires Smithing Lv.%d" % [int(price.gold),int(price.ingots),m.name_of(price.me
 	app.dynamic(materials,func(): return "Coins  %s / %s" % [RealmEconomy.money(int(m.s.gold)),RealmEconomy.money(int(price.gold))],16)
 	app.dynamic(materials,func(): return "%s  %d / %d" % [m.name_of(price.metal),m.count(price.metal),int(price.ingots)],16)
 	app.dynamic(materials,func(): return "Metal scraps  %d / %d" % [m.count("scrap"),int(price.scrap)],16)
+	if price.vault_material>0:
+		app.dynamic(materials,func():return "%s  %d / %d" % [m.name_of("journey_material_11"),m.count("journey_material_11"),price.vault_material],16)
+		materials.add_child(U.button("Explore dungeon journeys",func():preload("res://ui/voyages.gd").new(app).open()))
 	app.dynamic(materials,func(): return "Smithing  Lv.%d / %d" % [m.level("smithing"),int(price.level)],13,U.GOLD)
 	var copy_note = "Refines this piece." if g.count==1 else "Refines one of your %d copies; the rest keep their current quality." % int(g.count)
 	v.add_child(U.para(copy_note+" Equipped slots and saved builds follow the upgrade. Locks and favorites are preserved.",13))

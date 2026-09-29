@@ -465,7 +465,14 @@ func refresh():
 			rebuild_pending = true
 			call_deferred("refresh_objective_page")
 	else: last_objective = objective.key
-	if model.s.queue.is_empty():
+	if RealmVoyages.busy(model):
+		var a=model.s.voyages.active
+		activity_label.text=RealmVoyages.route(a.id).name
+		activity_sub.text="Journey · %d / 4 stages · %s left" % [a.stage,preload("res://ui/voyages.gd").new(self).time_text(int(a.due-model.s.time))]
+		activity_progress.max_value=1;activity_progress.value=float(model.s.time-a.started)/maxf(1,a.due-a.started)
+	elif not model.s.get("voyages",{}).get("ready",{}).is_empty():
+		activity_label.text="Journey complete";activity_sub.text="Open Queue to collect your cargo";activity_progress.value=1
+	elif model.s.queue.is_empty():
 		activity_label.text = tr2("Api menantikan langkahmu","No task running")
 		activity_sub.text = tr2("Pilih aktivitas · progres offline hingga 24 jam","Choose work or a hunt before you leave")
 		activity_progress.value = 0
@@ -761,6 +768,13 @@ func enqueue_activity(id: String, target: int, kind: String = "cycles", skip: bo
 
 func sources_dialog(id: String):
 	var v = modal(tr2("Sumber: ","Sources: ")+model.name_of(id))
+	var source=str(model.data.items[id].get("loot_source",""))
+	if source!="":
+		if RealmDiscovery.visible(model,source):v.add_child(U.button("Hunt "+model.local_name(model.data.enemies[source]),func():activity_dialog("hunt_"+source,1)))
+		else:v.add_child(U.para("An undiscovered guardian carries this treasure.",15))
+	for route in RealmVoyages.data().routes:
+		if id==route.material or id==route.gear:
+			v.add_child(U.button("Journey · "+route.name,func():preload("res://ui/voyages.gd").new(self).prepare(route.id)))
 	if id.begins_with("keepsake_"):
 		for enemy in model.data.enemies.values():
 			if enemy.get("rare_material","")==id: v.add_child(U.para("Used to craft masterwork equipment.",15,U.GOLD))
@@ -770,6 +784,7 @@ func sources_dialog(id: String):
 	if model.data.merchant.has(id): v.add_child(U.button(tr2("Beli di pedagang desa","Buy from the village merchant"),merchant_dialog))
 
 func queue_dialog():
+	if RealmVoyages.busy(model) or not model.s.get("voyages",{}).get("ready",{}).is_empty():preload("res://ui/voyages.gd").new(self).open();return
 	preload("res://ui/queue_review.gd").new(self).open()
 
 func merchant_dialog():

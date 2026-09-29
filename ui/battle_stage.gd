@@ -12,6 +12,7 @@ var faces: Array[Texture2D] = []
 var region_art: Dictionary = {}
 var current_enemy = ""
 var enemy_face: Texture2D
+const Actor=preload("res://ui/enemy_actor.gd")
 var enemy_background: Texture2D
 var floating: Array = []
 var impacts = {"hero":0.0,"enemy":0.0}
@@ -84,7 +85,7 @@ func _process(delta: float):
 	if id!="" and id!=current_enemy:
 		current_enemy = id
 		arrival = .65
-		enemy_face = U.enemy_texture(model.data.enemies[id])
+		Actor.frames(id)
 		enemy_background = U.atlas_tile("res://assets/art/ascension-places-0.25.png",int(model.data.enemies[id].place_tile),2,2) if model.data.enemies[id].has("place_tile") else null
 		if model.data.enemies[id].has("march"):enemy_background=U.atlas_tile("res://assets/art/march-places-0.50.png",int(model.data.enemies[id].march),3,2)
 		if model.data.enemies[id].has("frontier"): enemy_background = preload("res://ui/premium.gd").art(9+int(model.data.enemies[id].frontier))
@@ -165,33 +166,32 @@ func _draw():
 		if fighting:
 			var until = float(int(f.player_at if side==0 else f.enemy_at)-int(model.s.time))/1000.0
 			windup = clampf(1.0-until/.5,0,1)
-		if side==0 and model.s.settings.motion:
-			r.position.y += sin(elapsed*1.4+side*2)*1.2-evade*3
-			r.position.x += direction*(swing*15-windup*4-evade*11)
-			if hit: r.position.x -= direction*sin(clampf(impacts[target]/.4,0,1)*PI)*6
-			var center = r.get_center()
-			draw_set_transform(center,direction*(swing*.035-evade*.045),Vector2(1,1+sin(elapsed*1.4+side*2)*.006))
-			r.position -= center
-		if side==0 or fighting:
-			var pose_row = 0 if side==0 else -1
-			if pose_row>=0:
-				var frame = 3 if hit else ((2 if attacks[target]>.18 else 3) if attacks[target]>0 else (1 if windup>.4 else 0))
-				if not model.s.settings.motion: frame = 0
-				var pose_center = (left if side==0 else right).get_center()
-				if model.s.settings.motion: pose_center.x += direction*(swing*15-windup*4-evade*11)
-				draw_set_transform(pose_center,0,Vector2(1 if side==0 else -1,1))
-				var area = Rect2(-98,-90,196,180)
-				preload("res://ui/hero_combat.gd").draw(self,RealmCharacters.id(model),frame,area,Color(1,.72,.68) if hit else Color.WHITE)
-				draw_set_transform(Vector2.ZERO)
-			else:
-				draw_rect(r.grow(1),Color(U.LINE,.6))
-				var face = enemy_face if enemy_face!=null else faces[int(enemy.get("portrait",0))]
-				draw_face(face,r,Color.WHITE)
-		else:
-			draw_rect(r,U.INK)
-			caption(r.position+Vector2(0,80),"Awaiting hunt",U.MUTED,12,w)
-		if model.s.settings.motion: draw_set_transform(Vector2.ZERO)
-		r = left if side==0 else right
+		var moving=bool(model.s.settings.motion)
+		var recoil=sin(clampf(impacts[target]/.4,0,1)*PI)
+		var dimensions=Vector2(156,164)*float(Actor.definition(str(enemy.get("id",""))).get("scale",1))
+		dimensions*=minf(1.0,190.0/dimensions.y)
+		var anchor=Vector2(r.get_center().x,235)
+		if moving:
+			anchor.x+=direction*(swing*19-windup*5-evade*18-recoil*8)
+			anchor.y-=sin(elapsed*1.6+side)*1.4+evade*8+swing*3
+		if side==1:anchor.x=minf(anchor.x,size.x-16-dimensions.x/2)
+		# Ground shadow belongs to the actor, never to a rectangular portrait.
+		draw_set_transform(Vector2(r.get_center().x,233),0,Vector2(1,.19))
+		draw_circle(Vector2.ZERO,31 if side==0 else 31*float(Actor.definition(str(enemy.get("id",""))).get("scale",1)),Color(0,0,0,.24))
+		draw_set_transform(Vector2.ZERO)
+		var tilt=direction*(windup*.035-swing*.055+evade*.09+recoil*.035) if moving else 0.0
+		var stretch=Vector2(1+recoil*.025,1-recoil*.025) if moving else Vector2.ONE
+		draw_set_transform(anchor,tilt,stretch)
+		var tint=Color(1,.88,.81) if hit else Color.WHITE
+		if side==0:
+			var frame=3 if hit else ((2 if attacks[target]>.18 else 3) if attacks[target]>0 else (1 if windup>.4 else 0))
+			if not moving:frame=0
+			preload("res://ui/hero_combat.gd").draw(self,RealmCharacters.id(model),frame,Rect2(-98,-180,196,180),tint)
+		elif fighting:
+			var pose=1 if moving and attacks[target]>.08 else 0
+			Actor.draw(self,enemy.id,pose,Rect2(-dimensions.x/2,-dimensions.y,dimensions.x,dimensions.y),tint)
+		draw_set_transform(Vector2.ZERO)
+		r=left if side==0 else right
 		if recovery[target]>0:
 			var life = recovery[target]/.8
 			if model.s.settings.motion and effects_enabled:
@@ -243,7 +243,7 @@ func _draw():
 		caption(Vector2(0,228),cast_name.to_upper(),U.GOLD,12,size.x)
 	if fighting and enemy.boss and int(f.hits)%3==2:
 		var warning_alpha = .6+.2*sin(elapsed*4) if model.s.settings.motion else .7
-		draw_rect(right.grow(6),Color(U.RED,warning_alpha),false,2.0)
+		draw_arc(right.get_center()+Vector2(0,80),25,-PI*.9,-PI*.1,16,Color(U.RED,warning_alpha),1.4,true)
 		var charge = 1.0-clampf(float(int(f.enemy_at)-int(model.s.time))/float(enemy.interval),0,1)
 		bar(Rect2(right.position.x,39,w,3),charge,U.RED)
 	if fighting:
@@ -265,6 +265,10 @@ func _draw():
 		var lane = int(lanes[item.side])
 		lanes[item.side] += 1
 		var y = 158-(1.0-float(item.life))*24-lane*30 if model.s.settings.motion else 125.0-lane*30
-		draw_rect(Rect2(x,y-20,w,27),Color(0,0,0,.8))
 		var color = U.GREEN if str(item.text).begins_with("+") else (U.RED if item.side=="hero" else U.GOLD)
-		caption(Vector2(x,y),item.text,color,14,w)
+		if item.text=="MISS":color=Color("a8c5d5")
+		var font_size=mini(23,roundi((18 if str(item.text).begins_with("CRIT") else 15)*U.scale))
+		var visible_text=str(item.text)
+		while font_size>10 and visible_text.length()>1 and U.body_font.get_string_size(visible_text,HORIZONTAL_ALIGNMENT_LEFT,-1,font_size).x>w:font_size-=1
+		draw_string_outline(U.body_font,Vector2(x,y),visible_text,HORIZONTAL_ALIGNMENT_CENTER,w,font_size,3,Color(0,0,0,float(item.life)*.85))
+		draw_string(U.body_font,Vector2(x,y),visible_text,HORIZONTAL_ALIGNMENT_CENTER,w,font_size,Color(color,clampf(float(item.life)*1.5,0,1)))

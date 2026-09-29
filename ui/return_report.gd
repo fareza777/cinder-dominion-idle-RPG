@@ -17,7 +17,11 @@ func open(report: Dictionary):
 	if report.get("capped",false): v.add_child(U.para("24-hour offline limit reached.",14,U.GOLD))
 	var status = U.card(v,14)
 	var blocked = not m.s.queue.is_empty() and m.s.active.is_empty() and m.s.fight.is_empty()
-	if blocked:
+	if RealmVoyages.busy(m):
+		status.add_child(U.para("Journey underway",21,U.GOLD))
+	elif not m.s.get("voyages",{}).get("ready",{}).is_empty():
+		status.add_child(U.para("Journey rewards ready",21,U.GREEN))
+	elif blocked:
 		status.add_child(U.para("Queue blocked",21,U.GOLD))
 		status.add_child(U.para(m.requirement(m.s.queue[0].id),15))
 	elif not m.s.queue.is_empty():
@@ -25,6 +29,7 @@ func open(report: Dictionary):
 		status.add_child(U.para(m.activity_name(m.s.queue[0].id)+" · %d tasks remaining" % m.s.queue.size(),14))
 	else:
 		status.add_child(U.para("No tasks remaining",21,U.TEXT))
+	if RealmVoyages.busy(m) or not m.s.get("voyages",{}).get("ready",{}).is_empty():preload("res://ui/voyages.gd").new(app).home(v)
 	preload("res://ui/upgrade_goal.gd").new(app).home(v)
 	var rewards = U.card(v,14)
 	rewards.add_child(U.para("Results",20,U.TEXT))

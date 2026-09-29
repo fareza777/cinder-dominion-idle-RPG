@@ -4,7 +4,8 @@ const COLORS = {"frostbound":Color("9bc9d5"),"penitent":Color("c69774"),"duskbla
 const LABELS = {"frostbound":"RIME SPEAR","penitent":"IRON PENANCE","duskblade":"LAST LIGHT","warden":"IRON GUARD","ranger":"MARKED STRIKE","arcanist":"EMBER LANCE","reaver":"SUNDERING BLOW","apothecary":"FIELD REMEDY","balanced":"CLEAVE","guard":"WARD","reaver_style":"REND"}
 
 static func from_event(model, event: Dictionary) -> Dictionary:
-	if event.get("kind","hit")!="hit" or event.text in ["MISS","PHASE II"]: return {}
+	if event.text=="MISS":return {"class":RealmCharacters.id(model),"side":event.side,"skill":"evade","heal":false,"life":.4,"duration":.4,"critical":false}
+	if event.get("kind","hit")!="hit" or event.text=="PHASE II": return {}
 	var skill = str(event.get("skill",""))
 	# 'reaver' stance and class are disambiguated at the event source.
 	var heal = str(event.text).begins_with("+")
@@ -28,7 +29,28 @@ static func draw(canvas: CanvasItem, effect: Dictionary, left: Rect2, right: Rec
 	var center = left.get_center() if effect.side=="hero" else right.get_center()
 	var color = COLORS.get(effect["class"],Color("dfb977")) if effect.side=="enemy" or effect.skill in ["warden","apothecary"] else Color("b78379")
 	var skill = str(effect.skill)
-	if skill=="warden":
+	if skill=="evade":
+		for i in range(3):
+			var origin=center+Vector2(-20+i*13,20-i*8)
+			trail(canvas,PackedVector2Array([origin,origin+Vector2(12,-7),origin+Vector2(25,-9)]),Color("c6d2d7"),alpha*.35,1)
+		return
+	if skill=="frostbound":
+		var origin=left.get_center()+Vector2(25,10)
+		var tip=origin.lerp(center,minf(1,progress*3))
+		beam(canvas,origin,tip,color,alpha,2.2)
+		for i in range(5):
+			var ray=Vector2.from_angle(-2.4+i*.65)
+			beam(canvas,center+ray*(8+progress*18),center+ray*(17+progress*25),color,alpha,1)
+	elif skill=="penitent":
+		for i in range(3):
+			canvas.draw_arc(center,8+progress*35+i*4,-PI*.8,PI*.25,20,Color(color,alpha*(.5-i*.12)),1.6,true)
+	elif skill=="duskblade":
+		for i in range(2):
+			var points=PackedVector2Array()
+			for j in range(13):
+				var t=float(j)/12;points.append(center+Vector2(-32+t*64,(-24+t*48)*(1 if i==0 else -1)+sin(t*PI)*8))
+			trail(canvas,points,color,alpha*(1-i*.2),2)
+	elif skill=="warden":
 		# Short deflection glint along the guard side, followed by falling metal sparks.
 		var edge = center+Vector2(34,0)
 		trail(canvas,PackedVector2Array([edge+Vector2(-3,-27),edge+Vector2(4,0),edge+Vector2(-5,25)]),color,alpha,1.5)

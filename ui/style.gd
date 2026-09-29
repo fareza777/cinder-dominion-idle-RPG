@@ -283,6 +283,9 @@ static func icon(id: String, dimension: int = 52) -> TextureRect:
 	if data.has("enemy_art"):
 		t.texture=enemy_texture(enemy_catalog[data.enemy_art])
 		return t
+	if data.has("artisan_icon"):
+		t.texture=atlas_tile("res://assets/art/artisan-items-0.51.png",int(data.artisan_icon),6,8)
+		return t
 	if data.has("expansion_icon"):
 		t.texture=atlas_tile("res://assets/art/march-items-0.50.png",int(data.expansion_icon),6,8)
 		return t

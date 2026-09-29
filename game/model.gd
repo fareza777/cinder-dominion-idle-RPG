@@ -84,6 +84,8 @@ func stats() -> Dictionary:
 	st.attack = maxi(1,int(st.attack*float(style.attack)))
 	st.armor = maxi(0,int(st.armor)+int(style.armor)+int(progression().upgrades.ward))
 	RealmCharacters.apply_stats(self,st)
+	st.attack=maxi(1,int(st.attack*(1+RealmArtisan.bonus(self,"keen"))))
+	st.armor=maxi(0,int(st.armor*(1+RealmArtisan.bonus(self,"stalwart"))))
 	if RealmAfflictions.has(self,"hero","weaken"): st.attack = maxi(1,int(st.attack*.85))
 	if RealmAfflictions.has(self,"hero","armor_break"): st.armor = int(st.armor*.8)
 	return st
@@ -91,7 +93,7 @@ func stats() -> Dictionary:
 func protected(uid: String) -> bool:
 	var g = gear(uid)
 	if g.is_empty(): return true
-	if g.locked or g.favorite or s.get("gear_attunements",{}).has(uid) or uid in s.equipped.values() or s.get("card_sockets",{}).has(uid): return true
+	if g.locked or g.favorite or int(g.get("tool_rank",0))>0 or s.get("gear_attunements",{}).has(uid) or uid in s.equipped.values() or s.get("card_sockets",{}).has(uid): return true
 	for slots in s.presets.values():
 		if uid in slots.values(): return true
 	for build in RealmLoadouts.state(self).values():
@@ -100,7 +102,7 @@ func protected(uid: String) -> bool:
 
 func add_gear(id: String, quality: int, unique: bool = false) -> String:
 	for g in s.gear:
-		if not unique and not s.get("card_sockets",{}).has(g.uid) and not s.get("gear_attunements",{}).has(g.uid) and data.items[id].slot != "ring" and g.id == id and int(g.q) == quality:
+		if not unique and not RealmArtisan.has_traits(g) and not s.get("card_sockets",{}).has(g.uid) and not s.get("gear_attunements",{}).has(g.uid) and data.items[id].slot != "ring" and g.id == id and int(g.q) == quality:
 			g.count += 1
 			return g.uid
 	var uid = "eq_%d" % int(s.next_uid)
@@ -148,6 +150,7 @@ func requirement(aid: String) -> String:
 		if locked!="": return locked
 		if s.hp<=0: return "Recover HP outside combat before hunting"
 	else:
+		if a.has("artisan_source") and s.kills.get(a.artisan_source,0)<1:return "Defeat "+local_name(data.enemies[a.artisan_source])+" to learn this recipe."
 		var blueprint_reason=RealmBlueprints.reason(self,a)
 		if blueprint_reason!="": return blueprint_reason
 		if level(a.skill)<int(a.level): return "%s Lv.%d" % [local_name(data.skills[a.skill]),int(a.level)]
@@ -162,7 +165,14 @@ func command(cmd: Dictionary) -> bool:
 	var action = str(cmd.get("type",""))
 	var id = str(cmd.get("id",""))
 	if action in ["queue","clear","cancel","finish_hunt","work_order"]: RealmAutomation.stop(self,"Manual control. Enable rewarded assistance again when ready.")
+	if RealmVoyages.busy(self) and action in ["queue","clear","cancel","finish_hunt","work_order","training","equip","refine","preset_load","loadout_load","rune_equip","gear_attune","artisan_select","tool_upgrade","end_temper","end_depth","assist_start"]:return fail("Your hero is on a journey. Return or recall the expedition first.")
 	match action:
+		"voyage_start","voyage_recall","voyage_claim":
+			var why=RealmVoyages.command(self,cmd)
+			if why!="":return fail(why)
+		"artisan_select","tool_upgrade":
+			var why=RealmArtisan.command(self,cmd)
+			if why!="":return fail(why)
 		"frontier_claim":
 			var why = RealmFrontiers.claim(self,int(cmd.get("region",-1)),int(cmd.get("stage",-1)))
 			if why!="": return fail(why)
@@ -391,11 +401,12 @@ func duration(a: Dictionary) -> int:
 	if not g.is_empty(): discount = float(data.items[g.id].get("speed",0))
 	discount += minf(.1,floor(float(s.mastery.get(a.id,0))/100.0)*.01)
 	discount += int(progression().upgrades.forge)*.05
-	return maxi(200,int(float(a.duration)*1000*(1-minf(.45,discount))))
+	# Tool improvements remain useful after the stronghold/mastery speed cap.
+	return maxi(200,int(float(a.duration)*1000*(1-minf(.45,discount))*(1-minf(.20,RealmArtisan.tool_speed(g)))))
 
 func gear_score(g: Dictionary) -> float:
 	var d = data.items[g.id]
-	return (float(d.get("attack",0))+float(d.get("armor",0)))*QUALITY[int(g.q)]+float(d.get("speed",0))*100
+	return (float(d.get("attack",0))+float(d.get("armor",0)))*QUALITY[int(g.q)]+(float(d.get("speed",0))+RealmArtisan.tool_speed(g))*100
 
 func encounter_advice(id: String) -> String:
 	var f = RealmCombat.forecast(self,id)
@@ -407,6 +418,7 @@ func step_complete(step: Dictionary) -> bool:
 	return int(step.output if step.kind=="output" else step.done)>=int(step.target)
 
 func start_next():
+	if RealmVoyages.busy(self):return
 	if not s.active.is_empty() or not s.fight.is_empty(): return
 	while not s.queue.is_empty() and step_complete(s.queue[0]): s.queue.pop_front()
 	if s.queue.is_empty(): RealmAutomation.next(self)
@@ -452,8 +464,10 @@ func advance(ms: int, budget_usec: int = 0) -> int:
 			if s.fight.has("effects"): due = mini(due,int(s.fight.effects.next))
 		else:
 			if s.hp<100: due = mini(due,maxi(int(s.regen_at),int(s.time)))
+		due=mini(due,RealmVoyages.next_event(self))
 		if due>target: break
 		s.time = due
+		RealmVoyages.tick(self)
 		if not s.fight.is_empty(): resolve_combat()
 		else:
 			if s.hp<100 and s.regen_at<=s.time:
@@ -472,13 +486,15 @@ func quality_roll() -> int:
 func finish_production():
 	var a = data.activities[s.active.id]
 	var previous_level = level(a.skill)
-	var q = quality_roll() if data.items[a.output].category=="equipment" else 1
+	var q = RealmArtisan.craft_quality(self) if data.items[a.output].category=="equipment" else 1
 	if a.output.begins_with("relic_"): q = 1
 	if a.has("fixed_quality"): q = int(a.fixed_quality)
 	var completed = int(s.mastery.get(a.id,0))+1
 	var bonus = data.items[a.output].category in ["food","material"] and not a.has("blueprint") and ((completed>=1000 and completed%5==0) or (completed>=250 and completed%10==0))
-	var produced = 2 if bonus else 1
-	gain(a.output,produced,q)
+	var produced = (2 if bonus else 1)+RealmArtisan.extra_yield(self,a)
+	if data.items[a.output].category=="equipment":
+		last_forged=RealmArtisan.award(self,a.output,q,not a.has("fixed_quality") and not a.output.begins_with("relic_"))
+	else:gain(a.output,produced,q)
 	if a.side!="" and rng.randf()<.2: gain(a.side,1)
 	s.xp[a.skill] = int(s.xp[a.skill])+int(a.xp)
 	if level(a.skill)>previous_level: note("%s reached level %d. Check Skills for new recipes and resources." % [local_name(data.skills[a.skill]),level(a.skill)])
@@ -645,6 +661,7 @@ func win(enemy: Dictionary):
 		gain("copper_sword",1,3)
 		RealmHunts.equipment(self,"copper_sword",3)
 		note("The bells fall silent. Cinderwatch burns bright again.")
+	RealmSpoils.victory(self,enemy)
 	var card_drop = RealmCards.drop(self,id)
 	if card_drop!="": last_reward += " · CARD FOUND: "+name_of(card_drop)
 	var blueprint_drop = RealmBlueprints.drop(self,id)

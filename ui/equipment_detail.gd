@@ -28,6 +28,9 @@ func open(uid: String, requested_slot: String = ""):
 	title.add_child(U.para(m.data.rarities[int(item.q)],23,U.QUALITY[int(item.q)]))
 	title.add_child(U.para(RealmEquipmentSlots.NAMES.get(slot,slot)+" · %d owned" % int(item.count),14))
 	title.add_child(U.para("Equipped" if comparison.equipped else ("Worn on other hand — equipping moves this ring" if uid in m.s.equipped.values() else "In your bag"),13,U.GOLD))
+	for affix in item.get("affixes",[]):
+		hero.add_child(U.para(RealmArtisan.AFFIXES[affix].name+" · "+RealmArtisan.AFFIXES[affix].detail,14,U.GOLD))
+	if data.slot in RealmArtisan.TOOLS:v.add_child(U.button("Improve tool · Rank %d / 6" % item.get("tool_rank",0),func():preload("res://ui/artisan.gd").new(app).upgrade(uid)))
 	if data.has("unique_effect"):
 		hero.add_child(U.para("Unique effect · "+data.unique_effect,15,U.GOLD))
 		if item.id in RealmLegacyFinds.GEAR: hero.add_child(U.button("Masterwork blueprints",func(): preload("res://ui/masterworks.gd").new(app).open()))
@@ -42,7 +45,7 @@ func open(uid: String, requested_slot: String = ""):
 	changes.add_child(U.para("Your build with this item",21,U.TEXT))
 	if comparison.has("activity"):
 		changes.add_child(U.para("%s\n%.2fs → %.2fs per cycle" % [m.activity_name(comparison.activity),comparison.seconds_before,comparison.seconds_after],18,U.TEXT))
-		changes.add_child(U.para("Includes current mastery and stronghold bonuses. Tool speed is fixed by tool type; rarity does not increase it.",13))
+		changes.add_child(U.para("Includes rarity, tool rank, traits, mastery and stronghold bonuses. Tool improvements shorten the remaining cycle, even at maximum stronghold speed.",13))
 	else:
 		for stat in ["attack","armor"]:
 			var before = float(comparison.before[stat])

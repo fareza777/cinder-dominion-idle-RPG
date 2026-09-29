@@ -25,9 +25,15 @@ func village(parent: Node):
 	U.scenic(parent,page_art(0),"YOUR STRONGHOLD","Cinderwatch",180)
 	preload("res://ui/chronicle.gd").new(app).home(parent)
 	preload("res://ui/upgrade_goal.gd").new(app).home(parent)
+	preload("res://ui/voyages.gd").new(app).home(parent)
 	preload("res://ui/chronicle.gd").new(app).services(parent)
 
 func explore(parent: Node):
+	if RealmVoyages.busy(m):
+		heading(parent,"EXPEDITION","On the road","")
+		preload("res://ui/voyages.gd").new(app).home(parent)
+		parent.add_child(U.para("Your hero is exploring distant chambers. Review the journey to follow each stage or recall early.",16))
+		return
 	var region = m.data.enemies.get(m.s.fight.get("enemy",""),{}).get("region","")
 	var current_enemy = m.data.enemies.get(m.s.fight.get("enemy",""),{})
 	if current_enemy.has("frontier"): heading(parent,"LATE-GAME FRONTIER",RealmFrontiers.REGIONS[int(current_enemy.frontier)],"")
@@ -116,12 +122,15 @@ func explore(parent: Node):
 		else:
 			card.add_child(U.button(text("Tantang boss" if d.boss else "Buru & kumpulkan loot","Challenge boss" if d.boss else "Hunt & gather loot"),func(): app.activity_dialog("hunt_"+id),true))
 
+	preload("res://ui/voyages.gd").new(app).home(parent)
 	parent.add_child(U.button("Wallet & hunting rewards",func(): preload("res://ui/economy.gd").new(app).open()))
 	if m.s.beacon: parent.add_child(U.button("The Far Marches",func(): preload("res://ui/marches.gd").new(app).open()))
 	if m.s.beacon: parent.add_child(U.button("Beyond the Sovereign",func(): preload("res://ui/frontiers.gd").new(app).open()))
 
 func skills(parent: Node):
 	heading(parent,"","Professions")
+	parent.add_child(U.button("Artisan tools & crafting quality",func():preload("res://ui/artisan.gd").new(app).open()))
+	parent.add_child(U.button("Improve gathering tools",func():preload("res://ui/artisan.gd").new(app).tools()))
 	parent.add_child(U.button("Gear paths · level 25–100",func(): preload("res://ui/ascension.gd").new(app).open()))
 	preload("res://ui/training.gd").new(app).home(parent)
 	if app.skill=="":
@@ -287,6 +296,8 @@ func inventory(parent: Node):
 		for g in gear_list.slice(app.inventory_page*30,(app.inventory_page+1)*30):
 			shown += 1
 			var tags = m.data.rarities[int(g.q)]
+			if not g.get("affixes",[]).is_empty():tags+=" · "+RealmArtisan.AFFIXES[g.affixes[0]].name
+			if g.get("tool_rank",0)>0:tags+=" · Tool %d" % g.tool_rank
 			if g.uid in m.s.equipped.values(): tags += " · Equipped"
 			if g.locked: tags += " · Locked"
 			P.item_tile(gear_grid,g.id,m.name_of(g.id),tags+" · ×%d" % int(g.count),U.QUALITY[int(g.q)],func(): app.item_dialog(g.uid))

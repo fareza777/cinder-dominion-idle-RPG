@@ -12,6 +12,7 @@ var frame = 0
 var clock = 0.0
 var running = false
 var combat = false
+var travelling=false
 var character_id = "unset"
 
 func _ready():
@@ -45,12 +46,15 @@ func load_character():
 func _process(delta):
 	if model==null: return
 	if character_id!=RealmCharacters.id(model): load_character()
+	travelling=RealmVoyages.busy(model)
+	if travelling:
+		visible=true;clock+=delta;activity_id="journey";queue_redraw();return
 	visible = not model.s.queue.is_empty()
 	if not visible: return
 	var step = model.s.queue[0]
 	var activity = model.data.activities[step.id]
 	combat = activity.kind=="combat"
-	if activity_id!=step.id and combat: enemy_art = U.enemy_texture(model.data.enemies[activity.enemy])
+	if activity_id!=step.id and combat: enemy_art = preload("res://ui/enemy_actor.gd").frames(activity.enemy)[0]
 	activity_id = step.id
 	skill_index = maxi(0,SKILLS.find(activity.skill))
 	running = not model.s.fight.is_empty() if combat else not model.s.active.is_empty()
@@ -70,8 +74,12 @@ func _process(delta):
 func _draw():
 	if frames.is_empty() or activity_id=="": return
 	var area = Rect2(Vector2.ZERO,size)
+	if travelling:
+		draw_line(Vector2(0,size.y-5),Vector2(size.x,size.y-5),Color(U.GOLD,.4),1,true)
+		var hop=sin(clock*4)*1.5 if model.s.settings.motion else 0.0
+		preload("res://ui/hero_combat.gd").draw(self,character_id,0,Rect2(2,hop,size.x-4,size.y-4))
+		return
 	if combat:
-		draw_rect(area,Color("152029"))
 		if enemy_art!=null: draw_texture_rect(enemy_art,Rect2(size.x*.52,2,size.x*.46,size.y-4),false,Color(.8,.8,.8))
 		preload("res://ui/hero_combat.gd").draw(self,character_id,frame,Rect2(-6,3,size.x*.72,size.y-6))
 		if frame==2: draw_line(Vector2(size.x*.4,15),Vector2(size.x*.70,38),U.GOLD,2,true)
