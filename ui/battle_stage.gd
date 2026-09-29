@@ -169,24 +169,25 @@ func _draw():
 		var moving=bool(model.s.settings.motion)
 		var recoil=sin(clampf(impacts[target]/.4,0,1)*PI)
 		var dimensions=Vector2(156,164)*float(Actor.definition(str(enemy.get("id",""))).get("scale",1))
-		dimensions*=minf(1.0,190.0/dimensions.y)
-		var anchor=Vector2(r.get_center().x,235)
+		dimensions*=minf(1.0,184.0/dimensions.y)
+		var anchor=Vector2(r.get_center().x,231)
 		if moving:
 			anchor.x+=direction*(swing*19-windup*5-evade*18-recoil*8)
-			anchor.y-=sin(elapsed*1.6+side)*1.4+evade*8+swing*3
-		if side==1:anchor.x=minf(anchor.x,size.x-16-dimensions.x/2)
+			anchor.y-=evade*5
+		var half_width=79.0 if side==0 else dimensions.x/2
+		anchor.x=clampf(anchor.x,8+half_width,size.x-8-half_width)
 		# Ground shadow belongs to the actor, never to a rectangular portrait.
-		draw_set_transform(Vector2(r.get_center().x,233),0,Vector2(1,.19))
+		draw_set_transform(Vector2(anchor.x,233),0,Vector2(1,.19))
 		draw_circle(Vector2.ZERO,31 if side==0 else 31*float(Actor.definition(str(enemy.get("id",""))).get("scale",1)),Color(0,0,0,.24))
 		draw_set_transform(Vector2.ZERO)
-		var tilt=direction*(windup*.035-swing*.055+evade*.09+recoil*.035) if moving else 0.0
+		var tilt=direction*(windup*.02-swing*.03+evade*.035+recoil*.02) if moving else 0.0
 		var stretch=Vector2(1+recoil*.025,1-recoil*.025) if moving else Vector2.ONE
 		draw_set_transform(anchor,tilt,stretch)
 		var tint=Color(1,.88,.81) if hit else Color.WHITE
 		if side==0:
 			var frame=3 if hit else ((2 if attacks[target]>.18 else 3) if attacks[target]>0 else (1 if windup>.4 else 0))
 			if not moving:frame=0
-			preload("res://ui/hero_combat.gd").draw(self,RealmCharacters.id(model),frame,Rect2(-98,-180,196,180),tint)
+			preload("res://ui/hero_combat.gd").draw_grounded(self,RealmCharacters.id(model),frame,Rect2(-98,-180,196,180),tint)
 		elif fighting:
 			var pose=1 if moving and attacks[target]>.08 else 0
 			Actor.draw(self,enemy.id,pose,Rect2(-dimensions.x/2,-dimensions.y,dimensions.x,dimensions.y),tint)

@@ -30,6 +30,21 @@ static func frame(model) -> int:
 	return 0
 
 static var sheet: Texture2D
+static var measured={}
+
+static func draw_grounded(canvas: CanvasItem,character: String,index: int,area: Rect2,tint: Color = Color.WHITE):
+	if character not in ROWS and character not in ["frostbound","penitent","duskblade"]:
+		draw(canvas,character,index,area,tint)
+		return
+	if measured.is_empty():measured=JSON.parse_string(FileAccess.get_file_as_string("res://data/hero_frame_bounds.json"))
+	var march=character in ["frostbound","penitent","duskblade"]
+	var row=["frostbound","penitent","duskblade"].find(character) if march else int(ROWS[character])
+	var data=measured["march" if march else "original"].slice(row*4,row*4+4)
+	var texture=U.asset("res://assets/art/march-combat-0.50.png" if march else "res://assets/art/hero-combat-0.37.png")
+	var cell_height=texture.get_height()/float(3 if march else 5)
+	var bottom=float(data[index].rect[1]+data[index].rect[3]-2)-row*cell_height
+	area.position.y+=area.size.y*(1.0-bottom/cell_height)
+	draw(canvas,character,index,area,tint)
 
 static func draw(canvas: CanvasItem, character: String, index: int, area: Rect2, tint: Color = Color.WHITE):
 	if character in ["frostbound","penitent","duskblade"]:

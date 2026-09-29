@@ -80,8 +80,8 @@ func _draw():
 		preload("res://ui/hero_combat.gd").draw(self,character_id,0,Rect2(2,hop,size.x-4,size.y-4))
 		return
 	if combat:
-		if enemy_art!=null: draw_texture_rect(enemy_art,Rect2(size.x*.52,2,size.x*.46,size.y-4),false,Color(.8,.8,.8))
-		preload("res://ui/hero_combat.gd").draw(self,character_id,frame,Rect2(-6,3,size.x*.72,size.y-6))
+		if enemy_art!=null: preload("res://ui/enemy_actor.gd").draw(self,model.data.activities[activity_id].enemy,1 if frame==3 else 0,Rect2(size.x*.52,2,size.x*.46,size.y-4),Color(.8,.8,.8))
+		preload("res://ui/hero_combat.gd").draw_grounded(self,character_id,frame,Rect2(-6,3,size.x*.72,size.y-5))
 		if frame==2: draw_line(Vector2(size.x*.4,15),Vector2(size.x*.70,38),U.GOLD,2,true)
 	else:
 		var texture = frames[skill_index*4+frame]

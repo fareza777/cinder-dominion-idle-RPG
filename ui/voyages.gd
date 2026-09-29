@@ -10,11 +10,11 @@ func home(parent):
  var active=m.s.get("voyages",{}).get("active",{})
  var ready=m.s.get("voyages",{}).get("ready",{})
  if active.is_empty() and ready.is_empty():
-  parent.add_child(U.button("Dungeon journeys · 1–8 hours",open));return
+  parent.add_child(U.button("Dungeon journeys · 1–8 hours",func():open()));return
  var c=U.card(parent,12);var a=active if not active.is_empty() else ready
  c.add_child(U.para(RealmVoyages.route(a.id).name,21,U.GOLD))
  app.dynamic(c,func():return "Rewards ready to collect" if not RealmVoyages.busy(m) else "%s remaining · %d / 4 stages" % [time_text(int(m.s.voyages.active.due-m.s.time)),m.s.voyages.active.stage],15)
- c.add_child(U.button("Review journey",open,true))
+ c.add_child(U.button("Review journey",func():open(),true))
 func open(page: int = 0):
  var v=app.modal("Dungeon journeys");var s=RealmVoyages.state(m)
  if not s.ready.is_empty():
@@ -55,7 +55,7 @@ func underway(v,a: Dictionary):
  v.add_child(U.button("Recall journey…",func():
   var prompt=app.modal("Recall this journey?")
   prompt.add_child(U.para("Return with completed caches. You will lose the final vault reward, and provisions and travel fees will not be refunded.",16))
-  prompt.add_child(U.button("Keep travelling",open))
+  prompt.add_child(U.button("Keep travelling",func():open()))
   prompt.add_child(U.button("Recall hero",func():
    if app.send({"type":"voyage_recall"}):open()))))
  var ref=weakref(v)
