@@ -123,6 +123,11 @@ func failed(format: String,token: int):
 
 func sync_banner():
  var allowed=banner!=null and banner_loaded and banner_wanted and banner_allowed()
+ var native_margin=0
+ if OS.get_name()=="Android":
+  # Wait for the native bridge to position the hidden banner before showing it.
+  native_margin=Engine.get_singleton("BannerSafe").get_bottom_margin_pixels() if Engine.has_singleton("BannerSafe") else -1
+  allowed=allowed and native_margin>=0
  if banner!=null and banner_shown!=allowed:
   banner_shown=allowed
   if allowed:banner.show()
@@ -131,9 +136,14 @@ func sync_banner():
   app.banner_space.visible=allowed
   if allowed:
    var ratio=app.size.y/maxf(1,DisplayServer.window_get_size().y)
-   app.banner_space.custom_minimum_size.y=maxf(58,banner_height*ratio+14)
+   var safe=app.get_node_or_null("SafeArea")
+   var shell_bottom=safe.get_theme_constant("margin_bottom") if safe!=null else 0
+   app.banner_space.custom_minimum_size.y=banner_reservation(banner_height,native_margin,ratio,shell_bottom)
  if banner!=null and abs(DisplayServer.window_get_size().x-banner_width)>8:
   slots.banner.token+=1;slots.banner.loading=false;destroy_banner()
+
+static func banner_reservation(height: float,bottom: float,ratio: float,shell_bottom: float) -> float:
+ return maxf(58,height*ratio+maxf(0,bottom*ratio-shell_bottom)+14)
 
 func destroy_banner():
  if banner!=null:banner.destroy()

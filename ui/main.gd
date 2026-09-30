@@ -289,6 +289,7 @@ func build_shell():
 	floor_art.set_anchors_and_offsets_preset(Control.PRESET_FULL_RECT)
 	add_child(floor_art)
 	var margin = MarginContainer.new()
+	margin.name = "SafeArea"
 	margin.set_anchors_and_offsets_preset(Control.PRESET_FULL_RECT)
 	if OS.get_name()=="Android":
 		var safe = DisplayServer.get_display_safe_area()

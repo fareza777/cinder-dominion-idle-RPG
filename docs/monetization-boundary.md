@@ -23,3 +23,7 @@ Vendored Poing Studios Godot AdMob 5.1.0 and its native AARs remain unchanged. M
 Live rollout still requires real App/unit IDs, appropriate UMP consent/privacy-choice implementation, audience/account configuration, Play disclosures, and native device verification. This preview does not implement a production consent flow. No physical Android device was connected during this iteration: native serving, tap separation, lifecycle callbacks and native sound behavior need on-device verification. No production readiness or revenue optimization claim.
 
 References checked against official Google documentation: [adaptive banners](https://developers.google.com/admob/android/banner), [interstitial transitions](https://developers.google.com/admob/android/interstitial), [rewarded callbacks](https://developers.google.com/admob/android/rewarded), [rewarded opt-in](https://support.google.com/admob/answer/7313578?hl=en-GB). Plugin source: https://github.com/poingstudios/godot-admob-plugin/releases/tag/v5.1.0.
+
+## 0.55.1 navigation clearance
+
+A project-owned Android bridge now places the banner above stable navigation/gesture insets with8dp separation and synchronizes reserved game space. It does not change SDK binaries, requests or rewards. See addons/banner_safe/README.md and docs/qa/banner-safe-0.55.1-report.md. Native device confirmation remains pending.

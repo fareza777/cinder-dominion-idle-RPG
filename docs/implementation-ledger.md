@@ -316,3 +316,10 @@ User confirmed test ads because production IDs are unavailable. Replaced diagnos
 Local pacing persists separately from campaign saves. Campaign IDs and bounded receipts defend against duplicate callbacks/new-save grants and survive legitimate offline dictionary replacement. Fullscreen ads block game input and pause game audio, then recover progress without replacing the reward panel. Official Google demo IDs enforced; production remains blocked. No remote telemetry, billing, paid service activation or publishing.
 
 33 focused ad checks and83 essentials passed. Real pointer reward/no-fill/assistance/Journey-link flows and six phone captures (including130% text) reviewed. Native callbacks simulated only: no connected Android device, so native serving/banner layout/lifecycle/audio remain unverified. Existing11-object/five-resource harness shutdown warnings remain. Version0.55.0/code57; verified signed debug APK. Scope, package hash and remaining live-rollout requirements in docs/qa/admob-0.55-report.md and docs/monetization-boundary.md.
+
+
+## 0.55.1 — Android banner navigation clearance
+
+Fixed the reported native-navigation overlap at the Android layout layer. A small project-owned bridge reads stable/gesture navigation insets and cutouts, adds8dp separation, subtracts parent-consumed insets and updates before drawing. Godot reserves the same native clearance and waits until the hidden banner has been positioned. Source/build tooling/binary tracked; no change to SDK binaries, ad IDs, pacing, rewards or saves.
+
+Six native geometry checks and35 focused service checks passed. Two narrow-phone simulated layout captures reviewed, with actual Hero pointer navigation and130% text. No physical Android device was connected, so native serving/navigation behavior remains unverified. Debug0.55.1/code58; package and limitations in docs/qa/banner-safe-0.55.1-report.md.

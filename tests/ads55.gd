@@ -41,6 +41,8 @@ class FakeAd extends RefCounted:
  func destroy():destroyed=true
 func _init():call_deferred("run")
 func run():
+ check(is_equal_approx(TestService.banner_reservation(180,168,0.4,0),153.2),"navigation-safe banner reserves native clearance")
+ check(is_equal_approx(TestService.banner_reservation(180,168,0.4,57.6),95.6),"shell safe area is not counted twice")
  var config=JSON.parse_string(FileAccess.get_file_as_string("res://data/ads.json"));var now=1790000000000
  var p=MemoryPolicy.new(config)
  check(not p.interstitial_allowed(now),"first ten active minutes remain ad-free")
