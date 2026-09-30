@@ -81,3 +81,7 @@ func open(selected: int = 0):
 		button.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
 		v.add_child(button)
 	app.modal_action("Plan this hunt again",func(): app.hunt_plan_dialog(str(report.enemy)))
+	v.add_child(U.button("Return to Stronghold",func():
+		app.dismiss();app.set_page("village")
+		if selected==0 and report.result=="Completed" and int(report.wins)>=3:
+			app.ensure_ads();app.ads.natural_break("hunt","%s:%d:%d" % [report.enemy,report.started,report.ended],int(report.ended-report.started))))

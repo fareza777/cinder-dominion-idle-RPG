@@ -33,8 +33,9 @@ func _ready():
 
 func _process(delta: float):
 	if app==null: return
-	for voice in voices: voice.stream_paused = app.paused
-	if app.paused: return
+	var silence=app.paused or (is_instance_valid(app.ads) and app.ads.full_screen)
+	for voice in voices: voice.stream_paused = silence
+	if silence: return
 	var target = "hearth"
 	if app.mode=="play" and not app.model.s.fight.is_empty():
 		var region = app.model.data.enemies[app.model.s.fight.enemy].get("region","wilds")

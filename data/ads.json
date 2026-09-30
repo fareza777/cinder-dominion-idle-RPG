@@ -1,8 +1,18 @@
 {
   "test_mode": true,
-  "banner": "ca-app-pub-3940256099942544/6300978111",
+  "app_id": "ca-app-pub-3940256099942544~3347511713",
+  "banner": "ca-app-pub-3940256099942544/9214589741",
   "interstitial": "ca-app-pub-3940256099942544/1033173712",
   "rewarded": "ca-app-pub-3940256099942544/5224354917",
   "interstitial_cooldown_seconds": 900,
-  "reward_meals": 5
+  "first_interstitial_seconds": 600,
+  "interstitial_session_cap": 3,
+  "interstitial_daily_cap": 6,
+  "banner_start_seconds": 60,
+  "banner_pages": ["village", "skills", "inventory", "character"],
+  "cache_seconds": 2700,
+  "request_timeout_seconds": 45,
+  "reward_cooldown_seconds": 90,
+  "reward_daily_caps": {"meals": 3, "automation": 3},
+  "reward_meals": 15
 }

@@ -97,6 +97,7 @@ func _ready():
 	add_child(effect)
 	for i in range(3): effect.add_child(AudioStreamPlayer.new())
 	ensure_coach()
+	ensure_ads()
 	experience.splash()
 
 func tr2(_id_text: String, en_text: String) -> String:
@@ -133,7 +134,7 @@ func _notification(what):
 		if mode=="play":
 			var report = await recover_progress()
 			persist()
-			if report.elapsed>30000: offline_dialog(report)
+			if report.elapsed>30000 and not (is_instance_valid(ads) and (ads.full_screen or Time.get_ticks_msec()<ads.quiet_resume_until)): offline_dialog(report)
 	elif what==NOTIFICATION_WM_CLOSE_REQUEST:
 		persist()
 		get_tree().quit()
@@ -142,6 +143,7 @@ func _notification(what):
 		call_deferred("navigate_back")
 
 func navigate_back():
+	if is_instance_valid(ads) and ads.full_screen:return
 	if recovering: return
 	var ticks = Time.get_ticks_msec()
 	if ticks-last_back_ms<300: return
@@ -416,6 +418,7 @@ func set_page(next: String, retain_scroll: bool = false):
 	var return_scroll = old_scroll if retain_scroll else int(page_scroll.get(key,0))
 	rendered_page_key = key
 	page = next
+	if is_instance_valid(ads):ads.sync_banner()
 	update_callbacks.clear()
 	for child in body.get_children():
 		body.remove_child(child)
@@ -536,6 +539,7 @@ func toast(text: String):
 		if is_instance_valid(toast_label) and toast_label.text==expected: toast_label.hide())
 
 func play_cue(name: String):
+	if is_instance_valid(ads) and ads.full_screen:return
 	if not is_instance_valid(effect) or paused or float(model.s.settings.sfx)<=0: return
 	var path = "res://assets/audio/"+name+".wav"
 	if not ResourceLoader.exists(path): path = "res://assets/audio/action.wav"
@@ -564,6 +568,7 @@ func modal(title: String, dim_background: bool = true) -> VBoxContainer:
 	dialog.set_anchors_and_offsets_preset(Control.PRESET_FULL_RECT)
 	dialog.z_index = 10
 	add_child(dialog)
+	if is_instance_valid(ads):ads.sync_banner()
 	var shade = ColorRect.new()
 	shade.color = Color(0,0,0,0 if not dim_background or model.s.experience.get("coach_active",false) else .78)
 	shade.set_anchors_and_offsets_preset(Control.PRESET_FULL_RECT)

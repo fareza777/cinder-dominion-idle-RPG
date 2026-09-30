@@ -6,16 +6,7 @@ func check(value: bool, label: String):
 	if value: passed += 1
 	else: failed += 1; push_error(label)
 
-class AdApp extends Node:
-	var model = RealmModel.new()
-	var saves = 0
-	func persist(): saves += 1
-	func toast(_text): pass
-class DemoAd extends RefCounted:
-	var full_screen_content_callback
-	var listener
-	func show(value): listener = value
-	func destroy(): pass
+const AdsFixture = preload("res://tests/ads55.gd")
 
 func _init(): call_deferred("run")
 func run():
@@ -118,24 +109,24 @@ func run():
 	lease.until = int(assisted.s.time)+1000
 	assisted.advance(60000)
 	check(not lease.enabled and assisted.s.queue.is_empty(),"Lease expiry finishes cycle then stops")
-	var owner = AdApp.new()
+	var owner = AdsFixture.AdApp.new()
 	root.add_child(owner)
-	var ads = preload("res://services/admob.gd").new()
+	owner.add_child(owner.banner_space)
+	owner.model.s.tutorial=true;owner.model.s.experience.welcome_done=true;owner.model.s.experience.coach_active=false
+	var ads = AdsFixture.TestService.new()
 	ads.app = owner
 	owner.add_child(ads)
 	ads.request("rewarded","automation")
 	check(RealmAutomation.state(owner.model).until==0,"Unavailable desktop ad grants nothing")
-	ads.reward_placement = "automation"
-	ads.request_journey = owner.model.s
-	var ad = DemoAd.new()
-	ads.show_fullscreen(ad,true,ads.generation)
+	var ad = AdsFixture.FakeAd.new()
+	ads.show_fullscreen(ad,true,"automation")
 	ad.listener.on_user_earned_reward.call(null)
 	ad.listener.on_user_earned_reward.call(null)
-	check(owner.saves==1 and RealmAutomation.state(owner.model).until==14400000,"Earned callback granted once, duplicates ignored")
+	check(owner.saves==2 and RealmAutomation.state(owner.model).until==14400000,"Earned callback granted once, duplicates ignored")
 	ad.full_screen_content_callback.on_ad_dismissed_full_screen_content.call()
-	ads.request_journey = owner.model.s
-	var stale = DemoAd.new()
-	ads.show_fullscreen(stale,true,ads.generation)
+	ads.test_time+=100000
+	var stale = AdsFixture.FakeAd.new()
+	ads.show_fullscreen(stale,true,"meals")
 	owner.model.fresh()
 	stale.listener.on_user_earned_reward.call(null)
 	check(RealmAutomation.state(owner.model).until==0,"Stale ad callback cannot reward new journey")

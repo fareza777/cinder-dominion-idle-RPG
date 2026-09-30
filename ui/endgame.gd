@@ -164,18 +164,23 @@ func contracts():
 	app.modal_action("Back",open,false)
 
 func assistance():
+	app.ensure_ads()
 	var v = app.modal("Rewarded queue assistance")
 	var s = RealmAutomation.state(m)
 	v.add_child(U.para("A completed rewarded ad unlocks four hours of assistance. It prepares at least 30 selected meals (more for demanding hunts), works toward your tracked relic, then repeats your chosen hunt.",16))
 	v.add_child(U.para("Uses normal materials and time. Stops for unsafe or undiscovered hunts. Manual queues stay available without ads. The four hours also pass while you are away.",14))
-	app.dynamic(v,func(): return "%d min remaining · %s" % [maxi(0,ceili((int(s.until)-int(m.s.time))/60000.0)),"On" if s.enabled else "Off"],20,U.GOLD)
-	app.dynamic(v,func(): return str(s.status),14)
-	v.add_child(U.button("Watch test rewarded ad · unlock 4 hours",func(): app.ads.request("rewarded","automation"),true))
+	app.dynamic(v,func(): return "%d min remaining · %s" % [maxi(0,ceili((int(RealmAutomation.state(m).until)-int(m.s.time))/60000.0)),"On" if RealmAutomation.state(m).enabled else "Off"],20,U.GOLD)
+	app.dynamic(v,func(): return str(RealmAutomation.state(m).status),14)
+	preload("res://ui/ad_rewards.gd").new(app).reward_button(v,"automation")
 	app.dynamic(v,func(): return str(app.ads.status),13)
 	v.add_child(U.para("This preview uses Android test ads. No reward is granted when an ad is unavailable or closed early.",13))
 	action(v,"Enable · tracked relic only",{"type":"assist_start","id":""},assistance)
-	for id in m.data.enemies:
-		if id=="hollow_depth" or m.available(id)!="" or int(m.s.kills.get(id,0))<1: continue
-		action(v,"Enable · "+m.data.enemies[id].en,{"type":"assist_start","id":id},assistance)
+	var hunts=m.data.enemies.keys().filter(func(id):return id!="hollow_depth" and m.available(id)=="" and int(m.s.kills.get(id,0))>0)
+	if not hunts.is_empty():
+		var picker=OptionButton.new();picker.custom_minimum_size.y=48;picker.fit_to_longest_item=false
+		for id in hunts:picker.add_item(m.local_name(m.data.enemies[id]))
+		picker.select(maxi(0,hunts.find(s.hunt)));v.add_child(picker)
+		v.add_child(U.button("Enable selected hunt",func():
+			if app.send({"type":"assist_start","id":hunts[picker.selected]}):assistance()))
 	action(v,"Stop assistance",{"type":"assist_stop"},assistance)
 	app.modal_action("Back",open,false)

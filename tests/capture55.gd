@@ -1,0 +1,46 @@
+extends "res://tests/capture52.gd"
+const F=preload("res://tests/ads55.gd")
+func capture():
+	root.size=Vector2i(412,892)
+	var app=PreviewApp.new();root.add_child(app)
+	app.set_anchors_and_offsets_preset(Control.PRESET_FULL_RECT);app.set_process(false);app.mode="play"
+	app.model.s.tutorial=true;app.model.s.experience.welcome_done=true;app.model.s.experience.coach_active=false
+	var ads=F.TestService.new();ads.app=app;app.ads=ads;app.add_child(ads)
+	app.set_page("village")
+	await press(app,"Optional supplies & assistance");app.refresh()
+	await snap("ad-rewards-0.55")
+	var food=app.model.s.settings.food;var count=app.model.count(food)
+	await press(app.dialog,"Prepare ad");app.refresh()
+	assert(app.model.count(food)==count and "Android APK" in ads.status)
+	var ad=F.FakeAd.new();ads.allow_native=true;ads.sdk_ready=true
+	ads.slots.rewarded.ad=ad;ads.slots.rewarded.loaded=Time.get_ticks_msec();app.refresh()
+	await press(app.dialog,"Watch ad")
+	assert(ads.full_screen)
+	ad.listener.on_user_earned_reward.call(null);ad.full_screen_content_callback.on_ad_dismissed_full_screen_content.call();app.refresh()
+	assert(app.model.count(food)==count+15)
+	await create_timer(.2).timeout;app.refresh()
+	await snap("ad-earned-0.55")
+	ads.test_time+=100000
+	ad=F.FakeAd.new();ads.slots.rewarded.ad=ad;ads.slots.rewarded.loaded=Time.get_ticks_msec();app.refresh()
+	await press(app.dialog,"Set up queue assistance");app.refresh()
+	await press(app.dialog,"Watch ad")
+	ad.listener.on_user_earned_reward.call(null);ad.full_screen_content_callback.on_ad_dismissed_full_screen_content.call();app.refresh()
+	app.model.s.kills.ash_rat=1;app.model.gain(food,100)
+	preload("res://ui/endgame.gd").new(app).assistance();app.refresh()
+	await press(app.dialog,"Enable selected hunt");app.refresh()
+	assert(RealmAutomation.state(app.model).enabled)
+	await snap("ad-assistance-0.55")
+	app.model.command({"type":"assist_stop"});app.model.command({"type":"clear"})
+	preload("res://ui/ad_settings.gd").new(app).open();app.refresh()
+	await snap("ad-settings-0.55")
+	root.size=Vector2i(360,800);app.model.s.settings.font=1.3;app.U.scale=1.3
+	preload("res://ui/ad_rewards.gd").new(app).open();app.refresh()
+	await snap("ad-rewards-large-0.55")
+	await press(app.dialog,"Set up queue assistance");app.refresh()
+	await snap("ad-assistance-large-0.55")
+	app.dismiss();app.set_page("village");ads.allow_native=false
+	preload("res://ui/voyages.gd").new(app).prepare(RealmVoyages.data().routes[0].id)
+	await press(app.dialog,"Optional food reward")
+	assert(find_button(app.dialog,"Set up queue assistance")!=null)
+	print("PHONE55: real pointer reward entry, no-fill, earned food, assistance enable, Journey link; normal and 130% captures. SDK callbacks simulated, no native ad serving.")
+	app.queue_free();await process_frame;quit()

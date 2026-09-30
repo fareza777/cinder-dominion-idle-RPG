@@ -10,6 +10,13 @@ static func counter(v) -> bool:
 
 func valid(s, data: Dictionary) -> bool:
 	if not s is Dictionary: return false
+	if s.has("ad_identity") and (not s.ad_identity is String or s.ad_identity.length()!=32 or not s.ad_identity.is_valid_hex_number()):return false
+	if s.has("ad_reward_receipts"):
+		if not s.has("ad_identity") or not s.ad_reward_receipts is Array or s.ad_reward_receipts.size()>32:return false
+		var seen_receipts=[]
+		for receipt in s.ad_reward_receipts:
+			if not receipt is String or receipt.length()!=32 or not receipt.is_valid_hex_number() or receipt in seen_receipts:return false
+			seen_receipts.append(receipt)
 	if s.has("world_revision") and (not counter(s.world_revision) or s.world_revision!=1):return false
 	if s.has("economy_revision") and (not counter(s.economy_revision) or s.economy_revision!=1): return false
 	if s.has("blueprint_rng") and (not s.blueprint_rng is String or not s.blueprint_rng.is_valid_int()): return false

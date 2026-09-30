@@ -42,6 +42,7 @@ func prepare(id: String,risk: String = "steady",path: String = "supplies"):
  var amount=int(r.provisions)*(2 if risk=="perilous" else 1)
  v.add_child(U.para("Pack %d %s (%d owned)\nTravel fee: %s" % [amount,m.name_of(r.food),m.count(r.food),RealmEconomy.money(r.fee)],15))
  v.add_child(U.button("Prepare provisions",func():app.sources_dialog(r.food)))
+ v.add_child(U.button("Optional food reward",func():preload("res://ui/ad_rewards.gd").new(app).open()))
  var row=U.row(10);v.add_child(row);row.add_child(U.icon(r.material,64));row.add_child(U.para("Find "+m.name_of(r.material)+", scraps and coins along your chosen path. The final chamber can also yield Hollow Shards and equipment.",14))
  v.add_child(U.para("Supplies and fees are paid at departure. Recall keeps completed caches but forfeits the final vault; spent provisions are not refunded.",13))
  v.add_child(U.para(RealmVoyages.reason(m,id,risk),14,U.GOLD))
@@ -83,7 +84,10 @@ func rewards(v,a: Dictionary):
  for g in a.gear:
   var row=U.row(8);v.add_child(row);row.add_child(U.icon(g.id,54));row.add_child(U.para(m.data.rarities[int(g.q)]+" "+m.name_of(g.id),18,U.QUALITY[int(g.q)]))
  app.modal_action("Collect all rewards",func():
-  if app.send({"type":"voyage_claim"}):app.set_page("village");app.dismiss();app.toast("Journey cargo collected."))
+  if app.send({"type":"voyage_claim"}):
+   app.set_page("village");app.dismiss();app.toast("Journey cargo collected.")
+   if a.complete:
+    app.ensure_ads();app.ads.natural_break("journey","%s:%d" % [a.id,a.started],int(a.due-a.started)))
 
 func path_picker(v,selected: String,chosen: Callable):
  var p=OptionButton.new();p.custom_minimum_size.y=46;p.fit_to_longest_item=false

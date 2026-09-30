@@ -27,6 +27,7 @@ func village(parent: Node):
 	preload("res://ui/world.gd").new(app).home(parent)
 	preload("res://ui/upgrade_goal.gd").new(app).home(parent)
 	preload("res://ui/voyages.gd").new(app).home(parent)
+	if m.s.tutorial:parent.add_child(U.button("Optional supplies & assistance",func():preload("res://ui/ad_rewards.gd").new(app).open()))
 	preload("res://ui/chronicle.gd").new(app).services(parent)
 
 func explore(parent: Node):
