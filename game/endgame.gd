@@ -44,7 +44,7 @@ static func enemy(m, original: Dictionary) -> Dictionary:
 
 static func move(m, e: Dictionary, strike: int, damage: int, phase: bool) -> int:
 	# Unavoidable pressure keeps armor stacking from trivializing optional endgame.
-	if e.get("secret",false) or e.get("depth",false) or (e.has("frontier") or e.has("march")):
+	if e.get("secret",false) or e.get("depth",false) or (e.has("frontier") or e.has("march") or e.has("realm")):
 		if phase: damage = ceili(damage*1.18)
 		if strike%3==0: damage += int(e.pressure)*(2 if phase else 1)
 		# Fixed escalation after sustained exposure, independent of player gear.

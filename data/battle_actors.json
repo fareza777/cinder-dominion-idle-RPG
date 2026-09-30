@@ -598,5 +598,355 @@
     "sheet": 9,
     "tile": 22,
     "scale": 1.0
+  },
+  "realm_0_0": {
+    "sheet": 5,
+    "tile": 0,
+    "scale": 0.52
+  },
+  "realm_0_1": {
+    "sheet": 5,
+    "tile": 2,
+    "scale": 0.76
+  },
+  "realm_0_2": {
+    "sheet": 5,
+    "tile": 4,
+    "scale": 1.0
+  },
+  "realm_0_3": {
+    "sheet": 5,
+    "tile": 6,
+    "scale": 0.76
+  },
+  "realm_0_4": {
+    "sheet": 5,
+    "tile": 8,
+    "scale": 1.12
+  },
+  "realm_0_5": {
+    "sheet": 5,
+    "tile": 10,
+    "scale": 1.0
+  },
+  "realm_0_6": {
+    "sheet": 5,
+    "tile": 12,
+    "scale": 1.0
+  },
+  "realm_0_7": {
+    "sheet": 5,
+    "tile": 14,
+    "scale": 1.28
+  },
+  "realm_0_8": {
+    "sheet": 5,
+    "tile": 16,
+    "scale": 1.12
+  },
+  "realm_0_9": {
+    "sheet": 5,
+    "tile": 16,
+    "scale": 1.12
+  },
+  "realm_1_0": {
+    "sheet": 5,
+    "tile": 18,
+    "scale": 0.52
+  },
+  "realm_1_1": {
+    "sheet": 5,
+    "tile": 20,
+    "scale": 0.76
+  },
+  "realm_1_2": {
+    "sheet": 5,
+    "tile": 22,
+    "scale": 1.0
+  },
+  "realm_1_3": {
+    "sheet": 6,
+    "tile": 0,
+    "scale": 1.0
+  },
+  "realm_1_4": {
+    "sheet": 6,
+    "tile": 2,
+    "scale": 0.76
+  },
+  "realm_1_5": {
+    "sheet": 6,
+    "tile": 4,
+    "scale": 1.0
+  },
+  "realm_1_6": {
+    "sheet": 6,
+    "tile": 6,
+    "scale": 1.0
+  },
+  "realm_1_7": {
+    "sheet": 6,
+    "tile": 8,
+    "scale": 1.0
+  },
+  "realm_1_8": {
+    "sheet": 6,
+    "tile": 10,
+    "scale": 1.12
+  },
+  "realm_1_9": {
+    "sheet": 6,
+    "tile": 10,
+    "scale": 1.12
+  },
+  "realm_2_0": {
+    "sheet": 6,
+    "tile": 12,
+    "scale": 0.52
+  },
+  "realm_2_1": {
+    "sheet": 6,
+    "tile": 14,
+    "scale": 1.0
+  },
+  "realm_2_2": {
+    "sheet": 6,
+    "tile": 16,
+    "scale": 1.0
+  },
+  "realm_2_3": {
+    "sheet": 6,
+    "tile": 18,
+    "scale": 1.0
+  },
+  "realm_2_4": {
+    "sheet": 6,
+    "tile": 20,
+    "scale": 1.12
+  },
+  "realm_2_5": {
+    "sheet": 6,
+    "tile": 22,
+    "scale": 1.0
+  },
+  "realm_2_6": {
+    "sheet": 7,
+    "tile": 0,
+    "scale": 1.0
+  },
+  "realm_2_7": {
+    "sheet": 7,
+    "tile": 2,
+    "scale": 1.0
+  },
+  "realm_2_8": {
+    "sheet": 7,
+    "tile": 4,
+    "scale": 1.12
+  },
+  "realm_2_9": {
+    "sheet": 7,
+    "tile": 4,
+    "scale": 1.12
+  },
+  "realm_3_0": {
+    "sheet": 7,
+    "tile": 6,
+    "scale": 0.76
+  },
+  "realm_3_1": {
+    "sheet": 7,
+    "tile": 8,
+    "scale": 0.76
+  },
+  "realm_3_2": {
+    "sheet": 7,
+    "tile": 10,
+    "scale": 1.0
+  },
+  "realm_3_3": {
+    "sheet": 7,
+    "tile": 12,
+    "scale": 1.0
+  },
+  "realm_3_4": {
+    "sheet": 7,
+    "tile": 14,
+    "scale": 1.12
+  },
+  "realm_3_5": {
+    "sheet": 7,
+    "tile": 16,
+    "scale": 1.0
+  },
+  "realm_3_6": {
+    "sheet": 7,
+    "tile": 18,
+    "scale": 1.0
+  },
+  "realm_3_7": {
+    "sheet": 7,
+    "tile": 20,
+    "scale": 1.28
+  },
+  "realm_3_8": {
+    "sheet": 7,
+    "tile": 22,
+    "scale": 1.12
+  },
+  "realm_3_9": {
+    "sheet": 7,
+    "tile": 22,
+    "scale": 1.12
+  },
+  "realm_4_0": {
+    "sheet": 8,
+    "tile": 0,
+    "scale": 0.76
+  },
+  "realm_4_1": {
+    "sheet": 8,
+    "tile": 2,
+    "scale": 0.76
+  },
+  "realm_4_2": {
+    "sheet": 8,
+    "tile": 4,
+    "scale": 1.0
+  },
+  "realm_4_3": {
+    "sheet": 8,
+    "tile": 6,
+    "scale": 0.76
+  },
+  "realm_4_4": {
+    "sheet": 8,
+    "tile": 8,
+    "scale": 1.12
+  },
+  "realm_4_5": {
+    "sheet": 8,
+    "tile": 10,
+    "scale": 1.0
+  },
+  "realm_4_6": {
+    "sheet": 8,
+    "tile": 12,
+    "scale": 1.0
+  },
+  "realm_4_7": {
+    "sheet": 8,
+    "tile": 14,
+    "scale": 1.0
+  },
+  "realm_4_8": {
+    "sheet": 8,
+    "tile": 16,
+    "scale": 1.12
+  },
+  "realm_4_9": {
+    "sheet": 8,
+    "tile": 16,
+    "scale": 1.12
+  },
+  "realm_5_0": {
+    "sheet": 8,
+    "tile": 18,
+    "scale": 0.52
+  },
+  "realm_5_1": {
+    "sheet": 8,
+    "tile": 20,
+    "scale": 0.76
+  },
+  "realm_5_2": {
+    "sheet": 8,
+    "tile": 22,
+    "scale": 1.0
+  },
+  "realm_5_3": {
+    "sheet": 9,
+    "tile": 0,
+    "scale": 1.0
+  },
+  "realm_5_4": {
+    "sheet": 9,
+    "tile": 2,
+    "scale": 1.12
+  },
+  "realm_5_5": {
+    "sheet": 9,
+    "tile": 4,
+    "scale": 1.0
+  },
+  "realm_5_6": {
+    "sheet": 9,
+    "tile": 6,
+    "scale": 1.0
+  },
+  "realm_5_7": {
+    "sheet": 9,
+    "tile": 8,
+    "scale": 1.28
+  },
+  "realm_5_8": {
+    "sheet": 9,
+    "tile": 10,
+    "scale": 1.12
+  },
+  "realm_5_9": {
+    "sheet": 9,
+    "tile": 10,
+    "scale": 1.12
+  },
+  "realm_6_0": {
+    "sheet": 5,
+    "tile": 0,
+    "scale": 0.52
+  },
+  "realm_6_1": {
+    "sheet": 5,
+    "tile": 2,
+    "scale": 0.76
+  },
+  "realm_6_2": {
+    "sheet": 5,
+    "tile": 4,
+    "scale": 1.0
+  },
+  "realm_6_3": {
+    "sheet": 5,
+    "tile": 6,
+    "scale": 0.76
+  },
+  "realm_6_4": {
+    "sheet": 5,
+    "tile": 8,
+    "scale": 1.12
+  },
+  "realm_6_5": {
+    "sheet": 5,
+    "tile": 10,
+    "scale": 1.0
+  },
+  "realm_6_6": {
+    "sheet": 5,
+    "tile": 12,
+    "scale": 1.0
+  },
+  "realm_6_7": {
+    "sheet": 5,
+    "tile": 14,
+    "scale": 1.28
+  },
+  "realm_6_8": {
+    "sheet": 5,
+    "tile": 16,
+    "scale": 1.12
+  },
+  "realm_6_9": {
+    "sheet": 5,
+    "tile": 16,
+    "scale": 1.12
   }
 }

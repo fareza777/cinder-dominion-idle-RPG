@@ -33,7 +33,7 @@ static func affixes(m,id: String,q: int) -> Array:
  return out
 static func craft_quality(m,roll: float = -1.0) -> int:
  if roll<0:roll=m.rng.randf()
- var hammer=tier(m,"hammer");var skill=float(m.level("smithing"))/100.0
+ var hammer=tier(m,"hammer");var skill=minf(1.0,float(m.level("smithing"))/100.0)
  if hammer==4 and m.level("smithing")>=90 and roll<.00005:return 5
  if roll<.001+skill*.003+hammer*.001:return 4
  if roll<.025+skill*.025+hammer*.008:return 3

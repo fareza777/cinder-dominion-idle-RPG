@@ -1,0 +1,65 @@
+[
+  {
+    "id": "realm_0",
+    "name": "Drowned Cathedral",
+    "gate": "march_5_8",
+    "art": 0,
+    "seal": 0,
+    "recommended_quality": 6,
+    "story": "The tide has buried the old bells. Recover their silver from the drowned guardians."
+  },
+  {
+    "id": "realm_1",
+    "name": "Glassfire Caldera",
+    "gate": "realm_0_9",
+    "art": 1,
+    "seal": 0,
+    "recommended_quality": 8,
+    "story": "The caldera still feeds an abandoned forge. Its keepers will not yield the crucible."
+  },
+  {
+    "id": "realm_2",
+    "name": "Winter Observatory",
+    "gate": "realm_1_9",
+    "art": 2,
+    "seal": 1,
+    "recommended_quality": 10,
+    "story": "At the summit, the observatory counts stars that no longer exist."
+  },
+  {
+    "id": "realm_3",
+    "name": "Silverroot Abyss",
+    "gate": "realm_2_9",
+    "art": 3,
+    "seal": 1,
+    "recommended_quality": 12,
+    "story": "Roots have swallowed the old road. Follow their silver veins beneath the earth."
+  },
+  {
+    "id": "realm_4",
+    "name": "Broken Constellation",
+    "gate": "realm_3_9",
+    "art": 4,
+    "seal": 2,
+    "recommended_quality": 14,
+    "story": "Fragments of a fallen sky turn above an empty sanctuary."
+  },
+  {
+    "id": "realm_5",
+    "name": "Pale Dominion",
+    "gate": "realm_4_9",
+    "art": 5,
+    "seal": 2,
+    "recommended_quality": 16,
+    "story": "Beyond the pale gates, the last court still guards its oath."
+  },
+  {
+    "id": "realm_6",
+    "name": "The Last Firmament",
+    "gate": "realm_5_9",
+    "art": 6,
+    "seal": 3,
+    "recommended_quality": 18,
+    "story": "There are no roads beyond this citadel. Break its final seal."
+  }
+]

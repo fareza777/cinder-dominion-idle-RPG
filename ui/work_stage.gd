@@ -56,7 +56,7 @@ func _process(delta):
 	combat = activity.kind=="combat"
 	if activity_id!=step.id and combat: enemy_art = preload("res://ui/enemy_actor.gd").frames(activity.enemy)[0]
 	activity_id = step.id
-	skill_index = maxi(0,SKILLS.find(activity.skill))
+	skill_index = maxi(0,SKILLS.find({"herbalism":"alchemy","hunting":"woodcutting","thieving":"smithing","crafting":"smithing","arcane_arts":"alchemy","divinity":"alchemy","runecarving":"smithing"}.get(activity.skill,activity.skill)))
 	running = not model.s.fight.is_empty() if combat else not model.s.active.is_empty()
 	frame = 0
 	if running and model.s.settings.motion:

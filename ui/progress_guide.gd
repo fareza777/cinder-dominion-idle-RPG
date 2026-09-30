@@ -48,7 +48,7 @@ func farming(v):
 	if m.level("mining")>=10 and m.level("smithing")>=10:
 		metal.add_child(U.button("Make 10 iron ingots",func(): app.planner_dialog("craft_iron_ingot",10)))
 	else: metal.add_child(U.para("Iron: Mining 10 + Smithing 10",12))
-	var xp = section(v,"Smithing","Level %d / 100" % m.level("smithing"))
+	var xp = section(v,"Smithing","Level %d / 130" % m.level("smithing"))
 	xp.add_child(U.button("Train · 25 ingots",func(): app.planner_dialog("craft_copper_ingot",25)))
 	if m.s.tutorial:
 		for id in RealmChronicle.RELICS:

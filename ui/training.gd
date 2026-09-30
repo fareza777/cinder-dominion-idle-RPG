@@ -16,7 +16,7 @@ func open(skill: String, target: int, minutes: int = 60):
 	var v = app.modal("Training plan")
 	v.add_child(U.para("%s · Lv.%d → %d" % [m.local_name(m.data.skills[skill]),m.level(skill),target],23,U.TEXT))
 	var levels = [target]
-	for level in [25,50,75,100]:
+	for level in [25,50,75,100,110,120,130]:
 		if level>m.level(skill) and level not in levels: levels.append(level)
 	levels.sort()
 	var picker = OptionButton.new()

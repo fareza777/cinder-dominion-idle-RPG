@@ -24,6 +24,7 @@ func heading(parent: Node, overline: String, title: String, subtitle: String = "
 func village(parent: Node):
 	U.scenic(parent,page_art(0),"YOUR STRONGHOLD","Cinderwatch",180)
 	preload("res://ui/chronicle.gd").new(app).home(parent)
+	preload("res://ui/world.gd").new(app).home(parent)
 	preload("res://ui/upgrade_goal.gd").new(app).home(parent)
 	preload("res://ui/voyages.gd").new(app).home(parent)
 	preload("res://ui/chronicle.gd").new(app).services(parent)
@@ -34,16 +35,12 @@ func explore(parent: Node):
 		preload("res://ui/voyages.gd").new(app).home(parent)
 		parent.add_child(U.para("Your hero is exploring distant chambers. Review the journey to follow each stage or recall early.",16))
 		return
-	var region = m.data.enemies.get(m.s.fight.get("enemy",""),{}).get("region","")
-	var current_enemy = m.data.enemies.get(m.s.fight.get("enemy",""),{})
-	if current_enemy.has("frontier"): heading(parent,"LATE-GAME FRONTIER",RealmFrontiers.REGIONS[int(current_enemy.frontier)],"")
-	elif current_enemy.has("march"):heading(parent,"THE FAR MARCHES",RealmMarches.data().regions[int(current_enemy.march)].name,"")
-	elif current_enemy.has("secret_tile"): heading(parent,"OPTIONAL EXPEDITION",current_enemy.location,"")
-	elif current_enemy.get("trial",false): heading(parent,"GUARDIAN TRIAL",m.local_name(current_enemy),"")
-	elif region!="": heading(parent,"EXPEDITION IN PROGRESS",RealmChronicle.REGIONS[region].name,"")
-	else:
-		if m.s.fight.is_empty(): U.scenic(parent,page_art(1),"CHAPTER I · HUNTING GROUNDS","Cinderwatch Outskirts",160)
-		else: heading(parent,"CHAPTER I · THE OUTSKIRTS","Cinderwatch Outskirts","")
+	var world=preload("res://ui/world.gd").new(app)
+	if app.explore_location=="" and not m.s.fight.is_empty():app.explore_location=RealmWorld.location(m.data.enemies[m.s.fight.enemy])
+	if app.explore_location=="":
+		world.open(parent)
+		return
+	world.header(parent)
 	var battle = U.card(parent,12,U.GOLD.darkened(.55))
 	var battle_panel = battle.get_parent()
 	battle_panel.visible = not m.s.fight.is_empty() or m.last_reward!=""
@@ -71,7 +68,7 @@ func explore(parent: Node):
 	app.dynamic(battle,func():
 		if m.s.fight.is_empty(): return ""
 		var enemy = m.data.enemies[m.s.fight.enemy]
-		if enemy.get("secret",false) or enemy.get("depth",false) or (enemy.has("frontier") or enemy.has("march")):
+		if enemy.get("secret",false) or enemy.get("depth",false) or (enemy.has("frontier") or (enemy.has("march") or enemy.has("realm"))):
 			return "PHASE II · Heavy-strike pressure doubled. Finish the fight before danger builds." if RealmTrials.active_phase(m,enemy) else "PHASE I · Danger rises every 15 enemy attacks."
 		if not enemy.get("trial",false): return ""
 		return "PHASE II · "+RealmTrials.phase_text(enemy) if RealmTrials.active_phase(m,enemy) else "PHASE I · The guardian awakens at half health.",13,U.RED)
@@ -95,9 +92,8 @@ func explore(parent: Node):
 		action.size_flags_horizontal = Control.SIZE_EXPAND_FILL
 		preparation_actions.add_child(action)
 	U.section(parent,"DISCOVERED ENEMIES")
-	for id in m.data.enemies:
+	for id in RealmWorld.encounters(m,app.explore_location):
 		var d = m.data.enemies[id]
-		if d.has("region") or d.has("frontier") or d.has("march"): continue
 		if not RealmDiscovery.visible(m,id): continue
 		var why = m.available(id)
 		var card = U.card(parent,12,U.GOLD.darkened(.55) if d.boss else U.LINE)
@@ -128,31 +124,36 @@ func explore(parent: Node):
 	if m.s.beacon: parent.add_child(U.button("Beyond the Sovereign",func(): preload("res://ui/frontiers.gd").new(app).open()))
 
 func skills(parent: Node):
-	heading(parent,"","Professions")
+	U.scenic(parent,preload("res://ui/world.gd").art(1),"16 SKILLS · GATHER, CRAFT, FIGHT","Professions",145)
 	parent.add_child(U.button("Artisan tools & crafting quality",func():preload("res://ui/artisan.gd").new(app).open()))
 	parent.add_child(U.button("Improve gathering tools",func():preload("res://ui/artisan.gd").new(app).tools()))
 	parent.add_child(U.button("Gear paths · level 25–100",func(): preload("res://ui/ascension.gd").new(app).open()))
 	preload("res://ui/training.gd").new(app).home(parent)
 	if app.skill=="":
+		P.tabs(parent,[["gather","Gather"],["craft","Craft"],["arcane","Arcane"]],app.profession_group,func(group):app.profession_group=group;app.set_page("skills"))
+		var groups={"gather":["woodcutting","mining","fishing","herbalism","hunting","thieving"],"craft":["smithing","cooking","alchemy","crafting"],"arcane":["arcane_arts","divinity","runecarving"]}
 		var grid = VBoxContainer.new()
 		grid.add_theme_constant_override("h_separation",10)
 		grid.add_theme_constant_override("v_separation",10)
 		parent.add_child(grid)
-		for id in ["woodcutting","mining","fishing","cooking","smithing","alchemy"]:
+		for id in groups[app.profession_group]:
 			var skill = m.data.skills[id]
 			var c = U.card(grid,12)
 			c.get_parent().size_flags_horizontal = Control.SIZE_EXPAND_FILL
-			P.destination(c,m.local_name(skill),{"woodcutting":4,"mining":5,"fishing":6,"cooking":7,"smithing":0,"alchemy":8}[id],func():
+			var destination=P.destination(c,m.local_name(skill),{"woodcutting":4,"mining":5,"fishing":6,"cooking":7,"smithing":0,"alchemy":8}.get(id,8),func():
 				app.skill=id
-				app.set_page("skills"),140)
-			c.add_child(U.para({"woodcutting":"Timber & logs","mining":"Ore & minerals","fishing":"Fresh supplies","cooking":"Food for hunts","smithing":"Weapons & armor","alchemy":"Combat potions"}[id],12))
-			app.dynamic(c,func(): return "LEVEL %d  /  100" % m.level(id),10,U.GOLD)
+				app.set_page("skills"),115)
+			if id in RealmWorld.PROFESSIONS:
+				for child in destination.get_children():
+					if child is TextureRect and child.texture is AtlasTexture:child.texture=preload("res://ui/world.gd").art({"herbalism":3,"hunting":3,"thieving":6,"crafting":8,"arcane_arts":4,"divinity":5,"runecarving":7}[id])
+			c.add_child(U.para(preload("res://ui/world.gd").USES.get(id,""),12))
+			app.dynamic(c,func(): return "LEVEL %d  /  130" % m.level(id),10,U.GOLD)
 			var bar = U.progress(0,1,U.GOLD)
 			c.add_child(bar)
 			app.update_callbacks.append(func():
 				if is_instance_valid(bar):
 					var l = m.level(id)
-					bar.value = float(m.s.xp[id]-25*(l-1)*(l-1))/maxf(1,25*l*l-25*(l-1)*(l-1)))
+					bar.value = 1.0 if l>=130 else float(m.s.xp[id]-RealmEconomy.threshold(l,id))/maxf(1,RealmEconomy.threshold(l+1,id)-RealmEconomy.threshold(l,id)))
 			c.add_child(U.button(text("Latih  →","Train  →"),func():
 				app.skill = id
 				app.set_page("skills")))
@@ -205,7 +206,7 @@ func skills(parent: Node):
 			c.add_child(U.button(text("Atur aktivitas","Set activity"),func(): app.activity_dialog(aid),m.level(selected)>=int(a.level)))
 
 func inventory(parent: Node):
-	heading(parent,"","Inventory")
+	U.scenic(parent,preload("res://ui/world.gd").art(8),"YOUR COLLECTION","Inventory",125)
 	var filters = U.row(6)
 	parent.add_child(filters)
 	var picker = OptionButton.new()

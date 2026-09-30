@@ -3,7 +3,7 @@ extends RefCounted
 const U = preload("res://ui/style.gd")
 const Brand = preload("res://ui/brand.gd")
 const STORE_URL = "" # Set only after a real public listing exists.
-const VERSION = "0.51.1"
+const VERSION = "0.52.0"
 var app
 var front: Control
 var cinematic_page = 0
@@ -345,7 +345,7 @@ func archives():
 func about():
 	var v = app.modal("About Cinder Dominion")
 	title(v,"Keep the last fire burning.",30)
-	v.add_child(U.para("Cinder Dominion: Idle RPG is an independent dark fantasy idle RPG about gathering, crafting and preparing for the battles ahead.\n\nVersion "+VERSION+" · Adventure preview\n120 enemies · 12 expedition regions\n12 optional guardians + Hollow Depths\n8 playable characters · class skills · customizable attributes\n\nFree to play. No purchases are active in this preview. Settings includes optional Android test ads. Cosmetics and content expansions are planned for future releases.",16,U.TEXT))
+	v.add_child(U.para("Cinder Dominion: Idle RPG is an independent dark fantasy idle RPG about gathering, crafting and preparing for the battles ahead.\n\nVersion "+VERSION+" · Adventure preview\n190 enemies · 20 campaign locations\n12 optional guardians + Hollow Depths\n8 playable characters · 16 skills up to level 130\n21 equipment rarities · 946 collectible items\n\nFree to play. No purchases are active in this preview. Settings includes optional Android test ads. Cosmetics and content expansions are planned for future releases.",16,U.TEXT))
 	v.add_child(U.para("Art generated for this project with OpenAI image generation. Original synthesized audio. Fonts: Manrope and Cormorant Garamond. Built with Godot.",14))
 	v.add_child(U.button("Credits & open-source licenses",licenses))
 	v.add_child(U.button("Replay cinematic intro",func(): intro(true)))

@@ -25,7 +25,7 @@ func open():
 	v.add_child(U.button("Hunting routes",routes))
 	v.add_child(U.button("Contracts & weekly hunt",contracts))
 	v.add_child(U.button("Rewarded queue assistance",assistance))
-	v.add_child(U.para("Level 100 is the skill cap. Beyond it, improve your build, perfect relics and push deeper expeditions.",14))
+	v.add_child(U.para("Level 130 is the skill cap. Forge higher rarities, perfect relics and conquer the Shattered Realms.",14))
 
 func locations():
 	var v = app.modal("Optional expeditions")

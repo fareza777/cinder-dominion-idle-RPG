@@ -103,7 +103,7 @@ func talents():
 	var v = app.modal("Talents")
 	if locked(v): return
 	var state = C.state(m)
-	v.add_child(U.para("%d points available · %d / 80 earned" % [C.points_free(m),C.points_earned(m)],18,U.GOLD))
+	v.add_child(U.para("%d points available · %d / 100 earned" % [C.points_free(m),C.points_earned(m)],18,U.GOLD))
 	v.add_child(U.para(RealmLegacyGrowth.next_point(m),14))
 	var branches = {"power":["power","technique","hunter","searing","hemorrhage","execution"],"guard":["guard","endurance","resolve","frostcraft","laststand","counter"],"fortune":["fortune","recovery","bounty","venomcraft","reclamation","vitality"]}
 	preload("res://ui/premium.gd").tabs(v,[["power","Power"],["guard","Guard"],["fortune","Hunt"]],talent_branch,func(key):

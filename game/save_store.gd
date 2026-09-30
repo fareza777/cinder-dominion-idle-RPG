@@ -10,6 +10,7 @@ static func counter(v) -> bool:
 
 func valid(s, data: Dictionary) -> bool:
 	if not s is Dictionary: return false
+	if s.has("world_revision") and (not counter(s.world_revision) or s.world_revision!=1):return false
 	if s.has("economy_revision") and (not counter(s.economy_revision) or s.economy_revision!=1): return false
 	if s.has("blueprint_rng") and (not s.blueprint_rng is String or not s.blueprint_rng.is_valid_int()): return false
 	if s.has("legacy_rng") and (not s.legacy_rng is String or not s.legacy_rng.is_valid_int()): return false
@@ -41,7 +42,7 @@ func valid(s, data: Dictionary) -> bool:
 		for key in ["uid","id","q","count","locked","favorite"]:
 			if not g.has(key): return false
 		if not data.items.has(g.id) or data.items[g.id].category!="equipment": return false
-		if not counter(g.q) or g.q>7 or not counter(g.count) or g.count<1: return false
+		if not counter(g.q) or g.q>=data.rarities.size() or not counter(g.count) or g.count<1: return false
 		if not g.uid is String or uids.has(g.uid) or not g.locked is bool or not g.favorite is bool: return false
 		uids[g.uid] = g
 	if not RealmCards.valid(s,uids) or not RealmAfflictions.valid(s.fight,int(s.time)): return false
@@ -70,7 +71,7 @@ func valid(s, data: Dictionary) -> bool:
 		for key in ["id","target","kind","done","output","skip"]:
 			if not step.has(key): return false
 		if not data.activities.has(step.id) or step.kind not in ["cycles","output","level"]: return false
-		if not counter(step.target) or step.target<1 or step.target>1000000 or not counter(step.done) or not counter(step.output) or not step.skip is bool: return false
+		if not counter(step.target) or step.target<1 or step.target>1300000 or not counter(step.done) or not counter(step.output) or not step.skip is bool: return false
 	if not s.active.is_empty():
 		for key in ["id","started","due","reserved"]:
 			if not s.active.has(key): return false
@@ -93,7 +94,7 @@ func valid(s, data: Dictionary) -> bool:
 	if s.has("training_goal"):
 		var goal = s.training_goal
 		if not goal is Dictionary or goal.get("skill","") not in RealmTraining.SKILLS: return false
-		if not counter(goal.get("target",-1)) or goal.target<2 or goal.target>100: return false
+		if not counter(goal.get("target",-1)) or goal.target<2 or goal.target>130: return false
 		if not counter(goal.get("minutes",-1)) or int(goal.minutes) not in RealmTraining.MINUTES: return false
 	if s.has("experience"):
 		if not s.experience is Dictionary or s.experience.get("version",0)!=2 or not s.experience.get("welcome_done",false) is bool: return false
@@ -142,6 +143,7 @@ func decode(text: String, data: Dictionary) -> Dictionary:
 		if not counter(state.xp.get(skill,-1)): return {}
 	if not counter(state.get("economy_revision",0)) or state.get("economy_revision",0)>1: return {}
 	RealmEconomy.migrate(state)
+	RealmWorld.migrate(state)
 	if not valid(state,data): return {}
 	RealmCards.migrate(state,data)
 	return state if valid(state,data) else {}

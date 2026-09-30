@@ -27,13 +27,14 @@ static func money(value: int) -> String:
 	return ("−" if value<0 else "")+" ".join(parts)
 
 static func threshold(level_value: int, skill: String = "bladecraft") -> int:
-	var n = clampi(level_value,1,100)-1
+	var n = clampi(level_value,1,130)-1
 	var late = maxi(0,level_value-20)
-	return 25*n*n+(4*late*late*late if skill in COMBAT else 0)
+	var beyond = maxi(0,mini(130,level_value)-100)
+	return 25*n*n+(4*late*late*late if skill in COMBAT else 0)+(1200 if skill in COMBAT else 200)*beyond*beyond*beyond
 
 static func level(xp, skill: String = "bladecraft") -> int:
 	var low = 1
-	var high = 100
+	var high = 130
 	while low<high:
 		var mid = int((low+high+1)/2)
 		if int(xp)>=threshold(mid,skill): low = mid
@@ -66,7 +67,7 @@ static func migrate(s: Dictionary):
 
 static func experience_note(m, enemy: Dictionary) -> String:
 	var current = m.level("bladecraft")
-	if current>=100: return "Bladecraft mastered. Hunt for cards, materials and better equipment."
+	if current>=130: return "Bladecraft mastered. Hunt for cards, materials and better equipment."
 	var xp = hunt_xp(m,enemy)
 	var per_win = xp-int(xp/3)*2
 	var remaining = threshold(current+1)-int(m.s.xp.bladecraft)

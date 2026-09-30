@@ -1742,5 +1742,999 @@
       "head"
     ],
     "material": 0.025
+  },
+  "card_realm_0_0": {
+    "enemy": "realm_0_0",
+    "tile": 0,
+    "rarity": "Epic",
+    "chance": 8e-05,
+    "detail": "Take 1.2% less direct damage. Chill lasts 25% less time; matching special strikes deal 25% less damage.",
+    "role": "Build choice",
+    "build_hint": "Choose equipment that fits this card and complements your build.",
+    "slots": [
+      "body",
+      "shield"
+    ],
+    "resist": "chill",
+    "defense": 0.012
+  },
+  "card_realm_0_1": {
+    "enemy": "realm_0_1",
+    "tile": 0,
+    "rarity": "Epic",
+    "chance": 8e-05,
+    "detail": "+1.5% attack damage. Every fourth hit applies Chill.",
+    "role": "Build choice",
+    "build_hint": "Choose equipment that fits this card and complements your build.",
+    "slots": [
+      "weapon",
+      "hands"
+    ],
+    "proc": "chill",
+    "attack": 0.015
+  },
+  "card_realm_0_2": {
+    "enemy": "realm_0_2",
+    "tile": 0,
+    "rarity": "Epic",
+    "chance": 8e-05,
+    "detail": "+3.5% damage against enemies affected by Chill.",
+    "role": "Build choice",
+    "build_hint": "Choose equipment that fits this card and complements your build.",
+    "slots": [
+      "ring",
+      "necklace"
+    ],
+    "vs_chill": 0.035
+  },
+  "card_realm_0_3": {
+    "enemy": "realm_0_3",
+    "tile": 0,
+    "rarity": "Epic",
+    "chance": 8e-05,
+    "detail": "Meals restore 3.5% more HP.",
+    "role": "Build choice",
+    "build_hint": "Choose equipment that fits this card and complements your build.",
+    "slots": [
+      "belt",
+      "necklace"
+    ],
+    "healing": 0.035
+  },
+  "card_realm_0_4": {
+    "enemy": "realm_0_4",
+    "tile": 0,
+    "rarity": "Legendary",
+    "chance": 2.5e-05,
+    "detail": "Deal 3.5% more damage to bosses.",
+    "role": "Build choice",
+    "build_hint": "Choose equipment that fits this card and complements your build.",
+    "slots": [
+      "weapon",
+      "ring"
+    ],
+    "boss": 0.035
+  },
+  "card_realm_0_5": {
+    "enemy": "realm_0_5",
+    "tile": 0,
+    "rarity": "Epic",
+    "chance": 8e-05,
+    "detail": "Gain 2.5% more ordinary hunt materials.",
+    "role": "Build choice",
+    "build_hint": "Choose equipment that fits this card and complements your build.",
+    "slots": [
+      "feet",
+      "head"
+    ],
+    "material": 0.025
+  },
+  "card_realm_0_6": {
+    "enemy": "realm_0_6",
+    "tile": 0,
+    "rarity": "Epic",
+    "chance": 8e-05,
+    "detail": "Ignore 3.5% of enemy armor.",
+    "role": "Build choice",
+    "build_hint": "Choose equipment that fits this card and complements your build.",
+    "slots": [
+      "hands",
+      "weapon"
+    ],
+    "pierce": 0.035
+  },
+  "card_realm_0_7": {
+    "enemy": "realm_0_7",
+    "tile": 0,
+    "rarity": "Epic",
+    "chance": 8e-05,
+    "detail": "Every fourth hit grants a small Barrier.",
+    "role": "Build choice",
+    "build_hint": "Choose equipment that fits this card and complements your build.",
+    "slots": [
+      "shield",
+      "body"
+    ],
+    "boon": "barrier"
+  },
+  "card_realm_0_8": {
+    "enemy": "realm_0_8",
+    "tile": 0,
+    "rarity": "Legendary",
+    "chance": 2.5e-05,
+    "detail": "Every fourth attack deals 4% more damage.",
+    "role": "Build choice",
+    "build_hint": "Choose equipment that fits this card and complements your build.",
+    "slots": [
+      "weapon",
+      "necklace"
+    ],
+    "special": 0.04
+  },
+  "card_realm_0_9": {
+    "enemy": "realm_0_9",
+    "tile": 0,
+    "rarity": "Legendary",
+    "chance": 2.5e-05,
+    "detail": "Every fourth attack deals 4% more damage.",
+    "role": "Build choice",
+    "build_hint": "Choose equipment that fits this card and complements your build.",
+    "slots": [
+      "weapon",
+      "necklace"
+    ],
+    "special": 0.04
+  },
+  "card_realm_1_0": {
+    "enemy": "realm_1_0",
+    "tile": 0,
+    "rarity": "Epic",
+    "chance": 8e-05,
+    "detail": "Take 1.2% less direct damage. Poison lasts 25% less time; matching special strikes deal 25% less damage.",
+    "role": "Build choice",
+    "build_hint": "Choose equipment that fits this card and complements your build.",
+    "slots": [
+      "body",
+      "shield"
+    ],
+    "resist": "poison",
+    "defense": 0.012
+  },
+  "card_realm_1_1": {
+    "enemy": "realm_1_1",
+    "tile": 0,
+    "rarity": "Epic",
+    "chance": 8e-05,
+    "detail": "+1.5% attack damage. Every fourth hit applies Poison.",
+    "role": "Build choice",
+    "build_hint": "Choose equipment that fits this card and complements your build.",
+    "slots": [
+      "weapon",
+      "hands"
+    ],
+    "proc": "poison",
+    "attack": 0.015
+  },
+  "card_realm_1_2": {
+    "enemy": "realm_1_2",
+    "tile": 0,
+    "rarity": "Epic",
+    "chance": 8e-05,
+    "detail": "+3.5% damage against enemies affected by Poison.",
+    "role": "Build choice",
+    "build_hint": "Choose equipment that fits this card and complements your build.",
+    "slots": [
+      "ring",
+      "necklace"
+    ],
+    "vs_poison": 0.035
+  },
+  "card_realm_1_3": {
+    "enemy": "realm_1_3",
+    "tile": 0,
+    "rarity": "Epic",
+    "chance": 8e-05,
+    "detail": "Meals restore 3.5% more HP.",
+    "role": "Build choice",
+    "build_hint": "Choose equipment that fits this card and complements your build.",
+    "slots": [
+      "belt",
+      "necklace"
+    ],
+    "healing": 0.035
+  },
+  "card_realm_1_4": {
+    "enemy": "realm_1_4",
+    "tile": 0,
+    "rarity": "Legendary",
+    "chance": 2.5e-05,
+    "detail": "Deal 3.5% more damage to bosses.",
+    "role": "Build choice",
+    "build_hint": "Choose equipment that fits this card and complements your build.",
+    "slots": [
+      "weapon",
+      "ring"
+    ],
+    "boss": 0.035
+  },
+  "card_realm_1_5": {
+    "enemy": "realm_1_5",
+    "tile": 0,
+    "rarity": "Epic",
+    "chance": 8e-05,
+    "detail": "Gain 2.5% more ordinary hunt materials.",
+    "role": "Build choice",
+    "build_hint": "Choose equipment that fits this card and complements your build.",
+    "slots": [
+      "feet",
+      "head"
+    ],
+    "material": 0.025
+  },
+  "card_realm_1_6": {
+    "enemy": "realm_1_6",
+    "tile": 0,
+    "rarity": "Epic",
+    "chance": 8e-05,
+    "detail": "Ignore 3.5% of enemy armor.",
+    "role": "Build choice",
+    "build_hint": "Choose equipment that fits this card and complements your build.",
+    "slots": [
+      "hands",
+      "weapon"
+    ],
+    "pierce": 0.035
+  },
+  "card_realm_1_7": {
+    "enemy": "realm_1_7",
+    "tile": 0,
+    "rarity": "Epic",
+    "chance": 8e-05,
+    "detail": "Every fourth hit grants a small Barrier.",
+    "role": "Build choice",
+    "build_hint": "Choose equipment that fits this card and complements your build.",
+    "slots": [
+      "shield",
+      "body"
+    ],
+    "boon": "barrier"
+  },
+  "card_realm_1_8": {
+    "enemy": "realm_1_8",
+    "tile": 0,
+    "rarity": "Legendary",
+    "chance": 2.5e-05,
+    "detail": "Every fourth attack deals 4% more damage.",
+    "role": "Build choice",
+    "build_hint": "Choose equipment that fits this card and complements your build.",
+    "slots": [
+      "weapon",
+      "necklace"
+    ],
+    "special": 0.04
+  },
+  "card_realm_1_9": {
+    "enemy": "realm_1_9",
+    "tile": 0,
+    "rarity": "Legendary",
+    "chance": 2.5e-05,
+    "detail": "Every fourth attack deals 4% more damage.",
+    "role": "Build choice",
+    "build_hint": "Choose equipment that fits this card and complements your build.",
+    "slots": [
+      "weapon",
+      "necklace"
+    ],
+    "special": 0.04
+  },
+  "card_realm_2_0": {
+    "enemy": "realm_2_0",
+    "tile": 0,
+    "rarity": "Epic",
+    "chance": 8e-05,
+    "detail": "Take 1.2% less direct damage. Burn lasts 25% less time; matching special strikes deal 25% less damage.",
+    "role": "Build choice",
+    "build_hint": "Choose equipment that fits this card and complements your build.",
+    "slots": [
+      "body",
+      "shield"
+    ],
+    "resist": "burn",
+    "defense": 0.012
+  },
+  "card_realm_2_1": {
+    "enemy": "realm_2_1",
+    "tile": 0,
+    "rarity": "Epic",
+    "chance": 8e-05,
+    "detail": "+1.5% attack damage. Every fourth hit applies Burn.",
+    "role": "Build choice",
+    "build_hint": "Choose equipment that fits this card and complements your build.",
+    "slots": [
+      "weapon",
+      "hands"
+    ],
+    "proc": "burn",
+    "attack": 0.015
+  },
+  "card_realm_2_2": {
+    "enemy": "realm_2_2",
+    "tile": 0,
+    "rarity": "Epic",
+    "chance": 8e-05,
+    "detail": "+3.5% damage against enemies affected by Burn.",
+    "role": "Build choice",
+    "build_hint": "Choose equipment that fits this card and complements your build.",
+    "slots": [
+      "ring",
+      "necklace"
+    ],
+    "vs_burn": 0.035
+  },
+  "card_realm_2_3": {
+    "enemy": "realm_2_3",
+    "tile": 0,
+    "rarity": "Epic",
+    "chance": 8e-05,
+    "detail": "Meals restore 3.5% more HP.",
+    "role": "Build choice",
+    "build_hint": "Choose equipment that fits this card and complements your build.",
+    "slots": [
+      "belt",
+      "necklace"
+    ],
+    "healing": 0.035
+  },
+  "card_realm_2_4": {
+    "enemy": "realm_2_4",
+    "tile": 0,
+    "rarity": "Legendary",
+    "chance": 2.5e-05,
+    "detail": "Deal 3.5% more damage to bosses.",
+    "role": "Build choice",
+    "build_hint": "Choose equipment that fits this card and complements your build.",
+    "slots": [
+      "weapon",
+      "ring"
+    ],
+    "boss": 0.035
+  },
+  "card_realm_2_5": {
+    "enemy": "realm_2_5",
+    "tile": 0,
+    "rarity": "Epic",
+    "chance": 8e-05,
+    "detail": "Gain 2.5% more ordinary hunt materials.",
+    "role": "Build choice",
+    "build_hint": "Choose equipment that fits this card and complements your build.",
+    "slots": [
+      "feet",
+      "head"
+    ],
+    "material": 0.025
+  },
+  "card_realm_2_6": {
+    "enemy": "realm_2_6",
+    "tile": 0,
+    "rarity": "Epic",
+    "chance": 8e-05,
+    "detail": "Ignore 3.5% of enemy armor.",
+    "role": "Build choice",
+    "build_hint": "Choose equipment that fits this card and complements your build.",
+    "slots": [
+      "hands",
+      "weapon"
+    ],
+    "pierce": 0.035
+  },
+  "card_realm_2_7": {
+    "enemy": "realm_2_7",
+    "tile": 0,
+    "rarity": "Epic",
+    "chance": 8e-05,
+    "detail": "Every fourth hit grants a small Barrier.",
+    "role": "Build choice",
+    "build_hint": "Choose equipment that fits this card and complements your build.",
+    "slots": [
+      "shield",
+      "body"
+    ],
+    "boon": "barrier"
+  },
+  "card_realm_2_8": {
+    "enemy": "realm_2_8",
+    "tile": 0,
+    "rarity": "Legendary",
+    "chance": 2.5e-05,
+    "detail": "Every fourth attack deals 4% more damage.",
+    "role": "Build choice",
+    "build_hint": "Choose equipment that fits this card and complements your build.",
+    "slots": [
+      "weapon",
+      "necklace"
+    ],
+    "special": 0.04
+  },
+  "card_realm_2_9": {
+    "enemy": "realm_2_9",
+    "tile": 0,
+    "rarity": "Legendary",
+    "chance": 2.5e-05,
+    "detail": "Every fourth attack deals 4% more damage.",
+    "role": "Build choice",
+    "build_hint": "Choose equipment that fits this card and complements your build.",
+    "slots": [
+      "weapon",
+      "necklace"
+    ],
+    "special": 0.04
+  },
+  "card_realm_3_0": {
+    "enemy": "realm_3_0",
+    "tile": 0,
+    "rarity": "Epic",
+    "chance": 8e-05,
+    "detail": "Take 1.2% less direct damage. Weaken lasts 25% less time; matching special strikes deal 25% less damage.",
+    "role": "Build choice",
+    "build_hint": "Choose equipment that fits this card and complements your build.",
+    "slots": [
+      "body",
+      "shield"
+    ],
+    "resist": "weaken",
+    "defense": 0.012
+  },
+  "card_realm_3_1": {
+    "enemy": "realm_3_1",
+    "tile": 0,
+    "rarity": "Epic",
+    "chance": 8e-05,
+    "detail": "+1.5% attack damage. Every fourth hit applies Weaken.",
+    "role": "Build choice",
+    "build_hint": "Choose equipment that fits this card and complements your build.",
+    "slots": [
+      "weapon",
+      "hands"
+    ],
+    "proc": "weaken",
+    "attack": 0.015
+  },
+  "card_realm_3_2": {
+    "enemy": "realm_3_2",
+    "tile": 0,
+    "rarity": "Epic",
+    "chance": 8e-05,
+    "detail": "+3.5% damage against enemies affected by Chill.",
+    "role": "Build choice",
+    "build_hint": "Choose equipment that fits this card and complements your build.",
+    "slots": [
+      "ring",
+      "necklace"
+    ],
+    "vs_chill": 0.035
+  },
+  "card_realm_3_3": {
+    "enemy": "realm_3_3",
+    "tile": 0,
+    "rarity": "Epic",
+    "chance": 8e-05,
+    "detail": "Meals restore 3.5% more HP.",
+    "role": "Build choice",
+    "build_hint": "Choose equipment that fits this card and complements your build.",
+    "slots": [
+      "belt",
+      "necklace"
+    ],
+    "healing": 0.035
+  },
+  "card_realm_3_4": {
+    "enemy": "realm_3_4",
+    "tile": 0,
+    "rarity": "Legendary",
+    "chance": 2.5e-05,
+    "detail": "Deal 3.5% more damage to bosses.",
+    "role": "Build choice",
+    "build_hint": "Choose equipment that fits this card and complements your build.",
+    "slots": [
+      "weapon",
+      "ring"
+    ],
+    "boss": 0.035
+  },
+  "card_realm_3_5": {
+    "enemy": "realm_3_5",
+    "tile": 0,
+    "rarity": "Epic",
+    "chance": 8e-05,
+    "detail": "Gain 2.5% more ordinary hunt materials.",
+    "role": "Build choice",
+    "build_hint": "Choose equipment that fits this card and complements your build.",
+    "slots": [
+      "feet",
+      "head"
+    ],
+    "material": 0.025
+  },
+  "card_realm_3_6": {
+    "enemy": "realm_3_6",
+    "tile": 0,
+    "rarity": "Epic",
+    "chance": 8e-05,
+    "detail": "Ignore 3.5% of enemy armor.",
+    "role": "Build choice",
+    "build_hint": "Choose equipment that fits this card and complements your build.",
+    "slots": [
+      "hands",
+      "weapon"
+    ],
+    "pierce": 0.035
+  },
+  "card_realm_3_7": {
+    "enemy": "realm_3_7",
+    "tile": 0,
+    "rarity": "Epic",
+    "chance": 8e-05,
+    "detail": "Every fourth hit grants a small Barrier.",
+    "role": "Build choice",
+    "build_hint": "Choose equipment that fits this card and complements your build.",
+    "slots": [
+      "shield",
+      "body"
+    ],
+    "boon": "barrier"
+  },
+  "card_realm_3_8": {
+    "enemy": "realm_3_8",
+    "tile": 0,
+    "rarity": "Legendary",
+    "chance": 2.5e-05,
+    "detail": "Every fourth attack deals 4% more damage.",
+    "role": "Build choice",
+    "build_hint": "Choose equipment that fits this card and complements your build.",
+    "slots": [
+      "weapon",
+      "necklace"
+    ],
+    "special": 0.04
+  },
+  "card_realm_3_9": {
+    "enemy": "realm_3_9",
+    "tile": 0,
+    "rarity": "Legendary",
+    "chance": 2.5e-05,
+    "detail": "Every fourth attack deals 4% more damage.",
+    "role": "Build choice",
+    "build_hint": "Choose equipment that fits this card and complements your build.",
+    "slots": [
+      "weapon",
+      "necklace"
+    ],
+    "special": 0.04
+  },
+  "card_realm_4_0": {
+    "enemy": "realm_4_0",
+    "tile": 0,
+    "rarity": "Epic",
+    "chance": 8e-05,
+    "detail": "Take 1.2% less direct damage. Bleed lasts 25% less time; matching special strikes deal 25% less damage.",
+    "role": "Build choice",
+    "build_hint": "Choose equipment that fits this card and complements your build.",
+    "slots": [
+      "body",
+      "shield"
+    ],
+    "resist": "bleed",
+    "defense": 0.012
+  },
+  "card_realm_4_1": {
+    "enemy": "realm_4_1",
+    "tile": 0,
+    "rarity": "Epic",
+    "chance": 8e-05,
+    "detail": "+1.5% attack damage. Every fourth hit applies Bleed.",
+    "role": "Build choice",
+    "build_hint": "Choose equipment that fits this card and complements your build.",
+    "slots": [
+      "weapon",
+      "hands"
+    ],
+    "proc": "bleed",
+    "attack": 0.015
+  },
+  "card_realm_4_2": {
+    "enemy": "realm_4_2",
+    "tile": 0,
+    "rarity": "Epic",
+    "chance": 8e-05,
+    "detail": "+3.5% damage against enemies affected by Bleed.",
+    "role": "Build choice",
+    "build_hint": "Choose equipment that fits this card and complements your build.",
+    "slots": [
+      "ring",
+      "necklace"
+    ],
+    "vs_bleed": 0.035
+  },
+  "card_realm_4_3": {
+    "enemy": "realm_4_3",
+    "tile": 0,
+    "rarity": "Epic",
+    "chance": 8e-05,
+    "detail": "Meals restore 3.5% more HP.",
+    "role": "Build choice",
+    "build_hint": "Choose equipment that fits this card and complements your build.",
+    "slots": [
+      "belt",
+      "necklace"
+    ],
+    "healing": 0.035
+  },
+  "card_realm_4_4": {
+    "enemy": "realm_4_4",
+    "tile": 0,
+    "rarity": "Legendary",
+    "chance": 2.5e-05,
+    "detail": "Deal 3.5% more damage to bosses.",
+    "role": "Build choice",
+    "build_hint": "Choose equipment that fits this card and complements your build.",
+    "slots": [
+      "weapon",
+      "ring"
+    ],
+    "boss": 0.035
+  },
+  "card_realm_4_5": {
+    "enemy": "realm_4_5",
+    "tile": 0,
+    "rarity": "Epic",
+    "chance": 8e-05,
+    "detail": "Gain 2.5% more ordinary hunt materials.",
+    "role": "Build choice",
+    "build_hint": "Choose equipment that fits this card and complements your build.",
+    "slots": [
+      "feet",
+      "head"
+    ],
+    "material": 0.025
+  },
+  "card_realm_4_6": {
+    "enemy": "realm_4_6",
+    "tile": 0,
+    "rarity": "Epic",
+    "chance": 8e-05,
+    "detail": "Ignore 3.5% of enemy armor.",
+    "role": "Build choice",
+    "build_hint": "Choose equipment that fits this card and complements your build.",
+    "slots": [
+      "hands",
+      "weapon"
+    ],
+    "pierce": 0.035
+  },
+  "card_realm_4_7": {
+    "enemy": "realm_4_7",
+    "tile": 0,
+    "rarity": "Epic",
+    "chance": 8e-05,
+    "detail": "Every fourth hit grants a small Barrier.",
+    "role": "Build choice",
+    "build_hint": "Choose equipment that fits this card and complements your build.",
+    "slots": [
+      "shield",
+      "body"
+    ],
+    "boon": "barrier"
+  },
+  "card_realm_4_8": {
+    "enemy": "realm_4_8",
+    "tile": 0,
+    "rarity": "Legendary",
+    "chance": 2.5e-05,
+    "detail": "Every fourth attack deals 4% more damage.",
+    "role": "Build choice",
+    "build_hint": "Choose equipment that fits this card and complements your build.",
+    "slots": [
+      "weapon",
+      "necklace"
+    ],
+    "special": 0.04
+  },
+  "card_realm_4_9": {
+    "enemy": "realm_4_9",
+    "tile": 0,
+    "rarity": "Legendary",
+    "chance": 2.5e-05,
+    "detail": "Every fourth attack deals 4% more damage.",
+    "role": "Build choice",
+    "build_hint": "Choose equipment that fits this card and complements your build.",
+    "slots": [
+      "weapon",
+      "necklace"
+    ],
+    "special": 0.04
+  },
+  "card_realm_5_0": {
+    "enemy": "realm_5_0",
+    "tile": 0,
+    "rarity": "Epic",
+    "chance": 8e-05,
+    "detail": "Take 1.2% less direct damage. Shock lasts 25% less time; matching special strikes deal 25% less damage.",
+    "role": "Build choice",
+    "build_hint": "Choose equipment that fits this card and complements your build.",
+    "slots": [
+      "body",
+      "shield"
+    ],
+    "resist": "shock",
+    "defense": 0.012
+  },
+  "card_realm_5_1": {
+    "enemy": "realm_5_1",
+    "tile": 0,
+    "rarity": "Epic",
+    "chance": 8e-05,
+    "detail": "+1.5% attack damage. Every fourth hit applies Shock.",
+    "role": "Build choice",
+    "build_hint": "Choose equipment that fits this card and complements your build.",
+    "slots": [
+      "weapon",
+      "hands"
+    ],
+    "proc": "shock",
+    "attack": 0.015
+  },
+  "card_realm_5_2": {
+    "enemy": "realm_5_2",
+    "tile": 0,
+    "rarity": "Epic",
+    "chance": 8e-05,
+    "detail": "+3.5% damage against enemies affected by Shock.",
+    "role": "Build choice",
+    "build_hint": "Choose equipment that fits this card and complements your build.",
+    "slots": [
+      "ring",
+      "necklace"
+    ],
+    "vs_shock": 0.035
+  },
+  "card_realm_5_3": {
+    "enemy": "realm_5_3",
+    "tile": 0,
+    "rarity": "Epic",
+    "chance": 8e-05,
+    "detail": "Meals restore 3.5% more HP.",
+    "role": "Build choice",
+    "build_hint": "Choose equipment that fits this card and complements your build.",
+    "slots": [
+      "belt",
+      "necklace"
+    ],
+    "healing": 0.035
+  },
+  "card_realm_5_4": {
+    "enemy": "realm_5_4",
+    "tile": 0,
+    "rarity": "Legendary",
+    "chance": 2.5e-05,
+    "detail": "Deal 3.5% more damage to bosses.",
+    "role": "Build choice",
+    "build_hint": "Choose equipment that fits this card and complements your build.",
+    "slots": [
+      "weapon",
+      "ring"
+    ],
+    "boss": 0.035
+  },
+  "card_realm_5_5": {
+    "enemy": "realm_5_5",
+    "tile": 0,
+    "rarity": "Epic",
+    "chance": 8e-05,
+    "detail": "Gain 2.5% more ordinary hunt materials.",
+    "role": "Build choice",
+    "build_hint": "Choose equipment that fits this card and complements your build.",
+    "slots": [
+      "feet",
+      "head"
+    ],
+    "material": 0.025
+  },
+  "card_realm_5_6": {
+    "enemy": "realm_5_6",
+    "tile": 0,
+    "rarity": "Epic",
+    "chance": 8e-05,
+    "detail": "Ignore 3.5% of enemy armor.",
+    "role": "Build choice",
+    "build_hint": "Choose equipment that fits this card and complements your build.",
+    "slots": [
+      "hands",
+      "weapon"
+    ],
+    "pierce": 0.035
+  },
+  "card_realm_5_7": {
+    "enemy": "realm_5_7",
+    "tile": 0,
+    "rarity": "Epic",
+    "chance": 8e-05,
+    "detail": "Every fourth hit grants a small Barrier.",
+    "role": "Build choice",
+    "build_hint": "Choose equipment that fits this card and complements your build.",
+    "slots": [
+      "shield",
+      "body"
+    ],
+    "boon": "barrier"
+  },
+  "card_realm_5_8": {
+    "enemy": "realm_5_8",
+    "tile": 0,
+    "rarity": "Legendary",
+    "chance": 2.5e-05,
+    "detail": "Every fourth attack deals 4% more damage.",
+    "role": "Build choice",
+    "build_hint": "Choose equipment that fits this card and complements your build.",
+    "slots": [
+      "weapon",
+      "necklace"
+    ],
+    "special": 0.04
+  },
+  "card_realm_5_9": {
+    "enemy": "realm_5_9",
+    "tile": 0,
+    "rarity": "Legendary",
+    "chance": 2.5e-05,
+    "detail": "Every fourth attack deals 4% more damage.",
+    "role": "Build choice",
+    "build_hint": "Choose equipment that fits this card and complements your build.",
+    "slots": [
+      "weapon",
+      "necklace"
+    ],
+    "special": 0.04
+  },
+  "card_realm_6_0": {
+    "enemy": "realm_6_0",
+    "tile": 0,
+    "rarity": "Epic",
+    "chance": 8e-05,
+    "detail": "Take 1.2% less direct damage. Chill lasts 25% less time; matching special strikes deal 25% less damage.",
+    "role": "Build choice",
+    "build_hint": "Choose equipment that fits this card and complements your build.",
+    "slots": [
+      "body",
+      "shield"
+    ],
+    "resist": "chill",
+    "defense": 0.012
+  },
+  "card_realm_6_1": {
+    "enemy": "realm_6_1",
+    "tile": 0,
+    "rarity": "Epic",
+    "chance": 8e-05,
+    "detail": "+1.5% attack damage. Every fourth hit applies Chill.",
+    "role": "Build choice",
+    "build_hint": "Choose equipment that fits this card and complements your build.",
+    "slots": [
+      "weapon",
+      "hands"
+    ],
+    "proc": "chill",
+    "attack": 0.015
+  },
+  "card_realm_6_2": {
+    "enemy": "realm_6_2",
+    "tile": 0,
+    "rarity": "Epic",
+    "chance": 8e-05,
+    "detail": "+3.5% damage against enemies affected by Chill.",
+    "role": "Build choice",
+    "build_hint": "Choose equipment that fits this card and complements your build.",
+    "slots": [
+      "ring",
+      "necklace"
+    ],
+    "vs_chill": 0.035
+  },
+  "card_realm_6_3": {
+    "enemy": "realm_6_3",
+    "tile": 0,
+    "rarity": "Epic",
+    "chance": 8e-05,
+    "detail": "Meals restore 3.5% more HP.",
+    "role": "Build choice",
+    "build_hint": "Choose equipment that fits this card and complements your build.",
+    "slots": [
+      "belt",
+      "necklace"
+    ],
+    "healing": 0.035
+  },
+  "card_realm_6_4": {
+    "enemy": "realm_6_4",
+    "tile": 0,
+    "rarity": "Legendary",
+    "chance": 2.5e-05,
+    "detail": "Deal 3.5% more damage to bosses.",
+    "role": "Build choice",
+    "build_hint": "Choose equipment that fits this card and complements your build.",
+    "slots": [
+      "weapon",
+      "ring"
+    ],
+    "boss": 0.035
+  },
+  "card_realm_6_5": {
+    "enemy": "realm_6_5",
+    "tile": 0,
+    "rarity": "Epic",
+    "chance": 8e-05,
+    "detail": "Gain 2.5% more ordinary hunt materials.",
+    "role": "Build choice",
+    "build_hint": "Choose equipment that fits this card and complements your build.",
+    "slots": [
+      "feet",
+      "head"
+    ],
+    "material": 0.025
+  },
+  "card_realm_6_6": {
+    "enemy": "realm_6_6",
+    "tile": 0,
+    "rarity": "Epic",
+    "chance": 8e-05,
+    "detail": "Ignore 3.5% of enemy armor.",
+    "role": "Build choice",
+    "build_hint": "Choose equipment that fits this card and complements your build.",
+    "slots": [
+      "hands",
+      "weapon"
+    ],
+    "pierce": 0.035
+  },
+  "card_realm_6_7": {
+    "enemy": "realm_6_7",
+    "tile": 0,
+    "rarity": "Epic",
+    "chance": 8e-05,
+    "detail": "Every fourth hit grants a small Barrier.",
+    "role": "Build choice",
+    "build_hint": "Choose equipment that fits this card and complements your build.",
+    "slots": [
+      "shield",
+      "body"
+    ],
+    "boon": "barrier"
+  },
+  "card_realm_6_8": {
+    "enemy": "realm_6_8",
+    "tile": 0,
+    "rarity": "Legendary",
+    "chance": 2.5e-05,
+    "detail": "Every fourth attack deals 4% more damage.",
+    "role": "Build choice",
+    "build_hint": "Choose equipment that fits this card and complements your build.",
+    "slots": [
+      "weapon",
+      "necklace"
+    ],
+    "special": 0.04
+  },
+  "card_realm_6_9": {
+    "enemy": "realm_6_9",
+    "tile": 0,
+    "rarity": "Legendary",
+    "chance": 2.5e-05,
+    "detail": "Every fourth attack deals 4% more damage.",
+    "role": "Build choice",
+    "build_hint": "Choose equipment that fits this card and complements your build.",
+    "slots": [
+      "weapon",
+      "necklace"
+    ],
+    "special": 0.04
   }
 }

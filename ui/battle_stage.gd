@@ -87,6 +87,7 @@ func _process(delta: float):
 		arrival = .65
 		Actor.frames(id)
 		enemy_background = U.atlas_tile("res://assets/art/ascension-places-0.25.png",int(model.data.enemies[id].place_tile),2,2) if model.data.enemies[id].has("place_tile") else null
+		if model.data.enemies[id].has("realm"):enemy_background=preload("res://ui/world.gd").art(int(model.data.enemies[id].realm))
 		if model.data.enemies[id].has("march"):enemy_background=U.atlas_tile("res://assets/art/march-places-0.50.png",int(model.data.enemies[id].march),3,2)
 		if model.data.enemies[id].has("frontier"): enemy_background = preload("res://ui/premium.gd").art(9+int(model.data.enemies[id].frontier))
 	if serial!=int(model.battle_event.serial):

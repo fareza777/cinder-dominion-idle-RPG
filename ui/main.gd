@@ -7,6 +7,8 @@ var model = RealmModel.new()
 var saves = RealmSave.new()
 var page = "village"
 var skill = ""
+var explore_location = ""
+var profession_group = "gather"
 var show_locked_recipes = false
 var filter = "all"
 var search_text = ""
@@ -670,6 +672,7 @@ func activity_dialog(id: String, recommended: int = 0):
 	dialog.set_meta("coach_activity",id)
 	if a.kind!="combat":
 		v.add_child(U.icon(a.output,92))
+		if a.skill in RealmWorld.PROFESSIONS:v.add_child(U.para(preload("res://ui/world.gd").USES[a.skill],14,U.GOLD))
 		v.add_child(U.para("%s · Lv.%d · %.1fs · +%d XP" % [model.local_name(model.data.skills[a.skill]),int(a.level),model.duration(a)/1000.0,int(a.xp)]))
 		var mastery = U.disclosure(v,"crafting mastery")
 		mastery.add_child(U.para("%d completions. At 250: +1 output every 10 cycles. At 1,000: every 5 cycles. Materials and food only." % int(model.s.mastery.get(id,0)),13))
@@ -799,7 +802,7 @@ func salvage_dialog(ids: Array):
 	for uid in ids:
 		var g = model.gear(uid)
 		if g.is_empty(): continue
-		total += int(g.count)*[1,1,2,4,6,8,12,16][int(g.q)]
+		total += int(g.count)*([1,1,2,4,6,8,12,16][int(g.q)] if g.q<8 else 16+(int(g.q)-7)*8)
 		v.add_child(U.para("%s ×%d" % [model.name_of(g.id),int(g.count)]))
 	v.add_child(U.label("→ %d %s" % [total,tr2("serpihan logam","metal scraps")],19,U.GOLD))
 	v.add_child(U.para(tr2("Perlengkapan dalam daftar akan dilebur permanen.","The listed equipment will be permanently salvaged.")))

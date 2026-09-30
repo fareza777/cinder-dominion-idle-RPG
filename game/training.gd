@@ -1,6 +1,6 @@
 class_name RealmTraining
 extends RefCounted
-const SKILLS = ["mining","woodcutting","fishing","smithing","cooking","alchemy"]
+const SKILLS = ["mining","woodcutting","fishing","smithing","cooking","alchemy","herbalism","hunting","thieving","crafting","arcane_arts","divinity","runecarving"]
 const MINUTES = [15,60,240]
 
 static func chain(m, id: String, cycles: int, skill: String) -> Dictionary:
@@ -16,7 +16,7 @@ static func plan(source, skill: String, target: int, minutes: int) -> Dictionary
 	var m = RealmModel.new()
 	m.data = source.data
 	m.s = source.s.duplicate(true)
-	if skill not in SKILLS or target<2 or target>100 or minutes not in MINUTES: return {"error":"Choose a skill, a level up to 100 and a training duration."}
+	if skill not in SKILLS or target<2 or target>130 or minutes not in MINUTES: return {"error":"Choose a skill, a level up to 130 and a training duration."}
 	if m.level(skill)>=target: return {"error":"Target reached. Choose your next upgrade or a higher level.","complete":true}
 	if not m.s.queue.is_empty(): return {"error":"Finish your current work before starting another training plan."}
 	var milestone = target

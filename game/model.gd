@@ -2,7 +2,7 @@ class_name RealmModel
 extends RefCounted
 
 const MAX_OFFLINE = 86400000
-const QUALITY = [0.8, 1.0, 1.1, 1.25, 1.5, 1.8, 2.2, 2.7]
+const QUALITY = [0.8, 1.0, 1.1, 1.25, 1.5, 1.8, 2.2, 2.7, 3.1, 3.6, 4.2, 4.9, 5.7, 6.6, 7.6, 8.8, 10.1, 11.6, 13.3, 15.2, 17.4]
 var data: Dictionary
 var s: Dictionary
 var rng = RandomNumberGenerator.new()
@@ -31,7 +31,7 @@ func fresh(seed_value: int = 12345):
 	last_hit = ""
 	last_forged = ""
 	rng.seed = seed_value
-	s = {"version":1,"card_slot_revision":1,"economy_revision":1,"revision":0,"time":0,"wall":0,"rng":str(rng.state),"gold":20,
+	s = {"version":1,"world_revision":1,"card_slot_revision":1,"economy_revision":1,"revision":0,"time":0,"wall":0,"rng":str(rng.state),"gold":20,
 		"bag":{"cooked_minnow":5},"gear":[],"overflow":[],"equipped":{},"next_uid":1,
 		"xp":{},"mastery":{},"queue":[],"active":{},"fight":{},"hp":100,
 		"regen_at":1000,"kills":{},"gains":{},"spent":{},"tutorial":false,"beacon":false,
@@ -128,6 +128,7 @@ func note(message: String):
 
 func available(enemy_id: String) -> String:
 	var d = data.enemies[enemy_id]
+	if d.has("realm"): return RealmWorld.available(self,enemy_id)
 	if d.has("march"): return RealmMarches.available(self,enemy_id)
 	if d.has("frontier"): return RealmFrontiers.available(self,enemy_id)
 	if d.get("secret",false) or d.get("depth",false): return RealmEndgame.available(self,enemy_id)
@@ -167,6 +168,9 @@ func command(cmd: Dictionary) -> bool:
 	if action in ["queue","clear","cancel","finish_hunt","work_order"]: RealmAutomation.stop(self,"Manual control. Enable rewarded assistance again when ready.")
 	if RealmVoyages.busy(self) and action in ["queue","clear","cancel","finish_hunt","work_order","training","equip","refine","preset_load","loadout_load","rune_equip","gear_attune","artisan_select","tool_upgrade","end_temper","end_depth","assist_start"]:return fail("Your hero is on a journey. Return or recall the expedition first.")
 	match action:
+		"rarity_fuse":
+			var why=RealmFusion.command(self,str(cmd.get("uid","")))
+			if why!="":return fail(why)
 		"voyage_start","voyage_recall","voyage_claim":
 			var why=RealmVoyages.command(self,cmd)
 			if why!="":return fail(why)
@@ -268,7 +272,7 @@ func command(cmd: Dictionary) -> bool:
 			var target = 1 if id=="hunt_hollow_depth" else clampi(int(cmd.get("target",50)),1,1000000)
 			var kind = str(cmd.get("kind","cycles"))
 			if kind not in ["cycles","output","level"]: return fail("Invalid activity target")
-			s.queue.append({"id":id,"target":mini(target,100) if kind=="level" else target,"kind":kind,"done":0,"output":0,"skip":bool(cmd.get("skip",false))})
+			s.queue.append({"id":id,"target":mini(target,130) if kind=="level" else target,"kind":kind,"done":0,"output":0,"skip":bool(cmd.get("skip",false))})
 			if s.active.is_empty() and s.fight.is_empty(): start_next()
 		"cancel":
 			var index = int(cmd.get("index",0))
@@ -316,7 +320,7 @@ func command(cmd: Dictionary) -> bool:
 			var amount = 0
 			for uid in ids:
 				var g = gear(uid)
-				amount += int(g.count)*([1,1,2,4,6,8,12,16][int(g.q)])
+				amount += int(g.count)*([1,1,2,4,6,8,12,16][int(g.q)] if g.q<8 else 16+(int(g.q)-7)*8)
 				s.gear.erase(g)
 			gain("scrap",amount)
 			note("Salvaged into %d metal scraps" % amount)
@@ -608,6 +612,7 @@ func win(enemy: Dictionary):
 	var id = enemy.id
 	RealmEndgame.victory(self,enemy)
 	RealmMarches.victory(self,enemy)
+	RealmWorld.victory(self,enemy)
 	var legacy = RealmChronicle.state(self)
 	var fragment_id = RealmChronicle.fragments_for(enemy)
 	var fragments = RealmHuntMastery.fragments(self,enemy)

@@ -23,8 +23,8 @@ func open():
 	v.add_child(U.para("1,000 Silver = 1 Gold\n1,000 Gold = 1 Platinum",17,U.GOLD))
 	v.add_child(U.para("Coins convert automatically.",14))
 	var level = m.level("bladecraft")
-	v.add_child(U.para("Bladecraft · Level %d / 100" % level,21,U.TEXT))
-	if level<100:
+	v.add_child(U.para("Bladecraft · Level %d / 130" % level,21,U.TEXT))
+	if level<130:
 		v.add_child(U.para("%d XP to level %d" % [RealmEconomy.threshold(level+1)-int(m.s.xp.bladecraft),level+1],15,U.GOLD))
 	v.add_child(U.para("Hunt stronger enemies for XP. Revisit old foes for cards and materials.",14))
 	v.add_child(U.button("Compare available hunts",hunts,true))

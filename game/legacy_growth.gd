@@ -22,7 +22,10 @@ static func earned(s: Dictionary) -> int:
 		if s.kills.get("march_%d_8" % r,0)>0:bonus+=3
 	for i in range(5):
 		if s.kills.get("march_guard_%d" % i,0)>0:bonus+=1
-	return mini(80,mini(cap,initial+maxi(0,int((level(s.xp)-20)*50/80)))+bonus)
+	var realm_points=mini(6,maxi(0,int((level(s.xp)-100)/5)))
+	for r in range(7):
+		if s.kills.get("realm_%d_9" % r,0)>0:realm_points+=2
+	return mini(80,mini(cap,initial+maxi(0,int((mini(100,level(s.xp))-20)*50/80)))+bonus)+realm_points
 
 static func limit(id: String) -> int: return 10 if id in ADVANCED else 5
 static func rank(m, id: String) -> int: return int(RealmChronicle.state(m).talents.get(id,0))
@@ -46,7 +49,8 @@ static func talent_reason(m, id: String) -> String:
 	return ""
 
 static func next_point(m) -> String:
-	if earned(m.s)>=80:return "All 80 points earned. Choose your strengths; the full tree costs 120 points."
+	if earned(m.s)>=100:return "All 100 points earned. Choose your strengths; the full tree costs 120 points."
+	if earned(m.s)>=80:return "Earn 2 points per Shattered Realm ruler and 1 per 5 Bladecraft levels beyond 100."
 	if earned(m.s)>=60:return "Secure the Far Marches and defeat their optional guardians to earn more talent points."
 	for enemy in GATES:
 		if int(m.s.kills.get(enemy,0))==0:
@@ -71,7 +75,7 @@ static func ascended(m, id: String) -> int:
 
 static func essence(enemy: Dictionary) -> int:
 	if not enemy.boss: return 0
-	if enemy.get("secret",false) or enemy.get("depth",false) or enemy.has("art_tile") or enemy.has("frontier") or enemy.has("march"): return 3
+	if enemy.get("secret",false) or enemy.get("depth",false) or enemy.has("art_tile") or enemy.has("frontier") or (enemy.has("march") or enemy.has("realm")): return 3
 	if enemy.get("trial",false): return 2
 	return 1 if int(enemy.get("tier",0))>=3 else 0
 

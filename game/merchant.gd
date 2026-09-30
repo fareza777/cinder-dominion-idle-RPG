@@ -115,7 +115,7 @@ static func buy_provisions(m) -> String:
 	return ""
 
 static func sell_price(m, g: Dictionary) -> int:
-	return maxi(1,int(m.data.items[g.id].get("sell",1)))*[1,2,3,5,8,12,18,25][int(g.q)]
+	return maxi(1,int(m.data.items[g.id].get("sell",1)))*([1,2,3,5,8,12,18,25][int(g.q)] if g.q<8 else 25+(int(g.q)-7)*10)
 
 static func sell(m, uid: String) -> String:
 	var g = m.gear(uid)

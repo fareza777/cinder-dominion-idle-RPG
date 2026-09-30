@@ -99,7 +99,7 @@ static func player_damage(m, enemy: Dictionary, swing: int) -> int:
 	return maxi(1,int(damage*(1.0+minf(.40,card_bonus))))
 
 static func mechanic(enemy: Dictionary) -> String:
-	if enemy.get("secret",false) or (enemy.get("depth",false) or (enemy.has("frontier") or enemy.has("march"))):
+	if enemy.get("secret",false) or (enemy.get("depth",false) or (enemy.has("frontier") or (enemy.has("march") or enemy.has("realm")))):
 		var recovery = " Restores %.1f%% HP." % (float(enemy.special_heal)*100) if enemy.special_heal>0 else ""
 		return "%s · Every third attack: %.2f× attack, ignores %d%% armor, +%d pressure damage.%s\nBelow half HP: +18%% damage, double pressure. Every 15 attacks: +12%% damage (cap +150%%). Resists %d%% of your damage." % [enemy.special_name,enemy.special_attack,roundi((1-float(enemy.special_armor))*100),enemy.pressure,recovery,roundi(float(enemy.get("resist",0))*100)]
 	if enemy.has("special_name"):
@@ -121,13 +121,13 @@ static func forecast(m, id: String) -> Dictionary:
 	var cycle_damage = player_damage(m,enemy,1)*3+player_damage(m,enemy,4)
 	var damage_per_second = cycle_damage*float(stats.accuracy)*1.025/8.0
 	var ordinary = move(m,enemy,1,int(stats.armor))
-	var late_special = move(m,enemy,3,int(stats.armor),bool(enemy.get("trial",false)) or enemy.get("secret",false) or (enemy.get("depth",false) or (enemy.has("frontier") or enemy.has("march"))))
+	var late_special = move(m,enemy,3,int(stats.armor),bool(enemy.get("trial",false)) or enemy.get("secret",false) or (enemy.get("depth",false) or (enemy.has("frontier") or (enemy.has("march") or enemy.has("realm")))))
 	var interval = float(enemy.interval)/1000.0
 	# Trials use the stronger phase for a conservative recovery/risk estimate.
 	var net_damage = damage_per_second-float(late_special.heal)/(interval*3.0)
 	var stalled = net_damage<=0
 	var seconds = 3600.0 if stalled else clampf(ceil(float(enemy.hp)/maxf(.01,net_damage)/2.0)*2.0,2,3600)
-	if enemy.get("secret",false) or (enemy.get("depth",false) or (enemy.has("frontier") or enemy.has("march"))):
+	if enemy.get("secret",false) or (enemy.get("depth",false) or (enemy.has("frontier") or (enemy.has("march") or enemy.has("realm")))):
 		var late_strike = maxi(3,int(seconds/interval))
 		late_strike += (3-late_strike%3)%3
 		late_special = move(m,enemy,late_strike,int(stats.armor),true)

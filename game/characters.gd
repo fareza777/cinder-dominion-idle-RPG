@@ -31,7 +31,7 @@ static func valid(hero, xp: Dictionary) -> bool:
 	var total = 0
 	for key in ATTRIBUTES:
 		var v = hero.attributes.get(key,-1)
-		if not RealmSave.counter(v) or v>22: return false
+		if not RealmSave.counter(v) or v>28: return false
 		total += int(v)
 	var level = RealmEconomy.level(xp.bladecraft)
 	return total<=3+int((level-1)/5)

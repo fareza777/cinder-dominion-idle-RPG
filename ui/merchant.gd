@@ -12,7 +12,7 @@ func open():
 	var stock = RealmMerchant.sync(m,app.now_ms())
 	app.persist()
 	var v = app.modal("Cinderwatch merchant")
-	U.scenic(v,preload("res://ui/premium.gd").art(1),"","The merchant",120)
+	U.scenic(v,preload("res://ui/world.gd").art(6),"","The merchant",120)
 	var wallet = preload("res://ui/currency.gd").new()
 	wallet.setup(func(): preload("res://ui/economy.gd").new(app).open())
 	v.add_child(wallet)

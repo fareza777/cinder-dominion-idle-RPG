@@ -9,7 +9,7 @@ const MUTED = Color("abb4b5")
 const GOLD = Color("d9b477")
 const GREEN = Color("9eb9a1")
 const RED = Color("dd938d")
-const QUALITY = [Color("929a9f"),Color("b9c0bd"),Color("9fbca2"),Color("91b5db"),Color("b69bce"),Color("dbb777"),Color("dd9184"),Color("ead9a5")]
+const QUALITY = [Color("929a9f"),Color("b9c0bd"),Color("9fbca2"),Color("91b5db"),Color("b69bce"),Color("dbb777"),Color("dd9184"),Color("ead9a5"),Color("e6b28c"),Color("d4c3a0"),Color("bdafdc"),Color("a8c6ae"),Color("9dc9df"),Color("cac0ea"),Color("d5e3f1"),Color("e6cfaf"),Color("c7c196"),Color("cab0d4"),Color("e5bca5"),Color("dbe2c9"),Color("f1dfac")]
 static var body_font: Font
 static var title_font: Font
 static var portraits: Texture2D

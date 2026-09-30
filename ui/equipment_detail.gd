@@ -53,6 +53,7 @@ func open(uid: String, requested_slot: String = ""):
 			changes.add_child(U.para("%s   %.0f → %.0f   (%+.0f)" % [stat.capitalize(),before,after,after-before],18,U.GREEN if after>before else (U.RED if after<before else U.MUTED)))
 		changes.add_child(U.para("Total stats with your current style, talents and relic. Card damage percentages apply during combat and are not added to these ATK/DEF totals.",13))
 		changes.add_child(U.para("Armor sets\nBefore: %s\nAfter: %s" % [comparison.sets_before,comparison.sets_after],14,U.GOLD))
+	if RealmFusion.eligible(m,item):v.add_child(U.button("Rarity forge · tier %d / 21" % (int(item.q)+1),func():preload("res://ui/fusion.gd").new(app).open(uid)))
 	var metal = RealmGearSets.metal(item.id)
 	if metal!="" and data.slot in RealmGearSets.SLOTS:
 		var set_info = RealmGearSets.ALL[metal]
