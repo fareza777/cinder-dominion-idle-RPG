@@ -18,6 +18,11 @@ func home(parent: Node):
 	if not m.s.beacon:return
 	var c=U.card(parent,12,U.GOLD.darkened(.5))
 	c.add_child(U.para("The Shattered Realms",23,U.GOLD))
+	var conquered=0
+	for r in range(7):
+		if m.s.kills.get("realm_%d_9" % r,0)>0:conquered+=1
+	c.add_child(U.para("%d / 7 rulers defeated" % conquered,14,U.GOLD))
+	if conquered==7:c.add_child(U.para("All realms conquered. Return for rare cards, materials and your next equipment build.",14))
 	for r in range(7):
 		if m.s.kills.get("realm_%d_9" % r,0)>0:continue
 		c.add_child(U.para(data_name(r)+" · Bladecraft Lv.%d" % (100+r*5),15))

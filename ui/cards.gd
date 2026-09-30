@@ -4,6 +4,7 @@ const U = preload("res://ui/style.gd")
 var app
 var m
 var collection_page = 0
+var collection_filter = "all"
 func _init(owner): app = owner; m = owner.model
 
 func collection(page: int = -1):
@@ -15,16 +16,37 @@ func collection(page: int = -1):
 	for id in RealmCards.definitions():
 		if int(m.s.kills.get(RealmCards.definitions()[id].enemy,0))>0 or m.count(id)>0 or id in m.s.get("card_sockets",{}).values(): known.append(id)
 	v.add_child(U.para("%d / %d discovered" % [known.size(),RealmCards.definitions().size()],14,U.GOLD))
+	var choices=["all","owned","attached"]
+	var picker=OptionButton.new();picker.custom_minimum_size.y=48;picker.fit_to_longest_item=false
+	for name in ["All discovered cards","In your bag","Attached to equipment"]:picker.add_item(name)
+	for place in RealmWorld.locations():
+		if known.any(func(id):return RealmWorld.location(m.data.enemies[RealmCards.definitions()[id].enemy])==place.id):
+			choices.append(place.id);picker.add_item(place.name)
+	if collection_filter not in choices:collection_filter="all"
+	picker.select(choices.find(collection_filter));v.add_child(picker)
+	picker.item_selected.connect(func(index):collection_filter=choices[index];collection(0))
+	known=known.filter(func(id):
+		if collection_filter=="all":return true
+		if collection_filter=="owned":return m.count(id)>0
+		if collection_filter=="attached":return id in m.s.get("card_sockets",{}).values()
+		return RealmWorld.location(m.data.enemies[RealmCards.definitions()[id].enemy])==collection_filter)
 	var pages = maxi(1,ceili(known.size()/7.0))
 	page = clampi(page,0,pages-1)
+	v.add_child(U.para("%d cards · Page %d / %d" % [known.size(),page+1,pages],13))
 	for id in known.slice(page*7,(page+1)*7):
+		var d=RealmCards.definitions()[id]
+		var accent=preload("res://ui/card_art.gd").accent(d.rarity)
+		var entry=U.card(v,10,accent.darkened(.55))
 		var row = U.row(12)
-		v.add_child(row)
-		row.add_child(U.icon(id,72))
-		var b = U.button(m.name_of(id)+"\n%d in bag" % m.count(id),func(): detail(id))
-		b.size_flags_horizontal = Control.SIZE_EXPAND_FILL
-		row.add_child(b)
-	if known.is_empty(): v.add_child(U.para("Win your first hunt to reveal its card.",18))
+		entry.add_child(row)
+		var art=U.icon(id,84);art.custom_minimum_size=Vector2(84,114);row.add_child(art)
+		var words=U.column(5);words.size_flags_horizontal=Control.SIZE_EXPAND_FILL;row.add_child(words)
+		var b = U.button(m.name_of(id).trim_suffix(" Card"),func(): detail(id))
+		words.add_child(b)
+		words.add_child(U.para(RealmCards.slot_text(id),12,U.MUTED))
+		var attached=m.s.get("card_sockets",{}).values().count(id)
+		words.add_child(U.para("%d in bag%s" % [m.count(id)," · %d attached" % attached if attached>0 else ""],12,U.GOLD))
+	if known.is_empty(): v.add_child(U.para("No cards match this filter." if collection_filter!="all" else "Win your first hunt to reveal its card.",18))
 	if page>0: v.add_child(U.button("Previous cards",func(): collection(page-1)))
 	if page+1<pages: v.add_child(U.button("Next cards",func(): collection(page+1)))
 	v.add_child(U.button("How cards work",help))
@@ -32,8 +54,9 @@ func collection(page: int = -1):
 func detail(id: String, uid: String = ""):
 	var d = RealmCards.definitions()[id]
 	var v = app.modal(m.name_of(id))
-	v.add_child(U.icon(id,200))
-	v.add_child(U.para(d.rarity+" · "+d.get("role","Build choice"),18,U.GOLD))
+	var art=U.icon(id,200);art.custom_minimum_size=Vector2(0,265);art.size_flags_horizontal=Control.SIZE_EXPAND_FILL;v.add_child(art)
+	var role=str(d.get("role",""))
+	if role!="" and role!="Build choice":v.add_child(U.para(role,18,preload("res://ui/card_art.gd").accent(d.rarity)))
 	v.add_child(U.para(d.detail,17,U.TEXT))
 	v.add_child(U.para(RealmCards.slot_text(id),15,U.GOLD))
 	v.add_child(U.para("Owned %d · duplicates do not stack" % m.count(id),13))

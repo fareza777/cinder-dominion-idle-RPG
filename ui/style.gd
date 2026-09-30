@@ -226,6 +226,8 @@ static func portrait(index: int, dimensions: Vector2) -> TextureRect:
 	return t
 
 static func enemy_texture(enemy: Dictionary) -> Texture2D:
+	if enemy.has("realm"):
+		return load("res://ui/enemy_actor.gd").frames(enemy.id)[0]
 	if enemy.has("march_tile"):
 		var sheet=int(enemy.march_tile/12);var cell=int(enemy.march_tile)%12
 		var tile=atlas_tile("res://assets/art/march-enemies-%d-0.50.png" % sheet,cell,4,3)
@@ -258,6 +260,10 @@ static func enemy_portrait(enemy: Dictionary, dimensions: Vector2) -> TextureRec
 	t.stretch_mode = TextureRect.STRETCH_KEEP_ASPECT_COVERED
 	t.mouse_filter = Control.MOUSE_FILTER_IGNORE
 	t.texture = enemy_texture(enemy)
+	if enemy.has("realm"):
+		t.texture=null
+		t.set_script(load("res://ui/realm_portrait.gd"))
+		t.enemy_id=enemy.id
 	return t
 
 static func frontier_texture(tile: int) -> Texture2D:
@@ -276,11 +282,16 @@ static func icon(id: String, dimension: int = 52) -> TextureRect:
 	t.expand_mode = TextureRect.EXPAND_IGNORE_SIZE
 	t.stretch_mode = TextureRect.STRETCH_KEEP_ASPECT_CENTERED
 	t.mouse_filter = Control.MOUSE_FILTER_IGNORE
-	if id in ["card_ash_rat","card_hollow_hound"]:
-		t.texture = enemy_texture(enemy_catalog[id.trim_prefix("card_")])
+	if id.begins_with("card_") and RealmCards.definitions().has(id):
+		var framed=load("res://ui/card_art.gd").new()
+		framed.card_id=id
+		t.add_child(framed)
+		framed.set_anchors_and_offsets_preset(Control.PRESET_FULL_RECT)
 		return t
 	var data = item_catalog.get(id,{})
 	if data.has("enemy_art"):
+		if enemy_catalog[data.enemy_art].has("realm"):
+			t.set_script(load("res://ui/realm_portrait.gd"));t.enemy_id=data.enemy_art;return t
 		t.texture=enemy_texture(enemy_catalog[data.enemy_art])
 		return t
 	if data.has("artisan_icon"):

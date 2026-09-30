@@ -81,13 +81,13 @@ func explore(parent: Node):
 	app.update_callbacks.append(func():
 		if is_instance_valid(retreat): retreat.visible = not m.s.fight.is_empty())
 	battle.add_child(U.button("Hunt reports",app.hunt_reports_dialog))
-	var prep = U.disclosure(parent,"hunt preparation") if not m.s.fight.is_empty() else U.card(parent,14)
+	var prep = U.disclosure(parent,"hunt preparation")
 	U.section(prep,"HUNT PREPARATION")
 	app.dynamic(prep,func(): return "%s · %d ATK · %d DEF" % [RealmProgression.STANCES[m.progression().stance].name,int(m.stats().attack),int(m.stats().armor)],16,U.GOLD)
 	app.dynamic(prep,func(): return "%s ×%d · heals %d HP at %d%% health" % [m.name_of(m.s.settings.food),m.count(m.s.settings.food),RealmCombat.food_heal(m,m.s.settings.food),int(m.s.settings.threshold*100)],13,U.GREEN)
 	var preparation_actions = U.row(6)
 	prep.add_child(preparation_actions)
-	for entry in [["Prepare for a hunt",hunt_preparation],["More hunts",hunt_routes]]:
+	for entry in [["Prepare for a hunt",hunt_preparation],["Change location",app.world_dialog]]:
 		var action = U.button(entry[0],entry[1])
 		action.size_flags_horizontal = Control.SIZE_EXPAND_FILL
 		preparation_actions.add_child(action)
@@ -120,15 +120,19 @@ func explore(parent: Node):
 
 	preload("res://ui/voyages.gd").new(app).home(parent)
 	parent.add_child(U.button("Wallet & hunting rewards",func(): preload("res://ui/economy.gd").new(app).open()))
-	if m.s.beacon: parent.add_child(U.button("The Far Marches",func(): preload("res://ui/marches.gd").new(app).open()))
-	if m.s.beacon: parent.add_child(U.button("Beyond the Sovereign",func(): preload("res://ui/frontiers.gd").new(app).open()))
+
+func profession_services():
+	var v=app.modal("Tools & equipment")
+	v.add_child(U.button("Artisan tools & crafting quality",func():preload("res://ui/artisan.gd").new(app).open()))
+	v.add_child(U.button("Improve gathering tools",func():preload("res://ui/artisan.gd").new(app).tools()))
+	v.add_child(U.button("Gear paths · level 25–100",func():preload("res://ui/ascension.gd").new(app).open()))
+	v.add_child(U.button("Rarity forge",func():preload("res://ui/fusion.gd").new(app).hub()))
 
 func skills(parent: Node):
-	U.scenic(parent,preload("res://ui/world.gd").art(1),"16 SKILLS · GATHER, CRAFT, FIGHT","Professions",145)
-	parent.add_child(U.button("Artisan tools & crafting quality",func():preload("res://ui/artisan.gd").new(app).open()))
-	parent.add_child(U.button("Improve gathering tools",func():preload("res://ui/artisan.gd").new(app).tools()))
-	parent.add_child(U.button("Gear paths · level 25–100",func(): preload("res://ui/ascension.gd").new(app).open()))
-	preload("res://ui/training.gd").new(app).home(parent)
+	if app.skill=="":
+		U.scenic(parent,preload("res://ui/world.gd").art(1),"GATHER · CRAFT · ADVANCE","Professions",115)
+		parent.add_child(U.button("Tools & equipment",func():profession_services()))
+		preload("res://ui/training.gd").new(app).home(parent)
 	if app.skill=="":
 		P.tabs(parent,[["gather","Gather"],["craft","Craft"],["arcane","Arcane"]],app.profession_group,func(group):app.profession_group=group;app.set_page("skills"))
 		var groups={"gather":["woodcutting","mining","fishing","herbalism","hunting","thieving"],"craft":["smithing","cooking","alchemy","crafting"],"arcane":["arcane_arts","divinity","runecarving"]}
@@ -355,7 +359,7 @@ func character(parent: Node):
 	var c = U.card(parent)
 	c.add_child(U.label("COMBAT SKILLS",11,U.GOLD))
 	for id in ["bladecraft","might","warding"]:
-		app.dynamic(c,func(): return "%s   Lv.%d   ·   %d XP" % [m.local_name(m.data.skills[id]),m.level(id),int(m.s.xp[id])],15)
+		app.dynamic(c,func(): return "%s · Lv.%d · %s" % [m.local_name(m.data.skills[id]),m.level(id),"Mastered" if m.level(id)>=130 else "%s XP to next level" % str(RealmEconomy.threshold(m.level(id)+1,id)-int(m.s.xp[id]))],15)
 	var style = U.card(parent)
 	style.add_child(U.label("YOUR FIGHTING STYLE",10,U.GOLD))
 	app.dynamic(style,func(): return RealmProgression.STANCES[m.progression().stance].name,24,U.TEXT)

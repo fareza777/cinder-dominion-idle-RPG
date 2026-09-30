@@ -616,7 +616,7 @@ func journal_dialog():
 	preload("res://ui/runeforge.gd").new(self).journal()
 
 func workshop_dialog():
-	preload("res://ui/armory.gd").new(self).workshop()
+	preload("res://ui/fusion.gd").new(self).hub()
 
 func loadouts_dialog():
 	preload("res://ui/armory.gd").new(self).loadouts()
@@ -640,7 +640,9 @@ func trials_dialog():
 	preload("res://ui/trials.gd").new(self).show_trial()
 
 func world_dialog():
-	preload("res://ui/chronicle.gd").new(self).world()
+	dismiss()
+	explore_location=""
+	set_page("explore",true)
 
 func talents_dialog():
 	preload("res://ui/chronicle.gd").new(self).talents()

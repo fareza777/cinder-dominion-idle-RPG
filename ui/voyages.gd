@@ -21,7 +21,7 @@ func open(page: int = 0):
   rewards(v,s.ready);return
  if not s.active.is_empty():
   underway(v,s.active);return
- v.add_child(U.para("Prepare your hero, pack provisions and leave on a long expedition. Your journey continues offline. Your hero returns with supplies, rare materials and a chance of exceptional equipment.",15))
+ v.add_child(U.para("Pack provisions and explore offline for supplies, rare materials and equipment.",15))
  v.add_child(U.para("One journey at a time. Hunting and profession work pause while your hero is away.",13,U.GOLD))
  var known=RealmVoyages.data().routes.filter(func(r):return m.s.kills.get(r.gate,0)>0)
  if known.is_empty():v.add_child(U.para("Defeat the Bellkeeper to uncover the first route.",17));return

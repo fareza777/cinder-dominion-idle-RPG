@@ -14,7 +14,7 @@ static func frames(id: String) -> Array:
  if cached.has(id):return cached[id]
  var d=definition(id)
  if d.is_empty():return []
- var result=[];var sheet=U.asset("res://assets/art/enemy-actors-%d-0.51.png" % int(d.sheet))
+ var result=[];var sheet=U.asset(d.get("path","res://assets/art/enemy-actors-%d-0.51.png" % int(d.sheet)))
  for pose in range(2):
   var index=int(d.tile)+pose;var t=AtlasTexture.new();t.atlas=sheet;t.filter_clip=true
   var b=measured(id)[pose].rect

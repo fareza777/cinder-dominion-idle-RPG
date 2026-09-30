@@ -9,10 +9,13 @@ func open(region: String = "all", page: int = 0):
 	var v = app.modal("Bestiary")
 	v.add_child(U.para("Your discovered enemies",14))
 	var picker = OptionButton.new()
-	var regions = ["all","wilds","marsh","crown","frontier_0","frontier_1","frontier_2"]
-	for id in regions:
-		var title = "All regions" if id=="all" else (RealmFrontiers.REGIONS[int(id.trim_prefix("frontier_"))] if id.begins_with("frontier_") else RealmChronicle.REGIONS[id].name)
-		picker.add_item(title)
+	var regions = ["all"]
+	picker.add_item("All discovered locations")
+	for place in RealmWorld.locations():
+		if RealmWorld.encounters(m,place.id).any(func(id):return RealmDiscovery.visible(m,id)):
+			regions.append(place.id);picker.add_item(place.name)
+	picker.fit_to_longest_item=false
+	if region not in regions:region="all"
 	picker.selected = regions.find(region)
 	picker.custom_minimum_size.y = 48
 	picker.item_selected.connect(func(index): open(regions[index]))
@@ -21,7 +24,7 @@ func open(region: String = "all", page: int = 0):
 	for id in m.data.enemies:
 		if not RealmDiscovery.visible(m,id): continue
 		var e = m.data.enemies[id]
-		var area = "frontier_"+str(int(e.frontier)) if e.has("frontier") else str(e.get("region",""))
+		var area = RealmWorld.location(e)
 		if region!="all" and area!=region: continue
 		known.append(id)
 	var pages = maxi(1,ceili(known.size()/8.0))
