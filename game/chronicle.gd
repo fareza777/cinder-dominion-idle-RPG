@@ -84,7 +84,7 @@ static func bounty_reward(m, id: String) -> Dictionary:
 		if m.level("cooking")>=recipe.level and m.level("fishing")>=recipe.level-5 and m.level("woodcutting")>=recipe.level-5:
 			tier += 1
 			food = recipe.output
-	return {"gold":int(BOUNTIES[id].gold)*(tier+1),"food":food,"fragments":5*(tier+1)}
+	return {"gold":maxi(int(BOUNTIES[id].gold)*(tier+1),int(RealmEndgame.reward_scale(m)*.15)),"food":food,"fragments":5*(tier+1)}
 
 static func command(m, cmd: Dictionary) -> String:
 	if not m.s.tutorial: return "Complete First Supplies to unlock your legacy. Follow the Journey guide."
@@ -137,6 +137,8 @@ static func next_expedition(m) -> String:
 	return ""
 
 static func focus(m) -> Dictionary:
+	if RealmVoyages.busy(m):return {"title":"Your journey is underway","why":"Review the next chamber, remaining time and your chosen path.","kind":"queue","id":"","amount":1}
+	if not m.s.get("voyages",{}).get("ready",{}).is_empty():return {"title":"Collect your journey cargo","why":"Your hero has returned. Collect the supplies before setting out again.","kind":"queue","id":"","amount":1}
 	if not m.s.queue.is_empty():
 		if m.s.active.is_empty() and m.s.fight.is_empty(): return {"title":"Your queue is blocked","why":m.requirement(m.s.queue[0].id),"kind":"queue","id":"","amount":1}
 		return {"title":"Your task is running","why":"Your orders continue while you are away, for up to 24 hours. Review the queue to see what will be ready when you return.","kind":"queue","id":"","amount":1}

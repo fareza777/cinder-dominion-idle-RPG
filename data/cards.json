@@ -1876,14 +1876,14 @@
     "tile": 0,
     "rarity": "Legendary",
     "chance": 2.5e-05,
-    "detail": "Every fourth attack deals 4% more damage.",
-    "role": "Build choice",
-    "build_hint": "Choose equipment that fits this card and complements your build.",
+    "detail": "Deal 22% more direct damage to chilled enemies, but 6% less while they are not chilled.",
+    "role": "Sovereign pact",
+    "build_hint": "Match this pact to your weapon and skills. Its benefit comes with a tradeoff.",
     "slots": [
       "weapon",
       "necklace"
     ],
-    "special": 0.04
+    "build_rule": "winter"
   },
   "card_realm_1_0": {
     "enemy": "realm_1_0",
@@ -2018,14 +2018,14 @@
     "tile": 0,
     "rarity": "Legendary",
     "chance": 2.5e-05,
-    "detail": "Every fourth attack deals 4% more damage.",
-    "role": "Build choice",
-    "build_hint": "Choose equipment that fits this card and complements your build.",
+    "detail": "Special hits deal 28% more direct damage to burning enemies. Normal hits deal 6% less damage.",
+    "role": "Sovereign pact",
+    "build_hint": "Match this pact to your weapon and skills. Its benefit comes with a tradeoff.",
     "slots": [
       "weapon",
       "necklace"
     ],
-    "special": 0.04
+    "build_rule": "ember"
   },
   "card_realm_2_0": {
     "enemy": "realm_2_0",
@@ -2160,14 +2160,14 @@
     "tile": 0,
     "rarity": "Legendary",
     "chance": 2.5e-05,
-    "detail": "Every fourth attack deals 4% more damage.",
-    "role": "Build choice",
-    "build_hint": "Choose equipment that fits this card and complements your build.",
+    "detail": "Deal 20% more direct damage to poisoned enemies, but 8% less before poison takes hold.",
+    "role": "Sovereign pact",
+    "build_hint": "Match this pact to your weapon and skills. Its benefit comes with a tradeoff.",
     "slots": [
       "weapon",
       "necklace"
     ],
-    "special": 0.04
+    "build_rule": "venom"
   },
   "card_realm_3_0": {
     "enemy": "realm_3_0",
@@ -2302,14 +2302,14 @@
     "tile": 0,
     "rarity": "Legendary",
     "chance": 2.5e-05,
-    "detail": "Every fourth attack deals 4% more damage.",
-    "role": "Build choice",
-    "build_hint": "Choose equipment that fits this card and complements your build.",
+    "detail": "Deal 22% more direct damage below half health, but 5% less above it. Take 6% more direct damage.",
+    "role": "Sovereign pact",
+    "build_hint": "Match this pact to your weapon and skills. Its benefit comes with a tradeoff.",
     "slots": [
       "weapon",
       "necklace"
     ],
-    "special": 0.04
+    "build_rule": "blood"
   },
   "card_realm_4_0": {
     "enemy": "realm_4_0",
@@ -2444,14 +2444,14 @@
     "tile": 0,
     "rarity": "Legendary",
     "chance": 2.5e-05,
-    "detail": "Every fourth attack deals 4% more damage.",
-    "role": "Build choice",
-    "build_hint": "Choose equipment that fits this card and complements your build.",
+    "detail": "Special hits deal 30% more direct damage. Normal hits deal 10% less damage.",
+    "role": "Sovereign pact",
+    "build_hint": "Match this pact to your weapon and skills. Its benefit comes with a tradeoff.",
     "slots": [
       "weapon",
       "necklace"
     ],
-    "special": 0.04
+    "build_rule": "echo"
   },
   "card_realm_5_0": {
     "enemy": "realm_5_0",
@@ -2586,14 +2586,14 @@
     "tile": 0,
     "rarity": "Legendary",
     "chance": 2.5e-05,
-    "detail": "Every fourth attack deals 4% more damage.",
-    "role": "Build choice",
-    "build_hint": "Choose equipment that fits this card and complements your build.",
+    "detail": "Take 25% less direct damage from every third enemy strike, but deal 8% less direct damage.",
+    "role": "Sovereign pact",
+    "build_hint": "Match this pact to your weapon and skills. Its benefit comes with a tradeoff.",
     "slots": [
       "weapon",
       "necklace"
     ],
-    "special": 0.04
+    "build_rule": "bastion"
   },
   "card_realm_6_0": {
     "enemy": "realm_6_0",
@@ -2728,13 +2728,13 @@
     "tile": 0,
     "rarity": "Legendary",
     "chance": 2.5e-05,
-    "detail": "Every fourth attack deals 4% more damage.",
-    "role": "Build choice",
-    "build_hint": "Choose equipment that fits this card and complements your build.",
+    "detail": "Deal 30% more direct damage below 30% enemy health, but 6% less before then.",
+    "role": "Sovereign pact",
+    "build_hint": "Match this pact to your weapon and skills. Its benefit comes with a tradeoff.",
     "slots": [
       "weapon",
       "necklace"
     ],
-    "special": 0.04
+    "build_rule": "mercy"
   }
 }

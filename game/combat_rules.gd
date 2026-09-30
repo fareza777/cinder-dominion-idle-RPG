@@ -50,12 +50,15 @@ static func move(m, enemy: Dictionary, strike: int, armor: int, second_phase: bo
 	damage = RealmEndgame.move(m,enemy,strike,damage,second_phase)
 	if RealmAfflictions.has(m,"enemy","weaken"): damage = maxi(1,int(damage*.85))
 	if RealmAfflictions.has(m,"enemy","wound"): heal = int(heal*.65)
+	if RealmBuildDepth.role(enemy)=="mender" and RealmAfflictions.has(m,"enemy","poison"):heal=int(heal*.5)
+	damage=RealmBuildDepth.enemy_damage(m,enemy,strike,damage)
 	damage = maxi(1,ceili(RealmLegacyGrowth.incoming(m,enemy,strike,damage)*(1.0-RealmCards.bonus(m,"defense"))))
 	if third: damage = maxi(1,ceili(damage*(1.0-RealmCards.resistance(m,str(enemy.get("status",""))))))
 	if third and enemy.boss and RealmPaths.has_item(m,"heirloom_aegis"): damage = maxi(1,ceili(damage*.9))
 	if strike<=3 and RealmPaths.has_item(m,"heirloom_boots"): damage = maxi(1,ceili(damage*.85))
 	if RealmPaths.has_item(m,"heirloom_ember_ring"): damage = maxi(1,ceili(damage*1.05))
 	damage=RealmMarches.incoming(m,damage,third)
+	damage=RealmBuildDepth.incoming(m,third,damage)
 	return {"damage":damage,"heal":heal,"label":label}
 
 static func player_damage(m, enemy: Dictionary, swing: int) -> int:
@@ -96,9 +99,11 @@ static func player_damage(m, enemy: Dictionary, swing: int) -> int:
 	if special and RealmPaths.has_item(m,"heirloom_gauntlets"): damage = int(damage*1.08)
 	if enemy.boss and RealmPaths.has_item(m,"heirloom_ember_ring"): damage = int(damage*1.08)
 	if RealmPaths.has_item(m,"heirloom_glass_ring") and (RealmAfflictions.has(m,"enemy","chill") or RealmAfflictions.has(m,"enemy","weaken")): damage = int(damage*1.06)
-	return maxi(1,int(damage*(1.0+minf(.40,card_bonus))))
+	return RealmBuildDepth.player_damage(m,enemy,special,maxi(1,int(damage*(1.0+minf(.40,card_bonus)))))
 
 static func mechanic(enemy: Dictionary) -> String:
+	if enemy.has("combat_role"):
+		return RealmBuildDepth.ROLES[enemy.combat_role]+"\n"+"Every third strike: %s. Below half HP: stronger attacks. Long fights build pressure." % enemy.special_name
 	if enemy.get("secret",false) or (enemy.get("depth",false) or (enemy.has("frontier") or (enemy.has("march") or enemy.has("realm")))):
 		var recovery = " Restores %.1f%% HP." % (float(enemy.special_heal)*100) if enemy.special_heal>0 else ""
 		return "%s · Every third attack: %.2f× attack, ignores %d%% armor, +%d pressure damage.%s\nBelow half HP: +18%% damage, double pressure. Every 15 attacks: +12%% damage (cap +150%%). Resists %d%% of your damage." % [enemy.special_name,enemy.special_attack,roundi((1-float(enemy.special_armor))*100),enemy.pressure,recovery,roundi(float(enemy.get("resist",0))*100)]

@@ -39,26 +39,25 @@ static func current(m) -> Dictionary:
 		var enemy = m.data.enemies[expedition]
 		var region_index = RealmChronicle.REGIONS.keys().find(enemy.region)
 		return {"key":expedition,"title":"Clear "+m.local_name(enemy),"detail":"Win once to unlock the next tier. If the fight is too costly, farm a cleared tier and upgrade your gear, relic or rune. Each victory gives %d %s fragments." % [int(enemy.fragments),RealmChronicle.RELICS[enemy.relic].name],"activity":"hunt_"+expedition,"current":0,"goal":1,"action":"Prepare expedition","route":RealmChronicle.REGIONS[enemy.region].name+" → Tier "+str(int(enemy.tier)),"kind":"expedition","index":12+region_index*5+int(enemy.tier),"total":27}
-	for trial_id in RealmTrials.IDS:
-		if int(m.s.kills.get(trial_id,0))==0:
-			var trial_enemy = m.data.enemies[trial_id]
-			return {"key":trial_id,"title":"Conquer "+m.local_name(trial_enemy),"detail":"This optional boss gains stronger attacks at half health. Check its mechanics, equip your build and bring cooked food. Win once for Epic equipment and 120 bonus fragments.","activity":"hunt_"+trial_id,"current":0,"goal":1,"action":"Prepare guardian trial","route":"World map → Guardian trials","kind":"expedition","index":28+RealmTrials.IDS.find(trial_id),"total":30}
-	var apex_index = 30
+	# Follow the Far Marches into the Realms; optional hunts never block this road.
+	var road=[]
+	for region in range(6):
+		for n in range(9):road.append("march_%d_%d" % [region,n])
+	for region in range(7):
+		for n in range(10):road.append("realm_%d_%d" % [region,n])
+	for id in RealmTrials.IDS:road.append(id)
 	for id in m.data.enemies:
-		var enemy = m.data.enemies[id]
-		if not enemy.get("apex",false): continue
-		apex_index += 1
-		if int(m.s.kills.get(id,0))==0:
-			return {"key":id,"title":"Defeat "+m.local_name(enemy),"detail":"Use Ascension paths to craft stronger equipment, then prepare food and review this hunt. "+RealmCombat.mechanic(enemy),"activity":"hunt_"+id,"current":0,"goal":1,"action":"Prepare Apex hunt","route":"Explore → Ascension → Apex hunts","kind":"expedition","index":apex_index,"total":39}
-	var late_index = 39
-	for id in RealmEndgame.IDS:
-		late_index += 1
-		if int(m.s.kills.get(id,0))==0:
-			return {"key":id,"title":"Defeat "+m.local_name(m.data.enemies[id]),"detail":"An optional guardian stands beyond the Apex routes. Prepare a specialized build; its core opens unique crafting options.","activity":"hunt_"+id,"current":0,"goal":1,"action":"Prepare guardian hunt","route":"Beyond the beacon → Optional guardians","kind":"expedition","index":late_index,"total":64}
+		if m.data.enemies[id].get("apex",false):road.append(id)
+	for id in RealmEndgame.IDS:road.append(id)
 	for region in range(3):
-		for n in range(6):
-			late_index += 1
-			var id = "frontier_%d_%d" % [region,n]
-			if int(m.s.kills.get(id,0))==0:
-				return {"key":id,"title":"Defeat "+m.local_name(m.data.enemies[id]),"detail":"Improve your equipment, counter this enemy's debuff and stock cooked food. Clear each pair of encounters to claim a frontier objective reward.","activity":"hunt_"+id,"current":0,"goal":1,"action":"Prepare frontier hunt","route":RealmFrontiers.REGIONS[region],"kind":"expedition","index":late_index,"total":64}
-	return {"key":"complete","title":"All charted hunts cleared","detail":"Claim remaining frontier rewards, complete your masterworks and card builds, or push deeper into the Hollow Depths.","activity":"","current":1,"goal":1,"action":"Open world map","route":"All routes cleared","kind":"complete","index":64,"total":64}
+		for n in range(6):road.append("frontier_%d_%d" % [region,n])
+	for i in range(road.size()):
+		var id=road[i]
+		if int(m.s.kills.get(id,0))>0:continue
+		var e=m.data.enemies[id]
+		var why=m.available(id)
+		var location=RealmWorld.location(e)
+		for place in RealmWorld.locations():
+			if place.id==location:location=place.name;break
+		return {"key":id,"title":"Defeat "+m.local_name(e),"detail":(why+" " if why!="" else "")+RealmCombat.mechanic(e),"activity":"hunt_"+id,"current":0,"goal":1,"action":"Prepare this hunt","route":location,"kind":"expedition","index":28+i,"total":27+road.size()}
+	return {"key":"complete","title":"All charted hunts cleared","detail":"Complete your masterworks and card builds, or push deeper into the Hollow Depths.","activity":"","current":1,"goal":1,"action":"Open world map","route":"All routes cleared","kind":"complete","index":27+road.size(),"total":27+road.size()}

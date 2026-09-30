@@ -24,7 +24,7 @@ static func status(m) -> Dictionary:
 	if not m.s.queue.is_empty(): return {"kind":"queue","text":"Work in progress · check your queue","action":"View current work"}
 	var recipe = m.data.activities["craft_"+id]
 	if m.level(recipe.skill)<recipe.level:
-		return {"kind":"train","text":"Requires Smithing Lv.%d · currently %d" % [recipe.level,m.level(recipe.skill)],"action":"Train Smithing","skill":recipe.skill,"level":recipe.level}
+		return {"kind":"train","text":"Requires %s Lv.%d · currently %d" % [m.local_name(m.data.skills[recipe.skill]),recipe.level,m.level(recipe.skill)],"action":"Train "+m.local_name(m.data.skills[recipe.skill]),"skill":recipe.skill,"level":recipe.level}
 	var plan = RealmProgression.plan(m,recipe.id,1)
 	if plan.has("unlock_skill"):
 		return {"kind":"train","text":plan.error,"action":"Train "+m.local_name(m.data.skills[plan.unlock_skill]),"skill":plan.unlock_skill,"level":plan.unlock_level}

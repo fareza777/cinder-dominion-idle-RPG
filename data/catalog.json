@@ -20830,7 +20830,8 @@
       "resist": 0.05,
       "relic": "fang",
       "realm": 0,
-      "loot_metal": "star_"
+      "loot_metal": "star_",
+      "combat_role": "prowler"
     },
     "realm_0_1": {
       "id": "realm_0_1",
@@ -20848,8 +20849,8 @@
       "drop": "trophy_realm_0_1",
       "qty": 1,
       "fragments": 6,
-      "status": "chill",
-      "special_name": "Undertow",
+      "status": "bleed",
+      "special_name": "Rending Claws",
       "special_attack": 1.45,
       "special_armor": 0.85,
       "special_heal": 0,
@@ -20857,7 +20858,8 @@
       "resist": 0.05,
       "relic": "fang",
       "realm": 0,
-      "loot_metal": "star_"
+      "loot_metal": "star_",
+      "combat_role": "bleeder"
     },
     "realm_0_2": {
       "id": "realm_0_2",
@@ -20876,15 +20878,16 @@
       "qty": 1,
       "fragments": 6,
       "status": "chill",
-      "special_name": "Undertow",
+      "special_name": "Restoration",
       "special_attack": 1.45,
       "special_armor": 0.85,
-      "special_heal": 0,
+      "special_heal": 0.01,
       "pressure": 8,
       "resist": 0.05,
       "relic": "fang",
       "realm": 0,
-      "loot_metal": "star_"
+      "loot_metal": "star_",
+      "combat_role": "mender"
     },
     "realm_0_3": {
       "id": "realm_0_3",
@@ -20911,7 +20914,8 @@
       "resist": 0.05,
       "relic": "fang",
       "realm": 0,
-      "loot_metal": "star_"
+      "loot_metal": "star_",
+      "combat_role": "bulwark"
     },
     "realm_0_4": {
       "id": "realm_0_4",
@@ -20938,7 +20942,8 @@
       "resist": 0.05,
       "relic": "fang",
       "realm": 0,
-      "loot_metal": "star_"
+      "loot_metal": "star_",
+      "combat_role": "zealot"
     },
     "realm_0_5": {
       "id": "realm_0_5",
@@ -20956,8 +20961,8 @@
       "drop": "trophy_realm_0_5",
       "qty": 1,
       "fragments": 6,
-      "status": "chill",
-      "special_name": "Undertow",
+      "status": "wound",
+      "special_name": "Withering Curse",
       "special_attack": 1.45,
       "special_armor": 0.85,
       "special_heal": 0,
@@ -20965,7 +20970,8 @@
       "resist": 0.05,
       "relic": "fang",
       "realm": 0,
-      "loot_metal": "star_"
+      "loot_metal": "star_",
+      "combat_role": "hexer"
     },
     "realm_0_6": {
       "id": "realm_0_6",
@@ -20992,7 +20998,8 @@
       "resist": 0.05,
       "relic": "fang",
       "realm": 0,
-      "loot_metal": "star_"
+      "loot_metal": "star_",
+      "combat_role": "executioner"
     },
     "realm_0_7": {
       "id": "realm_0_7",
@@ -21010,16 +21017,17 @@
       "drop": "trophy_realm_0_7",
       "qty": 1,
       "fragments": 6,
-      "status": "chill",
-      "special_name": "Undertow",
+      "status": "slow",
+      "special_name": "Rallying Hymn",
       "special_attack": 1.45,
       "special_armor": 0.85,
-      "special_heal": 0,
+      "special_heal": 0.004,
       "pressure": 8,
       "resist": 0.05,
       "relic": "fang",
       "realm": 0,
-      "loot_metal": "star_"
+      "loot_metal": "star_",
+      "combat_role": "cantor"
     },
     "realm_0_8": {
       "id": "realm_0_8",
@@ -21046,7 +21054,8 @@
       "resist": 0.05,
       "relic": "fang",
       "realm": 0,
-      "loot_metal": "star_"
+      "loot_metal": "star_",
+      "combat_role": "sentinel"
     },
     "realm_0_9": {
       "id": "realm_0_9",
@@ -21073,7 +21082,8 @@
       "resist": 0.05,
       "relic": "fang",
       "realm": 0,
-      "loot_metal": "star_"
+      "loot_metal": "star_",
+      "combat_role": "sovereign"
     },
     "realm_1_0": {
       "id": "realm_1_0",
@@ -21100,7 +21110,8 @@
       "resist": 0.060000000000000005,
       "relic": "heart",
       "realm": 1,
-      "loot_metal": "star_"
+      "loot_metal": "star_",
+      "combat_role": "prowler"
     },
     "realm_1_1": {
       "id": "realm_1_1",
@@ -21118,8 +21129,8 @@
       "drop": "trophy_realm_1_1",
       "qty": 1,
       "fragments": 8,
-      "status": "poison",
-      "special_name": "Cinderfall",
+      "status": "bleed",
+      "special_name": "Rending Claws",
       "special_attack": 1.49,
       "special_armor": 0.85,
       "special_heal": 0,
@@ -21127,7 +21138,8 @@
       "resist": 0.060000000000000005,
       "relic": "heart",
       "realm": 1,
-      "loot_metal": "star_"
+      "loot_metal": "star_",
+      "combat_role": "bleeder"
     },
     "realm_1_2": {
       "id": "realm_1_2",
@@ -21146,15 +21158,16 @@
       "qty": 1,
       "fragments": 8,
       "status": "poison",
-      "special_name": "Cinderfall",
+      "special_name": "Restoration",
       "special_attack": 1.49,
       "special_armor": 0.85,
-      "special_heal": 0,
+      "special_heal": 0.01,
       "pressure": 8,
       "resist": 0.060000000000000005,
       "relic": "heart",
       "realm": 1,
-      "loot_metal": "star_"
+      "loot_metal": "star_",
+      "combat_role": "mender"
     },
     "realm_1_3": {
       "id": "realm_1_3",
@@ -21181,7 +21194,8 @@
       "resist": 0.060000000000000005,
       "relic": "heart",
       "realm": 1,
-      "loot_metal": "star_"
+      "loot_metal": "star_",
+      "combat_role": "bulwark"
     },
     "realm_1_4": {
       "id": "realm_1_4",
@@ -21208,7 +21222,8 @@
       "resist": 0.060000000000000005,
       "relic": "heart",
       "realm": 1,
-      "loot_metal": "star_"
+      "loot_metal": "star_",
+      "combat_role": "zealot"
     },
     "realm_1_5": {
       "id": "realm_1_5",
@@ -21226,8 +21241,8 @@
       "drop": "trophy_realm_1_5",
       "qty": 1,
       "fragments": 8,
-      "status": "poison",
-      "special_name": "Cinderfall",
+      "status": "wound",
+      "special_name": "Withering Curse",
       "special_attack": 1.49,
       "special_armor": 0.85,
       "special_heal": 0,
@@ -21235,7 +21250,8 @@
       "resist": 0.060000000000000005,
       "relic": "heart",
       "realm": 1,
-      "loot_metal": "star_"
+      "loot_metal": "star_",
+      "combat_role": "hexer"
     },
     "realm_1_6": {
       "id": "realm_1_6",
@@ -21262,7 +21278,8 @@
       "resist": 0.060000000000000005,
       "relic": "heart",
       "realm": 1,
-      "loot_metal": "star_"
+      "loot_metal": "star_",
+      "combat_role": "executioner"
     },
     "realm_1_7": {
       "id": "realm_1_7",
@@ -21280,16 +21297,17 @@
       "drop": "trophy_realm_1_7",
       "qty": 1,
       "fragments": 8,
-      "status": "poison",
-      "special_name": "Cinderfall",
+      "status": "slow",
+      "special_name": "Rallying Hymn",
       "special_attack": 1.49,
       "special_armor": 0.85,
-      "special_heal": 0,
+      "special_heal": 0.004,
       "pressure": 8,
       "resist": 0.060000000000000005,
       "relic": "heart",
       "realm": 1,
-      "loot_metal": "star_"
+      "loot_metal": "star_",
+      "combat_role": "cantor"
     },
     "realm_1_8": {
       "id": "realm_1_8",
@@ -21316,7 +21334,8 @@
       "resist": 0.060000000000000005,
       "relic": "heart",
       "realm": 1,
-      "loot_metal": "star_"
+      "loot_metal": "star_",
+      "combat_role": "sentinel"
     },
     "realm_1_9": {
       "id": "realm_1_9",
@@ -21343,7 +21362,8 @@
       "resist": 0.060000000000000005,
       "relic": "heart",
       "realm": 1,
-      "loot_metal": "star_"
+      "loot_metal": "star_",
+      "combat_role": "sovereign"
     },
     "realm_2_0": {
       "id": "realm_2_0",
@@ -21370,7 +21390,8 @@
       "resist": 0.07,
       "relic": "ward",
       "realm": 2,
-      "loot_metal": "star_"
+      "loot_metal": "star_",
+      "combat_role": "prowler"
     },
     "realm_2_1": {
       "id": "realm_2_1",
@@ -21388,8 +21409,8 @@
       "drop": "trophy_realm_2_1",
       "qty": 1,
       "fragments": 10,
-      "status": "burn",
-      "special_name": "Whiteout",
+      "status": "bleed",
+      "special_name": "Rending Claws",
       "special_attack": 1.53,
       "special_armor": 0.85,
       "special_heal": 0,
@@ -21397,7 +21418,8 @@
       "resist": 0.07,
       "relic": "ward",
       "realm": 2,
-      "loot_metal": "star_"
+      "loot_metal": "star_",
+      "combat_role": "bleeder"
     },
     "realm_2_2": {
       "id": "realm_2_2",
@@ -21416,15 +21438,16 @@
       "qty": 1,
       "fragments": 10,
       "status": "burn",
-      "special_name": "Whiteout",
+      "special_name": "Restoration",
       "special_attack": 1.53,
       "special_armor": 0.85,
-      "special_heal": 0,
+      "special_heal": 0.01,
       "pressure": 9,
       "resist": 0.07,
       "relic": "ward",
       "realm": 2,
-      "loot_metal": "star_"
+      "loot_metal": "star_",
+      "combat_role": "mender"
     },
     "realm_2_3": {
       "id": "realm_2_3",
@@ -21451,7 +21474,8 @@
       "resist": 0.07,
       "relic": "ward",
       "realm": 2,
-      "loot_metal": "star_"
+      "loot_metal": "star_",
+      "combat_role": "bulwark"
     },
     "realm_2_4": {
       "id": "realm_2_4",
@@ -21478,7 +21502,8 @@
       "resist": 0.07,
       "relic": "ward",
       "realm": 2,
-      "loot_metal": "star_"
+      "loot_metal": "star_",
+      "combat_role": "zealot"
     },
     "realm_2_5": {
       "id": "realm_2_5",
@@ -21496,8 +21521,8 @@
       "drop": "trophy_realm_2_5",
       "qty": 1,
       "fragments": 10,
-      "status": "burn",
-      "special_name": "Whiteout",
+      "status": "wound",
+      "special_name": "Withering Curse",
       "special_attack": 1.53,
       "special_armor": 0.85,
       "special_heal": 0,
@@ -21505,7 +21530,8 @@
       "resist": 0.07,
       "relic": "ward",
       "realm": 2,
-      "loot_metal": "star_"
+      "loot_metal": "star_",
+      "combat_role": "hexer"
     },
     "realm_2_6": {
       "id": "realm_2_6",
@@ -21532,7 +21558,8 @@
       "resist": 0.07,
       "relic": "ward",
       "realm": 2,
-      "loot_metal": "star_"
+      "loot_metal": "star_",
+      "combat_role": "executioner"
     },
     "realm_2_7": {
       "id": "realm_2_7",
@@ -21550,16 +21577,17 @@
       "drop": "trophy_realm_2_7",
       "qty": 1,
       "fragments": 10,
-      "status": "burn",
-      "special_name": "Whiteout",
+      "status": "slow",
+      "special_name": "Rallying Hymn",
       "special_attack": 1.53,
       "special_armor": 0.85,
-      "special_heal": 0,
+      "special_heal": 0.004,
       "pressure": 9,
       "resist": 0.07,
       "relic": "ward",
       "realm": 2,
-      "loot_metal": "star_"
+      "loot_metal": "star_",
+      "combat_role": "cantor"
     },
     "realm_2_8": {
       "id": "realm_2_8",
@@ -21586,7 +21614,8 @@
       "resist": 0.07,
       "relic": "ward",
       "realm": 2,
-      "loot_metal": "star_"
+      "loot_metal": "star_",
+      "combat_role": "sentinel"
     },
     "realm_2_9": {
       "id": "realm_2_9",
@@ -21613,7 +21642,8 @@
       "resist": 0.07,
       "relic": "ward",
       "realm": 2,
-      "loot_metal": "star_"
+      "loot_metal": "star_",
+      "combat_role": "sovereign"
     },
     "realm_3_0": {
       "id": "realm_3_0",
@@ -21640,7 +21670,8 @@
       "resist": 0.08,
       "relic": "fang",
       "realm": 3,
-      "loot_metal": "star_"
+      "loot_metal": "star_",
+      "combat_role": "prowler"
     },
     "realm_3_1": {
       "id": "realm_3_1",
@@ -21658,8 +21689,8 @@
       "drop": "trophy_realm_3_1",
       "qty": 1,
       "fragments": 12,
-      "status": "weaken",
-      "special_name": "Rootfall",
+      "status": "bleed",
+      "special_name": "Rending Claws",
       "special_attack": 1.5699999999999998,
       "special_armor": 0.85,
       "special_heal": 0,
@@ -21667,7 +21698,8 @@
       "resist": 0.08,
       "relic": "fang",
       "realm": 3,
-      "loot_metal": "star_"
+      "loot_metal": "star_",
+      "combat_role": "bleeder"
     },
     "realm_3_2": {
       "id": "realm_3_2",
@@ -21686,15 +21718,16 @@
       "qty": 1,
       "fragments": 12,
       "status": "weaken",
-      "special_name": "Rootfall",
+      "special_name": "Restoration",
       "special_attack": 1.5699999999999998,
       "special_armor": 0.85,
-      "special_heal": 0,
+      "special_heal": 0.01,
       "pressure": 9,
       "resist": 0.08,
       "relic": "fang",
       "realm": 3,
-      "loot_metal": "star_"
+      "loot_metal": "star_",
+      "combat_role": "mender"
     },
     "realm_3_3": {
       "id": "realm_3_3",
@@ -21721,7 +21754,8 @@
       "resist": 0.08,
       "relic": "fang",
       "realm": 3,
-      "loot_metal": "star_"
+      "loot_metal": "star_",
+      "combat_role": "bulwark"
     },
     "realm_3_4": {
       "id": "realm_3_4",
@@ -21748,7 +21782,8 @@
       "resist": 0.08,
       "relic": "fang",
       "realm": 3,
-      "loot_metal": "star_"
+      "loot_metal": "star_",
+      "combat_role": "zealot"
     },
     "realm_3_5": {
       "id": "realm_3_5",
@@ -21766,8 +21801,8 @@
       "drop": "trophy_realm_3_5",
       "qty": 1,
       "fragments": 12,
-      "status": "weaken",
-      "special_name": "Rootfall",
+      "status": "wound",
+      "special_name": "Withering Curse",
       "special_attack": 1.5699999999999998,
       "special_armor": 0.85,
       "special_heal": 0,
@@ -21775,7 +21810,8 @@
       "resist": 0.08,
       "relic": "fang",
       "realm": 3,
-      "loot_metal": "star_"
+      "loot_metal": "star_",
+      "combat_role": "hexer"
     },
     "realm_3_6": {
       "id": "realm_3_6",
@@ -21802,7 +21838,8 @@
       "resist": 0.08,
       "relic": "fang",
       "realm": 3,
-      "loot_metal": "star_"
+      "loot_metal": "star_",
+      "combat_role": "executioner"
     },
     "realm_3_7": {
       "id": "realm_3_7",
@@ -21820,16 +21857,17 @@
       "drop": "trophy_realm_3_7",
       "qty": 1,
       "fragments": 12,
-      "status": "weaken",
-      "special_name": "Rootfall",
+      "status": "slow",
+      "special_name": "Rallying Hymn",
       "special_attack": 1.5699999999999998,
       "special_armor": 0.85,
-      "special_heal": 0,
+      "special_heal": 0.004,
       "pressure": 9,
       "resist": 0.08,
       "relic": "fang",
       "realm": 3,
-      "loot_metal": "star_"
+      "loot_metal": "star_",
+      "combat_role": "cantor"
     },
     "realm_3_8": {
       "id": "realm_3_8",
@@ -21856,7 +21894,8 @@
       "resist": 0.08,
       "relic": "fang",
       "realm": 3,
-      "loot_metal": "star_"
+      "loot_metal": "star_",
+      "combat_role": "sentinel"
     },
     "realm_3_9": {
       "id": "realm_3_9",
@@ -21883,7 +21922,8 @@
       "resist": 0.08,
       "relic": "fang",
       "realm": 3,
-      "loot_metal": "star_"
+      "loot_metal": "star_",
+      "combat_role": "sovereign"
     },
     "realm_4_0": {
       "id": "realm_4_0",
@@ -21910,7 +21950,8 @@
       "resist": 0.09,
       "relic": "heart",
       "realm": 4,
-      "loot_metal": "star_"
+      "loot_metal": "star_",
+      "combat_role": "prowler"
     },
     "realm_4_1": {
       "id": "realm_4_1",
@@ -21929,7 +21970,7 @@
       "qty": 1,
       "fragments": 14,
       "status": "bleed",
-      "special_name": "Starfall",
+      "special_name": "Rending Claws",
       "special_attack": 1.6099999999999999,
       "special_armor": 0.85,
       "special_heal": 0,
@@ -21937,7 +21978,8 @@
       "resist": 0.09,
       "relic": "heart",
       "realm": 4,
-      "loot_metal": "star_"
+      "loot_metal": "star_",
+      "combat_role": "bleeder"
     },
     "realm_4_2": {
       "id": "realm_4_2",
@@ -21956,15 +21998,16 @@
       "qty": 1,
       "fragments": 14,
       "status": "bleed",
-      "special_name": "Starfall",
+      "special_name": "Restoration",
       "special_attack": 1.6099999999999999,
       "special_armor": 0.85,
-      "special_heal": 0,
+      "special_heal": 0.01,
       "pressure": 10,
       "resist": 0.09,
       "relic": "heart",
       "realm": 4,
-      "loot_metal": "star_"
+      "loot_metal": "star_",
+      "combat_role": "mender"
     },
     "realm_4_3": {
       "id": "realm_4_3",
@@ -21991,7 +22034,8 @@
       "resist": 0.09,
       "relic": "heart",
       "realm": 4,
-      "loot_metal": "star_"
+      "loot_metal": "star_",
+      "combat_role": "bulwark"
     },
     "realm_4_4": {
       "id": "realm_4_4",
@@ -22018,7 +22062,8 @@
       "resist": 0.09,
       "relic": "heart",
       "realm": 4,
-      "loot_metal": "star_"
+      "loot_metal": "star_",
+      "combat_role": "zealot"
     },
     "realm_4_5": {
       "id": "realm_4_5",
@@ -22036,8 +22081,8 @@
       "drop": "trophy_realm_4_5",
       "qty": 1,
       "fragments": 14,
-      "status": "bleed",
-      "special_name": "Starfall",
+      "status": "wound",
+      "special_name": "Withering Curse",
       "special_attack": 1.6099999999999999,
       "special_armor": 0.85,
       "special_heal": 0,
@@ -22045,7 +22090,8 @@
       "resist": 0.09,
       "relic": "heart",
       "realm": 4,
-      "loot_metal": "star_"
+      "loot_metal": "star_",
+      "combat_role": "hexer"
     },
     "realm_4_6": {
       "id": "realm_4_6",
@@ -22072,7 +22118,8 @@
       "resist": 0.09,
       "relic": "heart",
       "realm": 4,
-      "loot_metal": "star_"
+      "loot_metal": "star_",
+      "combat_role": "executioner"
     },
     "realm_4_7": {
       "id": "realm_4_7",
@@ -22090,16 +22137,17 @@
       "drop": "trophy_realm_4_7",
       "qty": 1,
       "fragments": 14,
-      "status": "bleed",
-      "special_name": "Starfall",
+      "status": "slow",
+      "special_name": "Rallying Hymn",
       "special_attack": 1.6099999999999999,
       "special_armor": 0.85,
-      "special_heal": 0,
+      "special_heal": 0.004,
       "pressure": 10,
       "resist": 0.09,
       "relic": "heart",
       "realm": 4,
-      "loot_metal": "star_"
+      "loot_metal": "star_",
+      "combat_role": "cantor"
     },
     "realm_4_8": {
       "id": "realm_4_8",
@@ -22126,7 +22174,8 @@
       "resist": 0.09,
       "relic": "heart",
       "realm": 4,
-      "loot_metal": "star_"
+      "loot_metal": "star_",
+      "combat_role": "sentinel"
     },
     "realm_4_9": {
       "id": "realm_4_9",
@@ -22153,7 +22202,8 @@
       "resist": 0.09,
       "relic": "heart",
       "realm": 4,
-      "loot_metal": "star_"
+      "loot_metal": "star_",
+      "combat_role": "sovereign"
     },
     "realm_5_0": {
       "id": "realm_5_0",
@@ -22180,7 +22230,8 @@
       "resist": 0.1,
       "relic": "ward",
       "realm": 5,
-      "loot_metal": "star_"
+      "loot_metal": "star_",
+      "combat_role": "prowler"
     },
     "realm_5_1": {
       "id": "realm_5_1",
@@ -22198,8 +22249,8 @@
       "drop": "trophy_realm_5_1",
       "qty": 1,
       "fragments": 16,
-      "status": "shock",
-      "special_name": "Last Oath",
+      "status": "bleed",
+      "special_name": "Rending Claws",
       "special_attack": 1.65,
       "special_armor": 0.85,
       "special_heal": 0,
@@ -22207,7 +22258,8 @@
       "resist": 0.1,
       "relic": "ward",
       "realm": 5,
-      "loot_metal": "star_"
+      "loot_metal": "star_",
+      "combat_role": "bleeder"
     },
     "realm_5_2": {
       "id": "realm_5_2",
@@ -22226,15 +22278,16 @@
       "qty": 1,
       "fragments": 16,
       "status": "shock",
-      "special_name": "Last Oath",
+      "special_name": "Restoration",
       "special_attack": 1.65,
       "special_armor": 0.85,
-      "special_heal": 0,
+      "special_heal": 0.01,
       "pressure": 11,
       "resist": 0.1,
       "relic": "ward",
       "realm": 5,
-      "loot_metal": "star_"
+      "loot_metal": "star_",
+      "combat_role": "mender"
     },
     "realm_5_3": {
       "id": "realm_5_3",
@@ -22261,7 +22314,8 @@
       "resist": 0.1,
       "relic": "ward",
       "realm": 5,
-      "loot_metal": "star_"
+      "loot_metal": "star_",
+      "combat_role": "bulwark"
     },
     "realm_5_4": {
       "id": "realm_5_4",
@@ -22288,7 +22342,8 @@
       "resist": 0.1,
       "relic": "ward",
       "realm": 5,
-      "loot_metal": "star_"
+      "loot_metal": "star_",
+      "combat_role": "zealot"
     },
     "realm_5_5": {
       "id": "realm_5_5",
@@ -22306,8 +22361,8 @@
       "drop": "trophy_realm_5_5",
       "qty": 1,
       "fragments": 16,
-      "status": "shock",
-      "special_name": "Last Oath",
+      "status": "wound",
+      "special_name": "Withering Curse",
       "special_attack": 1.65,
       "special_armor": 0.85,
       "special_heal": 0,
@@ -22315,7 +22370,8 @@
       "resist": 0.1,
       "relic": "ward",
       "realm": 5,
-      "loot_metal": "star_"
+      "loot_metal": "star_",
+      "combat_role": "hexer"
     },
     "realm_5_6": {
       "id": "realm_5_6",
@@ -22342,7 +22398,8 @@
       "resist": 0.1,
       "relic": "ward",
       "realm": 5,
-      "loot_metal": "star_"
+      "loot_metal": "star_",
+      "combat_role": "executioner"
     },
     "realm_5_7": {
       "id": "realm_5_7",
@@ -22360,16 +22417,17 @@
       "drop": "trophy_realm_5_7",
       "qty": 1,
       "fragments": 16,
-      "status": "shock",
-      "special_name": "Last Oath",
+      "status": "slow",
+      "special_name": "Rallying Hymn",
       "special_attack": 1.65,
       "special_armor": 0.85,
-      "special_heal": 0,
+      "special_heal": 0.004,
       "pressure": 11,
       "resist": 0.1,
       "relic": "ward",
       "realm": 5,
-      "loot_metal": "star_"
+      "loot_metal": "star_",
+      "combat_role": "cantor"
     },
     "realm_5_8": {
       "id": "realm_5_8",
@@ -22396,7 +22454,8 @@
       "resist": 0.1,
       "relic": "ward",
       "realm": 5,
-      "loot_metal": "star_"
+      "loot_metal": "star_",
+      "combat_role": "sentinel"
     },
     "realm_5_9": {
       "id": "realm_5_9",
@@ -22423,7 +22482,8 @@
       "resist": 0.1,
       "relic": "ward",
       "realm": 5,
-      "loot_metal": "star_"
+      "loot_metal": "star_",
+      "combat_role": "sovereign"
     },
     "realm_6_0": {
       "id": "realm_6_0",
@@ -22450,7 +22510,8 @@
       "resist": 0.05,
       "relic": "fang",
       "realm": 6,
-      "loot_metal": "star_"
+      "loot_metal": "star_",
+      "combat_role": "prowler"
     },
     "realm_6_1": {
       "id": "realm_6_1",
@@ -22468,8 +22529,8 @@
       "drop": "trophy_realm_6_1",
       "qty": 1,
       "fragments": 6,
-      "status": "chill",
-      "special_name": "Skybreak",
+      "status": "bleed",
+      "special_name": "Rending Claws",
       "special_attack": 1.69,
       "special_armor": 0.85,
       "special_heal": 0,
@@ -22477,7 +22538,8 @@
       "resist": 0.05,
       "relic": "fang",
       "realm": 6,
-      "loot_metal": "star_"
+      "loot_metal": "star_",
+      "combat_role": "bleeder"
     },
     "realm_6_2": {
       "id": "realm_6_2",
@@ -22496,15 +22558,16 @@
       "qty": 1,
       "fragments": 6,
       "status": "chill",
-      "special_name": "Skybreak",
+      "special_name": "Restoration",
       "special_attack": 1.69,
       "special_armor": 0.85,
-      "special_heal": 0,
+      "special_heal": 0.01,
       "pressure": 11,
       "resist": 0.05,
       "relic": "fang",
       "realm": 6,
-      "loot_metal": "star_"
+      "loot_metal": "star_",
+      "combat_role": "mender"
     },
     "realm_6_3": {
       "id": "realm_6_3",
@@ -22531,7 +22594,8 @@
       "resist": 0.05,
       "relic": "fang",
       "realm": 6,
-      "loot_metal": "star_"
+      "loot_metal": "star_",
+      "combat_role": "bulwark"
     },
     "realm_6_4": {
       "id": "realm_6_4",
@@ -22558,7 +22622,8 @@
       "resist": 0.05,
       "relic": "fang",
       "realm": 6,
-      "loot_metal": "star_"
+      "loot_metal": "star_",
+      "combat_role": "zealot"
     },
     "realm_6_5": {
       "id": "realm_6_5",
@@ -22576,8 +22641,8 @@
       "drop": "trophy_realm_6_5",
       "qty": 1,
       "fragments": 6,
-      "status": "chill",
-      "special_name": "Skybreak",
+      "status": "wound",
+      "special_name": "Withering Curse",
       "special_attack": 1.69,
       "special_armor": 0.85,
       "special_heal": 0,
@@ -22585,7 +22650,8 @@
       "resist": 0.05,
       "relic": "fang",
       "realm": 6,
-      "loot_metal": "star_"
+      "loot_metal": "star_",
+      "combat_role": "hexer"
     },
     "realm_6_6": {
       "id": "realm_6_6",
@@ -22612,7 +22678,8 @@
       "resist": 0.05,
       "relic": "fang",
       "realm": 6,
-      "loot_metal": "star_"
+      "loot_metal": "star_",
+      "combat_role": "executioner"
     },
     "realm_6_7": {
       "id": "realm_6_7",
@@ -22630,16 +22697,17 @@
       "drop": "trophy_realm_6_7",
       "qty": 1,
       "fragments": 6,
-      "status": "chill",
-      "special_name": "Skybreak",
+      "status": "slow",
+      "special_name": "Rallying Hymn",
       "special_attack": 1.69,
       "special_armor": 0.85,
-      "special_heal": 0,
+      "special_heal": 0.004,
       "pressure": 11,
       "resist": 0.05,
       "relic": "fang",
       "realm": 6,
-      "loot_metal": "star_"
+      "loot_metal": "star_",
+      "combat_role": "cantor"
     },
     "realm_6_8": {
       "id": "realm_6_8",
@@ -22666,7 +22734,8 @@
       "resist": 0.05,
       "relic": "fang",
       "realm": 6,
-      "loot_metal": "star_"
+      "loot_metal": "star_",
+      "combat_role": "sentinel"
     },
     "realm_6_9": {
       "id": "realm_6_9",
@@ -22693,7 +22762,8 @@
       "resist": 0.05,
       "relic": "fang",
       "realm": 6,
-      "loot_metal": "star_"
+      "loot_metal": "star_",
+      "combat_role": "sovereign"
     }
   },
   "merchant": {

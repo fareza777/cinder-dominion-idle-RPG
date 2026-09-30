@@ -713,6 +713,7 @@ func activity_dialog(id: String, recommended: int = 0):
 		intel.add_child(U.para("Estimates exclude timed effects and card triggers. Bring spare food.",12))
 		intel.add_child(U.button("Mastery · "+RealmHuntMastery.NAMES[RealmHuntMastery.rank(model,a.enemy)],func(): preload("res://ui/hunt_mastery.gd").new(self).detail(a.enemy)))
 		v.add_child(U.button("Plan a longer hunt",func(): hunt_plan_dialog(a.enemy)))
+		v.add_child(U.button("Prepare your build",func():preload("res://ui/hunt_build.gd").new(self).open(a.enemy)))
 	if a.kind!="combat":
 		v.add_child(U.para("Makes 1 "+model.name_of(a.output)+" per cycle",14,U.GREEN))
 	if a.kind!="combat" and not a.inputs.is_empty() and model.requirement(id)=="":

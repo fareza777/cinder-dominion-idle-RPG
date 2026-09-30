@@ -171,7 +171,7 @@ func command(cmd: Dictionary) -> bool:
 		"rarity_fuse":
 			var why=RealmFusion.command(self,str(cmd.get("uid","")))
 			if why!="":return fail(why)
-		"voyage_start","voyage_recall","voyage_claim":
+		"voyage_start","voyage_recall","voyage_claim","voyage_path":
 			var why=RealmVoyages.command(self,cmd)
 			if why!="":return fail(why)
 		"artisan_select","tool_upgrade":
@@ -547,6 +547,7 @@ func resolve_combat():
 			damage = RealmAfflictions.absorb(self,"enemy",damage)
 			f.hp -= damage
 			RealmAfflictions.proc(self,d,"enemy",special)
+			RealmBuildDepth.on_hit(self,d,special)
 			var skill_name = {"balanced":"CLEAVE ","guard":"WARD ","reaver":"REND "}[progression().stance]
 			var character = RealmCharacters.id(self)
 			if RealmCharacters.rank(self)>0 and (character in ["ranger","arcanist"] or (character=="reaver" and d.boss)): skill_name = RealmCharacters.ALL[character].skill.to_upper()+" "
@@ -578,6 +579,7 @@ func resolve_combat():
 			move.damage = RealmAfflictions.absorb(self,"hero",int(move.damage))
 			s.hp -= int(move.damage)
 			RealmAfflictions.proc(self,d,"hero",int(f.hits)%3==0)
+			RealmBuildDepth.enemy_proc(self,d,int(f.hits)%3==0)
 			combat_event("−%d HP" % int(move.damage),"hero","hit","warden" if int(f.hits)%3==0 and RealmCharacters.id(self)=="warden" and RealmCharacters.rank(self)>0 else "")
 		else: combat_event("MISS","hero")
 		if s.hp<=0:

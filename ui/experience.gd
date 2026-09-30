@@ -3,7 +3,7 @@ extends RefCounted
 const U = preload("res://ui/style.gd")
 const Brand = preload("res://ui/brand.gd")
 const STORE_URL = "" # Set only after a real public listing exists.
-const VERSION = "0.53.0"
+const VERSION = "0.54.0"
 var app
 var front: Control
 var cinematic_page = 0
@@ -247,6 +247,9 @@ func guide():
 	var v = app.modal("Objectives")
 	app.dialog.set_meta("journey_guide",true)
 	title(v,o.title,28)
+	v.add_child(U.para(o.detail,14))
+	if str(o.activity).begins_with("hunt_"):
+		v.add_child(U.button("Build for this encounter",func():preload("res://ui/hunt_build.gd").new(app).open(str(o.activity).trim_prefix("hunt_"))))
 	app.dynamic(v,func(): return "%d / %d" % [mini(int(app.model.objective().current),int(o.goal)),int(o.goal)],18,U.GOLD)
 	var bar = U.progress(o.current,o.goal,U.GOLD,7)
 	v.add_child(bar)
@@ -254,10 +257,12 @@ func guide():
 		if is_instance_valid(bar): bar.value = mini(int(app.model.objective().current),int(o.goal)))
 	if not app.model.s.queue.is_empty():
 		v.add_child(U.button("View active queue",app.queue_dialog))
-	v.add_child(U.label("MILESTONES",11,U.GOLD))
+	var milestones=v
+	if int(o.index)>12:milestones=U.disclosure(v,"Completed first steps")
+	else:v.add_child(U.label("MILESTONES",11,U.GOLD))
 	for step in RealmJourney.steps(app.model):
 		var done = step.current>=step.goal
-		v.add_child(U.para(("✓  " if done else "○  ")+step.title,14,U.GREEN if done else U.MUTED))
+		milestones.add_child(U.para(("✓  " if done else "○  ")+step.title,14,U.GREEN if done else U.MUTED))
 		if not done: break
 	v.add_child(U.button("Farm & upgrade",app.progress_dialog))
 	v.add_child(U.button("How to play",handbook))

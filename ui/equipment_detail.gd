@@ -65,6 +65,7 @@ func open(uid: String, requested_slot: String = ""):
 	if RealmCards.fits(m,uid): v.add_child(U.button("Monster card · "+("Attached" if m.s.get("card_sockets",{}).has(uid) else "Empty socket"),func(): preload("res://ui/cards.gd").new(app).socket(uid)))
 	var attunement=str(m.s.get("gear_attunements",{}).get(uid,""))
 	if attunement!="":v.add_child(U.para(RealmMarches.ATTUNEMENTS[attunement].name+" · "+RealmMarches.ATTUNEMENTS[attunement].detail,14,U.GOLD))
+	if attunement!="" and int(item.q)>=5:v.add_child(U.para(RealmBuildDepth.milestone_text(m,item),13,U.GOLD))
 	if data.slot=="weapon":v.add_child(U.button("Weapon attunement",func():preload("res://ui/marches.gd").new(app).attune(uid)))
 	var protection = U.card(v,12)
 	protection.add_child(U.para("Keep or salvage",17,U.TEXT))

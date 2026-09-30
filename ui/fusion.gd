@@ -30,6 +30,10 @@ func open(uid: String):
 	panel.add_child(U.icon(g.id,90))
 	panel.add_child(U.para(m.name_of(g.id),23,U.TEXT))
 	panel.add_child(U.para("Tier %d / 21 · %s" % [int(g.q)+1,m.data.rarities[g.q]],16,U.QUALITY[g.q]))
+	if m.data.items[g.id].slot=="weapon":
+		var awaken=U.disclosure(v,"Weapon awakenings · tiers 6, 11, 16")
+		awaken.add_child(U.para(RealmBuildDepth.milestone_text(m,g),14))
+		awaken.add_child(U.button("Choose weapon attunement",func():preload("res://ui/marches.gd").new(app).attune(uid)))
 	if g.q==20:
 		panel.add_child(U.para("Worldforged. The final rarity has been reached.",16));return
 	var c=RealmFusion.cost(g)

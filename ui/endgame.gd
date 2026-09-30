@@ -141,16 +141,24 @@ func contracts():
 		c.add_child(U.para(def[0],20,U.GOLD))
 		var selected = id in s.board.selected
 		if selected:
+			if id=="frontline":
+				var target=str(s.board.target)
+				c.add_child(U.para(m.local_name(m.data.enemies[target]),16))
+				c.add_child(U.button("Prepare commissioned hunt",func():app.activity_dialog("hunt_"+target,6)))
+			var reward=RealmEndgame.contract_reward(m,id)
+			c.add_child(U.para(RealmEconomy.money(reward.gold)+" · 5 scraps"+(" · %d %s" % [reward.amount,m.name_of(reward.material)] if reward.material!="" else ""),13,U.GREEN))
 			app.dynamic(c,func(): return "%d / %d" % [mini(def[1],RealmEndgame.totals(m)[id]-s.board.baseline[id]),def[1]],16)
 			if id in s.board.claimed: c.add_child(U.para("Reward collected",14))
-			else: action(c,"Collect coins & 5 scraps",{"type":"end_claim","id":id},contracts)
+			else: action(c,"Collect commission rewards",{"type":"end_claim","id":id},contracts)
 		else: action(c,"Choose · %d required" % def[1],{"type":"end_contract","id":id},contracts)
 	var c = U.card(v,12)
 	c.add_child(U.para("Weekly guardian",21,U.GOLD))
 	if s.weekly_enemy!="":
 		c.add_child(U.para(m.data.enemies[s.weekly_enemy].en,17))
 		app.dynamic(c,func(): return "%d / 3 victories" % mini(3,int(m.s.kills.get(s.weekly_enemy,0))-int(s.weekly_base)),15)
-		if not s.weekly_claimed: action(c,"Collect 3 seals & 5 shards",{"type":"end_week_claim"},contracts)
+		var reward=RealmEndgame.weekly_reward(m)
+		c.add_child(U.para("%s · %d Dread Seals · %d Hollow Shards" % [RealmEconomy.money(reward.gold),reward.seals,reward.shards],13,U.GREEN))
+		if not s.weekly_claimed: action(c,"Collect weekly rewards",{"type":"end_week_claim"},contracts)
 	c.add_child(U.para("A rotating target from guardians you have beaten. An accepted hunt carries over until you finish it.",14))
 	action(c,"Accept this week's hunt",{"type":"end_week"},contracts)
 	app.modal_action("Back",open,false)

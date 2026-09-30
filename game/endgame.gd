@@ -3,7 +3,7 @@ extends RefCounted
 
 const IDS = ["secret_0","secret_1","secret_2","secret_3","secret_4","secret_5","secret_6","march_guard_0","march_guard_1","march_guard_2","march_guard_3","march_guard_4"]
 const ROUTES = {"safe":"Take 12% less damage; gain 20% less gold and XP.","resource":"Standard danger and rewards.","elite":"Take 20% more damage; gain 25% more coins and XP.","mastery":"Standard danger; gain 20% more XP and 20% less gold."}
-const CONTRACTS = {"gather":["Gather supplies",60],"craft":["Keep the forge working",25],"hunt":["Complete hunts",12],"elite":["Defeat optional guardians",3],"depth":["Clear Depths rooms",3]}
+const CONTRACTS = {"gather":["Gather supplies",60],"craft":["Keep the forge working",25],"hunt":["Complete hunts",12],"frontline":["Frontline commission",6],"elite":["Defeat optional guardians",3],"depth":["Clear Depths rooms",3]}
 
 static func defaults() -> Dictionary:
 	return {"route":"resource","target":"","depth":{"active":false,"floor":1,"best":0,"stash":0,"risk":"steady"},"board":{"day":-1,"selected":[],"claimed":[],"baseline":{}},"week":-1,"weekly_claimed":false,"weekly_enemy":"","weekly_base":0,"rooms":0}
@@ -58,7 +58,36 @@ static func totals(m) -> Dictionary:
 	result.elite = 0
 	for id in IDS: result.elite += int(m.s.kills.get(id,0))
 	result.depth = int(state(m).rooms)
+	result.frontline=int(m.s.kills.get(state(m).board.get("target",""),0))
 	return result
+
+static func proven_hunts(m) -> Array:
+	var out=m.data.enemies.keys().filter(func(id):return m.s.kills.get(id,0)>0 and not m.data.enemies[id].get("depth",false))
+	out.sort_custom(func(a,b):return m.data.enemies[a].gold>m.data.enemies[b].gold)
+	return out
+
+static func reward_scale(m) -> int:
+	var value=0
+	for id in m.s.kills:
+		if m.s.kills[id]>0 and not m.data.enemies[id].get("depth",false):value=maxi(value,int(m.data.enemies[id].gold))
+	return value
+
+static func contract_reward(m,id: String) -> Dictionary:
+	var weight={"gather":.5,"craft":.6,"hunt":.75,"frontline":2.0,"elite":1.5,"depth":1.2}.get(id,.5)
+	var out={"gold":maxi(50+5*m.level("bladecraft"),int(reward_scale(m)*weight)),"scrap":5,"material":"","amount":0}
+	var target=state(m).board.get("target","")
+	if id=="frontline" and m.data.enemies.has(target):out.material=m.data.enemies[target].drop;out.amount=8
+	return out
+
+static func weekly_pool() -> Array:
+	var out=IDS.duplicate()
+	for r in range(7):out.append("realm_%d_9" % r)
+	return out
+
+static func weekly_reward(m) -> Dictionary:
+	var id=state(m).weekly_enemy
+	var realm=int(m.data.enemies.get(id,{}).get("realm",-1))
+	return {"gold":int(m.data.enemies.get(id,{}).get("gold",0))*3,"seals":3+maxi(0,realm+1),"shards":5+maxi(0,realm+1)*3}
 
 static func victory(m, e: Dictionary):
 	if e.get("secret",false):
@@ -182,6 +211,10 @@ static func command(m, cmd) -> String:
 			if id in b.selected: return "This contract is already selected."
 			if b.selected.size()>=3: return "Complete this board. A new board opens on a later day."
 			if id in ["elite","depth"] and m.s.kills.get("secret_0",0)<1: return "Discover an optional guardian first."
+			if id=="frontline":
+				var known=proven_hunts(m)
+				if known.is_empty():return "Win a hunt to receive a frontline commission."
+				b.target=known[day%mini(3,known.size())]
 			b.day = maxi(day,int(b.day))
 			b.selected.append(id)
 			b.baseline[id] = totals(m)[id]
@@ -189,13 +222,14 @@ static func command(m, cmd) -> String:
 			var b = s.board
 			if id not in b.selected or id in b.claimed or totals(m)[id]-b.baseline[id]<CONTRACTS[id][1]: return "Complete the selected contract first."
 			b.claimed.append(id)
-			m.s.gold += 50+5*m.level("bladecraft")
-			m.gain("scrap",5)
+			var reward=contract_reward(m,id)
+			m.s.gold+=reward.gold;m.gain("scrap",reward.scrap)
+			if reward.material!="":m.gain(reward.material,reward.amount)
 		"end_week":
 			var week = int(maxi(int(m.s.wall),0)/604800000)
 			if s.weekly_enemy!="" and not s.weekly_claimed: return "Complete your current weekly challenge first."
 			if week<=int(s.week): return "The next challenge opens next week."
-			var options = IDS.filter(func(key): return int(m.s.kills.get(key,0))>0)
+			var options = weekly_pool().filter(func(key): return int(m.s.kills.get(key,0))>0)
 			if options.is_empty(): return "Defeat an optional guardian first."
 			s.week = week
 			s.weekly_claimed = false
@@ -204,8 +238,8 @@ static func command(m, cmd) -> String:
 		"end_week_claim":
 			if s.weekly_enemy=="" or s.weekly_claimed or int(m.s.kills.get(s.weekly_enemy,0))-int(s.weekly_base)<3: return "Win three hunts against your weekly target."
 			s.weekly_claimed = true
-			m.gain("dread_token",3)
-			m.gain("depth_shard",5)
+			var reward=weekly_reward(m)
+			m.s.gold+=reward.gold;m.gain("dread_token",reward.seals);m.gain("depth_shard",reward.shards)
 	return ""
 
 static func valid(value, data) -> bool:
@@ -225,6 +259,8 @@ static func valid(value, data) -> bool:
 	if typeof(b.get("day")) not in [TYPE_INT,TYPE_FLOAT] or typeof(value.week) not in [TYPE_INT,TYPE_FLOAT]: return false
 	if not RealmSave.counter(float(b.get("day",-2))+1) or b.selected.size()>3: return false
 	var seen = []
+	if b.has("target") and (not b.target is String or not data.enemies.has(b.target) or data.enemies[b.target].get("depth",false)):return false
+	if "frontline" in b.selected and not b.has("target"):return false
 	for id in b.selected:
 		if id not in CONTRACTS or id in seen or not RealmSave.counter(b.baseline.get(id,-1)): return false
 		seen.append(id)
@@ -232,4 +268,4 @@ static func valid(value, data) -> bool:
 	for id in b.claimed:
 		if id not in b.selected or id in seen: return false
 		seen.append(id)
-	return RealmSave.counter(value.rooms) and RealmSave.counter(float(value.week)+1) and value.weekly_claimed is bool and (value.weekly_enemy=="" or value.weekly_enemy in IDS) and RealmSave.counter(value.weekly_base)
+	return RealmSave.counter(value.rooms) and RealmSave.counter(float(value.week)+1) and value.weekly_claimed is bool and (value.weekly_enemy=="" or value.weekly_enemy in weekly_pool()) and RealmSave.counter(value.weekly_base)

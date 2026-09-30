@@ -31,6 +31,8 @@ func next_step(v):
 	var objective = m.objective()
 	var goal = section(v,objective.title,"%d / %d" % [mini(int(objective.current),int(objective.goal)),int(objective.goal)])
 	goal.add_child(U.progress(objective.current,objective.goal,U.GOLD,8))
+	if str(objective.activity).begins_with("hunt_"):
+		goal.add_child(U.button("Build for this encounter",func():preload("res://ui/hunt_build.gd").new(app).open(str(objective.activity).trim_prefix("hunt_"))))
 	var focus = RealmChronicle.focus(m)
 	if focus.kind!="story":
 		var prep = section(v,focus.title,"")

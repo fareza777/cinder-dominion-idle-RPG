@@ -212,7 +212,7 @@ func bounties():
 			continue
 		app.dynamic(card,func():
 			var reward = C.bounty_reward(m,id)
-			return "+%d gold · 5 %s · %d %s fragments" % [reward.gold,m.name_of(reward.food),reward.fragments,C.RELICS[relic].name],13,U.GREEN)
+			return "%s · 5 %s · %d %s fragments" % [RealmEconomy.money(reward.gold),m.name_of(reward.food),reward.fragments,C.RELICS[relic].name],13,U.GREEN)
 		var button = U.button("Claim reward",func():
 			if app.send({"type":"bounty_claim","id":id}): bounties(),true)
 		button.disabled = C.bounty_value(m,id)<d.target
@@ -228,7 +228,10 @@ func bounties():
 				if a.kind=="gather" and a.skill=="mining" and a.level<=m.level("mining") and a.level>m.data.activities[activity].level: activity = aid
 			card.add_child(U.button("Gather "+m.name_of(m.data.activities[activity].output),func(): app.activity_dialog(activity,maxi(1,30-C.bounty_value(m,id)))))
 		elif id=="craft": card.add_child(U.button("Cook meals · supply planner",func(): app.planner_dialog("craft_"+str(C.bounty_reward(m,id).food),maxi(1,10-C.bounty_value(m,id)))))
-		else: card.add_child(U.button("Hunt Ash Rats · preview task",func(): app.activity_dialog("hunt_ash_rat",maxi(1,8-C.bounty_value(m,id)))))
+		else:
+			var known=RealmEndgame.proven_hunts(m)
+			var hunt=str(known[0]) if not known.is_empty() else "ash_rat"
+			card.add_child(U.button("Hunt "+m.local_name(m.data.enemies[hunt])+" · preview",func(): app.activity_dialog("hunt_"+hunt,maxi(1,8-C.bounty_value(m,id)))))
 	if state.daily.claimed.size()==3: v.add_child(U.para("Board complete. Come back after the next UTC day begins for a fresh board. Your expeditions and farming remain available now.",15,U.GOLD))
 
 func world(selected: String = "wilds"):
