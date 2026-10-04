@@ -323,3 +323,11 @@ Local pacing persists separately from campaign saves. Campaign IDs and bounded r
 Fixed the reported native-navigation overlap at the Android layout layer. A small project-owned bridge reads stable/gesture navigation insets and cutouts, adds8dp separation, subtracts parent-consumed insets and updates before drawing. Godot reserves the same native clearance and waits until the hidden banner has been positioned. Source/build tooling/binary tracked; no change to SDK binaries, ad IDs, pacing, rewards or saves.
 
 Six native geometry checks and35 focused service checks passed. Two narrow-phone simulated layout captures reviewed, with actual Hero pointer navigation and130% text. No physical Android device was connected, so native serving/navigation behavior remains unverified. Debug0.55.1/code58; package and limitations in docs/qa/banner-safe-0.55.1-report.md.
+
+## 2026-10-04 — English Play Store campaign and Remotion trailers
+
+Created a cohesive crown/ember/citadel identity: object-only 512px app icon,1024x500 feature graphic,eight1080x1920 screenshots and landscape/portrait30-second Remotion MP4s. All promotional copy is English; humans remain hooded,masked,enclosed in armor or back-facing. Two generated marketing artworks,source prompts,original masters,licensed fonts and original game music/SFX are preserved in marketing/remotion.
+
+Captured actual0.55.1 UI and240 battle frames using a prepared in-memory hero without reading/writing player saves. Screenshots cover battle,21-tier Forge,190 cards,16 skills,hero equipment,Shattered Realms,dungeon Journey and relics. Game UI begins1.5seconds into the trailer and occupies26/30seconds;generated citadel art supplies promotional atmosphere. Crop/inventory polish retains genuine game UI. Marketing files are excluded from Godot imports.
+
+All eight screenshots and scene-frame samples reviewed;both Remotion renders and TypeScript check passed. Export dimensions,color modes,size limits,900-frame H.264/stereo AAC streams,decoded audio(no clipped samples),SHA-256 manifests and both ZIP CRCs verified. Offline gallery and editable-source archive delivered. Existing capture-harness shutdown warnings remain;no physical-device playback,Play Console/YouTube publication,gameplay changes,APK export or finished AAA/SSS claim. Details:docs/qa/store-kit-2026-10-04-report.md.

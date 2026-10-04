@@ -1,0 +1,87 @@
+{
+  "game": "Cinder Dominion: Idle RPG",
+  "date": "2026-10-04",
+  "based_on": {
+    "version": "0.55.1",
+    "version_code": 58,
+    "commit": "9949b31"
+  },
+  "art": [
+    {
+      "file": "public/art/crown-original.png",
+      "generator": "OpenAI image generation tool",
+      "prompt": "Use case: logo-brand. Create an original premium dark-fantasy mobile RPG app icon for Cinder Dominion: Idle RPG. Square 1024x1024 composition, full-bleed opaque background, no rounded corners or outer frame. Central striking sculpted blackened steel crown of five sharp uneven points, split by a narrow glowing ember fissure, an elegant broad sword blade rising behind its center. The silhouette must read instantly at 48 pixels. Close, heroic object-only composition occupying 70 percent of image, front view. Rich forged metal, restrained antique gold edges, vivid molten amber core, cold teal-black atmosphere, deep but visible blue charcoal backdrop with faint smoke, beautiful cinematic rim lighting. Luxurious artisanal AAA fantasy art direction, clear large shapes, minimal micro-detail, powerful and clean. Absolutely no people, faces, skulls, eyes, animals, letters, typography, badges, user interface, app tile frame, watermarks, or logos of other games. Do not make a small emblem on empty space. The crown itself is the bold dominant subject, distinct asymmetrical damaged metal and contained fire, no busy explosion.",
+      "use": "App icon and trailer end card",
+      "contains_human_face": false
+    },
+    {
+      "file": "public/art/citadel-original.png",
+      "generator": "OpenAI image generation tool",
+      "prompt": "Use case: ads-marketing. Asset type: landscape dark-fantasy mobile RPG key art for Cinder Dominion: Idle RPG, banner and cinematic trailer background. Create a breathtaking original wide panoramic 2048x1152 artwork: a colossal black iron citadel rises over a ruined causeway under a storm-dark indigo sky, towers lit by molten amber furnace glow, stone bridges and ash drifting through cold blue mist. The right third shows a single small imposing armored knight seen from behind standing at the entrance, fully enclosed blackened steel armor and heavy dark cloak, no visible skin or face or facial features; below the figure are ancient steps and an ember-lit broad sword. The left half has elegant low-detail shadowed mist and broken distant architecture suitable for large readable typography. Dramatic but controlled warm amber and cold teal contrast, refined painterly realism, richly crafted premium RPG marketing art, impressive scale, clear cinematic depth, restrained sparks, sharp focal architecture with atmosphere. Full bleed rectangular artwork, no border, no mockup, no graphic boxes. Absolutely no text, logos, icons, skull faces, eyes, nose, mouth, uncovered human faces, open visors, exposed skin, crowds, UI, advertising badges or watermarks. Character's head must be completely covered by hood or enclosed helmet and viewed from behind. Do not create a close-up portrait. This is promotional key art for the existing dark fantasy grinding and crafting game, mood dignified and powerful rather than garish.",
+      "use": "Feature graphic and restrained marketing backgrounds",
+      "human_presentation": "Single fully armored knight viewed from behind; no exposed face"
+    }
+  ],
+  "ui": {
+    "capture_script": "tools/capture_store.gd",
+    "engine": "Godot 4.7.1",
+    "dimensions": [
+      1080,
+      2160
+    ],
+    "fixture": "Prepared in-memory hero, English, progressed campaign, skill level 112; no user save reads or writes",
+    "capture": "Actual rendered UI. No generated interface or edited gameplay elements. Displayed UI crops omit some navigation.",
+    "battle": {
+      "dimensions": [
+        720,
+        1440
+      ],
+      "fps": 30,
+      "frames": 240,
+      "seconds": 8,
+      "method": "Model and battle stage manually advance at 1/30s between actual Godot-rendered frames; camera and post effects unchanged."
+    }
+  },
+  "audio": {
+    "music": "Existing original game track crown.ogg",
+    "effects": [
+      "strike.wav",
+      "forge.wav",
+      "reward.wav"
+    ],
+    "source": "assets/audio",
+    "external_stock_used": false,
+    "final_pass": "Full Remotion timeline rendered to PCM with the complete three-second reward chime, then AAC muxed into both MP4s using video stream copy."
+  },
+  "typography": [
+    {
+      "name": "Cormorant Garamond",
+      "license": "SIL Open Font License",
+      "source": "Existing licensed game font; OFL.txt included"
+    },
+    {
+      "name": "Manrope",
+      "license": "SIL Open Font License",
+      "source": "Existing licensed game font; OFL.txt included"
+    }
+  ],
+  "trailer": {
+    "seconds": 30,
+    "fps": 30,
+    "format": "H.264 MP4 / AAC",
+    "sizes": [
+      [
+        1920,
+        1080
+      ],
+      [
+        1080,
+        1920
+      ]
+    ],
+    "game_ui_seconds": 26,
+    "first_game_ui_second": 1.5,
+    "notes": "Gameplay is a mix of actual rendered battle footage and motion-framed screenshots. No narration or fabricated gameplay."
+  },
+  "publication": "Local creation only; no Play Console or YouTube upload"
+}
