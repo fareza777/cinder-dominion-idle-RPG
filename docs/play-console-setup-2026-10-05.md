@@ -19,7 +19,7 @@ The app record and the closed Alpha track are configured in Google Play Console.
 - **Status at verification:** Active; release `0.56.0 Closed Test` is **in review**
 - **Version code/name:** `59` / `0.56.0`
 - **AAB:** `build/android/cinder-dominion-0.56.0.aab`
-- **SHA-256:** `2F660F8B6FF52824E0F7E3035112C3115D2C340394F7990EE1EADA402C88F`
+- **SHA-256:** `2F660F8B6FF52824E0F7E3035112C3113115D2C340394F7990EE1EADA402C88F`
 - **Targeted regions:** 178 countries/regions
 - **Tester access:** four Google Groups copied from the Vocatim Alpha setup
 - **Feedback channel:** `fajar.mreza@gmail.com`
