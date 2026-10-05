@@ -46,6 +46,8 @@ var pages
 var music: AudioStreamPlayer
 var coach: Control
 var ads: Node
+var commerce: RealmCommerce
+var commerce_status = ""
 var banner_space: Control
 var effect: AudioStreamPlayer
 var experience
@@ -80,6 +82,7 @@ func _ready():
 	U.setup(model.data)
 	U.scale = float(model.s.settings.font)
 	pages = Pages.new(self)
+	commerce = RealmCommerce.new()
 	experience = preload("res://ui/experience.gd").new(self)
 	mode = "boot"
 	build_shell()
@@ -869,6 +872,7 @@ func settings_dialog(section: String = "display"):
 		v.add_child(U.button(tr2("Impor cadangan save","Import save backup"),import_save))
 		v.add_child(U.button("Restore a previous journey",experience.archives))
 	if section=="about":
+		v.add_child(U.button("Store · Remove Ads",func(): preload("res://ui/commerce.gd").new(self).open()))
 		v.add_child(U.button("How to play",experience.handbook))
 		if mode=="play": v.add_child(U.button("Replay beginner tips",experience.welcome))
 		v.add_child(U.button("About Cinder Dominion",experience.about))

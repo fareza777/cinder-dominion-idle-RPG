@@ -6,6 +6,14 @@ var config: Dictionary = JSON.parse_string(FileAccess.get_file_as_string("res://
 var billing_provider: Object
 var ads_provider: Object
 
+const REMOVE_ADS_PRODUCT := "remove_ads"
+
+func product(product_id: String) -> Dictionary:
+	return config.billing.products.get(product_id, {})
+
+func remove_ads_configured() -> bool:
+	return bool(config.billing.enabled) and not str(product(REMOVE_ADS_PRODUCT).get("store_product_id", "")).is_empty()
+
 func purchase(product_id: String) -> Dictionary:
 	if not config.billing.enabled: return {"ok":false,"code":"not_configured"}
 	if not config.billing.products.has(product_id): return {"ok":false,"code":"unknown_product"}

@@ -1,0 +1,3 @@
+# Cinder Dominion: Idle RPG — replace this test publisher line with the live
+# publisher line shown in AdMob before production traffic is enabled.
+google.com, pub-3940256099942544, DIRECT, f08c47fec0942fa0

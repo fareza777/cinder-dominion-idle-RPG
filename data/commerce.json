@@ -2,6 +2,7 @@
   "billing": {
     "enabled": false,
     "products": {
+      "remove_ads": {"kind": "non_consumable", "delivery": "ad_free_entitlement", "store_product_id": "remove_ads", "price_usd": 4.99, "title": "Remove Ads"},
       "cosmetic_ember_cloak": {"kind": "non_consumable", "delivery": "cosmetic", "store_product_id": ""},
       "expansion_dusk": {"kind": "non_consumable", "delivery": "content_expansion", "store_product_id": ""}
     }

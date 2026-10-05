@@ -45,6 +45,7 @@ func foreground() -> bool:
 func safe_context() -> bool:
  return foreground() and not full_screen and app.model.s.tutorial and app.model.s.experience.get("welcome_done",false) and not app.model.s.experience.get("coach_active",false) and app.model.s.fight.is_empty()
 func banner_allowed() -> bool:
+	if app.model.s.get("entitlements",{}).get("remove_ads",false): return false
  var keyboard=DisplayServer.has_feature(DisplayServer.FEATURE_VIRTUAL_KEYBOARD) and DisplayServer.virtual_keyboard_get_height()>0
  return safe_context() and not is_instance_valid(app.dialog) and app.page in config.banner_pages and not keyboard and policy.foreground_seconds>=config.banner_start_seconds
 
@@ -165,6 +166,9 @@ func cache_ready(format: String) -> bool:
  return slot.get("ad")!=null and Time.get_ticks_msec()-int(slot.loaded)<int(config.cache_seconds)*1000
 
 func request(format: String,placement: String = "meals"):
+	if app.model.s.get("entitlements",{}).get("remove_ads",false):
+		status="Ads are removed from this journey."
+		return
  if not demo_configuration():status="This build permits official Google test IDs only.";return
  if not native_available():status="Ad display requires the Android APK. No reward was granted.";return
  if not safe_context():status="Finish your battle or beginner guidance first.";return

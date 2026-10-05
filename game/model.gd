@@ -35,7 +35,7 @@ func fresh(seed_value: int = 12345):
 		"bag":{"cooked_minnow":5},"gear":[],"overflow":[],"equipped":{},"next_uid":1,
 		"xp":{},"mastery":{},"queue":[],"active":{},"fight":{},"hp":100,
 		"regen_at":1000,"kills":{},"gains":{},"spent":{},"tutorial":false,"beacon":false,
-		"presets":{},"log":[],"processed":[],"experience":{"version":2,"welcome_done":false},"settings":{"locale":"en","font":1.0,
+		"presets":{},"log":[],"processed":[],"entitlements":{"remove_ads":false},"experience":{"version":2,"welcome_done":false},"settings":{"locale":"en","font":1.0,
 		"motion":true,"battery":true,"music":0.35,"sfx":0.5,"food":"cooked_minnow",
 		"threshold":0.5,"potion":"","potion_policy":"off"},"report":{}}
 	for key in data.skills: s.xp[key] = 0
