@@ -18,7 +18,7 @@ The app record was created successfully in Google Play Console. It is still in s
 - AAB: `build/android/cinder-dominion-0.56.0.aab`
 - Version code: `59`
 - Version name: `0.56.0`
-- SHA-256: `2F660F8B6FF52824E0F7E3035112C3115D2C340394F7990EE1EADA402C88F`
+- SHA-256: `2F660F8B6FF52824E0F7E3035112C3113115D2C340394F7990EE1EADA402C88F`
 
 ## Store assets
 
